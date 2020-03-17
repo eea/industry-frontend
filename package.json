@@ -1,0 +1,129 @@
+{
+  "name": "energy-union-frontend",
+  "description": "Volto Starter Kit",
+  "license": "MIT",
+  "version": "3.1.0",
+  "scripts": {
+    "start": "razzle start",
+    "prebuild": "./scripts/prebuild-fix-modules.sh",
+    "build": "razzle build",
+    "test": "razzle test --env=jsdom --passWithNoTests",
+    "start:prod": "NODE_ENV=production node build/server.js",
+    "i18n": "NODE_ENV=production node node_modules/@plone/volto/src/i18n.js",
+    "develop": "missdev --config=jsconfig.json --output=develop"
+  },
+  "jest": {
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "transform": {
+      "^.+\\.js(x)?$": "babel-jest",
+      "^.+\\.css$": "jest-css-modules",
+      "^.+\\.scss$": "jest-css-modules",
+      "^.+\\.(png)$": "jest-file",
+      "^.+\\.(jpg)$": "jest-file",
+      "^.+\\.(svg)$": "./node_modules/@plone/volto/jest-svgsystem-transform.js"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!@plone/volto).+\\.js$"
+    ],
+    "moduleNameMapper": {
+      "@plone/volto/(.*)$": "<rootDir>/node_modules/@plone/volto/src/$1",
+      "@package/(.*)$": "<rootDir>/src/$1",
+      "~/(.*)$": "<rootDir>/src/$1"
+    },
+    "coverageThreshold": {
+      "global": {
+        "branches": 10,
+        "functions": 10,
+        "lines": 10,
+        "statements": 10
+      }
+    },
+    "setupFiles": [
+      "@plone/volto/test-setup.js"
+    ]
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "singleQuote": true
+  },
+  "stylelint": {
+    "extends": [
+      "stylelint-config-standard",
+      "stylelint-config-idiomatic-order",
+      "./node_modules/prettier-stylelint/config.js"
+    ]
+  },
+  "engines": {
+    "node": "^8 || ^10"
+  },
+  "dependencies": {
+    "@ckeditor/ckeditor5-basic-styles": "^11.1.4",
+    "@ckeditor/ckeditor5-build-balloon-block": "^12.4.0",
+    "@ckeditor/ckeditor5-build-classic": "^12.4.0",
+    "@ckeditor/ckeditor5-editor-classic": "^12.1.4",
+    "@ckeditor/ckeditor5-essentials": "^11.0.5",
+    "@ckeditor/ckeditor5-heading": "^11.0.5",
+    "@ckeditor/ckeditor5-paragraph": "^11.0.5",
+    "@ckeditor/ckeditor5-react": "^1.1.3",
+    "@n8tb1t/use-scroll-position": "^1.0.43",
+    "@plone/volto": "github:tiberiuichim/volto#kitchen_sink",
+    "compression-webpack-plugin": "3.1.0",
+    "draft-js-alignment-plugin": "^2.0.6",
+    "draftjs-to-html": "^0.8.4",
+    "mgr-pdf-viewer-react": "^1.0.3",
+    "react-loadable": "^5.5.0",
+    "react-scrollspy": "^3.4.2",
+    "react-sizeme": "2.6.12",
+    "react-visibility-sensor": "^5.1.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "7.8.4",
+    "@babel/plugin-proposal-decorators": "^7.8.3",
+    "@babel/plugin-proposal-do-expressions": "^7.8.3",
+    "@babel/plugin-proposal-export-default-from": "^7.8.3",
+    "@babel/plugin-proposal-export-namespace-from": "^7.8.3",
+    "@babel/plugin-proposal-function-bind": "^7.8.3",
+    "@babel/plugin-proposal-function-sent": "^7.8.3",
+    "@babel/plugin-proposal-logical-assignment-operators": "^7.8.3",
+    "@babel/plugin-proposal-numeric-separator": "^7.8.3",
+    "@babel/plugin-proposal-pipeline-operator": "^7.8.3",
+    "@babel/plugin-proposal-throw-expressions": "^7.8.3",
+    "@babel/plugin-syntax-import-meta": "^7.8.3",
+    "@babel/preset-env": "7.8.4",
+    "babel-plugin-react-intl": "^5.1.18",
+    "babel-plugin-transform-es2015-modules-commonjs": "6.26.2",
+    "eslint-plugin-prettier": "3.0.1",
+    "hard-source-webpack-plugin": "^0.13.1",
+    "less": "3.10.3",
+    "less-loader": "5.0.0",
+    "mrs-developer": "1.1.3",
+    "postcss-overrides": "3.1.4",
+    "prettier": "1.17.0",
+    "prettier-stylelint": "0.4.2"
+  },
+  "browserslist": [
+    ">1%",
+    "last 4 versions",
+    "Firefox ESR",
+    "not ie < 9"
+  ],
+  "resolutions": {
+    "browserslist": "4.8.3"
+  },
+  "customizationPaths": [
+    "src/customizations/volto/"
+  ],
+  "optimizeLiftPackages": [
+    "immutable"
+  ],
+  "manuallyTranspile": [
+    "prepend-http",
+    "normalize-url",
+    "cidr-regex",
+    "url-regex",
+    "lodash-es"
+  ]
+}
