@@ -1,7 +1,7 @@
 pipeline {
   environment {
-    registry = "eeacms/energy-union-frontend"
-    template = "templates/volto-energy-union"
+    registry = "eeacms/eptr-frontend"
+    template = "templates/volto-eptr"
     dockerImage = ''
     tagName = ''
   }
@@ -20,7 +20,7 @@ pipeline {
               tagName = "$BRANCH_NAME"
             }
             try {
-              dockerImage = docker.build("$registry:$tagName", "--no-cache .")
+              dockerImage = docker.build registry + ":" + tagName
               docker.withRegistry( '', 'eeajenkins' ) {
                 dockerImage.push()
               }
