@@ -1,7 +1,7 @@
 pipeline {
   environment {
-    registry = "eeacms/eptr-frontend"
-    template = "templates/volto-eptr"
+    registry = "eeacms/eprtr-frontend"
+    template = "templates/volto-eprtr"
     dockerImage = ''
     tagName = ''
   }
