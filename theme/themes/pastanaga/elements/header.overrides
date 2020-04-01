@@ -4,6 +4,7 @@
 
 .ui.basic.segment.header-wrapper {
   margin-bottom: 0;
+  background-color: @primaryColor;
 }
 
 .ui.basic.segment .header {
@@ -36,9 +37,6 @@
       @media only screen and (max-width: @largestTabletScreen) {
         overflow-x: initial;
       }
-
-      .ui.secondary.pointing.menu {
-      }
     }
   }
 
@@ -63,9 +61,6 @@
 
     & > * {
       display: flex;
-    }
-
-    .tools {
     }
 
     .search {

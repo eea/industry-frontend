@@ -24,6 +24,7 @@
 /*-------------------
     Brand Colors
 --------------------*/
+@primaryColor        : @darkBlue;
 
 @secondaryColor      : @brown;
 
@@ -131,6 +132,7 @@
 @brown            : #826A6A; // Palette: reddishGrey
 @grey             : #68778D; // Palette: blueishGrey
 @black            : #252525; // Palette: darkishGrey
+@darkBlue         : #005384;
 
 /*---  Light Colors  ---*/
 @lightOlive       : #C9EAB1; // Palette: lightSage
@@ -146,7 +148,7 @@
 /*--- Colored Backgrounds ---*/
 @redBackground    : #F5C1C1; // Palette: alertError
 @tealBackground   : #EDF1F2; // Palette: Breadcrumbs
-@blueBackground   : #F2F6F8;
+@blueBackground   : #005384;
 @purpleBackground : #B8C6C8; // Dublin Core Summary
 
 /*--- Colored Headers ---*/
