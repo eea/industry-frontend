@@ -3,29 +3,30 @@ import * as voltoConfig from '@plone/volto/config';
 import {
   applyConfig as addonsConfig,
   installFolderListing,
-  // installCustomAddonGroup,
   installTableau,
 } from 'volto-addons/config';
 import { applyConfig as ckeditorConfig } from 'volto-ckeditor/config';
 import { applyConfig as dataBlocksConfig } from 'volto-datablocks/config';
 import { applyConfig as blocksConfig } from 'volto-blocks/config';
 import { applyConfig as mosaicConfig } from 'volto-mosaic/config';
-// import { applyConfig as plotlyConfig } from 'volto-plotlycharts/config';
+import { applyConfig as plotlyConfig } from 'volto-plotlycharts/config';
 // import { applyConfig as installEPRTRFrontend } from './localconfig';
 import { applyConfig as installSidebar } from 'volto-sidebar/config';
 
+// import { applyConfig as installEPRTRFrontend } from './localconfig';
+import installEPRTR from './localconfig';
+
 const config = [
-  // installCustomAddonGroup,
   addonsConfig,
-  // installSidebar,
-  // installFolderListing,
-  // installTableau,
-  // plotlyConfig,
+  installSidebar,
+  installFolderListing,
+  installTableau,
+  plotlyConfig,
   // ckeditorConfig,
   // mosaicConfig,
-  // blocksConfig,
-  // dataBlocksConfig,
-  // installEPRTRFrontend,
+  blocksConfig,
+  dataBlocksConfig,
+  installEPRTR,
 ].reduce((acc, apply) => apply(acc), voltoConfig);
 
 // config.settings.contentExpand=[breadcrumbs,actions,workflow]
