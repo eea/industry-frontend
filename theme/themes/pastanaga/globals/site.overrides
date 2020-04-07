@@ -1,3 +1,22 @@
 /*******************************
         Global Overrides
 *******************************/
+
+
+.footerWrapper {
+  background-color: @primaryColor !important;
+  color           : white;
+
+  .unlist {
+    margin         : 0;
+    list-style-type: none;
+    text-decoration: underline;
+    font-weight    : bold;
+  }
+
+  a {
+    color          : white;
+    text-decoration: underline;
+    font-weight    : bold;
+  }
+}
