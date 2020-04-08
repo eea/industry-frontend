@@ -10,7 +10,7 @@ import { injectIntl } from 'react-intl';
 import { settings } from '~/config';
 import { BodyClass } from '@plone/volto/helpers';
 
-// import { Dropdown, Segment, Checkbox, Input, Button } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 // import AddLinkForm from './AddLinkForm';
 
 function removeDuplicates(myArr, prop) {
