@@ -73,3 +73,7 @@ h1.documentFirstHeading {
     display: none!important;
   }
 }
+
+.breadcrumbs {
+  display: none;
+}

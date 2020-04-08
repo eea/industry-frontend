@@ -20,6 +20,7 @@ import {
   hasBlocksData,
 } from '@plone/volto/helpers';
 import { flattenToAppURL } from '@plone/volto/helpers';
+import { SearchWidget } from '@plone/volto/components';
 
 const messages = defineMessages({
   unknownBlock: {
@@ -93,6 +94,9 @@ class DefaultView extends Component {
       hasBlocksData(content) && (
         <div className="ui wrapper">
 
+          <div className="glossary-search search">
+            <SearchWidget pathname={this.props.pathname} />
+          </div>
 
           {sectionTabs && sectionTabs.length ? (
             <nav className="tabs section-tabs">

@@ -1,3 +1,26 @@
 /*******************************
          Theme Overrides
 *******************************/
+.glossary-search {
+    max-width: 964px;
+    margin   : 2rem auto;
+
+    .searchbox {
+        border-left: none!important;
+    }
+
+    .input {
+        border-radius: 30px;
+        height       : 50px;
+        background   : #F6F6F6;
+        padding-left : 1rem;
+    }
+
+    button {
+        background: #008173!important;
+        border-radius: 30px;
+        padding: 0 2rem!important;
+        color: white!important;
+        margin-left: 1rem;
+    }
+}
