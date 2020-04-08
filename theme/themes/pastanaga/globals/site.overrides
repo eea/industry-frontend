@@ -77,3 +77,45 @@ h1.documentFirstHeading {
 .breadcrumbs {
   display: none;
 }
+
+
+
+
+.detailed-link-block {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 800px;
+  margin: 0 auto;
+  flex-direction: column;
+} 
+
+
+.detailed-link-block-item-title {
+  // font-family: 'Roboto Condensed';
+  font-size: 28px;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  color: black;
+  font-weight: bold;
+  position: relative;
+}
+
+.center-heading h1.documentFirstHeading {
+  text-align: center;
+}
+
+.detailed-link-block {
+  button {
+    max-width: 200px;
+    border-radius: 30px!important;
+    line-height: 2!important;
+    text-align: center!important;
+    border-width: 1px;
+    font-weight: 100;
+  }
+  p {
+    color: #444;
+    font-size: 16px;
+    position: relative;
+  }
+}

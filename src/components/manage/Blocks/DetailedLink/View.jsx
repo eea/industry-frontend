@@ -7,7 +7,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
-import './style.css';
 import { settings } from '~/config';
 import { BodyClass } from '@plone/volto/helpers';
 
@@ -34,10 +33,7 @@ class View extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      catalogue: props.data.catalogue || false,
-      catalogueList: this.props.data.catalogueList || [],
-      catalogueSelectionList: this.props.data.catalogueSelectionList || [],
-      details: [],
+      link: this.props.data.link
     };
   }
   getPath(url) {
@@ -46,67 +42,23 @@ class View extends Component {
       .replace(settings.apiPath, '')
       .replace(settings.internalApiPath, '');
   }
-  componentDidMount() {
-    this.setInitialCatalogueSelectionList();
-  }
 
-  setInitialCatalogueSelectionList = () => {
-    const catalogueSelectionListFromChildren =
-      (this.props.properties.items.length &&
-        this.props.properties.items.map(item => ({
-          key: this.getPath(item['@id']),
-          text: item.title || item.Title,
-          value: this.getPath(item['@id']),
-          description: item.description,
-          image: this.getPath(item.image?.download),
-        }))) ||
-      [];
-    const catalogueSelectionList = removeDuplicates(
-      [
-        ...catalogueSelectionListFromChildren,
-        ...this.state.catalogueSelectionList,
-      ],
-      'key',
-    );
-    console.log('initial', this.state.catalogueSelectionList);
-    this.setState({ catalogueSelectionList });
-  };
 
   render() {
-    const childrenToDisplay = this.state.catalogue
-      ? this.state.catalogueSelectionList.filter(item =>
-          this.state.catalogueList.includes(item.value),
-        )
-      : this.state.catalogueSelectionList;
     return (
       <div>
-        <BodyClass className="center-heading" />
-        {!this.state.catalogueSelectionList &&
-          !this.state.catalogueSelectionList.length && <div>No children</div>}
-        {this.state.catalogue && !this.state.catalogueList.length && (
-          <div>Please select items to display for catalogue intro</div>
-        )}
-        {childrenToDisplay.length && (
-          <div className="catalogue-listing-block">
-            {childrenToDisplay.map((item, i) => (
-              <div className="catalogue-listing-block-item" key={i}>
-                <Link key={item.value} to={item.value}>
-                  <div className="catalogue-listing-block-item-title">
-                    {item.text}
-                  </div>
-                  {item.description && <p>{item.description}</p>}
-                  {item.image && (
-                    <img
-                      style={{ maxWidth: '100%' }}
-                      src={item.image}
-                      alt="icon"
-                    />
-                  )}
-                </Link>
-              </div>
-            ))}
-          </div>
-        )}
+        {this.state.link && (
+          <Link className="detailed-link-block" onClick={(e) => e.preventDefault} to={this.getPath(this.state.link.value)}>
+            <div className="detailed-link-block-item-title">
+              {this.state.link.text}
+            </div>
+            <p>
+
+              {this.state.link.description && <p>{this.state.link.description}</p>}
+            </p>
+            <Button basic>Read more</Button>
+          </Link>
+        ) || 'Select a page from sidebar'}
       </div>
     );
   }

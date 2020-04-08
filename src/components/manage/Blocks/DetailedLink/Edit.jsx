@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 import { Icon, SidebarPortal, TextWidget } from '@plone/volto/components';
 import { Dropdown, Segment, Checkbox, Input, Button } from 'semantic-ui-react';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
-import './style.css';
 import { Card } from 'semantic-ui-react';
 import { settings } from '~/config';
 import AddLinkForm from './AddLinkForm';
@@ -42,9 +41,6 @@ class Edit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // catalogueList: this.props.data.catalogueList || [],
-      // catalogueSelectionList: this.props.data.catalogueSelectionList || [],
-      // details: [],
       link: this.props.data.link
     };
   }
@@ -55,73 +51,20 @@ class Edit extends Component {
       .replace(settings.internalApiPath, '');
   }
 
-  componentDidMount() {
-    console.log('-----', this.props.properties);
-    // this.setInitialCatalogueSelectionList();
+
+  componentDidUpdate(prevProps, prevState) {
+    if (JSON.stringify(prevState) !== JSON.stringify(this.state)) {
+      this.onChangeData();
+    }
   }
-
-  // resetCatalogueSelectionList = () => {
-  //   const catalogueSelectionList =
-  //     (this.props.properties.items.length &&
-  //       this.props.properties.items.map(item => ({
-  //         key: this.getPath(item['@id']),
-  //         text: item.title || item.Title,
-  //         value: this.getPath(item['@id']),
-  //         description: item.description,
-  //         image: this.getPath(item.image?.download),
-  //       }))) ||
-  //     [];
-  //   this.setState({ catalogueSelectionList });
-  // };
-
-  // setInitialCatalogueSelectionList = () => {
-  //   const catalogueSelectionListFromChildren =
-  //     (this.props.properties.items.length &&
-  //       this.props.properties.items.map(item => ({
-  //         key: this.getPath(item['@id']),
-  //         text: item.title || item.Title,
-  //         value: this.getPath(item['@id']),
-  //         description: item.description,
-  //         image: this.getPath(item.image?.download),
-  //       }))) ||
-  //     [];
-  //   const catalogueSelectionList = removeDuplicates(
-  //     [
-  //       ...catalogueSelectionListFromChildren,
-  //       ...this.state.catalogueSelectionList,
-  //     ],
-  //     'key',
-  //   );
-  //   console.log('initial', this.state.catalogueSelectionList);
-  //   this.setState({ catalogueSelectionList });
-  // };
-
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (JSON.stringify(prevState) !== JSON.stringify(this.state)) {
-  //     this.onChangeData();
-  //   }
-  // }
 
   onChangeData() {
     this.props.onChangeBlock(this.props.block, {
       ...this.props.data,
       link: this.state.link,
-      // catalogueList: this.state.catalogueList,
-      // catalogueSelectionList: this.state.catalogueSelectionList,
     });
   }
 
-  // onChangeCatalogue = (event, data) => {
-  //   this.setState({
-  //     catalogue: data.checked,
-  //   });
-  // };
-
-  // onChangeCatalogueListing = (event, data) => {
-  //   this.setState({
-  //     catalogueList: data.value,
-  //   });
-  // };
 
   onAddLink = link => {
     this.setState({
@@ -130,45 +73,42 @@ class Edit extends Component {
   };
 
   render() {
-    // text: item.title || item.Title,
-  //         value: this.getPath(item['@id']),
-  //         description: item.description,
-  //         image: this.getPath(item.image?.download),
+    console.log('link instate', this.state.link)
     return (
       <div>
-        asdasdas
         {this.state.link && (
-          <div fluid className="catalogue-listing-block">
-              <div className="catalogue-listing-block-item">
-                <Link to={this.getPath(this.state.link['@id'])}>
-                  <div className="catalogue-listing-block-item-title">
-                    {this.state.link.title || this.state.link.Title}
-                  </div>
-                  {this.state.link.description && <p>{this.state.link.description}</p>}
-                  {this.state.link.image && (
-                    <img
-                      style={{ maxWidth: '100%' }}
-                      src={this.getPath(this.state.link.image.download)}
-                      alt="icon"
-                    />
-                  )}
-                </Link>
-              </div>
-          </div>
-        ) || 'select a link from sidebar'}
-        {/* <SidebarPortal selected={true}> */}
+          <Link className="detailed-link-block" onClick={(e) => e.preventDefault} to={this.getPath(this.state.link.value)}>
+            <div className="detailed-link-block-item-title">
+              {this.state.link.text}
+            </div>
+            <p>
+            {this.state.link.description && <p>{this.state.link.description}</p>}
+            </p>
+              <Button basic>Read more</Button>
+          </Link>
+        ) || 'Select a page from sidebar'}
+        <SidebarPortal selected={true}>
           <Segment.Group raised>
             <header className="header pulled">
               <h2> Detailed Link </h2>
             </header>
             <Segment className="form sidebar-image-data">
               <div className="segment-row">
-                <p>Non-children links</p>
                 <AddLinkForm onAddLink={this.onAddLink} />
               </div>
             </Segment>
+            <Segment>
+              {/* <input
+                onChange={this.onChange}
+                onKeyDown={this.onKeyDown}
+                ref={this.onRef}
+                type="text"
+                value={value.title}
+                placeholder={this.props.intl.formatMessage(messages.placeholder)}
+              /> */}
+            </Segment>
           </Segment.Group>
-        {/* </SidebarPortal> */}
+        </SidebarPortal>
       </div>
     );
   }
