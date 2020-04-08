@@ -1,4 +1,6 @@
-import { SET_SECTION_TABS } from '~/constants/ActionTypes';
+import {
+    SET_SECTION_TABS,
+} from '~/constants/ActionTypes';
 
 const initialState = {
   error: null,
@@ -16,6 +18,7 @@ const initialState = {
  */
 export default function section_tabs(state = initialState, action = {}) {
   if (action.type === SET_SECTION_TABS) {
+      console.log('setting section tabs', action)
     return {
       ...state,
       error: null,

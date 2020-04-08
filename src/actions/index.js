@@ -4,6 +4,7 @@ import {
 
 
 export function setSectionTabs(payload) {
+    console.log('in action', payload)
     return {
       type: SET_SECTION_TABS,
       payload: payload,

@@ -21,6 +21,8 @@ import {
 } from '@plone/volto/helpers';
 import { flattenToAppURL } from '@plone/volto/helpers';
 import { setSectionTabs } from '~/actions';
+import { Redirect } from 'react-router-dom';
+
 const mapDispatchToProps = {
   setSectionTabs,
 };
@@ -80,7 +82,10 @@ class DefaultView extends Component {
         title: i.name,
       };
     });
-    this.props.setSectionTabs(tabsItems);
+    console.log('--------------', this.props.pathname)
+    if(this.props.pathname && this.props.pathname.split('/').length === 3) {
+      this.props.setSectionTabs(tabsItems);
+    }
     return tabsItems;
   };
 
@@ -90,26 +95,19 @@ class DefaultView extends Component {
     const blocksFieldname = getBlocksFieldname(content);
     const blocksLayoutFieldname = getBlocksLayoutFieldname(content);
     const tabs = this.computeFolderTabs(content['@components'].siblings);
-
+    const mainItem = content.items[0];
+    const mainUrl = mainItem && mainItem['@id'] && flattenToAppURL(mainItem['@id']);
+    console.log('mainitem,mainurl', mainItem, mainUrl);
+    let redirect = false
+    if (__CLIENT__ && mainUrl && window) {
+      redirect = true
+    }
     return (
       hasBlocksData(content) && (
         <div id="page-document" className="ui wrapper">
-          {tabs && tabs.length ? (
-            <nav className="tabs">
-              {tabs.map(tab => (
-                <Link
-                  key={`localtab-${tab.url}`}
-                  className={`tabs__item${(tab.url ===
-                    this.props.location.pathname &&
-                    ' tabs__item_active') ||
-                    ''}`}
-                  to={tab.url}
-                  title={tab.title}
-                >
-                  {tab.title}
-                </Link>
-              ))}
-            </nav>
+          {/* <button onClick={() => this.props.setSectionTabs(tabs)}>asd</button> */}
+          {tabs && tabs.length && redirect ? (
+             <Redirect to={{ pathname: mainUrl }} />
           ) : (
             ''
           )}

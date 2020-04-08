@@ -86,13 +86,17 @@ class DefaultView extends Component {
     const blocksFieldname = getBlocksFieldname(content);
     const blocksLayoutFieldname = getBlocksLayoutFieldname(content);
     const tabs = this.computeFolderTabs(content['@components'].siblings);
-    console.log('section tabs', this.props.sectionTabs)
+    const sectionTabs = this.props.sectionTabs?.items
+    console.log('sectionTabs in child', sectionTabs)
+
     return (
       hasBlocksData(content) && (
-        <div id="page-document" className="ui wrapper">
-          {tabs && tabs.length ? (
-            <nav className="tabs">
-              {tabs.map(tab => (
+        <div className="ui wrapper">
+
+
+          {sectionTabs && sectionTabs.length ? (
+            <nav className="tabs section-tabs">
+              {sectionTabs.map(tab => (
                 <Link
                   key={`localtab-${tab.url}`}
                   className={`tabs__item${(tab.url ===
@@ -107,32 +111,58 @@ class DefaultView extends Component {
               ))}
             </nav>
           ) : (
-            ''
-          )}
-          <Helmet title={content.title} />
-          {map(content[blocksLayoutFieldname].items, block => {
-            const Block =
-              blocks.blocksConfig[
-                (content[blocksFieldname]?.[block]?.['@type'])
-              ]?.['view'] || null;
-            return Block !== null ? (
-              <Block
-                key={`block-${block}`}
-                blockID={block}
-                properties={content}
-                data={content[blocksFieldname][block]}
-              />
-            ) : (
-              <div key={`blocktype-${block}`}>
-                {intl.formatMessage(messages.unknownBlock, {
-                  block: content[blocksFieldname]?.[block]?.['@type'],
-                })}
-              </div>
-            );
-          })}
+              ''
+            )}
+          <div className="widthSidebar">
+            <div className="page-document-sidebar">
+              {tabs && tabs.length ? (
+                <nav className="tabs">
+                  {tabs.map(tab => (
+                    <Link
+                      key={`localtab-${tab.url}`}
+                      className={`tabs__item${(tab.url ===
+                        this.props.location.pathname &&
+                        ' tabs__item_active') ||
+                        ''}`}
+                      to={tab.url}
+                      title={tab.title}
+                    >
+                      {tab.title}
+                    </Link>
+                  ))}
+                </nav>
+              ) : (
+                  ''
+                )}
+            </div>
+            <div id="page-document" className="hasSidebar">
+              <Helmet title={content.title} />
+              {map(content[blocksLayoutFieldname].items, block => {
+                const Block =
+                  blocks.blocksConfig[
+                  (content[blocksFieldname]?.[block]?.['@type'])
+                  ]?.['view'] || null;
+                return Block !== null ? (
+                  <Block
+                    key={`block-${block}`}
+                    blockID={block}
+                    properties={content}
+                    data={content[blocksFieldname][block]}
+                  />
+                ) : (
+                    <div key={`blocktype-${block}`}>
+                      {intl.formatMessage(messages.unknownBlock, {
+                        block: content[blocksFieldname]?.[block]?.['@type'],
+                      })}
+                    </div>
+                  );
+              })}
+            </div>
+          </div>
         </div>
+
       )
-    );
+    )
   }
 }
 
@@ -143,5 +173,5 @@ export default compose(
     content:
       state.prefetch?.[state.router.location.pathname] || state.content.data,
     sectionTabs: state.section_tabs
-  }),mapDispatchToProps),
+  })),
 )(DefaultView);
