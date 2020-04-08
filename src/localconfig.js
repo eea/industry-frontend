@@ -1,5 +1,6 @@
 
 import TabsView from '~/components/theme/View/TabsView';
+import RedirectView from '~/components/theme/View/RedirectView';
 
 import ChildrenListView from '~/components/manage/Blocks/DetailedLink/View';
 import ChildrenListEdit from '~/components/manage/Blocks/DetailedLink/Edit';
@@ -11,6 +12,8 @@ console.log('config', config)
     layoutViews: {
       ...config.views.layoutViews,
       tabs_view: TabsView,
+      redirect_view: RedirectView,
+
     },
   };
 
@@ -25,14 +28,6 @@ console.log('config', config)
     icon: config.blocks.blocksConfig.text.icon,
   };
 
-  // config.blocks.blocksConfig.collection_block = {
-  //   id: 'collection_block',
-  //   title: 'Collection Listing',
-  //   view: CollectionBlockView,
-  //   edit: CollectionBlockEdit,
-  //   icon: chartIcon,
-  //   group: 'custom_addons',
-  // };
   return config;
 }
 
