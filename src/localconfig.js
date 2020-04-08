@@ -1,6 +1,7 @@
 
 import TabsView from '~/components/theme/View/TabsView';
 import RedirectView from '~/components/theme/View/RedirectView';
+import TabsChildView from '~/components/theme/View/TabsChildView';
 
 import ChildrenListView from '~/components/manage/Blocks/DetailedLink/View';
 import ChildrenListEdit from '~/components/manage/Blocks/DetailedLink/Edit';
@@ -12,6 +13,8 @@ console.log('config', config)
     layoutViews: {
       ...config.views.layoutViews,
       tabs_view: TabsView,
+      tabs_child_view: TabsChildView,
+
       redirect_view: RedirectView,
 
     },
