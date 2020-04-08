@@ -20,7 +20,10 @@ import {
   hasBlocksData,
 } from '@plone/volto/helpers';
 import { flattenToAppURL } from '@plone/volto/helpers';
-
+import { setSectionTabs } from '~/actions';
+const mapDispatchToProps = {
+  setSectionTabs,
+};
 const messages = defineMessages({
   unknownBlock: {
     id: 'Unknown Block',
@@ -77,6 +80,7 @@ class DefaultView extends Component {
         title: i.name,
       };
     });
+    this.props.setSectionTabs(tabsItems);
     return tabsItems;
   };
 
@@ -86,31 +90,6 @@ class DefaultView extends Component {
     const blocksFieldname = getBlocksFieldname(content);
     const blocksLayoutFieldname = getBlocksLayoutFieldname(content);
     const tabs = this.computeFolderTabs(content['@components'].siblings);
-
-    // const currentUrl = this.props.content?.['@id'];
-    // const shouldRenderRoutes =
-    //   typeof currentUrl !== 'undefined' &&
-    //   samePath(currentUrl, this.props.pathname)
-    //     ? true
-    //     : false;
-    //
-    // if (shouldRenderRoutes === false)
-    //   return (
-    //     <div className="lds-default">
-    //       <div />
-    //       <div />
-    //       <div />
-    //       <div />
-    //       <div />
-    //       <div />
-    //       <div />
-    //       <div />
-    //       <div />
-    //       <div />
-    //       <div />
-    //       <div />
-    //     </div>
-    //   );
 
     return (
       hasBlocksData(content) && (
@@ -167,5 +146,5 @@ export default compose(
     pathname: props.location.pathname,
     content:
       state.prefetch?.[state.router.location.pathname] || state.content.data,
-  })),
+  }),mapDispatchToProps),
 )(DefaultView);

@@ -1,0 +1,1 @@
+export const SET_SECTION_TABS = 'SET_SECTION_TABS';
