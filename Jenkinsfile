@@ -12,6 +12,9 @@ pipeline {
 
   stages {
     stage('Build & Push') {
+      when {
+        buildingTag()
+      }
       steps{
         node(label: 'docker-host') {
           script {
