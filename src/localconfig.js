@@ -6,6 +6,9 @@ import TabsChildView from '~/components/theme/View/TabsChildView';
 import DetailedLinkView from '~/components/manage/Blocks/DetailedLink/View';
 import DetailedLinkEdit from '~/components/manage/Blocks/DetailedLink/Edit';
 
+import FolderContentsBlockView from '~/components/manage/Blocks/FolderContentsBlock/View';
+import FolderContentsBlockEdit from '~/components/manage/Blocks/FolderContentsBlock/Edit';
+
 const applyConfig = config => {
 console.log('config', config)
   config.views = {
@@ -31,6 +34,15 @@ console.log('config', config)
     icon: config.blocks.blocksConfig.text.icon,
   };
 
+
+  config.blocks.blocksConfig.folder_contents = {
+    id: 'folder_contents',
+    group: 'custom_addons',
+    title: 'Folder Contents',
+    view: FolderContentsBlockView,
+    edit: FolderContentsBlockEdit,
+    icon: config.blocks.blocksConfig.text.icon,
+  };
   return config;
 }
 
