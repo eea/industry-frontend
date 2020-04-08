@@ -71,7 +71,7 @@ class DefaultView extends Component {
   // }
 
   computeFolderTabs = siblings => {
-    const tabsItems = siblings.items.map(i => {
+    const tabsItems = siblings && siblings.items.map(i => {
       return {
         url: flattenToAppURL(i.url),
         title: i.name,

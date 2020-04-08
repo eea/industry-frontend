@@ -1,6 +1,9 @@
 
 import TabsView from '~/components/theme/View/TabsView';
 
+import ChildrenListView from '~/components/manage/Blocks/DetailedLink/View';
+import ChildrenListEdit from '~/components/manage/Blocks/DetailedLink/Edit';
+
 const applyConfig = config => {
 console.log('config', config)
   config.views = {
@@ -11,6 +14,16 @@ console.log('config', config)
     },
   };
 
+
+
+  config.blocks.blocksConfig.detailedLink = {
+    id: 'detailedlink',
+    group: 'custom_addons',
+    title: 'Detailed Link',
+    view: ChildrenListView,
+    edit: ChildrenListEdit,
+    icon: config.blocks.blocksConfig.text.icon,
+  };
 
   // config.blocks.blocksConfig.collection_block = {
   //   id: 'collection_block',
