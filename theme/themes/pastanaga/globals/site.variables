@@ -6,7 +6,7 @@
        Fonts
 --------------------*/
 
-@fontName          : 'Source Sans Pro';
+@fontName          : 'Poppins';
 
 @googleFontSizes   : '300,400,500,700,400italic,700italic';
 
@@ -24,19 +24,11 @@
 /*-------------------
     Brand Colors
 --------------------*/
-@primaryColor        : @lightblue;
+@primaryColor        : @darkBlue;
 
-@secondaryColor      : @darkBlue;
+@secondaryColor      : @brown;
 
-@bodyColor           : @bodyGrey;
-
-@darkPrimaryColor    : @darkOrange;
-
-@lightPrimaryColor   : @lightBodyGrey;
-
-@lightSecondaryColor : @lightOrange;
-
-/* @lightSecondaryColor : @lightGrey; */
+@lightSecondaryColor : @lightGrey;
 
 
 /*--------------
@@ -92,7 +84,7 @@
        Links
 --------------------*/
 
-@linkColor           : @lighterOrange;
+@linkColor           : @blue;
 
 
 /*-------------------
@@ -140,20 +132,11 @@
 @brown            : #826A6A; // Palette: reddishGrey
 @grey             : #68778D; // Palette: blueishGrey
 @black            : #252525; // Palette: darkishGrey
-@darkBlue         : #32536B;
-@darkOrange       : #D63D27;
-@darkGreen        : #009590;
+@darkBlue         : #005384;
 
 /*---  Light Colors  ---*/
 @lightOlive       : #C9EAB1; // Palette: lightSage
 @lightGrey        : #878F93;
-@lightblue        : #4296B2;
-@lightOrange      : #F3EFEE;
-@lighterOrange    : #EC776A;
-@lightBodyGrey    : #F6F6F6;
-@greyBlue         : #6C8BA2;
-
-
 
 /*---   Neutrals  ---*/
 @fullBlack        : #000000;
@@ -161,8 +144,6 @@
 @darkWhite        : #F3F4F5;
 @midWhite         : #DCDDDE;
 @white            : #FFFFFF;
-@bodyGrey         : #333333;
-
 
 /*--- Colored Backgrounds ---*/
 @redBackground    : #F5C1C1; // Palette: alertError

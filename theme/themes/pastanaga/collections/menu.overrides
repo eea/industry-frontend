@@ -116,29 +116,11 @@
       margin-left: 0;
     }
 
-    a {
-      &:hover {
-      color: rgba(white, .5);
-      border-color: transparent;
-      }
-    }
-
     .item {
-      font-weight: 300;
-      font-size: 14px;
-      text-transform: uppercase;
-      color: rgba(white, .8);
       padding-top: @relativeBig;
       margin: 0;
-
-      &.active {
-        font-weight: 700;
-        color: white;
-        border-color: transparent;
-        &:hover {
-          color: rgba(white, .8);
-        }
-      }
+      text-transform: uppercase;
+      color: white;
 
       @media only screen and (min-width: @largestTabletScreen) {
         padding: 1.7em 0 @relativeBig;
