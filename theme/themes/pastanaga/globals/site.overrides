@@ -2,7 +2,6 @@
         Global Overrides
 *******************************/
 
-
 .footerWrapper {
   background-color: @primaryColor !important;
   color           : white;
@@ -19,20 +18,29 @@
     text-decoration: underline;
     font-weight    : bold;
   }
+
+  p {
+    color: white !important;
+  }
 }
 
+#page-document.ui.container{
+  width: 80% !important;
+  margin: 4rem auto !important;
+}
 
 .widthSidebar {
   display: flex;
 
   #page-document.hasSidebar {
     width: 70%;
-    background-color: #f6f6f6;
+    background-color: @lightPrimaryColor;
     padding: 3rem;
+    text-align: left;
   }
   .page-document-sidebar {
     width: 30%;
-    background-color: #7c7c7c;
+    background-color: @lightSecondaryColor;
     display: flex;
     min-height: 100vh;
     .tabs {
@@ -40,24 +48,44 @@
       margin-left: auto;
       display: inline-flex;
       position: relative;
-      margin-right: 1rem;
-      margin-top: 2rem;
+      margin-right: 2rem;
+      margin-top: 4rem;
+      width: 58%;
       a {
-        color: white;
-        font-size: 1.2rem;
+        color: @bodyColor;
+        font-size: 1rem;
+        &.tabs__item {
+        padding-bottom: 2rem;
+          &.tabs__item_active {
+            font-weight: 700;
+            color: @linkColor;
+          }
+        }
       }
+    }
+  }
+  .hasSidebar{
+    padding-right: 10rem !important;
+    h1.documentFirstHeading {
+      text-align: left;
     }
   }
 }
 
 .tabs.section-tabs {
-  display: flex;
-  justify-content: center;
+  width: 78%;
+  margin: 0 auto;
   a {
-    color: #3f3f3f;
-    font-size: 1.2rem;
+    color: @bodyColor;
+    font-size: 18px;
     margin-right: 4rem;
     line-height: 3;
+    padding-bottom: 1rem;
+    &.tabs__item_active {
+      font-weight: 700;
+      color: @primaryColor;
+      border-bottom: 1rem solid @primaryColor;
+    }
   }
 }
 
@@ -66,11 +94,26 @@
   margin: 0;
 }
 
-h1.documentFirstHeading {
+h1.documentFirstHeading{
+  text-align: center;
+}
+
+h1.documentFirstHeading, h2, h3{
   font-size: 36px;
+  color: @primaryColor;
+  font-weight: 700;
   border-bottom: none!important;
   &:before {
     display: none!important;
+  }
+}
+
+p {
+
+  color: @bodyColor;
+  font-weight: 300;
+  &.documentDescription{
+    color: @fullBlack;
   }
 }
 
@@ -78,16 +121,13 @@ h1.documentFirstHeading {
   display: none;
 }
 
-
-
-
 .detailed-link-block {
   display: flex;
   flex-wrap: wrap;
   max-width: 800px;
   margin: 0 auto;
   flex-direction: column;
-} 
+}
 
 
 .detailed-link-block-item-title {
