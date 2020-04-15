@@ -2,23 +2,23 @@
          Theme Overrides
 *******************************/
 .glossary-search {
-    //max-width: 964px;
-    width: 80%;
-    margin   : 2rem auto;
+  //max-width: 964px;
+  width: 80%;
+  margin: 2rem auto;
 
-    .searchbox {
-        border-left: none!important;
-    }
+  .searchbox {
+    border-left: none!important;
+  }
 
-    .input {
-        border-radius: 30px;
-        height       : 50px;
-        background   : #EDEDED;
-        padding-left : 1.5rem;
-        font-weight: 300;
-        font-size: 18px;
-        color: @bodyColor;
-        /*
+  .input {
+    border-radius: 30px;
+    height: 50px;
+    background: #EDEDED;
+    padding-left: 1.5rem;
+    font-weight: 300;
+    font-size: 18px;
+    color: @bodyColor;
+    /*
         &:before{
           font-family: "Font Awesome 5 Free";
           font-weight: 700;
@@ -27,14 +27,14 @@
           color: @secondaryColor;
         }
         */
-    }
+  }
 
-    button {
-        background: @secondaryColor !important;
-        border-radius: 30px;
-        padding: 0 2rem!important;
-        color: white!important;
-        font-weight: 700;
-        margin-left: 1rem;
-    }
+  button {
+    background: @secondaryColor !important;
+    border-radius: 30px;
+    padding: 0 2rem !important;
+    color: white!important;
+    font-weight: 700;
+    margin-left: 1rem;
+  }
 }

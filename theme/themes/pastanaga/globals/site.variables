@@ -16,6 +16,7 @@
 --------------------*/
 
 
+
 /*-------------------
     Border Radius
 --------------------*/
@@ -24,6 +25,7 @@
 /*-------------------
     Brand Colors
 --------------------*/
+
 @primaryColor        : @lightblue;
 
 @secondaryColor      : @darkBlue;
@@ -35,8 +37,6 @@
 @lightPrimaryColor   : @lightBodyGrey;
 
 @lightSecondaryColor : @lightOrange;
-
-/* @lightSecondaryColor : @lightGrey; */
 
 
 /*--------------
@@ -125,6 +125,11 @@
      Breakpoints
 --------------------*/
 
+@mobileBreakpoint            : 320px;
+@tabletBreakpoint            : 903px;
+@computerBreakpoint          : 992px;
+@largeMonitorBreakpoint      : 1200px;
+@widescreenMonitorBreakpoint : 1920px;
 
 /*-------------------
       Site Colors
@@ -144,15 +149,15 @@
 @darkOrange       : #D63D27;
 @darkGreen        : #009590;
 
+
 /*---  Light Colors  ---*/
 @lightOlive       : #C9EAB1; // Palette: lightSage
 @lightGrey        : #878F93;
 @lightblue        : #4296B2;
 @lightOrange      : #F3EFEE;
-@lighterOrange    : #EC776A;
+@lighterOrange    : #ED776A;
 @lightBodyGrey    : #F6F6F6;
 @greyBlue         : #6C8BA2;
-
 
 
 /*---   Neutrals  ---*/
@@ -273,6 +278,10 @@
 
 
 /* Responsive */
+@largestMobileScreen : (@tabletBreakpoint - 1px);
+@largestTabletScreen : (@computerBreakpoint - 1px);
+@largestSmallMonitor : (@largeMonitorBreakpoint - 1px);
+@largestLargeMonitor : (@widescreenMonitorBreakpoint - 1px);
 
 
 /*-------------------
