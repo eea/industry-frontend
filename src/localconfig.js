@@ -9,6 +9,9 @@ import DetailedLinkEdit from '~/components/manage/Blocks/DetailedLink/Edit';
 import FolderContentsBlockView from '~/components/manage/Blocks/FolderContentsBlock/View';
 import FolderContentsBlockEdit from '~/components/manage/Blocks/FolderContentsBlock/Edit';
 
+import ArticlesListView from '~/components/manage/Blocks/ArticlesList/View';
+import ArticlesListEdit from '~/components/manage/Blocks/ArticlesList/Edit';
+
 const applyConfig = config => {
 console.log('config', config)
   config.views = {
@@ -41,6 +44,15 @@ console.log('config', config)
     title: 'Folder Contents',
     view: FolderContentsBlockView,
     edit: FolderContentsBlockEdit,
+    icon: config.blocks.blocksConfig.text.icon,
+  };
+
+  config.blocks.blocksConfig.articles_list = {
+    id: 'articles_list',
+    group: 'custom_addons',
+    title: 'Articles List',
+    view: ArticlesListView,
+    edit: ArticlesListEdit,
     icon: config.blocks.blocksConfig.text.icon,
   };
   return config;
