@@ -3,20 +3,20 @@
 *******************************/
 
 .footerWrapper {
-  background-color: @primaryColor !important;
-  color           : white;
+  background-color: @primaryColor  !important;
+  color: white;
 
   .unlist {
-    margin         : 0;
+    margin: 0;
     list-style-type: none;
     text-decoration: underline;
-    font-weight    : bold;
+    font-weight: bold;
   }
 
   a {
-    color          : white;
+    color: white;
     text-decoration: underline;
-    font-weight    : bold;
+    font-weight: bold;
   }
 
   p {
@@ -38,11 +38,13 @@
     padding: 3rem;
     text-align: left;
   }
+
   .page-document-sidebar {
     width: 30%;
     background-color: @lightSecondaryColor;
     display: flex;
     min-height: 100vh;
+
     .tabs {
       flex-direction: column;
       margin-left: auto;
@@ -73,7 +75,7 @@
 }
 
 .tabs.section-tabs {
-  width: 78%;
+  width: 80%;
   margin: 0 auto;
   a {
     color: @bodyColor;
@@ -104,7 +106,7 @@ h1.documentFirstHeading, h2, h3{
   font-weight: 700;
   border-bottom: none!important;
   &:before {
-    display: none!important;
+    display: none !important;
   }
 }
 
@@ -147,15 +149,70 @@ p {
 .detailed-link-block {
   button {
     max-width: 200px;
-    border-radius: 30px!important;
-    line-height: 2!important;
-    text-align: center!important;
+    border-radius: 30px !important;
+    line-height: 2 !important;
+    text-align: center !important;
     border-width: 1px;
     font-weight: 100;
   }
+
   p {
     color: #444;
     font-size: 16px;
     position: relative;
+  }
+}
+
+.article-list-row {
+  display: flex;
+  margin-bottom: 20px;
+
+  @media only screen and (max-width: 500px) {
+    flex-wrap: wrap;
+    margin-bottom: 40px
+  }
+
+
+  .article-img {
+    width: 200px;
+    border-radius: 20px;
+    margin-right: 25px;
+
+    @media only screen and (max-width: 500px) {
+      width: 90%;
+    }
+  }
+
+
+
+  .article-title {
+    color: #ED776A;
+    font-weight: 500;
+    font-size: 20px;
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
+
+  .article-date {
+    font-size: 12px;
+    color: grey;
+    margin-bottom: 5px;
+    margin-top: 5px;
+  }
+
+  .read-article {
+    border: 1px solid #33536B;
+    padding: 5px 30px;
+    border-radius: 20px;
+  }
+
+  .article-description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    /* number of lines to show */
+    -webkit-box-orient: vertical;
+    margin-bottom: 20px;
   }
 }

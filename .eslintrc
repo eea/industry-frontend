@@ -1,0 +1,63 @@
+{
+    "extends": "./node_modules/@plone/volto/.eslintrc", 
+    "settings": {
+        "import/resolver": {
+            "alias": {
+                "map": [
+                    [
+                        "@plone/volto", 
+                        "@plone/volto/src"
+                    ], 
+                    [
+                        "@package", 
+                        "./src"
+                    ], 
+                    [
+                        "~", 
+                        "./src"
+                    ], 
+                    [
+                        "volto-mosaic", 
+                        "./src/develop/volto-mosaic/src"
+                    ], 
+                    [
+                        "volto-datablocks", 
+                        "./src/develop/volto-datablocks/src"
+                    ], 
+                    [
+                        "volto-addons", 
+                        "./src/develop/volto-addons/src"
+                    ], 
+                    [
+                        "volto-ckeditor", 
+                        "./src/develop/volto-ckeditor/src"
+                    ], 
+                    [
+                        "volto-blocks", 
+                        "./src/develop/volto-blocks/src"
+                    ], 
+                    [
+                        "volto-drafteditor", 
+                        "./src/develop/volto-drafteditor/src"
+                    ], 
+                    [
+                        "volto-base", 
+                        "./src/develop/volto-base/src"
+                    ], 
+                    [
+                        "volto-plotlycharts", 
+                        "./src/develop/volto-plotlycharts/src"
+                    ], 
+                    [
+                        "volto-embed", 
+                        "./src/develop/volto-embed/src"
+                    ], 
+                    [
+                        "volto-sidebar", 
+                        "./src/develop/volto-sidebar/src"
+                    ]
+                ]
+            }
+        }
+    }
+}
