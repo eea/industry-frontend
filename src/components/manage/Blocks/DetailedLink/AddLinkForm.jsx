@@ -145,7 +145,6 @@ class AddLinkForm extends Component {
 
   render() {
     const { value, isInvalid } = this.state;
-    console.log('link value', this.props.search);
     return (
       <div className="link-form-container" style={{ display: 'flex', flexDirection: 'column' }} ref={this.linkFormContainer}>
         <div

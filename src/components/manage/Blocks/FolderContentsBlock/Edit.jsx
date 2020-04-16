@@ -73,7 +73,6 @@ class Edit extends Component {
   };
 
   render() {
-    console.log('link instate', this.state.link)
     return (
       <div>
         {this.state.link && (

@@ -14,7 +14,6 @@ export function setSectionTabs(payload) {
 
 
 export function getParentFolderData(url) {
-  console.log('in action', url)
   return {
     type: GET_PARENT_FOLDER_DATA,
     request: {
