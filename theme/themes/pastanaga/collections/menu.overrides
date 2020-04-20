@@ -1,7 +1,6 @@
 /*******************************
          Theme Overrides
 *******************************/
-
 .ui.menu .item.personal-bar {
   position: fixed;
   bottom: 68px;
@@ -37,8 +36,7 @@
   margin: 4px -14px 0;
   background-repeat: no-repeat;
   background-size: 64px 18px;
-  transition: width 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045),
-    margin 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  transition: width 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045), margin 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045);
 }
 
 .ui.menu.collapsed .item.logo > .image {
@@ -104,28 +102,53 @@
 
 .navigation,
 .tools {
-  .menu {
-    margin-top: 0;
+  margin-left: 40px;
+  @media only screen and (max-width: @largestTabletScreen) {
+    margin-left: 0;
+    margin-top: 0.5rem;
   }
-  margin: 0 0 0 40px;
-    .ui.secondary.pointing.menu {
-    border: 0;
 
+  .ui.pointing.secondary.stackable.computer.large.screen.widescreen.only.menu {
+    @media only screen and (max-width: 1071px) and (min-width:992px) {
+      display: flex !important;
+    }
+  }
+
+  .ui.secondary.pointing.menu {
+    border: 0;
     @media only screen and (max-width: @largestTabletScreen) {
       margin-bottom: 20px;
       margin-left: 0;
     }
 
-    .item {
-      padding-top: @relativeBig;
-      margin: 0;
-      text-transform: uppercase;
-      color: white;
-
-      @media only screen and (min-width: @largestTabletScreen) {
-        padding: 1.7em 0 @relativeBig;
-        margin: 0 unit(@relativeLarge * 2, em) 0 0;
+    a {
+      &:hover {
+        color: rgba(white, .5);
+        border-color: transparent;
       }
+    }
+
+    .item {
+      font-weight: 300;
+      font-size: 14px;
+      text-transform: uppercase;
+      color: rgba(white, .8);
+      //padding-top: @relativeBig;
+      margin: 0;
+
+      &.active {
+        font-weight: 700;
+        color: white;
+        border-color: transparent;
+
+        &:hover {
+          color: rgba(white, .8);
+        }
+      }
+      /*@media only screen and (min-width: @largestTabletScreen) {
+            padding: 1.7em 0 @relativeBig;
+            margin: 0 unit(@relativeLarge * 2, em) 0 0;
+          }*/
     }
   }
 }
@@ -159,14 +182,12 @@
     color: @black;
   }
 }
-
 @media only screen and (max-width: 767px) {
   .ui.menu.stackable > .menu,
   .ui.menu.stackable > .menu.right {
     display: block;
   }
 }
-
 /* Pagination */
 .pagination-wrapper {
   text-align: center;
@@ -186,6 +207,8 @@
 
   .active.item {
     background: none;
-    color: @textColor;
+    color: @linkColor;
+    font-weight: 700;
+    border-bottom: 2px solid @linkColor;
   }
 }

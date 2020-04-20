@@ -6,7 +6,7 @@
        Fonts
 --------------------*/
 
-@fontName          : 'Poppins';
+@fontName          : 'Source Sans Pro';
 
 @googleFontSizes   : '300,400,500,700,400italic,700italic';
 
@@ -14,6 +14,7 @@
 /*-------------------
       Base Sizes
 --------------------*/
+
 
 
 /*-------------------
@@ -24,11 +25,18 @@
 /*-------------------
     Brand Colors
 --------------------*/
-@primaryColor        : @darkBlue;
 
-@secondaryColor      : @brown;
+@primaryColor        : @lightblue;
 
-@lightSecondaryColor : @lightGrey;
+@secondaryColor      : @darkBlue;
+
+@bodyColor           : @bodyGrey;
+
+@darkPrimaryColor    : @darkOrange;
+
+@lightPrimaryColor   : @lightBodyGrey;
+
+@lightSecondaryColor : @lightOrange;
 
 
 /*--------------
@@ -84,7 +92,7 @@
        Links
 --------------------*/
 
-@linkColor           : @blue;
+@linkColor           : @lighterOrange;
 
 
 /*-------------------
@@ -117,6 +125,11 @@
      Breakpoints
 --------------------*/
 
+@mobileBreakpoint            : 320px;
+@tabletBreakpoint            : 903px;
+@computerBreakpoint          : 992px;
+@largeMonitorBreakpoint      : 1200px;
+@widescreenMonitorBreakpoint : 1920px;
 
 /*-------------------
       Site Colors
@@ -132,11 +145,20 @@
 @brown            : #826A6A; // Palette: reddishGrey
 @grey             : #68778D; // Palette: blueishGrey
 @black            : #252525; // Palette: darkishGrey
-@darkBlue         : #005384;
+@darkBlue         : #32536B;
+@darkOrange       : #D63D27;
+@darkGreen        : #009590;
+
 
 /*---  Light Colors  ---*/
 @lightOlive       : #C9EAB1; // Palette: lightSage
 @lightGrey        : #878F93;
+@lightblue        : #4296B2;
+@lightOrange      : #F3EFEE;
+@lighterOrange    : #ED776A;
+@lightBodyGrey    : #F6F6F6;
+@greyBlue         : #6C8BA2;
+
 
 /*---   Neutrals  ---*/
 @fullBlack        : #000000;
@@ -144,6 +166,8 @@
 @darkWhite        : #F3F4F5;
 @midWhite         : #DCDDDE;
 @white            : #FFFFFF;
+@bodyGrey         : #333333;
+
 
 /*--- Colored Backgrounds ---*/
 @redBackground    : #F5C1C1; // Palette: alertError
@@ -254,6 +278,10 @@
 
 
 /* Responsive */
+@largestMobileScreen : (@tabletBreakpoint - 1px);
+@largestTabletScreen : (@computerBreakpoint - 1px);
+@largestSmallMonitor : (@largeMonitorBreakpoint - 1px);
+@largestLargeMonitor : (@widescreenMonitorBreakpoint - 1px);
 
 
 /*-------------------

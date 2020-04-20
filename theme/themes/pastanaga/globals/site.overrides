@@ -1,13 +1,52 @@
 /*******************************
         Global Overrides
 *******************************/
-
+.ui.vertical.padded.segment.footerWrapper > .ui.container {
+  width: 80% !important;
+  @media only screen and (max-width: @largestTabletScreen) {
+    margin: 0 2rem !important;
+    width: auto !important;
+  }
+}
 
 .footerWrapper {
-  background-color: @primaryColor  !important;
-  color: white;
+  background-color: @primaryColor !important;
+
+  .ui.container {
+    padding-top: 2rem;
+
+    .six.wide.column {
+      flex: 2 0 auto;
+    }
+    @media only screen and (min-width: 425px) and (max-width: @largestTabletScreen) {
+      .row {
+        /*.three.wide.column, .six.wide.column {
+          width: 100% !important;
+        }*/
+        .three.wide.column:last-child {
+          width: 100% !important;
+        }
+      }
+    }
+    @media only screen and (max-width: 600px) {
+      .row {
+        flex-direction: column;
+
+        .six.wide.column,
+        .three.wide.column {
+          width: 100% !important;
+        }
+
+        .six.wide.column {
+          margin-top: .5rem;
+          flex-direction: row;
+        }
+      }
+    }
+  }
 
   .unlist {
+    padding-left: 0;
     margin: 0;
     list-style-type: none;
     text-decoration: underline;
@@ -19,21 +58,35 @@
     text-decoration: underline;
     font-weight: bold;
   }
+
+  p {
+    color: white;
+  }
 }
 
+#page-document.ui.container {
+  @media only screen and (min-width: 982px) {
+    width: 80% !important;
+    margin-top: 4rem !important;
+  }
+  @media only screen and (max-width: @largestTabletScreen) {
+    margin: 2rem !important;
+  }
+}
 
 .widthSidebar {
   display: flex;
 
   #page-document.hasSidebar {
     width: 70%;
-    background-color: #f6f6f6;
+    background-color: @lightPrimaryColor;
     padding: 3rem;
+    text-align: left;
   }
 
   .page-document-sidebar {
     width: 30%;
-    background-color: #7c7c7c;
+    background-color: @lightSecondaryColor;
     display: flex;
     min-height: 100vh;
 
@@ -42,26 +95,51 @@
       margin-left: auto;
       display: inline-flex;
       position: relative;
-      margin-right: 1rem;
-      margin-top: 2rem;
+      margin-right: 2rem;
+      margin-top: 4rem;
+      width: 58%;
 
       a {
-        color: white;
-        font-size: 1.2rem;
+        color: @bodyColor;
+        font-size: 1rem;
+
+        &.tabs__item {
+          padding-bottom: 2rem;
+
+          &.tabs__item_active {
+            font-weight: 700;
+            color: @linkColor;
+          }
+        }
       }
+    }
+  }
+
+  .hasSidebar {
+    padding-right: 10rem !important;
+
+    h1.documentFirstHeading {
+      text-align: center;
     }
   }
 }
 
 .tabs.section-tabs {
-  display: flex;
-  justify-content: center;
+  width: 80%;
+  margin: 0 auto;
 
   a {
-    color: #3f3f3f;
-    font-size: 1.2rem;
+    color: @bodyColor;
+    font-size: 18px;
     margin-right: 4rem;
     line-height: 3;
+    padding-bottom: 1rem;
+
+    &.tabs__item_active {
+      font-weight: 700;
+      color: @primaryColor;
+      border-bottom: 1rem solid @primaryColor;
+    }
   }
 }
 
@@ -71,20 +149,34 @@
 }
 
 h1.documentFirstHeading {
+  text-align: center;
+}
+
+h1.documentFirstHeading,
+h2,
+h3 {
   font-size: 36px;
-  border-bottom: none !important;
+  color: @primaryColor;
+  font-weight: 700;
+  border-bottom: none!important;
 
   &:before {
     display: none !important;
   }
 }
 
+p {
+  color: @bodyColor;
+  font-weight: 300;
+
+  &.documentDescription {
+    color: @fullBlack;
+  }
+}
+
 .breadcrumbs {
   display: none;
 }
-
-
-
 
 .detailed-link-block {
   display: flex;
@@ -94,9 +186,7 @@ h1.documentFirstHeading {
   flex-direction: column;
 }
 
-
 .detailed-link-block-item-title {
-  // font-family: 'Roboto Condensed';
   font-size: 28px;
   font-weight: 500;
   margin-bottom: 1.5rem;
@@ -129,27 +219,22 @@ h1.documentFirstHeading {
 .article-list-row {
   display: flex;
   margin-bottom: 20px;
-
   @media only screen and (max-width: 500px) {
     flex-wrap: wrap;
-    margin-bottom: 40px
+    margin-bottom: 40px;
   }
-
 
   .article-img {
     width: 200px;
     border-radius: 20px;
     margin-right: 25px;
-
     @media only screen and (max-width: 500px) {
       width: 90%;
     }
   }
 
-
-
   .article-title {
-    color: #ED776A;
+    color: @linkColor;
     font-weight: 500;
     font-size: 20px;
     margin-top: 10px;
