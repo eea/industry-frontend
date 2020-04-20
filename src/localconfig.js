@@ -12,8 +12,12 @@ import FolderContentsBlockEdit from '~/components/manage/Blocks/FolderContentsBl
 import ArticlesListView from '~/components/manage/Blocks/ArticlesList/View';
 import ArticlesListEdit from '~/components/manage/Blocks/ArticlesList/Edit';
 
+import ChildrenLinksView from '~/components/manage/Blocks/ChildrenLinks/View'
+import ChildrenLinksEdit from '~/components/manage/Blocks/ChildrenLinks/Edit'
+
+
 const applyConfig = config => {
-console.log('config', config)
+  console.log('config', config)
   config.views = {
     ...config.views,
     layoutViews: {
@@ -53,6 +57,15 @@ console.log('config', config)
     title: 'Articles List',
     view: ArticlesListView,
     edit: ArticlesListEdit,
+    icon: config.blocks.blocksConfig.text.icon,
+  };
+
+  config.blocks.blocksConfig.children_links = {
+    id: 'children_links',
+    group: 'custom_addons',
+    title: 'Children Links',
+    view: ChildrenLinksView,
+    edit: ChildrenLinksEdit,
     icon: config.blocks.blocksConfig.text.icon,
   };
   return config;

@@ -264,3 +264,24 @@ p {
     margin-bottom: 20px;
   }
 }
+
+.child-container {
+  display: flex;
+  justify-content: center;
+  border: 1px solid #33536B;
+  border-radius: 40px;
+  margin: 5px;
+
+  .child-link {
+    padding: 10px 25px;
+    color: #33536B;
+    font-size: 20px;
+    font-weight: 300 !important;
+    text-decoration: none;
+  }
+}
+
+.search-text {
+  margin: 10px !important;
+  font-size: 20px !important;
+}

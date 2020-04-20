@@ -12,7 +12,7 @@ import { map } from 'lodash';
 import { doesNodeContainClick } from 'semantic-ui-react/dist/commonjs/lib';
 import { defineMessages, injectIntl } from 'react-intl';
 
-import { resetSearchContent, searchContent } from '@plone/volto/actions';
+import { resetSearchContent, searchContent, getNavigation } from '@plone/volto/actions';
 import URLUtils from '@plone/volto/components/manage/AnchorPlugin/utils/URLUtils';
 
 const messages = defineMessages({
@@ -106,6 +106,7 @@ class AddLinkForm extends Component {
       value: item['@id'],
       description: item.description,
       external: true,
+      url: item.getURL
     };
     this.setState({
       value: itemToSave,
@@ -144,9 +145,8 @@ class AddLinkForm extends Component {
 
   render() {
     const { value, isInvalid } = this.state;
-    console.log('link value', this.props);
     return (
-      <div className="link-form-container" ref={this.linkFormContainer}>
+      <div className="link-form-container" style={{ display: 'flex', flexDirection: 'column' }} ref={this.linkFormContainer}>
         <div
           style={{ marginLeft: '5px', display: 'flex', alignItems: 'center' }}
         >
@@ -163,6 +163,7 @@ class AddLinkForm extends Component {
             </g>
           </svg>
           <input
+            style={{ padding: "10px", border: 'none' }}
             onChange={this.onChange}
             onKeyDown={this.onKeyDown}
             ref={this.onRef}
@@ -171,10 +172,11 @@ class AddLinkForm extends Component {
             placeholder={this.props.intl.formatMessage(messages.placeholder)}
           />
         </div>
-        <ul style={{ margin: 0, paddingLeft: '35px' }}>
+        <div style={{ margin: 0, paddingLeft: '35px', display: 'flex', flexWrap: 'wrap' }}>
           {map(this.props.search, item => (
-            <li style={{ padding: '5px' }}>
+            <div className="child-container">
               <button
+                className="child-link"
                 style={{ cursor: 'pointer' }}
                 onClick={e => this.onSelectItem(e, item)}
                 title={item['@id']}
@@ -182,9 +184,10 @@ class AddLinkForm extends Component {
               >
                 {item.title}
               </button>
-            </li>
+            </div>
+
           ))}
-        </ul>
+        </div>
       </div>
     );
   }
