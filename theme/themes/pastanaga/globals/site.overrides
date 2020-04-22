@@ -4,19 +4,85 @@
 
 
 .footerWrapper {
-  background-color: @primaryColor !important;
-  color           : white;
+  background-color: @primaryColor  !important;
+  color: white;
 
   .unlist {
-    margin         : 0;
+    margin: 0;
     list-style-type: none;
     text-decoration: underline;
-    font-weight    : bold;
+    font-weight: bold;
   }
 
   a {
-    color          : white;
+    color: white;
     text-decoration: underline;
-    font-weight    : bold;
+    font-weight: bold;
   }
+}
+
+.browse-area {
+
+  .browse-input {
+    width: 35%;
+    margin-left: 20px;
+
+    input {
+      background: #EDEDED !important;
+      border-radius: 20px !important;
+      border: none !important;
+      padding: 13.5px;
+      font-size: 16px;
+    }
+
+    i {
+      font-size: 30px;
+      color: #33536B;
+      left: -15px !important;
+    }
+  }
+
+  .view-button {
+    background: white;
+    border: 1px solid #333333;
+    border-radius: 30px;
+    margin-right: 20px;
+    padding: 10px 30px;
+    font-size: 13px;
+    color: #989898;
+    cursor: pointer;
+  }
+
+  .browse-text {
+    margin: 0;
+    align-self: center;
+    color: #B2B2B2
+  }
+
+  .browse-button {
+    border-radius: 30px;
+    padding: 10px 30px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+
+  }
+
+  .red-selected {
+    background-color: #D63D28;
+    color: white;
+  }
+
+  .red {
+    background-color: white;
+    color: #D63D28;
+    font-weight: normal;
+  }
+
+  .blue {
+    background-color: #33536B;
+    color: white;
+  }
+
 }
