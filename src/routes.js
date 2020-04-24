@@ -7,7 +7,7 @@ import { App } from '@plone/volto/components';
 import { defaultRoutes } from '@plone/volto/routes';
 
 import { addonRoutes } from '~/config';
-import BrowseView from '~/components/theme/View/BrowseView';
+import BrowseView from '~/components/theme/View/BrowseView/BrowseView';
 
 /**
  * Routes array.
