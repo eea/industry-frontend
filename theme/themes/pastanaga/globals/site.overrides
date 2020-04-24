@@ -24,12 +24,13 @@
 .browse-area {
 
   .browse-input {
-    width: 35%;
+    width: 50%;
     margin-left: 20px;
+    height: 50px;
 
     input {
       background: #EDEDED !important;
-      border-radius: 20px !important;
+      border-radius: 30px !important;
       border: none !important;
       padding: 13.5px;
       font-size: 16px;
@@ -51,6 +52,7 @@
     font-size: 13px;
     color: #989898;
     cursor: pointer;
+    outline: none;
   }
 
   .browse-text {
@@ -61,28 +63,156 @@
 
   .browse-button {
     border-radius: 30px;
-    padding: 10px 30px;
     font-size: 15px;
     font-weight: bold;
     cursor: pointer;
     border: none;
+    outline: none;
+  }
 
+  .advanced-red {
+    background-color: #D63D28;
+    color: white;
+    height: 50px;
+    max-width: 300px;
+    padding: 10px 30px;
   }
 
   .red-selected {
     background-color: #D63D28;
     color: white;
+    padding: 10px 15px;
   }
 
   .red {
     background-color: white;
     color: #D63D28;
     font-weight: normal;
+    padding: 10px 15px;
   }
 
   .blue {
     background-color: #33536B;
     color: white;
+    padding: 10px 30px;
   }
 
+  .spaced-row {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .centered-selector-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 15px;
+    margin-right: 80px;
+  }
+
+
+  .search-map-menu {
+    position: absolute;
+    top: 10px;
+    background: white;
+    left: 15%;
+    height: 100%;
+    width: 300px;
+    padding: 10px 40px;
+
+    .menu-title {
+      font-size: 20px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      color: #4296B2;
+      font-weight: 600;
+    }
+
+    .menu-label {
+      font-size: 15px;
+      font-weight: 600;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      color: #4296B2;
+    }
+
+    .quick-fact-card {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    .menu-radio {
+      font-size: 14px;
+      font-weight: 200;
+      min-height: 35px !important;
+
+      label::after {
+        background-color: red !important;
+      }
+    }
+
+
+    .card-content {
+      font-size: 13px;
+      font-weight: 200;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+  }
+
+  .table-head {
+    display: flex;
+    border-bottom: 1px solid grey;
+    width: 65%;
+    justify-content: space-between;
+  }
+
+  .table-row {
+    display: flex;
+    width: 65%;
+    justify-content: space-between;
+  }
+
+  .table-title {
+    font-size: 15px;
+    font-weight: bold;
+    margin-right: 30px;
+    text-align: left;
+  }
+
+  .table-content {
+    font-size: 14px;
+    font-weight: 300;
+    margin-right: 30px;
+    text-align: left;
+  }
+
+  .dropdown-icon {
+    fill: red
+  }
+
+  .details-content {
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .details-title {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .details-button {
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: #33536B;
+    color: white;
+    padding: 10px 50px;
+    flex-grow: unset!important;
+  }
 }
