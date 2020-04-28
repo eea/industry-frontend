@@ -20,7 +20,12 @@ import {
   hasBlocksData,
 } from '@plone/volto/helpers';
 import { flattenToAppURL } from '@plone/volto/helpers';
+import { setSectionTabs } from '~/actions';
+import { Redirect } from 'react-router-dom';
 
+const mapDispatchToProps = {
+  setSectionTabs,
+};
 const messages = defineMessages({
   unknownBlock: {
     id: 'Unknown Block',
@@ -71,12 +76,16 @@ class DefaultView extends Component {
   // }
 
   computeFolderTabs = siblings => {
-    const tabsItems = siblings.items.map(i => {
+    const tabsItems = siblings && siblings.items.map(i => {
       return {
         url: flattenToAppURL(i.url),
         title: i.name,
       };
     });
+    console.log('--------------', this.props.pathname)
+    if(this.props.pathname && this.props.pathname.split('/').length === 3) {
+      this.props.setSectionTabs(tabsItems);
+    }
     return tabsItems;
   };
 
@@ -86,51 +95,19 @@ class DefaultView extends Component {
     const blocksFieldname = getBlocksFieldname(content);
     const blocksLayoutFieldname = getBlocksLayoutFieldname(content);
     const tabs = this.computeFolderTabs(content['@components'].siblings);
-
-    // const currentUrl = this.props.content?.['@id'];
-    // const shouldRenderRoutes =
-    //   typeof currentUrl !== 'undefined' &&
-    //   samePath(currentUrl, this.props.pathname)
-    //     ? true
-    //     : false;
-    //
-    // if (shouldRenderRoutes === false)
-    //   return (
-    //     <div className="lds-default">
-    //       <div />
-    //       <div />
-    //       <div />
-    //       <div />
-    //       <div />
-    //       <div />
-    //       <div />
-    //       <div />
-    //       <div />
-    //       <div />
-    //       <div />
-    //       <div />
-    //     </div>
-    //   );
-
+    const mainItem = content.items[0];
+    const mainUrl = mainItem && mainItem['@id'] && flattenToAppURL(mainItem['@id']);
+    console.log('mainitem,mainurl', mainItem, mainUrl);
+    let redirect = false
+    if (__CLIENT__ && mainUrl && window) {
+      redirect = true
+    }
     return (
       hasBlocksData(content) && (
         <div id="page-document" className="ui wrapper">
-          {tabs && tabs.length ? (
-            <nav className="tabs">
-              {tabs.map(tab => (
-                <Link
-                  key={`localtab-${tab.url}`}
-                  className={`tabs__item${(tab.url ===
-                    this.props.location.pathname &&
-                    ' tabs__item_active') ||
-                    ''}`}
-                  to={tab.url}
-                  title={tab.title}
-                >
-                  {tab.title}
-                </Link>
-              ))}
-            </nav>
+          {/* <button onClick={() => this.props.setSectionTabs(tabs)}>asd</button> */}
+          {tabs && tabs.length && redirect ? (
+             <Redirect to={{ pathname: mainUrl }} />
           ) : (
             ''
           )}
@@ -167,5 +144,5 @@ export default compose(
     pathname: props.location.pathname,
     content:
       state.prefetch?.[state.router.location.pathname] || state.content.data,
-  })),
+  }),mapDispatchToProps),
 )(DefaultView);
