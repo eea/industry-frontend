@@ -7,6 +7,7 @@ import { App } from '@plone/volto/components';
 import { defaultRoutes } from '@plone/volto/routes';
 
 import { addonRoutes } from '~/config';
+import BrowseView from '~/components/theme/View/BrowseView/BrowseView';
 
 /**
  * Routes array.
@@ -19,6 +20,12 @@ const routes = [
     component: App, // Change this if you want a different component
     routes: [
       // Add your routes here
+      {
+        path: '/browse',
+        component: BrowseView,
+      },
+
+
       // {
       //   path: '/',
       //   component: HomepageView,
