@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import { compose } from 'redux';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { Grid, Input} from 'semantic-ui-react';
+import { Grid, Input } from 'semantic-ui-react';
 import BrowseTable from './BrowseTable';
 import BrowseMap from './BrowseMap';
 
@@ -31,6 +31,12 @@ class BrowseView extends Component {
 
         return (
             <div className="browse-area">
+                <div className="header-bar">
+                    <div className="header-wrapper">
+                        <p className="bar-item selected">Industrial emissions</p>
+                        <p className="bar-item">Diffuse emissions</p>
+                    </div>
+                </div>
                 <Grid>
                     <Grid.Row centered verticalAlign="middle">
                         <button className="view-button">

@@ -16,13 +16,14 @@ const MapModal = ({onClose, mapModal}) => {
             <Grid.Column stretched>
 
                 <Grid.Row>
-                    <p className="modal-label">Facility Contents</p>
+                    <p className="modal-label">Site Contents</p>
                     <div style={{ display: 'flex', flexDirection: "column" }}>
                         {mapModal.facilityContents &&
                             mapModal.facilityContents.map(content =>
                                 <a className="details-link" href={content.url}>{content.title}</a>
                             )
                         }
+                        
                     </div>
                 </Grid.Row>
                 <Grid.Row>
@@ -32,12 +33,14 @@ const MapModal = ({onClose, mapModal}) => {
                             <p className="details-content">{pollutants}</p>
                         )
                     }
+                    <a className="details-link" href={'google.com'}>15 more...</a>
                 </Grid.Row>
                 <Grid.Row>
                     <p className="modal-label">Regulatory information</p>
                     <p className="details-content">Operating since: {mapModal.regulatoryInformation.operatingSince}</p>
                     <p className="details-content">Last operating permit issued: {mapModal.regulatoryInformation.lastPermit}</p>
                     <p className="details-content">Last inspection: {mapModal.regulatoryInformation.lastInspection}</p>
+                    <a className="details-link" href={'google.com'}>Find out more</a>
                 </Grid.Row>
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <button className="details-button"> VIEW SITE DETAIL </button>

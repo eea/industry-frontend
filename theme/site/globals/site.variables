@@ -14,12 +14,19 @@
 /*-------------------
       Base Sizes
 --------------------*/
+@headlineFontSize: 24px;
+@titleFontSize: 20px;
+@contentFontSize: 15px;
 
+@extraBold: 600;
+@lightWeight: 200;
 
 
 /*-------------------
     Border Radius
 --------------------*/
+
+@themeBorderRadius: 30px;
 
 
 /*-------------------
@@ -61,6 +68,16 @@
     Focused Input
 --------------------*/
 
+/*-------------------
+  Spacing
+--------------------*/
+@smallMargin: 5px;
+@normalMargin: 10px;
+@mediumMargin: 15px;
+@extraMargin: 20px;
+@bigMargin: 30px;
+
+@buttonPadding: 10px 30px;
 
 /*-------------------
         Sizes
@@ -130,6 +147,8 @@
 @computerBreakpoint          : 992px;
 @largeMonitorBreakpoint      : 1200px;
 @widescreenMonitorBreakpoint : 1920px;
+
+@500Breakpoint: 500px;
 
 /*-------------------
       Site Colors

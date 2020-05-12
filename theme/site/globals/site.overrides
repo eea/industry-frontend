@@ -1,8 +1,9 @@
 /*******************************
         Global Overrides
 *******************************/
-.ui.vertical.padded.segment.footerWrapper > .ui.container {
+.ui.vertical.padded.segment.footerWrapper>.ui.container {
   width: 80% !important;
+
   @media only screen and (max-width: @largestTabletScreen) {
     margin: 0 2rem !important;
     width: auto !important;
@@ -10,7 +11,7 @@
 }
 
 .footerWrapper {
-  background-color: @primaryColor !important;
+  background-color: @primaryColor  !important;
 
   .ui.container {
     padding-top: 2rem;
@@ -18,8 +19,10 @@
     .six.wide.column {
       flex: 2 0 auto;
     }
+
     @media only screen and (min-width: 425px) and (max-width: @largestTabletScreen) {
       .row {
+
         /*.three.wide.column, .six.wide.column {
           width: 100% !important;
         }*/
@@ -28,6 +31,7 @@
         }
       }
     }
+
     @media only screen and (max-width: 600px) {
       .row {
         flex-direction: column;
@@ -54,13 +58,13 @@
   }
 
   a {
-    color: white;
+    color: @white;
     text-decoration: underline;
     font-weight: bold;
   }
 
   p {
-    color: white;
+    color: @white;
   }
 }
 
@@ -69,6 +73,7 @@
     width: 80% !important;
     margin-top: 4rem !important;
   }
+
   @media only screen and (max-width: @largestTabletScreen) {
     margin: 2rem !important;
   }
@@ -107,7 +112,7 @@
           padding-bottom: 2rem;
 
           &.tabs__item_active {
-            font-weight: 700;
+            font-weight: @extraBold;
             color: @linkColor;
           }
         }
@@ -136,7 +141,7 @@
     padding-bottom: 1rem;
 
     &.tabs__item_active {
-      font-weight: 700;
+      font-weight: @extraBold;
       color: @primaryColor;
       border-bottom: 1rem solid @primaryColor;
     }
@@ -157,8 +162,8 @@ h2,
 h3 {
   font-size: 36px;
   color: @primaryColor;
-  font-weight: 700;
-  border-bottom: none!important;
+  font-weight: @extraBold;
+  border-bottom: none !important;
 
   &:before {
     display: none !important;
@@ -167,7 +172,7 @@ h3 {
 
 p {
   color: @bodyColor;
-  font-weight: 300;
+  font-weight: @lightWeight;
 
   &.documentDescription {
     color: @fullBlack;
@@ -188,9 +193,8 @@ p {
 
 .detailed-link-block-item-title {
   font-size: 28px;
-  font-weight: 500;
   margin-bottom: 1.5rem;
-  color: black;
+  color: @fullBlack;
   font-weight: bold;
   position: relative;
 }
@@ -202,56 +206,58 @@ p {
 .detailed-link-block {
   button {
     max-width: 200px;
-    border-radius: 30px !important;
+    border-radius: @themeBorderRadius  !important;
     line-height: 2 !important;
     text-align: center !important;
     border-width: 1px;
-    font-weight: 100;
+    font-weight: @lightWeight;
   }
 
   p {
-    color: #444;
-    font-size: 16px;
+    color: @black;
+    font-size: @contentFontSize;
     position: relative;
   }
 }
 
 .article-list-row {
   display: flex;
-  margin-bottom: 20px;
-  @media only screen and (max-width: 500px) {
+  margin-bottom: @extraMargin;
+
+  @media only screen and (max-width: @500Breakpoint) {
     flex-wrap: wrap;
-    margin-bottom: 40px;
+    margin-bottom: @bigMargin;
   }
 
   .article-img {
     width: 200px;
-    border-radius: 20px;
-    margin-right: 25px;
-    @media only screen and (max-width: 500px) {
+    border-radius: @themeBorderRadius;
+    margin-right: @extraMargin;
+
+    @media only screen and (max-width: @500Breakpoint) {
       width: 90%;
     }
   }
 
   .article-title {
     color: @linkColor;
-    font-weight: 500;
-    font-size: 20px;
-    margin-top: 10px;
+    font-weight: bold;
+    font-size: @titleFontSize;
+    margin-top: @normalMargin;
     margin-bottom: 0;
   }
 
   .article-date {
     font-size: 12px;
-    color: grey;
-    margin-bottom: 5px;
-    margin-top: 5px;
+    color: @bodyGrey;
+    margin-bottom: @smallMargin;
+    margin-top: @smallMargin;
   }
 
   .read-article {
-    border: 1px solid #33536B;
+    border: 1px solid @darkBlue;
     padding: 5px 30px;
-    border-radius: 20px;
+    border-radius: @themeBorderRadius;
   }
 
   .article-description {
@@ -261,29 +267,29 @@ p {
     -webkit-line-clamp: 3;
     /* number of lines to show */
     -webkit-box-orient: vertical;
-    margin-bottom: 20px;
+    margin-bottom: @extraMargin;
   }
 }
 
 .child-container {
   display: flex;
   justify-content: center;
-  border: 1px solid #33536B;
-  border-radius: 40px;
-  margin: 5px;
+  border: 1px solid @darkBlue;
+  border-radius: @themeBorderRadius;
+  margin: @smallMargin;
 
   .child-link {
     padding: 10px 25px;
-    color: #33536B;
-    font-size: 20px;
-    font-weight: 300 !important;
+    color: @darkBlue;
+    font-size: @titleFontSize;
+    font-weight: @lightWeight  !important;
     text-decoration: none;
   }
 }
 
 .search-text {
-  margin: 10px !important;
-  font-size: 20px !important;
+  margin: @normalMargin  !important;
+  font-size: @titleFontSize  !important;
 }
 
 
@@ -296,7 +302,7 @@ p {
 
 .footerWrapper {
   background-color: @primaryColor  !important;
-  color: white;
+  color: @white;
 
   .unlist {
     margin: 0;
@@ -306,7 +312,7 @@ p {
   }
 
   a {
-    color: white;
+    color: @white;
     text-decoration: underline;
     font-weight: bold;
   }
@@ -314,40 +320,70 @@ p {
 
 .browse-area {
 
+  .header-bar {
+    background-color: @darkWhite;
+    height: 40px;
+    margin-bottom: @bigMargin;
+    display: flex;
+    align-items: center;
+
+    .header-wrapper {
+      display: flex;
+      align-items: center;
+      width: 80%;
+      margin: auto;
+    }
+
+    .bar-item {
+      font-size: @titleFontSize;
+      margin: 0 40px 0 0;
+      padding-bottom: 5px;
+      padding-top: 5px;
+      cursor: pointer;
+    }
+
+    .selected {
+      color: @lightblue;
+      font-weight: bold;
+      border-bottom: solid;
+    }
+  }
+
+
   .browse-input {
     width: 50%;
-    margin-left: 20px;
+    margin-left: @extraMargin;
     height: 50px;
 
-    @media only screen and (max-width: 460px) {
+    @media only screen and (max-width: @500Breakpoint) {
       width: 80%;
       margin-left: 0;
-      margin-top: 20px;
+      margin-top: @extraMargin;
     }
 
     input {
-      background: #EDEDED !important;
-      border-radius: 30px !important;
+      background: @darkWhite  !important;
+      border-radius: @themeBorderRadius  !important;
       border: none !important;
       padding: 13.5px;
-      font-size: 16px;
+      font-size: @contentFontSize;
     }
 
     i {
       font-size: 30px;
-      color: #33536B;
+      color: @darkBlue;
       left: -15px !important;
     }
   }
 
   .view-button {
-    background: white;
-    border: 1px solid #333333;
-    border-radius: 30px;
-    margin-right: 20px;
-    padding: 10px 30px;
-    font-size: 13px;
-    color: #989898;
+    background: @white;
+    border: 1px solid @bodyGrey;
+    border-radius: @themeBorderRadius;
+    margin-right: @extraMargin;
+    padding: @buttonPadding;
+    font-size: @contentFontSize;
+    color: @lightGrey;
     cursor: pointer;
     outline: none;
   }
@@ -355,12 +391,12 @@ p {
   .browse-text {
     margin: 0;
     align-self: center;
-    color: #B2B2B2
+    color: @lightGrey;
   }
 
   .browse-button {
-    border-radius: 30px;
-    font-size: 15px;
+    border-radius: @themeBorderRadius;
+    font-size: @contentFontSize;
     font-weight: bold;
     cursor: pointer;
     border: none;
@@ -368,34 +404,37 @@ p {
   }
 
   .advanced-red {
-    background-color: #D63D28;
-    color: white;
+    background-color: @darkOrange;
+    color: @white;
     height: 50px;
-    max-width: 300px;
-    padding: 10px 30px;
+    padding: @buttonPadding;
+
+    @media only screen and (max-width: @500Breakpoint) {
+      width: 90%;
+    }
   }
 
   .red-selected {
-    background-color: #D63D28;
-    color: white;
+    background-color: @darkOrange;
+    color: @white;
     padding: 10px 15px;
   }
 
   .red {
-    background-color: white;
-    color: #D63D28;
+    background-color: @white;
+    color: @darkOrange;
     font-weight: normal;
     padding: 10px 15px;
   }
 
   .blue {
-    background-color: #33536B;
-    color: white;
-    padding: 10px 30px;
+    background-color: @darkBlue;
+    color: @white;
+    padding: @buttonPadding;
 
-    @media only screen and (max-width: 540px) {
-      width: 300px;
-      margin-top: 10px;
+    @media only screen and (max-width: @500Breakpoint) {
+      width: 90%;
+      margin-top: @normalMargin;
       height: 50px;
     }
   }
@@ -405,10 +444,10 @@ p {
     display: flex;
     justify-content: space-between;
 
-    @media only screen and (max-width: 680px) {
-      width: 80%;
+    @media only screen and (max-width: 660px) {
+      width: 85%;
       flex-wrap: wrap;
-      margin-top: 30px;
+      margin-top: @extraMargin;
       justify-content: center;
     }
   }
@@ -417,12 +456,12 @@ p {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 15px;
+    margin-left: @mediumMargin;
     margin-right: 80px;
 
-    @media only screen and (max-width: 460px) {
+    @media only screen and (max-width: @500Breakpoint) {
       justify-content: space-between;
-      margin-bottom: 20px;
+      margin-bottom: @extraMargin;
       margin-left: 0;
       margin-right: 0;
     }
@@ -439,20 +478,20 @@ p {
     top: 30px;
     right: 30px;
     padding: 10px;
-    background: white;
+    background: @white;
     border: none;
-    color: dodgerblue;
+    color: @blue;
   }
 
   .map-modal {
     padding: 15px 45px;
-    background-color: white;
+    background-color: @white;
     position: absolute;
     top: 20%;
     left: 50%;
-    border: 2px solid #33536B;
+    border: 2px solid @darkBlue;
 
-    @media only screen and (max-width: 1000px) {
+    @media only screen and (max-width: @computerBreakpoint) {
       left: 5%;
     }
 
@@ -462,32 +501,32 @@ p {
       align-items: center;
       width: 400px;
 
-      @media only screen and (max-width: 540px) {
+      @media only screen and (max-width: @500Breakpoint) {
         width: 100%;
       }
     }
 
     .modal-title {
-      font-size: 20px;
-      margin-top: 15px;
-      margin-bottom: 15px;
-      color: #4296B2;
-      font-weight: 600;
+      font-size: @headlineFontSize;
+      margin-top: @mediumMargin;
+      margin-bottom: @mediumMargin;
+      color: @lightblue;
+      font-weight: @extraBold;
     }
 
     .modal-label {
-      font-size: 15px;
-      font-weight: 600;
-      margin-top: 15px;
-      margin-bottom: 5px;
-      color: #4296B2;
+      font-size: @titleFontSize;
+      font-weight: @extraBold;
+      margin-top: @mediumMargin;
+      margin-bottom: @smallMargin;
+      color: @lightblue;
     }
   }
 
   .search-map-menu {
     position: absolute;
     margin-bottom: 33px;
-    background: white;
+    background: @white;
     top: 0;
     left: 15%;
     height: 99.5%;
@@ -495,43 +534,47 @@ p {
     padding: 10px 40px;
 
     .menu-title {
-      font-size: 20px;
-      margin-top: 15px;
-      margin-bottom: 15px;
-      color: #4296B2;
-      font-weight: 600;
+      font-size: @titleFontSize;
+      margin-top: @mediumMargin;
+      margin-bottom: @mediumMargin;
+      color: @lightblue;
+      font-weight: @extraBold;
     }
 
     .menu-label {
-      font-size: 15px;
-      font-weight: 600;
-      margin-top: 15px;
-      margin-bottom: 5px;
-      color: #4296B2;
+      font-size: @contentFontSize;
+      font-weight: @extraBold;
+      margin-top: @mediumMargin;
+      margin-bottom: @smallMargin;
+      color: @lightblue;
     }
 
     .quick-fact-card {
-      margin-top: 10px;
-      margin-bottom: 10px;
+      margin-top: @normalMargin;
+      margin-bottom: @normalMargin;
     }
 
     .menu-radio {
-      font-size: 14px;
-      font-weight: 200;
+      font-size: @contentFontSize;
+      font-weight: @lightWeight;
       min-height: 35px !important;
 
       label::after {
-        background-color: red !important;
+        background-color: @darkOrange  !important;
       }
     }
 
 
     .card-content {
-      font-size: 13px;
-      font-weight: 200;
-      margin-top: 5px;
-      margin-bottom: 5px;
+      font-size: @contentFontSize;
+      font-weight: @lightWeight;
+      margin-top: @smallMargin;
+      margin-bottom: @smallMargin;
     }
+  }
+
+  .browse-table {
+    margin-bottom: @bigMargin;
   }
 
   .table-head {
@@ -540,7 +583,7 @@ p {
     width: 65%;
     justify-content: space-between;
 
-    @media only screen and (max-width: 700px) {
+    @media only screen and (max-width: @computerBreakpoint) {
       width: 85%;
     }
   }
@@ -550,64 +593,64 @@ p {
     width: 65%;
     justify-content: space-between;
 
-    @media only screen and (max-width: 700px) {
+    @media only screen and (max-width: @computerBreakpoint) {
       width: 85%;
     }
   }
 
   .table-title {
-    font-size: 15px;
+    font-size: @contentFontSize;
     font-weight: bold;
-    margin-right: 30px;
+    margin-right: @bigMargin;
     text-align: left;
   }
 
   .table-content {
-    font-size: 14px;
-    font-weight: 300;
-    margin-right: 30px;
+    font-size: @contentFontSize;
+    font-weight: @lightWeight;
+    margin-right: @bigMargin;
     text-align: left;
   }
 
   .dropdown-icon {
-    fill: red
+    fill: @darkOrange
   }
 
   .details-content {
-    font-size: 14px;
+    font-size: @contentFontSize;
     margin: 0;
     padding: 0;
 
   }
 
   .details-link {
-    font-size: 14px;
+    font-size: @contentFontSize;
     margin: 0;
     padding: 0;
-    color: #ED7669;
-    text-decoration: underline #ED7669;
+    color: @lighterOrange;
+    text-decoration: underline @lighterOrange;
   }
 
   .details-title {
-    font-size: 14px;
+    font-size: @contentFontSize;
     font-weight: bold;
 
-    @media only screen and (max-width: 1000px) {
-      margin-top: 10px;
-      margin-bottom: 5px;
+    @media only screen and (max-width: @computerBreakpoint) {
+      margin-top: @normalMargin;
+      margin-bottom: @smallMargin;
     }
   }
 
   .details-button {
     margin-top: 35px;
-    border-radius: 30px;
-    font-size: 15px;
+    border-radius: @themeBorderRadius;
+    font-size: @contentFontSize;
     font-weight: bold;
     cursor: pointer;
     border: none;
     outline: none;
-    background-color: #33536B;
-    color: white;
+    background-color: @darkBlue;
+    color: @white;
     padding: 15px 50px;
     flex-grow: unset !important;
   }
