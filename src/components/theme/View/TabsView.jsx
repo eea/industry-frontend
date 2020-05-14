@@ -76,14 +76,16 @@ class DefaultView extends Component {
   // }
 
   computeFolderTabs = siblings => {
-    const tabsItems = siblings && siblings.items.map(i => {
-      return {
-        url: flattenToAppURL(i.url),
-        title: i.name,
-      };
-    });
-    console.log('--------------', this.props.pathname)
-    if(this.props.pathname && this.props.pathname.split('/').length === 3) {
+    const tabsItems =
+      siblings &&
+      siblings.items?.map(i => {
+        return {
+          url: flattenToAppURL(i.url),
+          title: i.name,
+        };
+      });
+    console.log('--------------', this.props.pathname);
+    if (this.props.pathname && this.props.pathname.split('/').length === 3) {
       this.props.setSectionTabs(tabsItems);
     }
     return tabsItems;
@@ -96,18 +98,19 @@ class DefaultView extends Component {
     const blocksLayoutFieldname = getBlocksLayoutFieldname(content);
     const tabs = this.computeFolderTabs(content['@components'].siblings);
     const mainItem = content.items[0];
-    const mainUrl = mainItem && mainItem['@id'] && flattenToAppURL(mainItem['@id']);
+    const mainUrl =
+      mainItem && mainItem['@id'] && flattenToAppURL(mainItem['@id']);
     console.log('mainitem,mainurl', mainItem, mainUrl);
-    let redirect = false
+    let redirect = false;
     if (__CLIENT__ && mainUrl && window) {
-      redirect = true
+      redirect = true;
     }
     return (
       hasBlocksData(content) && (
         <div id="page-document" className="ui wrapper">
           {/* <button onClick={() => this.props.setSectionTabs(tabs)}>asd</button> */}
           {tabs && tabs.length && redirect ? (
-             <Redirect to={{ pathname: mainUrl }} />
+            <Redirect to={{ pathname: mainUrl }} />
           ) : (
             ''
           )}
@@ -140,9 +143,12 @@ class DefaultView extends Component {
 
 export default compose(
   injectIntl,
-  connect((state, props) => ({
-    pathname: props.location.pathname,
-    content:
-      state.prefetch?.[state.router.location.pathname] || state.content.data,
-  }),mapDispatchToProps),
+  connect(
+    (state, props) => ({
+      pathname: props.location.pathname,
+      content:
+        state.prefetch?.[state.router.location.pathname] || state.content.data,
+    }),
+    mapDispatchToProps,
+  ),
 )(DefaultView);

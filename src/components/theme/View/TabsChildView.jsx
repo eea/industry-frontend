@@ -72,12 +72,14 @@ class DefaultView extends Component {
   // }
 
   computeFolderTabs = siblings => {
-    const tabsItems = siblings && siblings.items.map(i => {
-      return {
-        url: flattenToAppURL(i.url),
-        title: i.name,
-      };
-    });
+    const tabsItems =
+      siblings &&
+      siblings.items?.map(i => {
+        return {
+          url: flattenToAppURL(i.url),
+          title: i.name,
+        };
+      });
     return tabsItems;
   };
 
@@ -87,13 +89,12 @@ class DefaultView extends Component {
     const blocksFieldname = getBlocksFieldname(content);
     const blocksLayoutFieldname = getBlocksLayoutFieldname(content);
     const tabs = this.computeFolderTabs(content['@components'].siblings);
-    const sectionTabs = this.props.sectionTabs?.items
-    console.log('sectionTabs in child', sectionTabs)
+    const sectionTabs = this.props.sectionTabs?.items;
+    console.log('sectionTabs in child', sectionTabs);
 
     return (
       hasBlocksData(content) && (
         <div className="ui wrapper">
-
           <div className="glossary-search search">
             <SearchWidget pathname={this.props.pathname} />
           </div>
@@ -115,8 +116,8 @@ class DefaultView extends Component {
               ))}
             </nav>
           ) : (
-              ''
-            )}
+            ''
+          )}
           <div className="widthSidebar">
             <div className="page-document-sidebar">
               {tabs && tabs.length ? (
@@ -136,15 +137,15 @@ class DefaultView extends Component {
                   ))}
                 </nav>
               ) : (
-                  ''
-                )}
+                ''
+              )}
             </div>
             <div id="page-document" className="hasSidebar">
               <Helmet title={content.title} />
               {map(content[blocksLayoutFieldname].items, block => {
                 const Block =
                   blocks.blocksConfig[
-                  (content[blocksFieldname]?.[block]?.['@type'])
+                    (content[blocksFieldname]?.[block]?.['@type'])
                   ]?.['view'] || null;
                 return Block !== null ? (
                   <Block
@@ -154,19 +155,18 @@ class DefaultView extends Component {
                     data={content[blocksFieldname][block]}
                   />
                 ) : (
-                    <div key={`blocktype-${block}`}>
-                      {intl.formatMessage(messages.unknownBlock, {
-                        block: content[blocksFieldname]?.[block]?.['@type'],
-                      })}
-                    </div>
-                  );
+                  <div key={`blocktype-${block}`}>
+                    {intl.formatMessage(messages.unknownBlock, {
+                      block: content[blocksFieldname]?.[block]?.['@type'],
+                    })}
+                  </div>
+                );
               })}
             </div>
           </div>
         </div>
-
       )
-    )
+    );
   }
 }
 
@@ -176,6 +176,6 @@ export default compose(
     pathname: props.location.pathname,
     content:
       state.prefetch?.[state.router.location.pathname] || state.content.data,
-    sectionTabs: state.section_tabs
+    sectionTabs: state.section_tabs,
   })),
 )(DefaultView);

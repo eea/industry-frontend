@@ -655,3 +655,7 @@ p {
     flex-grow: unset !important;
   }
 }
+
+.mosaic-modal {
+  transform: none!important;
+}

@@ -23,7 +23,7 @@ const config = [
   installTableau,
   plotlyConfig,
   // ckeditorConfig,
-  // mosaicConfig,
+  mosaicConfig,
   blocksConfig,
   dataBlocksConfig,
   installEPRTR,
