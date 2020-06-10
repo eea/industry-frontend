@@ -79,7 +79,7 @@
   }
 }
 
-.widthSidebar {
+.withSidebar {
   display: flex;
 
   #page-document.hasSidebar {

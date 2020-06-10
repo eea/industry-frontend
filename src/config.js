@@ -11,14 +11,12 @@ import { applyConfig as blocksConfig } from 'volto-blocks/config';
 import { applyConfig as mosaicConfig } from 'volto-mosaic/config';
 import { applyConfig as plotlyConfig } from 'volto-plotlycharts/config';
 // import { applyConfig as installEPRTRFrontend } from './localconfig';
-import { applyConfig as installSidebar } from 'volto-sidebar/config';
 
 // import { applyConfig as installEPRTRFrontend } from './localconfig';
 import installEPRTR from './localconfig';
 
 const config = [
   addonsConfig,
-  installSidebar,
   installFolderListing,
   installTableau,
   plotlyConfig,

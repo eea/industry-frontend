@@ -89,8 +89,6 @@ class DefaultView extends Component {
     const blocksFieldname = getBlocksFieldname(content);
     const blocksLayoutFieldname = getBlocksLayoutFieldname(content);
     const tabs = this.computeFolderTabs(content['@components'].siblings);
-    const sectionTabs = this.props.sectionTabs?.items;
-    console.log('sectionTabs in child', sectionTabs);
 
     return (
       hasBlocksData(content) && (
@@ -99,46 +97,10 @@ class DefaultView extends Component {
             <SearchWidget pathname={this.props.pathname} />
           </div>
 
-          {sectionTabs && sectionTabs.length ? (
-            <nav className="tabs section-tabs">
-              {sectionTabs.map(tab => (
-                <Link
-                  key={`localtab-${tab.url}`}
-                  className={`tabs__item${(tab.url ===
-                    this.props.location.pathname &&
-                    ' tabs__item_active') ||
-                    ''}`}
-                  to={tab.url}
-                  title={tab.title}
-                >
-                  {tab.title}
-                </Link>
-              ))}
-            </nav>
-          ) : (
-            ''
-          )}
-          <div className="widthSidebar">
+          <nav className="tabs section-tabs" />
+          <div className="withSidebar">
             <div className="page-document-sidebar">
-              {tabs && tabs.length ? (
-                <nav className="tabs">
-                  {tabs.map(tab => (
-                    <Link
-                      key={`localtab-${tab.url}`}
-                      className={`tabs__item${(tab.url ===
-                        this.props.location.pathname &&
-                        ' tabs__item_active') ||
-                        ''}`}
-                      to={tab.url}
-                      title={tab.title}
-                    >
-                      {tab.title}
-                    </Link>
-                  ))}
-                </nav>
-              ) : (
-                ''
-              )}
+              <nav className="tabs" />
             </div>
             <div id="page-document" className="hasSidebar">
               <Helmet title={content.title} />
@@ -176,6 +138,6 @@ export default compose(
     pathname: props.location.pathname,
     content:
       state.prefetch?.[state.router.location.pathname] || state.content.data,
-    sectionTabs: state.section_tabs,
+    // sectionTabs: state.section_tabs,
   })),
 )(DefaultView);

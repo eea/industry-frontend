@@ -23,7 +23,7 @@ const applyConfig = config => {
     layoutViews: {
       ...config.views.layoutViews,
       tabs_view: TabsView,
-      tabs_child_view: TabsChildView,
+      glossaryview: TabsChildView,
 
       redirect_view: RedirectView,
 
