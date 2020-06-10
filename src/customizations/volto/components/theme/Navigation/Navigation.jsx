@@ -3,11 +3,12 @@
  * @module components/theme/Navigation/Navigation
  */
 
-import React, { Component } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { NavLink } from 'react-router-dom';
+import { isMatch } from 'lodash';
 import { defineMessages, injectIntl } from 'react-intl';
 import { Menu } from 'semantic-ui-react';
 import cx from 'classnames';
@@ -33,196 +34,167 @@ const messages = defineMessages({
  * @class Navigation
  * @extends Component
  */
-class Navigation extends Component {
-  /**
-   * Property types.
-   * @property {Object} propTypes Property types.
-   * @static
-   */
-  static propTypes = {
-    getNavigation: PropTypes.func.isRequired,
-    pathname: PropTypes.string.isRequired,
-    items: PropTypes.arrayOf(
-      PropTypes.shape({
-        title: PropTypes.string,
-        url: PropTypes.string,
-      }),
-    ).isRequired,
-    lang: PropTypes.string.isRequired,
-  };
+const Navigation = props => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [tabsSection, setTabsSection] = useState(
+    __CLIENT__ && document.querySelector('.tabs.section-tabs'),
+  );
+  const [childrenTabsSection, setChildrenTabsSection] = useState(
+    __CLIENT__ && document.querySelector('.page-document-sidebar .tabs'),
+  );
 
-  /**
-   * Constructor
-   * @method constructor
-   * @param {Object} props Component properties
-   * @constructs Navigation
-   */
-  constructor(props) {
-    super(props);
-    this.toggleMobileMenu = this.toggleMobileMenu.bind(this);
-    this.closeMobileMenu = this.closeMobileMenu.bind(this);
-    this.state = {
-      isMobileMenuOpen: false,
-    };
-  }
+  useEffect(() => {
+    props.getNavigation(getBaseUrl(props.pathname), 3);
+  }, [props]);
 
-  /**
-   * Component will mount
-   * @method componentWillMount
-   * @returns {undefined}
-   */
-  UNSAFE_componentWillMount() {
-    if (!settings.contentExpand.includes('navigation'))
-      this.props.getNavigation(getBaseUrl(this.props.pathname), 3);
-  }
-
-  /**
-   * Component will receive props
-   * @method componentWillReceiveProps
-   * @param {Object} nextProps Next properties
-   * @returns {undefined}
-   */
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (
-      !settings.contentExpand.includes('navigation') &&
-      nextProps.pathname !== this.props.pathname
-    ) {
-      this.props.getNavigation(getBaseUrl(nextProps.pathname), 3);
+  useLayoutEffect(() => {
+    if (__CLIENT__) {
+      setTabsSection(document.querySelector('.tabs.section-tabs'));
     }
-  }
+    if (__CLIENT__) {
+      setChildrenTabsSection(
+        document.querySelector('.page-document-sidebar .tabs'),
+      );
+    }
+  },[document.querySelector('.page-document-sidebar .tabs'), document.querySelector('.tabs.section-tabs')]);
 
+
+  const isActive = url => {
+    return (
+      (url === '' && props.pathname === '/') ||
+      (url !== '' && isMatch(props.pathname.split('/'), url.split('/')))
+    );
+  };
   /**
    * Toggle mobile menu's open state
    * @method toggleMobileMenu
    * @returns {undefined}
    */
-  toggleMobileMenu() {
-    this.setState({ isMobileMenuOpen: !this.state.isMobileMenuOpen });
-  }
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   /**
    * Close mobile menu
    * @method closeMobileMenu
    * @returns {undefined}
    */
-  closeMobileMenu() {
-    if (!this.state.isMobileMenuOpen) {
+  const closeMobileMenu = () => {
+    if (!isMobileMenuOpen) {
       return;
     }
-    this.setState({ isMobileMenuOpen: false });
-  }
+    setIsMobileMenuOpen(false);
+  };
 
   /**
    * Render method.
    * @method render
    * @returns {string} Markup for the component.
    */
-  render() {
-    const { lang } = this.props;
-    console.log('navigation', this.props.items);
+  const { lang } = props;
 
-    return (
-      <nav className="navigation">
-        <div className="hamburger-wrapper mobile tablet only">
-          <button
-            className={cx('hamburger hamburger--collapse', {
-              'is-active': this.state.isMobileMenuOpen,
-            })}
-            aria-label={
-              this.state.isMobileMenuOpen
-                ? this.props.intl.formatMessage(messages.closeMobileMenu, {
-                    type: this.props.type,
-                  })
-                : this.props.intl.formatMessage(messages.openMobileMenu, {
-                    type: this.props.type,
-                  })
-            }
-            title={
-              this.state.isMobileMenuOpen
-                ? this.props.intl.formatMessage(messages.closeMobileMenu, {
-                    type: this.props.type,
-                  })
-                : this.props.intl.formatMessage(messages.openMobileMenu, {
-                    type: this.props.type,
-                  })
-            }
-            type="button"
-            onClick={this.toggleMobileMenu}
-          >
-            <span className="hamburger-box">
-              <span className="hamburger-inner" />
-            </span>
-          </button>
-        </div>
-        <Menu
-          stackable
-          pointing
-          secondary
-          className={
-            this.state.isMobileMenuOpen
-              ? 'open'
-              : 'computer large screen widescreen only'
+  return (
+    <nav className="navigation">
+      <div className="hamburger-wrapper mobile tablet only">
+        <button
+          className={cx('hamburger hamburger--collapse', {
+            'is-active': isMobileMenuOpen,
+          })}
+          aria-label={
+            isMobileMenuOpen
+              ? props.intl.formatMessage(messages.closeMobileMenu, {
+                  type: props.type,
+                })
+              : props.intl.formatMessage(messages.openMobileMenu, {
+                  type: props.type,
+                })
           }
-          onClick={this.closeMobileMenu}
+          title={
+            isMobileMenuOpen
+              ? props.intl.formatMessage(messages.closeMobileMenu, {
+                  type: props.type,
+                })
+              : props.intl.formatMessage(messages.openMobileMenu, {
+                  type: props.type,
+                })
+          }
+          type="button"
+          onClick={() => toggleMobileMenu}
         >
-          {this.props.items.map(item =>
-            item.title === 'Glossary' ? (
-              <React.Fragment>
-                <NavLink
-                  to={item.url === '' ? '/' : item.url}
-                  key={item.url}
-                  className="item"
-                  activeClassName="active"
-                  exact={
-                    settings.isMultilingual
-                      ? item.url === `/${lang}`
-                      : item.url === ''
-                  }
-                >
-                  {item.title}
-                </NavLink>
-                {item.items?.length &&
-                document.querySelector('.tabs.section-tabs') &&
-                document.querySelector('.page-document-sidebar .tabs')
-                  ? item.items.map(secondLevelItem => (
-                      <React.Fragment>
-                        <Portal
-                          node={
-                            __CLIENT__ &&
-                            document.querySelector('.tabs.section-tabs')
+          <span className="hamburger-box">
+            <span className="hamburger-inner" />
+          </span>
+        </button>
+      </div>
+      <Menu
+        stackable
+        pointing
+        secondary
+        className={
+          isMobileMenuOpen ? 'open' : 'computer large screen widescreen only'
+        }
+        onClick={() => closeMobileMenu}
+      >
+        {props.items.map(item =>
+          item.title === 'Glossary' ? (
+            <React.Fragment>
+              <NavLink
+                to={
+                  //   TODO: Refactor this
+                  item.items?.length && item.items[0].items?.length
+                    ? item.items[0].items[0].url
+                    : item.items?.length
+                    ? item.items[0].url
+                    : item.url
+                }
+                key={item.url}
+                className={isActive(item.url) ? 'item active' : 'item'}
+                activeClassName="active"
+                exact={
+                  settings.isMultilingual
+                    ? item.url === `/${lang}`
+                    : item.url === ''
+                }
+              >
+                {item.title}
+              </NavLink>
+              {item.items?.length && tabsSection && childrenTabsSection
+                ? item.items.map(secondLevelItem => (
+                    <React.Fragment>
+                      <Portal node={__CLIENT__ && tabsSection}>
+                        <NavLink
+                          to={
+                            secondLevelItem.items?.length
+                              ? secondLevelItem.items[0].url
+                              : secondLevelItem.url
+                          }
+                          key={secondLevelItem.url}
+                          className={
+                            isActive(secondLevelItem.url)
+                              ? 'tabs__item tabs__item_active'
+                              : 'tabs__item'
+                          }
+                          activeClassName="tabs__item_active"
+                          exact={
+                            settings.isMultilingual
+                              ? secondLevelItem.url === `/${lang}`
+                              : secondLevelItem.url === ''
                           }
                         >
-                          <NavLink
-                            to={
-                              secondLevelItem.items?.length
-                                ? secondLevelItem.items[0].url
-                                : secondLevelItem.url
-                            }
-                            key={secondLevelItem.url}
-                            className="tabs__item"
-                            activeClassName="tabs__item_active"
-                            exact={
-                              settings.isMultilingual
-                                ? secondLevelItem.url === `/${lang}`
-                                : secondLevelItem.url === ''
-                            }
-                          >
-                            {secondLevelItem.title}
-                          </NavLink>
-                        </Portal>
-                        {secondLevelItem.items?.length &&
-                        document.querySelector(
-                          '.page-document-sidebar .tabs',
-                        ) ? (
-                          <Portal
-                            node={
-                              __CLIENT__ &&
-                              document.querySelector(
-                                '.page-document-sidebar .tabs',
-                              )
-                            }
-                          >
-                            {secondLevelItem.items.map(thirdLevelItem => (
+                          {secondLevelItem.title}
+                        </NavLink>
+                      </Portal>
+                      {secondLevelItem.items?.length && childrenTabsSection ? (
+                        <Portal node={__CLIENT__ && childrenTabsSection}>
+                          {secondLevelItem.items
+                            .filter(
+                              thirdLevelItem =>
+                                thirdLevelItem.url.includes(
+                                  secondLevelItem.url,
+                                ) &&
+                                props.pathname.includes(secondLevelItem.url),
+                            )
+                            .map(thirdLevelItem => (
                               <NavLink
                                 to={
                                   thirdLevelItem.url === ''
@@ -241,35 +213,50 @@ class Navigation extends Component {
                                 {thirdLevelItem.title}
                               </NavLink>
                             ))}
-                          </Portal>
-                        ) : (
-                          ''
-                        )}
-                      </React.Fragment>
-                    ))
-                  : ''}
-              </React.Fragment>
-            ) : (
-              <NavLink
-                to={item.url === '' ? '/' : item.url}
-                key={item.url}
-                className="item"
-                activeClassName="active"
-                exact={
-                  settings.isMultilingual
-                    ? item.url === `/${lang}`
-                    : item.url === ''
-                }
-              >
-                {item.title}
-              </NavLink>
-            ),
-          )}
-        </Menu>
-      </nav>
-    );
-  }
-}
+                        </Portal>
+                      ) : (
+                        ''
+                      )}
+                    </React.Fragment>
+                  ))
+                : ''}
+            </React.Fragment>
+          ) : (
+            <NavLink
+              to={item.url === '' ? '/' : item.url}
+              key={item.url}
+              className="item"
+              activeClassName="active"
+              exact={
+                settings.isMultilingual
+                  ? item.url === `/${lang}`
+                  : item.url === ''
+              }
+            >
+              {item.title}
+            </NavLink>
+          ),
+        )}
+      </Menu>
+    </nav>
+  );
+};
+/**
+ * Property types.
+ * @property {Object} propTypes Property types.
+ * @static
+ */
+Navigation.propTypes = {
+  getNavigation: PropTypes.func.isRequired,
+  pathname: PropTypes.string.isRequired,
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string,
+      url: PropTypes.string,
+    }),
+  ).isRequired,
+  lang: PropTypes.string.isRequired,
+};
 
 export default compose(
   injectIntl,
