@@ -56,7 +56,7 @@ const Navigation = props => {
         document.querySelector('.page-document-sidebar .tabs'),
       );
     }
-  },[document.querySelector('.page-document-sidebar .tabs'), document.querySelector('.tabs.section-tabs')]);
+  },[__CLIENT__ && document.querySelector('.page-document-sidebar .tabs'), __CLIENT__ && document.querySelector('.tabs.section-tabs')]);
 
 
   const isActive = url => {
