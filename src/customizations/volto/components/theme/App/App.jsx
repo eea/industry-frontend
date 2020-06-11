@@ -138,6 +138,7 @@ class App extends Component {
         <MultilingualRedirector pathname={this.props.pathname}>
           <Segment basic className="content-area">
             <main>
+              <div className="editor-toolbar-wrapper" />
               <OutdatedBrowser />
               {this.state.hasError ? (
                 <Error
