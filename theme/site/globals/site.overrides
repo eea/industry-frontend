@@ -664,3 +664,19 @@ p {
     top: 0;
     z-index: 2;
 }
+
+.mosaic-page-modal-open {
+  &:not(.has-sidebar-collapsed).has-sidebar {
+    .ui.fullscreen.modal.mosaic-modal {
+      width: calc(100% - 400px) !important;
+      left: 1rem !important;
+      transform: none !important;
+      top: auto;
+    }
+  }
+
+  .sidebar-container {
+    z-index: 9999;
+  }
+
+}
