@@ -157,9 +157,7 @@ h1.documentFirstHeading {
   text-align: center;
 }
 
-h1.documentFirstHeading,
-h2,
-h3 {
+h1.documentFirstHeading {
   font-size: 36px;
   color: @primaryColor;
   font-weight: @extraBold;
@@ -168,6 +166,22 @@ h3 {
   &:before {
     display: none !important;
   }
+}
+
+h2,h3,h4 {
+  line-height: 1.5;
+  font-weight: 600;
+}
+h2 {
+  font-size: 2.2rem;
+}
+
+h3 {
+  font-size: 1.8rem;
+}
+
+h4 {
+  font-size: 1.5rem;
 }
 
 p {
@@ -211,6 +225,11 @@ p {
     text-align: center !important;
     border-width: 1px;
     font-weight: @lightWeight;
+    min-height: 46px;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    font-weight: 100;
+    margin-top: 1rem;
   }
 
   p {

@@ -10,7 +10,7 @@ const BrowseMap = () => {
 
     return (
         <React.Fragment>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d252073.50646166946!2d24.240267324149645!3d45.730190540367225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sro!4v1587553242878!5m2!1sen!2sro"
+            <iframe src="https://maps.eea.europa.eu/EEAViewer/?appid=dee1fa0f864e4f8a9e088c83231a9f02&embed=true"
                 width="100%"
                 height="900"
                 frameBorder="0"
