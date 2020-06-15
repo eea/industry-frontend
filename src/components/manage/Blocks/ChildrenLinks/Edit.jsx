@@ -7,8 +7,8 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { getParentFolderData } from '~/actions';
 import { Link } from 'react-router-dom';
-import _ from 'lodash'
-
+import _ from 'lodash';
+import { getBasePath } from '~/helpers';
 
 class Edit extends Component {
   /**
@@ -31,20 +31,18 @@ class Edit extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-    };
+    this.state = {};
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.childrenLinks !== this.props.childrenLinks) {
-      this.onEditData()
+      this.onEditData();
     }
   }
 
-  handleLinkData = (link) => {
-    this.props.getParentFolderData(link.value)
-
-  }
+  handleLinkData = link => {
+    this.props.getParentFolderData(link.value);
+  };
 
   onEditData() {
     const childrenLinks = this.props.childrenLinks;
@@ -55,44 +53,44 @@ class Edit extends Component {
   }
 
   render() {
-
     const childrenLinks = this.props.data.links;
-
+    console.log('props in childrenlist', this.props);
     return (
       <Grid columns={1}>
         <Grid.Row>
           {childrenLinks &&
-            childrenLinks.map(child =>
+            childrenLinks.map(child => (
               <div className="child-container">
-                <Link target="_blank" className="child-link" to={child.url}>
+                <Link
+                  target="_blank"
+                  className="child-link"
+                  to={getBasePath(child?.['@id'] || '')}
+                >
                   {_.capitalize(child.title)}
                 </Link>
               </div>
-            )
-          }
+            ))}
         </Grid.Row>
         <Grid.Column>
-            <p className="search-text">Search page</p>
-            <AddLinkForm onAddLink={this.handleLinkData} />
+          <p className="search-text">Search page</p>
+          <AddLinkForm onAddLink={this.handleLinkData} />
         </Grid.Column>
       </Grid>
     );
   }
 }
 
-
-
 const mapDispatchToProps = {
   getParentFolderData,
-}
+};
 
 export default compose(
   injectIntl,
   connect(
     state => ({
       state,
-      childrenLinks: state.parent_folder_data.items
+      childrenLinks: state.parent_folder_data.items,
     }),
     mapDispatchToProps,
-  )
-)(Edit)
+  ),
+)(Edit);
