@@ -25,7 +25,9 @@ const Edit = props => {
         ...props.data,
         detailedLink: {
           ...props.data.detailedLink,
-          ...props.pages[state.link.value],
+          title: props.pages[state.link.value].title,
+          description: props.pages[state.link.value].description,
+          path: state.link.value,
         },
       });
     }
@@ -48,7 +50,9 @@ const Edit = props => {
                     ...props.data,
                     detailedLink: {
                       ...props.data.detailedLink,
-                      ...link,
+                      title: link.text,
+                      description: link.description,
+                      path: link.value,
                     },
                   });
                 }}

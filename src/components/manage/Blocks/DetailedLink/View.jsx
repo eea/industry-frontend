@@ -18,13 +18,13 @@ const View = props => {
       {(props.data?.detailedLink && (
         <div>
           <div className="detailed-link-block-item-title">
-            {props.data.detailedLink.title || props.data.detailedLink.text}
+            {props.data.detailedLink.title || ''}
           </div>
           <p>{props.data.detailedLink.description || ''}</p>
           <Link
             className="detailed-link-block"
             onClick={e => e.preventDefault}
-            to={getPath(props.data.detailedLink.value)}
+            to={getPath(props.data.detailedLink.path)}
           >
             <Button basic>Read more</Button>
           </Link>
