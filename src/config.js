@@ -33,9 +33,8 @@ export const settings = {
   ...config.settings,
   contentExpand: [
     ...config.settings.contentExpand,
-    'localnavigation',
-    'siblings',
-    '&expand.localnavigation.depth=2',
+    'navigation',
+    '&expand.navigation.depth=5',
   ],
 };
 
