@@ -8,7 +8,6 @@ import { defaultRoutes } from '@plone/volto/routes';
 
 import { addonRoutes } from '~/config';
 import BrowseView from '~/components/theme/View/BrowseView/BrowseView';
-
 /**
  * Routes array.
  * @array
@@ -24,8 +23,6 @@ const routes = [
         path: '/browse',
         component: BrowseView,
       },
-
-
       // {
       //   path: '/',
       //   component: HomepageView,
