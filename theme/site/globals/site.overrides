@@ -172,13 +172,13 @@
     font-size: 18px;
     margin-right: 4rem;
     line-height: 3;
-    padding-bottom: 1rem;
+    // padding-bottom: 1rem;
     display: inline-block;
 
     &.tabs__item_active {
       font-weight: @extraBold;
       color: @primaryColor;
-      border-bottom: 1rem solid @primaryColor;
+      border-bottom: 2px solid @primaryColor;
     }
   }
 }
