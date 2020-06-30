@@ -90,7 +90,7 @@ const DefaultView = props => {
 
   return hasBlocksData(content) ? (
     <div className="ui wrapper">
-      <div className="glossary-search search">
+      <div className="glossary-search">
         <SearchWidget pathname={props.pathname} />
       </div>
 
