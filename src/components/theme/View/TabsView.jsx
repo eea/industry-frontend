@@ -11,7 +11,6 @@ import { defineMessages, injectIntl } from 'react-intl';
 
 import { map } from 'lodash';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 
 import { blocks } from '~/config';
 import {

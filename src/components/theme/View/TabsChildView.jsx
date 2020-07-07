@@ -10,6 +10,7 @@ import { NavLink } from 'react-router-dom';
 import { defineMessages, injectIntl } from 'react-intl';
 import { map, isMatch } from 'lodash';
 import cx from 'classnames';
+import SearchBlock from 'volto-addons/SearchBlock/View';
 
 import {
   Helmet,
@@ -17,7 +18,6 @@ import {
   getBlocksLayoutFieldname,
   hasBlocksData,
 } from '@plone/volto/helpers';
-import { SearchWidget } from '@plone/volto/components';
 
 import { deepSearch } from '~/helpers';
 import { blocks, settings } from '~/config';
@@ -91,7 +91,16 @@ const DefaultView = props => {
   return hasBlocksData(content) ? (
     <div className="ui wrapper">
       <div className="glossary-search">
-        <SearchWidget pathname={props.pathname} />
+        <SearchBlock
+          data={{
+            title: { value: 'Glossary page results' },
+            paths: { value: ['eprtr/glossary'] },
+            placeholder: { value: 'Search site' },
+            buttonText: { value: 'SEARCH' },
+            buttonClassName: { value: '' },
+            searchButton: { value: true },
+          }}
+        />
       </div>
 
       <nav className="tabs section-tabs">

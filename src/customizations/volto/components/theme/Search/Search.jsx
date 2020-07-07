@@ -18,12 +18,7 @@ import moment from 'moment';
 import { settings } from '~/config';
 import { Helmet } from '@plone/volto/helpers';
 import { searchContent } from '@plone/volto/actions';
-import {
-  SearchTags,
-  SearchWidget,
-  Toolbar,
-  Icon,
-} from '@plone/volto/components';
+import { SearchWidget, Toolbar, Icon } from '@plone/volto/components';
 
 import paginationLeftSVG from '@plone/volto/icons/left-key.svg';
 import paginationRightSVG from '@plone/volto/icons/right-key.svg';
@@ -149,13 +144,6 @@ class Search extends Component {
     });
   };
 
-  getTitle = pathArray => {
-    let header = pathArray.slice(2, pathArray.length).join(' ');
-    return header
-      ? header.charAt(0).toUpperCase() + header.slice(1) + ' search result'
-      : null;
-  };
-
   /**
    * Render method.
    * @method render
@@ -169,10 +157,8 @@ class Search extends Component {
           <article id="content">
             <header>
               <h1 className="documentFirstHeading">
-                {this.getTitle(this.props.path.split('/')) ? (
-                  <h1 className="documentFirstHeading">
-                    {this.getTitle(this.props.path.split('/'))}
-                  </h1>
+                {this.props.title ? (
+                  `${this.props.title}`
                 ) : (
                   <FormattedMessage
                     id="Search results"
@@ -210,7 +196,7 @@ class Search extends Component {
               {this.props.items.map(item => (
                 <article className="tileItem" key={item['@id']}>
                   <h2 className="tileHeadline">{item.title}</h2>
-                  <div class="search-meta">
+                  <div className="search-meta">
                     {item['@type'] ? <span>{item['@type']}</span> : ''}
                     {item['effective'] ? (
                       <span>
@@ -301,6 +287,7 @@ export default compose(
       searchableText: qs.parse(props.location.search).SearchableText,
       subject: qs.parse(props.location.search).Subject,
       path: qs.parse(props.location.search).path,
+      title: qs.parse(props.location.search).title,
       pathname: props.location.pathname,
     }),
     { searchContent },
