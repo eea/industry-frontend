@@ -1,8 +1,7 @@
 {
   "volto-mosaic": {
     "url": "https://github.com/eea/volto-mosaic.git",
-    "path": "src",
-    "branch": "blocks_override"
+    "path": "src"
   },
   "volto-datablocks": {
     "url": "https://github.com/eea/volto-datablocks.git",
@@ -34,6 +33,10 @@
   },
   "volto-embed": {
     "url": "https://github.com/eea/volto-embed.git",
+    "path": "src"
+  },
+  "volto-gridlayout": {
+    "url": "https://github.com/eea/volto-gridlayout.git",
     "path": "src"
   }
 }

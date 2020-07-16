@@ -11,6 +11,7 @@ import { applyConfig as blocksConfig } from 'volto-blocks/config';
 import { applyConfig as mosaicConfig } from 'volto-mosaic/config';
 import { applyConfig as plotlyConfig } from 'volto-plotlycharts/config';
 // import { applyConfig as installEPRTRFrontend } from './localconfig';
+import { applyConfig as gridLayoutConfig } from 'volto-gridlayout/config';
 
 // import { applyConfig as installEPRTRFrontend } from './localconfig';
 import installEPRTR from './localconfig';
@@ -24,6 +25,7 @@ const config = [
   mosaicConfig,
   blocksConfig,
   dataBlocksConfig,
+  gridLayoutConfig,
   installEPRTR,
 ].reduce((acc, apply) => apply(acc), voltoConfig);
 

@@ -22,6 +22,9 @@ import FacilityBlockView from '~/components/manage/Blocks/FacilityBlock/View';
 import RegulatoryInformationBlockEdit from '~/components/manage/Blocks/RegulatoryInformationBlock/Edit';
 import RegulatoryInformationBlockView from '~/components/manage/Blocks/RegulatoryInformationBlock/View';
 
+import CompanyHeaderEdit from '~/components/manage/Blocks/CompanyHeader/Edit';
+import CompanyHeaderView from '~/components/manage/Blocks/CompanyHeader/View';
+
 const applyConfig = config => {
   console.log('config', config);
   config.views = {
@@ -85,6 +88,15 @@ const applyConfig = config => {
     title: 'Regulatory information block',
     view: RegulatoryInformationBlockView,
     edit: RegulatoryInformationBlockEdit,
+    icon: chartIcon,
+    group: 'data_blocks',
+  };
+
+  config.blocks.blocksConfig.comany_header_block = {
+    id: 'comany_header_block',
+    title: 'Company header block',
+    view: CompanyHeaderView,
+    edit: CompanyHeaderEdit,
     icon: chartIcon,
     group: 'data_blocks',
   };
