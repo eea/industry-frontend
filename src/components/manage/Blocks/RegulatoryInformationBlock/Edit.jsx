@@ -2,43 +2,43 @@ import React, { useState, useEffect } from 'react';
 import _uniqueId from 'lodash/uniqueId';
 import DefaultEdit from '../DefaultEdit';
 import View from './View';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
 import { settings } from '~/config';
 
-const schema = {
-  provider_url: {
-    title: 'Provider url',
-    type: 'text',
-    default: '',
-  },
-  sql_select: {
-    type: 'sql',
-  },
-  data_query: {
-    iTitle: 'Where column',
-    vTitle: 'Is equal to',
-    type: 'data-query',
-  },
-};
-
 const Edit = props => {
-  const [state] = useState({
+  const [state, setState] = useState({
+    schema: {
+      provider_url: {
+        title: 'Provider url',
+        type: 'text',
+        default: '',
+      },
+      sql: {
+        title: 'SQL Select',
+        type: 'sql',
+        selectQueryFields: [
+          { title: 'Table', id: 'table' },
+          { title: 'Where column', id: 'columnKey' },
+          { title: 'Is equal to', id: 'columnValue' },
+        ],
+        additionalQueryFields: [
+          { title: 'Where column', id: 'columnKey' },
+          { title: 'Is equal to', id: 'columnValue' },
+        ],
+      },
+    },
     id: _uniqueId('block_'),
   });
   useEffect(() => {
+    const schema = { ...state.schema };
     schema.provider_url.default = settings.providerUrl;
+    setState({ ...state, schema });
+    /* eslint-disable-next-line */
   }, []);
   return (
     <div>
-      <DefaultEdit schema={schema} {...props} title="Facility block" />
+      <DefaultEdit schema={state.schema} {...props} title="Facility block" />
       <View {...props} id={state.id} />
     </div>
   );
 };
-export default compose(
-  connect((state, props) => ({
-    connected_data_parameters: state.connected_data_parameters,
-    pathname: state.router.location.pathname,
-  })),
-)(Edit);
+export default Edit;

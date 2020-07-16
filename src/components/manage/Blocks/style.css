@@ -84,6 +84,36 @@ p.dark {
 .mb-2 {
   margin-bottom: 2rem;
 }
+.ml-0 {
+  margin-top: 0;
+}
+.ml-1 {
+  margin-top: 1rem;
+}
+.ml-2 {
+  margin-top: 2rem;
+}
+.mr-0 {
+  margin-bottom: 0;
+}
+.mr-1 {
+  margin-bottom: 1rem;
+}
+.mr-2 {
+  margin-bottom: 2rem;
+}
+
+/* WIDTHS */
+.w-40 {
+  width: 40%;
+}
+.w-50 {
+  width: 50%;
+}
+.w-60 {
+  width: 60%;
+}
+
 
 .bat-container {
   border: 1px solid #606060;

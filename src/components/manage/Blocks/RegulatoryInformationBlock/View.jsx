@@ -1,48 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Table } from 'semantic-ui-react';
 
-import DB from '~/components/manage/DataBase/DB';
 import DefaultView from '../DefaultView';
-
-import './style.css';
+import '../style.css';
 
 //  STATIC DATA
 //  ==================
-const information = {
-  regulatedActivities: 'IEDAnnex|Activity|mainActivity',
-  statusType: 'statusType',
-  status: 'Valid',
-  statusModified: '24.10.2018',
-  seveso: 'eSPIRSId',
-  batFileName: 'Production of Chlor-alkali',
-  batPath: '',
-  permitUpdated: 'dateOfLastUpdate',
-  permitAuthority: 'organisationName',
-  permitUrl: 'permitURL',
-  visits: '4',
-  derogations: [
-    {
-      'Granted derogations': 'Derogation 1',
-      'Date granted': '12.1.2017',
-      'End date': '12.1.2017',
-    },
-    {
-      'Granted derogations': 'Derogation 2',
-      'Date granted': '12.1.2017',
-      'End date': 'N/A',
-    },
-    {
-      'Granted derogations': 'Derogation 3',
-      'Date granted': '12.1.2017',
-      'End date': '12.1.2017',
-    },
-    {
-      'Granted derogations': 'Derogation 4',
-      'Date granted': '12.1.2017',
-      'End date': 'N/A',
-    },
-  ],
-};
 const operatingPermitMetadata = [
   { label: 'Permit updated', id: 'permitUpdated' },
   { label: 'Permitting authority', id: 'permitAuthority' },
@@ -66,22 +29,24 @@ const GridMetadata = props => {
   const { metadata, metadataKeys, gridColumns } = props;
   return (
     <div className={`grid grid-cl-${gridColumns}`}>
-      {metadataKeys.map((meta, index) =>
-        metadata[meta.id] ? (
-          <div key={`grid-${index}-${meta.id}`}>
-            <p className="bold mb-0">{meta.label}</p>
-            <p className="info dark">[{metadata[meta.id]}]</p>
-          </div>
-        ) : (
-          ''
-        ),
-      )}
+      {metadata &&
+        metadataKeys.map((meta, index) =>
+          metadata[meta.id] ? (
+            <div key={`grid-${index}-${meta.id}`}>
+              <p className="bold mb-0">{meta.label}</p>
+              <p className="info dark">[{metadata[meta.id]}]</p>
+            </div>
+          ) : (
+            ''
+          ),
+        )}
     </div>
   );
 };
 
 const View = props => {
   const [state, setState] = useState({
+    items: [],
     onChange: newState => {
       setState({ ...state, ...newState });
     },
@@ -92,24 +57,24 @@ const View = props => {
         <h1 className="bold light-blue">About the entity</h1>
         <GridMetadata
           gridColumns="2"
-          metadata={information}
+          metadata={state.items[0]}
           metadataKeys={aboutEntityMetadata}
         />
       </div>
       <div className="flex flex-column mt-2">
         <h1 className="bold light-blue">BAT Conlcussions</h1>
         <div className="bat-container">
-          <a href={information.batPath} className="display-block mb-1">
-            {information.batFileName}
+          <a href={state.items[0]?.batPath} className="display-block mb-1">
+            {state.items[0]?.batFileName}
           </a>
           <GridMetadata
             gridColumns="2"
-            metadata={information}
+            metadata={state.items[0]}
             metadataKeys={batMetadata}
           />
           <div className="hr mt-1 mb-1" />
           <div className="align-center">
-            <a href={information.batPath}>View BAT AELs</a>
+            <a href={state.items[0]?.batPath}>View BAT AELs</a>
           </div>
         </div>
       </div>
@@ -117,26 +82,26 @@ const View = props => {
         <h1 className="bold light-blue">Operating permit</h1>
         <GridMetadata
           gridColumns="2"
-          metadata={information}
+          metadata={state.items[0]}
           metadataKeys={operatingPermitMetadata}
         />
       </div>
       <div className="flex flex-column mt-2">
         <h1 className="bold light-blue">BAT Derogations</h1>
-        <Table>
-          {/* ==== TABLE HEADER ==== */}
-          <Table.Header>
+        {/* <Table> */}
+        {/* ==== TABLE HEADER ==== */}
+        {/* <Table.Header>
             <Table.Row>
-              {Object.keys(information.derogations[0]).map(header => (
+              {Object.keys(state.items[0]?.derogations[0]).map(header => (
                 <Table.HeaderCell key={`header-${header}`}>
                   {header}
                 </Table.HeaderCell>
               ))}
             </Table.Row>
-          </Table.Header>
-          {/* ==== TABLE BODY ==== */}
-          <Table.Body>
-            {information.derogations.map((row, index) => (
+          </Table.Header> */}
+        {/* ==== TABLE BODY ==== */}
+        {/* <Table.Body>
+            {state.items[0]?.derogations.map((row, index) => (
               <Table.Row key={`tr-${index}`}>
                 {Object.keys(row).map(cell => (
                   <Table.Cell key={`cell-${cell}`}>{row[cell]}</Table.Cell>
@@ -144,19 +109,11 @@ const View = props => {
               </Table.Row>
             ))}
           </Table.Body>
-        </Table>
+        </Table> */}
       </div>
     </div>
   );
-  return view;
-  // return (
-  //   <DefaultView
-  //     {...props}
-  //     schema={schema}
-  //     view={view}
-  //     onChange={state.onChange}
-  //   />
-  // );
+  return <DefaultView {...props} view={view} onChange={state.onChange} />;
 };
 
 export default View;

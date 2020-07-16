@@ -22,21 +22,36 @@ class Table {
   where(column, value) {
     if (Array.isArray(value)) {
       value.forEach(v => {
-        this.whereStatements.push(`WHERE ${column}='${v}'`);
+        this.whereStatements.push(`${column}='${v}'`);
       });
     } else if (value) {
       value.split(',').forEach(v => {
-        this.whereStatements.push(`WHERE ${column}='${v}'`);
+        this.whereStatements.push(`${column}='${v}'`);
       });
     }
     return this;
   }
   log() {
-    console.log(this.query + this.whereStatements.join(' AND '));
-    return this.query + this.whereStatements.join(' AND ');
+    console.log(
+      this.query +
+        (this.whereStatements.length > 0
+          ? 'WHERE ' + this.whereStatements.join(' AND ')
+          : ''),
+    );
+    return (
+      this.query +
+      (this.whereStatements.length > 0
+        ? 'WHERE ' + this.whereStatements.join(' AND ')
+        : '')
+    );
   }
   makeRequest() {
-    return axios[this.method](`${this.path}?query=${this.query}`);
+    return axios[this.method](
+      `${this.path}?query=${this.query +
+        (this.whereStatements.length > 0
+          ? 'WHERE ' + this.whereStatements.join(' AND ')
+          : '')}`,
+    );
   }
 }
 
