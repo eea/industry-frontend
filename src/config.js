@@ -36,6 +36,7 @@ export const settings = {
     'navigation',
     '&expand.navigation.depth=5',
   ],
+  providerUrl: 'https://discodata.eea.europa.eu/sql',
 };
 
 export const views = {
@@ -61,5 +62,3 @@ export const portlets = {
 export const editForms = {
   ...config.editForms,
 };
-
-// console.log('config', config);
