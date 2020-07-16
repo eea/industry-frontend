@@ -46,31 +46,7 @@ const DefaultView = props => {
             loaded: false,
             loading: false,
             errors: errors,
-            //  THIS IS JUST FOR TESTING
-            items: [
-              {
-                siteName: ' "ASM BRESCIA" - BOSCO SELLA',
-                Country: 'IT',
-                RegulatedActivities:
-                  'Landfills, as defined in Article 2(g) of Council Directive 1999/31/EC of 26 April 1999 on the landfill of waste, receiving more than 10 tonnes of waste per day or with a total capacity exceeding 25,000 tonnes, excluding landfills of inert waste',
-                EntityStatus: 'disused',
-                Seveso: null,
-                OperatingSince_: null,
-                BATAEL: null,
-                StartDate: null,
-                EndDate: null,
-                'Derogated from - to': ' - ',
-                PermitUpdated: null,
-                PermitingAuthority: 'Provincia di Brescia',
-                PermitAvailable: null,
-                'Conclusion name': null,
-                'Conclusion status': null,
-                'BATAEL name': null,
-                'BATAEL status': null,
-                'BATAEL accepted date': null,
-                Description: null,
-              },
-            ],
+            items: [],
           });
         });
     }
