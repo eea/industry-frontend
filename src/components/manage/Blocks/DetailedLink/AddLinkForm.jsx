@@ -6,13 +6,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import unionClassNames from 'union-class-names';
 import { connect } from 'react-redux';
 import { map } from 'lodash';
 import { doesNodeContainClick } from 'semantic-ui-react/dist/commonjs/lib';
 import { defineMessages, injectIntl } from 'react-intl';
 
-import { resetSearchContent, searchContent, getNavigation } from '@plone/volto/actions';
+import { resetSearchContent, searchContent } from '@plone/volto/actions';
 import URLUtils from '@plone/volto/components/manage/AnchorPlugin/utils/URLUtils';
 
 const messages = defineMessages({
@@ -106,13 +105,13 @@ class AddLinkForm extends Component {
       value: item['@id'],
       description: item.description,
       external: true,
-      url: item.getURL
+      url: item.getURL,
     };
     this.setState({
       value: itemToSave,
       isInvalid: false,
     });
-    this.props.onAddLink(itemToSave)
+    this.props.onAddLink(itemToSave);
     this.props.resetSearchContent();
     this.input.blur();
     this.onClose();
@@ -144,9 +143,13 @@ class AddLinkForm extends Component {
   }
 
   render() {
-    const { value, isInvalid } = this.state;
+    const { value } = this.state;
     return (
-      <div className="link-form-container" style={{ display: 'flex', flexDirection: 'column' }} ref={this.linkFormContainer}>
+      <div
+        className="link-form-container"
+        style={{ display: 'flex', flexDirection: 'column' }}
+        ref={this.linkFormContainer}
+      >
         <div
           style={{ marginLeft: '5px', display: 'flex', alignItems: 'center' }}
         >
@@ -163,18 +166,26 @@ class AddLinkForm extends Component {
             </g>
           </svg>
           <input
-            style={{ padding: "10px", border: 'none' }}
+            style={{ padding: '10px', border: 'none' }}
             onChange={this.onChange}
             onKeyDown={this.onKeyDown}
             ref={this.onRef}
             type="text"
-            value={value.title}
+            value={value.text}
+            defaultValue={this.props.initialValue}
             placeholder={this.props.intl.formatMessage(messages.placeholder)}
           />
         </div>
-        <div style={{ margin: 0, paddingLeft: '35px', display: 'flex', flexWrap: 'wrap' }}>
+        <div
+          style={{
+            margin: 0,
+            paddingLeft: '35px',
+            display: 'flex',
+            flexWrap: 'wrap',
+          }}
+        >
           {map(this.props.search, item => (
-            <div className="child-container">
+            <div key={item['@id']} className="child-container">
               <button
                 className="child-link"
                 style={{ cursor: 'pointer' }}
@@ -185,7 +196,6 @@ class AddLinkForm extends Component {
                 {item.title}
               </button>
             </div>
-
           ))}
         </div>
       </div>
