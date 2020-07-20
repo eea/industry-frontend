@@ -29,8 +29,8 @@ const DefaultView = props => {
       setState({ ...state, loading: true });
       DB.table(providerUrl, selectQuery.table)
         .get()
-        .where(selectQuery.columnKey, selectQuery.columnValue)
-        .where(additionalQuery.columnKey, additionalQuery.columnValue)
+        .where(selectQuery?.columnKey, selectQuery?.columnValue)
+        .where(additionalQuery?.columnKey, additionalQuery?.columnValue)
         .makeRequest()
         .then(response => {
           setState({
