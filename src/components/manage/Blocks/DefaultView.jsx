@@ -20,9 +20,9 @@ const DefaultView = props => {
   const providerUrl = data?.providerUrl || settings.providerUrl || null;
   useEffect(() => {
     if (
-      selectQuery.table &&
-      selectQuery.columnKey &&
-      selectQuery.columnValue &&
+      selectQuery?.table &&
+      selectQuery?.columnKey &&
+      selectQuery?.columnValue &&
       providerUrl &&
       !state.loading
     ) {

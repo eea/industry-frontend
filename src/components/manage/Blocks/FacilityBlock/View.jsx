@@ -28,23 +28,27 @@ const View = props => {
         <div className="flex flex-column mr-3 w-40">
           <h1 className="mb-0 bold light-blue">[facilityName1]</h1>
           <p className="mb-0 bold light-blue">Industrial activity</p>
-          <p>{state.items[0]?.mainActivity}</p>
+          <p>{state.items?.[0]?.mainActivity}</p>
         </div>
         <div className="banner flex">
           <div className="flex-item">
             <p className="lighter">Last report was submitted on:</p>
             <p className="bold">
-              {moment(state.items[0]?.eprtrReportingDate).format('DD MMM YYYY')}
+              {moment(state.items?.[0]?.eprtrReportingDate).format(
+                'DD MMM YYYY',
+              )}
             </p>
           </div>
           <div className="flex-item">
             <p className="bold">Reporting year</p>
-            <p className="lighter">{state.items[0]?.eprtrReportingYear}</p>
+            <p className="lighter">{state.items?.[0]?.eprtrReportingYear}</p>
           </div>
           <div className="flex-item">
             <p className="bold">Publish date</p>
             <p className="lighter">
-              {moment(state.items[0]?.eprtrReportingDate).format('DD MMM YYYY')}
+              {moment(state.items?.[0]?.eprtrReportingDate).format(
+                'DD MMM YYYY',
+              )}
             </p>
           </div>
         </div>
@@ -53,15 +57,15 @@ const View = props => {
         <h1 className="mb-0 bold light-blue">Competent Authority</h1>
         <p className="info">
           Last updated:{' '}
-          {moment(state.items[0]?.authLastUpdated).format('DD MMM YYYY')}
+          {moment(state.items?.[0]?.authLastUpdated).format('DD MMM YYYY')}
         </p>
       </div>
       <div className="mt-2 grid grid-cl-3 responsive metadata">
         {metadata.map(meta =>
-          state.items[0]?.[meta.id] ? (
+          state.items?.[0]?.[meta.id] ? (
             <div>
               <p className="bold mb-0">{meta.label}</p>
-              <p className="info dark">{state.items[0]?.[meta.id]}</p>
+              <p className="info dark">{state.items?.[0]?.[meta.id]}</p>
             </div>
           ) : meta.default ? (
             <div>

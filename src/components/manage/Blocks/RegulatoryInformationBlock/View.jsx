@@ -57,15 +57,15 @@ const View = props => {
         <h1 className="bold light-blue">About the entity</h1>
         <GridMetadata
           gridColumns="2"
-          metadata={state.items[0]}
+          metadata={state.items?.[0]}
           metadataKeys={aboutEntityMetadata}
         />
       </div>
       <div className="flex flex-column mt-2">
         <h1 className="bold light-blue">BAT Conlcussions</h1>
         <div className="bat-container">
-          <a href={state.items[0]?.batPath} className="display-block mb-1">
-            {state.items[0]?.batFileName}
+          <a href={state.items?.[0]?.batPath} className="display-block mb-1">
+            {state.items?.[0]?.batFileName}
           </a>
           <GridMetadata
             gridColumns="2"
@@ -74,7 +74,7 @@ const View = props => {
           />
           <div className="hr mt-1 mb-1" />
           <div className="align-center">
-            <a href={state.items[0]?.batPath}>View BAT AELs</a>
+            <a href={state.items?.[0]?.batPath}>View BAT AELs</a>
           </div>
         </div>
       </div>
@@ -82,7 +82,7 @@ const View = props => {
         <h1 className="bold light-blue">Operating permit</h1>
         <GridMetadata
           gridColumns="2"
-          metadata={state.items[0]}
+          metadata={state.items?.[0]}
           metadataKeys={operatingPermitMetadata}
         />
       </div>
