@@ -1,4 +1,3 @@
-import chartIcon from '@plone/volto/icons/world.svg';
 import TabsView from '~/components/theme/View/TabsView';
 import RedirectView from '~/components/theme/View/RedirectView';
 import TabsChildView from '~/components/theme/View/TabsChildView';
@@ -16,17 +15,7 @@ import ArticlesListEdit from '~/components/manage/Blocks/ArticlesList/Edit';
 import ChildrenLinksView from '~/components/manage/Blocks/ChildrenLinks/View';
 import ChildrenLinksEdit from '~/components/manage/Blocks/ChildrenLinks/Edit';
 
-import FacilityBlockEdit from '~/components/manage/Blocks/FacilityBlock/Edit';
-import FacilityBlockView from '~/components/manage/Blocks/FacilityBlock/View';
-
-import RegulatoryInformationBlockEdit from '~/components/manage/Blocks/RegulatoryInformationBlock/Edit';
-import RegulatoryInformationBlockView from '~/components/manage/Blocks/RegulatoryInformationBlock/View';
-
-import CompanyHeaderEdit from '~/components/manage/Blocks/CompanyHeader/Edit';
-import CompanyHeaderView from '~/components/manage/Blocks/CompanyHeader/View';
-
 const applyConfig = config => {
-  console.log('config', config);
   config.views = {
     ...config.views,
     layoutViews: {
@@ -72,33 +61,6 @@ const applyConfig = config => {
     view: ChildrenLinksView,
     edit: ChildrenLinksEdit,
     icon: config.blocks.blocksConfig.text.icon,
-  };
-
-  config.blocks.blocksConfig.facility_block = {
-    id: 'facility_block',
-    title: 'Facility block',
-    view: FacilityBlockView,
-    edit: FacilityBlockEdit,
-    icon: chartIcon,
-    group: 'data_blocks',
-  };
-
-  config.blocks.blocksConfig.regulatory_information_block = {
-    id: 'regulatory_information_block',
-    title: 'Regulatory information block',
-    view: RegulatoryInformationBlockView,
-    edit: RegulatoryInformationBlockEdit,
-    icon: chartIcon,
-    group: 'data_blocks',
-  };
-
-  config.blocks.blocksConfig.comany_header_block = {
-    id: 'comany_header_block',
-    title: 'Company header block',
-    view: CompanyHeaderView,
-    edit: CompanyHeaderEdit,
-    icon: chartIcon,
-    group: 'data_blocks',
   };
 
   return config;
