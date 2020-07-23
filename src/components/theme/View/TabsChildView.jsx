@@ -77,7 +77,7 @@ const DefaultView = props => {
       });
     return sidebar;
   };
-
+  console.log('aici', props.location.pathname);
   useEffect(() => {
     const sidebar = [];
     sidebar.push(...getSidebar(navigation.items?.[state.activeTab], 1));
@@ -90,18 +90,46 @@ const DefaultView = props => {
 
   return hasBlocksData(content) ? (
     <div className="ui wrapper">
-      <div className="glossary-search">
-        <SearchBlock
-          data={{
-            title: { value: 'Glossary page results' },
-            paths: { value: ['eprtr/glossary'] },
-            placeholder: { value: 'Search site' },
-            buttonText: { value: 'SEARCH' },
-            buttonClassName: { value: '' },
-            searchButton: { value: true },
-          }}
-        />
-      </div>
+      {props.location.pathname.includes('/glossary') ? (
+        <div className="glossary-search">
+          <SearchBlock
+            data={{
+              title: { value: 'Glossary page results' },
+              paths: { value: ['eprtr/glossary'] },
+              placeholder: { value: 'Search site' },
+              buttonText: { value: 'SEARCH' },
+              buttonClassName: { value: '' },
+              searchButton: { value: true },
+            }}
+          />
+        </div>
+      ) : props.location.pathname.includes('/raw-data') ? (
+        <div>
+          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+            <h1
+              style={{
+                textAlign: 'center',
+                marginTop: '1rem',
+                fontSize: '36px',
+                color: '#4296B2',
+              }}
+            >
+              Raw data
+            </h1>
+            <p>
+              This section provides a close-up picture of air pollution from
+              various sources such as road transport, shipping, aviation,
+              domestic heating, agriculture and small business (diffuse
+              emissions). Pollution from diffuse sources occurs over large areas
+              from often indistinct elements. Although the large numbers of
+              houses and vehicles in cities represent many point sources, they
+              collectively represent a large, diffuse source of pollution.
+            </p>
+          </div>
+        </div>
+      ) : (
+        ''
+      )}
 
       <nav className="tabs section-tabs">
         {navigation.items?.length
@@ -244,8 +272,10 @@ DefaultView.propTypes = {
 export default compose(
   injectIntl,
   connect((state, props) => ({
-    navigation: state.navigation.items.filter(
-      item => item.title === 'Glossary',
+    navigation: state.navigation.items.filter(item =>
+      props.location.pathname.includes('raw-data')
+        ? item.title === 'Raw data'
+        : item.title === 'Glossary',
     )[0],
     pathname: props.location.pathname,
     lang: state.intl.locale,
