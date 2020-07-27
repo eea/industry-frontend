@@ -11,6 +11,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import { map, isMatch } from 'lodash';
 import cx from 'classnames';
 import SearchBlock from 'volto-addons/SearchBlock/View';
+import { getBasePath } from '~/helpers';
 
 import {
   Helmet,
@@ -20,7 +21,7 @@ import {
 } from '@plone/volto/helpers';
 
 import { deepSearch } from '~/helpers';
-import { blocks, settings } from '~/config';
+import { blocks, settings } from '../../../config';
 
 const messages = defineMessages({
   unknownBlock: {
@@ -51,6 +52,8 @@ const DefaultView = props => {
     activeTab: 0,
     isMobileSidebarOpen: false,
   });
+
+  // TODO: fix this
   const blocksFieldname = getBlocksFieldname(content);
   const blocksLayoutFieldname = getBlocksLayoutFieldname(content);
 
@@ -77,16 +80,19 @@ const DefaultView = props => {
       });
     return sidebar;
   };
-  console.log('aici', props.location.pathname);
   useEffect(() => {
-    const sidebar = [];
-    sidebar.push(...getSidebar(navigation.items?.[state.activeTab], 1));
-    setState({
-      ...state,
-      sidebar,
-    });
+    if (navigation) {
+      const sidebar = [];
+      sidebar.push(...getSidebar(navigation.items?.[state.activeTab], 1));
+      setState({
+        ...state,
+        sidebar,
+      });
+    }
     /* eslint-disable-next-line */
   }, [props.navigation, state.activeTab]);
+  // TODO: fix this
+  if (!navigation) return '';
 
   return hasBlocksData(content) ? (
     <div className="ui wrapper">
@@ -272,11 +278,16 @@ DefaultView.propTypes = {
 export default compose(
   injectIntl,
   connect((state, props) => ({
-    navigation: state.navigation.items.filter(item =>
-      props.location.pathname.includes('raw-data')
-        ? item.title === 'Raw data'
-        : item.title === 'Glossary',
-    )[0],
+    navigation: state.navigation.items.filter(item => {
+      const basePath = getBasePath(item.url);
+      // sectionsWithTabsView
+      const { sectionsWithTabsView } = settings;
+      const filterBy = sectionsWithTabsView.find(i => i === basePath);
+      if (props.location.pathname.includes(filterBy)) {
+        return item.title;
+      }
+      return false;
+    })[0],
     pathname: props.location.pathname,
     lang: state.intl.locale,
     content:

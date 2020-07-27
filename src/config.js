@@ -39,6 +39,7 @@ export const settings = {
     '&expand.navigation.depth=5',
   ],
   providerUrl: 'https://discodata.eea.europa.eu/sql',
+  sectionsWithTabsView: ['/raw-data', '/glossary'],
 };
 
 export const views = {
