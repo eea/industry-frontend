@@ -14,25 +14,104 @@ import { Portal } from 'react-portal';
 import { Container, Pagination } from 'semantic-ui-react';
 import qs from 'query-string';
 import moment from 'moment';
-
+import { isArray, isObject } from 'lodash';
 import { settings } from '~/config';
 import { Helmet } from '@plone/volto/helpers';
 import { searchContent } from '@plone/volto/actions';
-import { SearchWidget, Toolbar, Icon } from '@plone/volto/components';
+import { Toolbar, Icon } from '@plone/volto/components';
+import Highlighter from 'react-highlight-words';
+import SearchBlock from 'volto-addons/SearchBlock/View';
 
 import paginationLeftSVG from '@plone/volto/icons/left-key.svg';
 import paginationRightSVG from '@plone/volto/icons/right-key.svg';
 
-const toSearchOptions = (searchableText, subject, path) => {
+const toSearchOptions = (searchableText, subject, queryOptions) => {
   return {
+    fullobjects: true,
     ...(searchableText && { SearchableText: searchableText }),
     ...(subject && {
       Subject: subject,
     }),
-    ...(path && {
-      path: path,
-    }),
+    ...(queryOptions && queryOptions),
   };
+};
+
+const getQueryOptions = (query, schema = false) => {
+  const options = {};
+  isObject(query) &&
+    Object.entries(query).forEach(([key, value]) => {
+      if (key.includes(':query'))
+        options[key.split(':')[0]] = !schema
+          ? value
+          : { value: isArray(value) ? value : [value] };
+    });
+  return options;
+};
+
+const getText = block => {
+  let text = '';
+  if (block.text && typeof block.text === 'string') text = block.text;
+  if (block.text && block.text.blocks && isArray(block.text.blocks)) {
+    block.text.blocks.forEach(block => {
+      text += getText(block);
+    });
+  }
+  return text;
+};
+
+const matchedText = (text, searchableText) => {
+  let matchedText = text;
+  if (text.length > 256) {
+    const pos = text.toLowerCase().indexOf(searchableText.toLowerCase());
+    const rightPart = text.substring(pos, text.length);
+    const leftPart = text.substring(0, pos - 1);
+    matchedText = `[...${leftPart.slice(-128)} ${rightPart.substring(
+      0,
+      128,
+    )}...]`;
+  }
+  return matchedText;
+};
+
+const smallText = text => {
+  if (text.length > 256) return `[...${text.substring(0, 256)}...]`;
+  return text;
+};
+
+const paragraph = (text, searchableText) => (
+  <p>
+    <Highlighter
+      highlightClassName="highlight"
+      searchWords={searchableText?.split(' ') || []}
+      autoEscape={true}
+      textToHighlight={text}
+    />
+  </p>
+);
+
+const getSummary = (item, searchableText) => {
+  let summary = {
+    fullSummary: [],
+    matchedParagraph: [],
+    firstParagraph: [],
+  };
+  item.blocks &&
+    Object.entries(item.blocks).forEach(([key, block], index) => {
+      const text = getText(block);
+      summary.fullSummary.push(paragraph(text, searchableText));
+      if (text && text.length > 0 && summary.firstParagraph.length === 0) {
+        summary.firstParagraph.push(paragraph(smallText(text), searchableText));
+      }
+      if (
+        text.toLowerCase().includes(searchableText.toLowerCase()) &&
+        summary.matchedParagraph.length === 0
+      ) {
+        summary.matchedParagraph.push(
+          paragraph(matchedText(text, searchableText), searchableText),
+        );
+      }
+    });
+  return summary;
 };
 
 /**
@@ -76,7 +155,7 @@ class Search extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { currentPage: 1 };
+    this.state = { currentPage: 1, expendedItemIndex: -1 };
   }
 
   /**
@@ -88,7 +167,7 @@ class Search extends Component {
     this.doSearch(
       this.props.searchableText,
       this.props.subject,
-      this.props.path,
+      getQueryOptions(this.props.query),
     );
   }
 
@@ -106,7 +185,7 @@ class Search extends Component {
       this.doSearch(
         nextProps.searchableText,
         nextProps.subject,
-        this.props.path,
+        getQueryOptions(this.props.query),
       );
     }
   };
@@ -120,21 +199,31 @@ class Search extends Component {
    * @returns {undefined}
    */
 
-  doSearch = (searchableText, subject, path) => {
+  doSearch = (searchableText, subject, queryOptions) => {
     this.setState({ currentPage: 1 });
     this.props.searchContent(
       '',
-      toSearchOptions(searchableText, subject, path),
+      toSearchOptions(searchableText, subject, queryOptions),
     );
   };
 
+  makeQuery(key) {
+    let query = '';
+    const propsQuery = this.props.data?.[key]?.value;
+    isObject(propsQuery) &&
+      Object.entries(propsQuery).forEach(([itemKey, item]) => {
+        if (isArray(item)) query += `&${itemKey}:${key}=${item.join(',')}&`;
+      });
+    return query;
+  }
+
   handleQueryPaginationChange = (e, { activePage }) => {
     window.scrollTo(0, 0);
-    this.setState({ currentPage: activePage }, () => {
+    this.setState({ currentPage: activePage, expendedItemIndex: -1 }, () => {
       const options = toSearchOptions(
         qs.parse(this.props.location.search).SearchableText,
         qs.parse(this.props.location.search).Subject,
-        qs.parse(this.props.location.search).path,
+        getQueryOptions(this.props.query),
       );
 
       this.props.searchContent('', {
@@ -156,7 +245,7 @@ class Search extends Component {
         <div className="container">
           <article id="content">
             <header>
-              <h1 className="documentFirstHeading">
+              <h1 className="documentFirstHeading mb-0">
                 {this.props.title ? (
                   `${this.props.title}`
                 ) : (
@@ -167,20 +256,28 @@ class Search extends Component {
                 )}
               </h1>
 
-              <div className="glossary-search search-page">
-                <SearchWidget
-                  initialText={this.props.searchableText}
-                  pathname={this.props.pathname}
-                />
-              </div>
+              <SearchBlock
+                data={{
+                  title: { value: this.props.title },
+                  query: {
+                    value: {
+                      properties: {
+                        ...getQueryOptions(this.props.query, true),
+                      },
+                    },
+                  },
+                  placeholder: { value: 'Search site' },
+                  searchButton: { value: false },
+                }}
+              />
 
-              <div className="search-meta">
+              <div className="search-meta mb-2">
                 {this.props.searchableText ? (
                   <span>
-                    Results for{' '}
-                    <span className="bold ma-0">
+                    Results for:{' '}
+                    <mark className="highlight green bold ma-0">
                       {this.props.searchableText}
-                    </span>
+                    </mark>
                   </span>
                 ) : (
                   ''
@@ -193,33 +290,61 @@ class Search extends Component {
               </div>
             </header>
             <section id="content-core">
-              {this.props.items.map(item => (
-                <article className="tileItem" key={item['@id']}>
-                  <h2 className="tileHeadline">{item.title}</h2>
-                  <div className="search-meta">
-                    {item['@type'] ? <span>{item['@type']}</span> : ''}
-                    {item['effective'] ? (
-                      <span>
-                        {moment(item['effective']).format('DD.MM.YYYY')}
-                      </span>
-                    ) : (
-                      ''
-                    )}
-                  </div>
-                  {item.description && (
-                    <div className="tileBody">
-                      <span className="description">{item.description}</span>
+              {this.props.items.map((item, index) => (
+                <article
+                  className="tileItem"
+                  key={`article_${item['@id']}`}
+                  id={`article_${item['@id']}`}
+                >
+                  <Link to={item['@id']}>
+                    <h2 className="tileHeadline mb-1">{item.title}</h2>
+                  </Link>
+                  <div className="tileBody">
+                    <div className="description">
+                      {this.state.expendedItemIndex === index
+                        ? item.summary.fullSummary.length > 0
+                          ? item.summary.fullSummary.map((paragraph, index) => (
+                              <React.Fragment
+                                key={`summary_paragraph_${
+                                  item['@id']
+                                }_${index}}`}
+                              >
+                                {paragraph}
+                              </React.Fragment>
+                            ))
+                          : item.description
+                        : item.summary.matchedParagraph.length > 0
+                        ? item.summary.matchedParagraph[0]
+                        : item.summary.firstParagraph.length > 0
+                        ? item.summary.firstParagraph[0]
+                        : item.description}
                     </div>
-                  )}
-                  <div className="tileFooter">
-                    <Link to={item['@id']}>
-                      <button className="outline dark-blue">
-                        <FormattedMessage
-                          id="Read More…"
-                          defaultMessage="Read More"
-                        />
-                      </button>
-                    </Link>
+                    <button
+                      className="expendButton"
+                      onClick={() => {
+                        if (this.state.expendedItemIndex === index) {
+                          this.setState({ expendedItemIndex: -1 }, () => {
+                            window.scrollTo(
+                              0,
+                              document.getElementById(`article_${item['@id']}`)
+                                .offsetTop,
+                            );
+                          });
+                        } else {
+                          this.setState({ expendedItemIndex: index }, () => {
+                            window.scrollTo(
+                              0,
+                              document.getElementById(`article_${item['@id']}`)
+                                .offsetTop,
+                            );
+                          });
+                        }
+                      }}
+                    >
+                      {this.state.expendedItemIndex === index
+                        ? 'Collapse'
+                        : 'Read more'}
+                    </button>
                   </div>
                   <div className="visualClear" />
                 </article>
@@ -283,10 +408,19 @@ export const __test__ = connect(
 export default compose(
   connect(
     (state, props) => ({
-      items: state.search.items,
       searchableText: qs.parse(props.location.search).SearchableText,
+      items: state.search.items.map(item => {
+        return {
+          ...item,
+          '@id': item['@id'].replace(settings.apiPath, ''),
+          summary: getSummary(
+            item,
+            qs.parse(props.location.search).SearchableText,
+          ),
+        };
+      }),
       subject: qs.parse(props.location.search).Subject,
-      path: qs.parse(props.location.search).path,
+      query: qs.parse(props.location.search),
       title: qs.parse(props.location.search).title,
       pathname: props.location.pathname,
     }),
@@ -302,7 +436,7 @@ export default compose(
             toSearchOptions(
               qs.parse(location.search).SearchableText,
               qs.parse(location.search).Subject,
-              qs.parse(location.search).path,
+              getQueryOptions(qs.parse(location.search)),
             ),
           ),
         ),

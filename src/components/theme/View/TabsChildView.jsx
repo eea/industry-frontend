@@ -101,7 +101,15 @@ const DefaultView = props => {
           <SearchBlock
             data={{
               title: { value: 'Glossary page results' },
-              paths: { value: ['eprtr/glossary'] },
+              query: {
+                value: {
+                  properties: {
+                    path: {
+                      value: ['eprtr/glossary'],
+                    },
+                  },
+                },
+              },
               placeholder: { value: 'Search site' },
               buttonText: { value: 'SEARCH' },
               buttonClassName: { value: '' },

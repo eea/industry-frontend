@@ -904,7 +904,7 @@ space-around {
     transform: translateY(-50%);
   }
 
-  .clear.icon {
+  .clearIcon {
     left: unset;
     right: 1rem;
     cursor: pointer;
@@ -987,18 +987,6 @@ button.solid,
 
 .ma-0 {
   margin: 0 !important;
-}
-
-.ui.segment.form {
-  .react-select__control,
-  .ui.input > input,
-  .inline.field .wrapper {
-    border: 0;
-    border-bottom: 0;
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
-  }
 }
 
 body.has-sidebar {
