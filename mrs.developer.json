@@ -39,5 +39,9 @@
   "volto-gridlayout": {
     "url": "https://github.com/eea/volto-gridlayout.git",
     "path": "src"
+  },
+  "volto-tabsview": {
+    "url": "https://github.com/eea/volto-tabsview.git",
+    "path": "src"
   }
 }

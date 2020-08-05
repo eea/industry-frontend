@@ -12,6 +12,7 @@ import { applyConfig as mosaicConfig } from 'volto-mosaic/config';
 import { applyConfig as plotlyConfig } from 'volto-plotlycharts/config';
 // import { applyConfig as installEPRTRFrontend } from './localconfig';
 import { applyConfig as gridLayoutConfig } from 'volto-gridlayout/config';
+import { applyConfig as tabsViewConfig } from 'volto-tabsview/config';
 
 // import { applyConfig as installEPRTRFrontend } from './localconfig';
 import installEPRTR from './localconfig';
@@ -22,6 +23,7 @@ const config = [
   installTableau,
   plotlyConfig,
   // ckeditorConfig,
+  tabsViewConfig,
   mosaicConfig,
   blocksConfig,
   dataBlocksConfig,

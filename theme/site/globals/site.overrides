@@ -831,11 +831,13 @@ space-around {
       top: auto;
     }
   }
-
   .sidebar-container {
     z-index: 9999;
   }
+}
 
+.sidebar-container .ui.raised.segments {
+  height: fit-content !important;
 }
 
 .block.maps iframe {
@@ -1002,4 +1004,127 @@ body.has-sidebar {
   left: auto !important;
   transform: none !important;
   top: auto;
+}
+
+/* Tabs view nav */
+.tabs-view-menu {
+  padding-bottom: 0;
+  height: 100%;
+  .scroll-container {
+    height: 100%;
+    .ui.menu {
+      height: 100%;
+    }
+  }
+  .ui.menu {
+    border: none;
+    box-shadow: none;
+    &.item {
+      text-align: left !important;
+      justify-content: start !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      &::-webkit-scrollbar {
+        height: 6px;
+      }
+      &::-webkit-scrollbar-track {
+        border-radius: 10em;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: darkgrey;
+        outline: 1px solid slategrey;
+      }
+      .item {
+        width: fit-content !important;
+        margin-right: 1em !important;
+        margin-left: 1em !important;
+      }
+    }
+    .item {
+      font-size: 18px;
+      &:before {
+        background: #fff;
+      }
+    }
+    .active.item {
+      background: #fff;
+      color: #4296B3;
+      font-weight: bold;
+      border-bottom: 2px solid #4296B3;
+      &:hover {
+        background: transparent;
+        color: #3b849e;
+      }
+    }
+  }
+
+  // @media(min-width: 1300px) {
+  //   .ui.item.menu {
+  //     width: 1200px !important;
+  //   }
+  // }
+  
+  // @media(min-width: 1000px) {
+  //   .ui.item.menu {
+  //     width: 900px !important;
+  //   }
+  // }
+
+  // @media(max-width: 999px) {
+  //   .ui.item.menu {
+  //     width: fit-content !important;
+  //   }
+  // }
+}
+
+.react-grid-item {
+  .block-container {
+    .block-wrapper {
+      &.grey {
+        background-color: #F6F6F6;
+      }
+      .sidebar {
+        .tabs {
+
+        }
+      }
+    }
+  } 
+}
+  
+
+.view-navgation-container {
+  height: 100%;
+  .tabs-view-menu {
+    padding-bottom: 0;
+  }
+  .view-sidebar-container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    height: calc(100% - 40px);
+    .sidebar {
+      background: #F3EFEE;
+      padding: 20px 0;
+    }
+    .view {
+      padding: 20px;
+    }
+  }
+}
+
+
+.section-industrial-site main {
+  height: 100%;
+}
+
+h2 {
+  color: #4296B3;
+}
+
+h3 {
+  color: #EC776A;
+}
+
+.blocks-chooser {
+  top: -500px !important;
 }

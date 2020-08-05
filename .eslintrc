@@ -53,8 +53,8 @@
                         "./src/develop/volto-embed/src"
                     ], 
                     [
-                        "volto-sidebar", 
-                        "./src/develop/volto-sidebar/src"
+                        "volto-tabsview",
+                        "./src/develop/volto-tabsview/src"
                     ]
                 ]
             }

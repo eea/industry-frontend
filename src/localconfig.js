@@ -3,6 +3,9 @@ import TabsView from '~/components/theme/View/TabsView';
 import RedirectView from '~/components/theme/View/RedirectView';
 import TabsChildView from '~/components/theme/View/TabsChildView';
 import BrowseView from '~/components/theme/View/BrowseView/BrowseView';
+import DiscodataView from '~/components/theme/View/DiscodataView';
+
+import MosaicForm from 'volto-mosaic/components/manage/Form';
 
 import DetailedLinkView from '~/components/manage/Blocks/DetailedLink/View';
 import DetailedLinkEdit from '~/components/manage/Blocks/DetailedLink/Edit';
@@ -25,8 +28,10 @@ import RegulatoryInformationBlockView from '~/components/manage/Blocks/Regulator
 import CompanyHeaderEdit from '~/components/manage/Blocks/CompanyHeader/Edit';
 import CompanyHeaderView from '~/components/manage/Blocks/CompanyHeader/View';
 
+import EprtrSidebarBlockEdit from '~/components/manage/Blocks/SidebarBlock/Edit';
+import EprtrSidebarBlockView from '~/components/manage/Blocks/SidebarBlock/View';
+
 const applyConfig = config => {
-  console.log('config', config);
   config.views = {
     ...config.views,
     layoutViews: {
@@ -35,6 +40,15 @@ const applyConfig = config => {
       glossaryview: TabsChildView,
       redirect_view: RedirectView,
       browse_view: BrowseView,
+      discodata_view: DiscodataView,
+    },
+  };
+
+  config.editForms = {
+    ...config.editForms,
+    byLayout: {
+      ...config.editForms?.byLayout,
+      discodata_view: MosaicForm,
     },
   };
 
@@ -97,6 +111,15 @@ const applyConfig = config => {
     title: 'Company header block',
     view: CompanyHeaderView,
     edit: CompanyHeaderEdit,
+    icon: chartIcon,
+    group: 'data_blocks',
+  };
+
+  config.blocks.blocksConfig.eprtr_sidebar_block = {
+    id: 'eprtr_sidebar_block',
+    title: 'Eprtr sidebar block',
+    view: EprtrSidebarBlockView,
+    edit: EprtrSidebarBlockEdit,
     icon: chartIcon,
     group: 'data_blocks',
   };

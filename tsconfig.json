@@ -32,6 +32,9 @@
             ],
             "volto-embed": [
                 "develop/volto-embed"
+            ],
+            "volto-tabsview": [
+                "develop/volto-tabsview"
             ]
         },
         "baseUrl": "src"
