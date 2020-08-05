@@ -4,18 +4,19 @@ import { useHistory } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import qs from 'query-string';
 /* ROOT */
 import { settings } from '~/config';
 /* HELPERS */
 import { getNavigationByParent } from 'volto-tabsview/helpers';
 import {
   getDiscodataResource,
-  setDiscodataQuery,
+  setQueryParam,
+  deleteQueryParam,
 } from 'volto-datablocks/actions';
 
 import './style.css';
 const sidebarRef = React.createRef();
-let unlisten;
 const View = ({ content, ...props }) => {
   const { data } = props;
   const [state, setState] = useState({
@@ -23,32 +24,10 @@ const View = ({ content, ...props }) => {
     sidebarOpened: true,
   });
   const history = useHistory();
+  const parsedQuery = qs.parse(props.location.search);
   const { search, key, resourceKey } = props.discodata_query.data;
   const parent = data.parent?.value;
-  const activeItem = search?.[props.data.discodata_resource_property?.value];
-
-  // useEffect(() => {
-  //   unlisten = this.props.history.listen((location, action) => {
-  //     if (action === 'PUSH') {
-  //       const nextPathname = location.pathname.split('/');
-  //       const prevPathname = props.location.pathname.split('/');
-  //       // if (
-  //       //   props.location.search &&
-  //       //   props.location.search !== location.search &&
-  //       //   (location.pathname.includes(props.location.pathname) ||
-  //       //     nextPathname[1] === prevPathname[1])
-  //       // ) {
-  //       //   props.history.push(
-  //       //     `${location.pathname}${this.props.location.search}`,
-  //       //   );
-  //       // }
-  //     }
-  //   });
-  //   return () => {
-  //     unlisten();
-  //   };
-  //   /* eslint-disable-next-line */
-  // }, [])
+  const activeItem = parsedQuery?.[props.data.query_parameter?.value] || '';
 
   useEffect(() => {
     if (props.navigation) {
@@ -60,7 +39,7 @@ const View = ({ content, ...props }) => {
       });
     }
     /* eslint-disable-next-line */
-  }, [ props.data, props.navigation, props.discodata_resources, props.discodata_query?.search]);
+  }, [ props.data, props.navigation, props.discodata_resources, activeItem]);
 
   const getSidebar = (item, depth) => {
     const sidebar = [];
@@ -79,20 +58,18 @@ const View = ({ content, ...props }) => {
               <button
                 key={`${key}_button`}
                 onClick={() => {
-                  props.setDiscodataQuery({
-                    ...props.discodata_query,
-                    search: {
-                      ...search,
-                      [props.data.discodata_resource_property?.value]:
-                        search?.[
-                          props.data.discodata_resource_property?.value
-                        ] !== key
-                          ? key
-                          : props.pathname !== item.url
-                          ? key
-                          : '',
-                    },
-                  });
+                  const queryParam = props.data.query_parameter?.value;
+                  const oldValue = search?.[props.data.query_parameter?.value];
+                  if (key !== oldValue) {
+                    props.setQueryParam({
+                      queryParam,
+                      value: key,
+                    });
+                  } else {
+                    props.deleteQueryParam({
+                      queryParam,
+                    });
+                  }
                   history.push(item.url === '' ? '/' : item.url);
                 }}
                 className={
@@ -188,7 +165,6 @@ export default compose(
   connect(
     (state, props) => ({
       router: state.router,
-      query: state.router.location.search,
       location: state.router.location,
       content:
         state.prefetch?.[state.router.location.pathname] || state.content.data,
@@ -201,6 +177,10 @@ export default compose(
       discodata_resources: state.discodata_resources,
       discodata_query: state.discodata_query,
     }),
-    { getDiscodataResource, setDiscodataQuery },
+    {
+      getDiscodataResource,
+      setQueryParam,
+      deleteQueryParam,
+    },
   ),
 )(View);
