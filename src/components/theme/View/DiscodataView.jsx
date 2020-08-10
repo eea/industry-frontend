@@ -1,87 +1,65 @@
 /* REACT IMPORTS */
-import React, { useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import qs from 'query-string';
 /* ROOT IMPORTS */
 import MosaicView from 'volto-mosaic/components/theme/View';
-import DB from 'volto-datablocks/DataBase/DB';
-//  SVGS
 /* LOCAL IMPORTS */
-import { getDiscodataResource } from 'volto-datablocks/actions';
+import { getDiscodataResource, setQueryParam } from 'volto-datablocks/actions';
+import { Dimmer, Loader } from 'semantic-ui-react';
 /* =================================================== */
-
 const DiscodataView = props => {
-  const query = qs.parse(props.location.search);
+  const [state, setState] = useState({
+    mounted: false,
+  });
   const history = useHistory();
-  const { sql_query, endpoint_url } = props.content;
-  const {
-    search,
-    key,
-    resourceKey,
-    where,
-    groupBy,
-  } = props.discodata_query.data;
-  const { deletedQueryParams } = props.discodata_query;
-  useEffect(() => {
-    const whereStatements =
-      where?.length > 0 &&
-      where.map(param => {
-        return {
-          discodataKey: param,
-          value: props.discodata_query.data.search?.[param],
-        };
-      });
-    const url = DB.table(sql_query, endpoint_url, {
-      p: query.p,
-      nrOfHits: query.nrOfHits,
-    })
-      .where(whereStatements)
-      .encode()
-      .get();
-    if (!props.discodata_resources.loading) {
-      const request = {
-        url,
-        search: search || {},
-        resourceKey: resourceKey || '',
-        key: key || '',
-        groupBy: groupBy || [],
-      };
-      if (
-        request.url &&
-        !props.discodata_resources.data?.[key]?.[
-          props.discodata_query.data.search?.[key]
-        ] &&
-        !props.discodata_resources.pendingRequests[
-          `${resourceKey}_${key}_${search?.[key]}`
-        ]
-      ) {
-        props.getDiscodataResource(request);
-      }
-    }
-    /* eslint-disable-next-line */
-  }, [props.discodata_query.data])
+  const { search, deletedQueryParams } = props.discodata_query;
+  const parsedQuery = { ...(qs.parse(props.query) || {}) };
 
-  useEffect(() => {
-    const query = { ...(qs.parse(props.query) || {}) };
-    Object.entries(deletedQueryParams).forEach(([key, value]) => {
-      if (value && query[key]) delete query[key];
-    });
-    Object.entries(search).forEach(([key, value], index) => {
-      if (query) {
-        query[key] = value;
-      }
-    });
-    if (props.query !== `?${qs.stringify(query)}`) {
-      history.push({
-        search: `?${qs.stringify(query)}`,
-      });
-    }
-    /* eslint-disable-next-line */
-  }, [props.discodata_query.data?.search, props.query])
+  // useEffect(() => {
+  //   /* Add query to discodata_query on mount */
+  // let updatedSearch = false;
+  // let newSearch = { ...search };
+  // Object.entries(parsedQuery).forEach(([key, value]) => {
+  //   if (!search[key] || search[key] !== value) {
+  //     newSearch[key] = value;
+  //     if (!updatedSearch) updatedSearch = true;
+  //   }
+  // });
+  // if (updatedSearch) props.setQueryParam({ queryParam: newSearch });
+  //   setState({
+  //     ...state,
+  //     mounted: true,
+  //   });
+  //   /* eslint-disable-next-line */
+  // }, [])
+
+  // useEffect(() => {
+  //   if (state.mounted && props.content.layout === 'discodata_view') {
+  //     const newQuery = { ...parsedQuery };
+  //     Object.entries(deletedQueryParams).forEach(([key, value]) => {
+  //       if (newQuery[key]) delete newQuery[key];
+  //     });
+  //     Object.entries(search).forEach(([key, value], index) => {
+  //       if (newQuery[key] !== value) {
+  //         newQuery[key] = value;
+  //       }
+  //     });
+  //     if (qs.stringify(parsedQuery) !== `${qs.stringify(newQuery)}`) {
+  //       history.push({
+  //         search: `?${qs.stringify(newQuery)}`,
+  //       });
+  //     }
+  //   }
+  //   /* eslint-disable-next-line */
+  // }, [props.query])
 
   return (
-    <div id="mosaic-view">
+    <div id="discodata-mosaic-view">
+      <Dimmer active={props.discodata_resources.loading}>
+        <Loader />
+      </Dimmer>
       <MosaicView {...props} />
     </div>
   );
@@ -96,5 +74,5 @@ export default connect(
     content:
       state.prefetch?.[state.router.location.pathname] || state.content.data,
   }),
-  { getDiscodataResource },
+  { getDiscodataResource, setQueryParam },
 )(DiscodataView);

@@ -4,6 +4,7 @@ import {
   applyConfig as addonsConfig,
   installFolderListing,
   installTableau,
+  installExpendableList,
 } from 'volto-addons/config';
 import { applyConfig as ckeditorConfig } from 'volto-ckeditor/config';
 import { applyConfig as dataBlocksConfig } from 'volto-datablocks/config';
@@ -21,6 +22,7 @@ const config = [
   addonsConfig,
   installFolderListing,
   installTableau,
+  installExpendableList,
   plotlyConfig,
   // ckeditorConfig,
   tabsViewConfig,

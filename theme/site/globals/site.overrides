@@ -655,6 +655,7 @@ p {
         &.hide {
           td {
             .table-flex-container {
+              padding: 0;
               max-height: 0;
               opacity: 0;
             }
@@ -664,6 +665,7 @@ p {
         &.show {
           td {
             .table-flex-container {
+              padding: 20px 30px 40px 30px;
               max-height: fit-content;
               opacity: 1;
             }
@@ -1019,6 +1021,32 @@ body.has-sidebar {
   .ui.menu {
     border: none;
     box-shadow: none;
+    &.red-menu {
+      .item {
+        color: #D63D27;
+        background-color: transparent;
+        &:before {
+          width: 0;
+          background-color: transparent;
+        }
+      }
+      .active.item {
+        color: #fff;
+        border-bottom: none;
+        background-color: #D63D27;
+        padding: 0 2em !important;
+        border-radius: 2em;
+        &:hover {
+          background: #a32e1c;
+          color: #fff;
+        }
+        &:before {
+          width: 0;
+          background: transparent;
+          background-color: transparent;
+        }
+      }
+    }
     &.item {
       text-align: left !important;
       justify-content: start !important;
@@ -1088,10 +1116,31 @@ body.has-sidebar {
 
         }
       }
+      .facility-block-wrapper {
+        height: 100%;
+        > div {
+          height: 100%;
+        }
+      }
     }
   } 
 }
-  
+
+.ui.dropdown {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.ui.dropdown > .dropdown.icon {
+  font-size: 14px !important;
+  margin-left: 5px !important;
+}
+
+@media(max-width: 600px) {
+  .eprtr-box {
+    width: 100%;
+  }
+}
 
 .view-navgation-container {
   height: 100%;
@@ -1125,6 +1174,23 @@ h3 {
   color: #EC776A;
 }
 
-.blocks-chooser {
-  top: -500px !important;
+/* Navigation */
+.navigation .ui.menu {
+  flex-wrap: wrap;
+}
+
+// .react-grid-layout:not(.mosaic-edit-layout) {
+//   .react-grid-item {
+//     position: relative !important;
+//     float: left;
+//     top: unset !important;
+//     height: fit-content !important;
+//   }
+// }
+
+#discodata-mosaic-view {
+  position: relative;
+  .ui.dimmer {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
 }

@@ -14,103 +14,153 @@ import {
   setQueryParam,
   deleteQueryParam,
 } from 'volto-datablocks/actions';
+import DiscodataSqlBuilderView from 'volto-datablocks/DiscodataSqlBuilder/View';
 
 import './style.css';
 const sidebarRef = React.createRef();
 const View = ({ content, ...props }) => {
-  const { data } = props;
   const [state, setState] = useState({
     sidebar: [],
     sidebarOpened: true,
+    selectedResource: {},
   });
+  const { query } = props;
+  const { search } = props.discodata_query;
+  const { data } = props.discodata_resources;
   const history = useHistory();
-  const parsedQuery = qs.parse(props.location.search);
-  const { search, key, resourceKey } = props.discodata_query.data;
-  const parent = data.parent?.value;
-  const activeItem = parsedQuery?.[props.data.query_parameter?.value] || '';
+  const globalQuery = { ...query, ...search };
+  const resourcePackageKey = props.data.resource_package_key?.value;
+  const key = props.data.key?.value;
+  const source = props.data.source?.value;
+  const multiply = props.data.multiply?.value;
+  const depthOfMultiplication = props.data.depth_of_multiplication?.value;
+  const queryParam = props.data.query_parameter?.value;
+  const activeItem = globalQuery?.[queryParam] || '';
+  const queryParameters = props.data?.query_parameters?.value
+    ? JSON.parse(props.data.query_parameters.value).properties
+    : {};
 
   useEffect(() => {
-    if (props.navigation) {
-      const sidebar = [];
-      sidebar.push(...getSidebar(props.navigation, 1));
-      setState({
-        ...state,
-        sidebar,
-      });
+    if (
+      multiply &&
+      resourcePackageKey &&
+      key &&
+      source &&
+      data[resourcePackageKey]?.[globalQuery[key]]?.[source] &&
+      props.navigation
+    ) {
+      const selectedResource =
+        data[resourcePackageKey][globalQuery[key]][source];
+      setState({ ...state, selectedResource });
     }
     /* eslint-disable-next-line */
-  }, [ props.data, props.navigation, props.discodata_resources, activeItem]);
+  }, [resourcePackageKey, key, source, multiply, props.discodata_resources, props.navigation, activeItem])
+
+  useEffect(() => {
+    const sidebar = [...getSidebar(props.navigation, 1)];
+    setState({ ...state, sidebar });
+    /* eslint-disable-next-line */
+  }, [state.selectedResource, search])
 
   const getSidebar = (item, depth) => {
     const sidebar = [];
-    if (depth === 2 && props.data?.multiply_second_level?.value === true) {
-      const selectedDiscodataResource =
-        props.discodata_resources.data?.[resourceKey]?.[search?.[key]] || null;
-      const selectedDiscodataResourceProperty =
-        selectedDiscodataResource?.[
-          props.data.discodata_resource_property?.value
-        ];
-      selectedDiscodataResourceProperty &&
+    if (multiply && depth === parseInt(depthOfMultiplication)) {
+      Object.entries(state.selectedResource).forEach(([key, source]) => {
+        sidebar.push(
+          <button
+            key={`${key}_button`}
+            onClick={() => {
+              const queries = {};
+              Object.entries(queryParameters).forEach(([qKey, qValue]) => {
+                if (Array.isArray(source)) {
+                  source.forEach(item => {
+                    if (!queries[qKey] && item[qValue.queryParam]) {
+                      queries[qKey] = item[qValue.queryParam];
+                    } else if (
+                      queries[qKey] &&
+                      item[qValue.queryParam] &&
+                      queries[qKey] !== item[qValue.queryParam]
+                    ) {
+                      if (
+                        typeof item[qValue.queryParam] === 'number' &&
+                        !isNaN(item[qValue.queryParam]) &&
+                        item[qValue.queryParam] > queries[qKey]
+                      ) {
+                        queries[qKey] = item[qValue.queryParam];
+                      }
+                    }
+                  });
+                } else if (source && Object.keys(source).length > 0) {
+                  queries[qKey] = source[qValue.queryParam];
+                }
+              });
+              if (key !== activeItem) {
+                props.setQueryParam({
+                  queryParam: queries,
+                });
+              } else {
+                props.deleteQueryParam({
+                  queryParam: Object.keys(queryParameters),
+                });
+              }
+              if (
+                item.items?.length > 0 &&
+                item.items[0].url !== props.location.pathname
+              ) {
+                history.push(
+                  item.items[0].url === '' ? '/' : item.items[0].url,
+                );
+              }
+            }}
+            className={
+              activeItem === key
+                ? `tabs__item_active depth__${depth}`
+                : `tabs__item depth__${depth}`
+            }
+          >
+            {key}
+          </button>,
+        );
         item?.items?.length &&
-        Object.entries(selectedDiscodataResourceProperty).forEach(
-          ([key, value]) => {
+          item.items.forEach(nextItem => {
             sidebar.push(
-              <button
-                key={`${key}_button`}
-                onClick={() => {
-                  const queryParam = props.data.query_parameter?.value;
-                  const oldValue = search?.[props.data.query_parameter?.value];
-                  if (key !== oldValue) {
-                    props.setQueryParam({
-                      queryParam,
-                      value: key,
-                    });
-                  } else {
-                    props.deleteQueryParam({
-                      queryParam,
-                    });
-                  }
-                  history.push(item.url === '' ? '/' : item.url);
-                }}
+              <NavLink
+                to={nextItem.url === '' ? '/' : nextItem.url}
+                exact={
+                  settings.isMultilingual
+                    ? nextItem.url === `/${props.lang}}`
+                    : nextItem.url === ''
+                }
+                key={`${key}_${nextItem.url}`}
                 className={
                   activeItem === key
-                    ? `tabs__item_active depth__${depth}`
-                    : `tabs__item depth__${depth}`
+                    ? `tabs__item show depth__${depth + 1}`
+                    : `tabs__item hidden depth__${depth + 1}`
                 }
+                activeClassName="tabs__item_active"
               >
-                {key}
-              </button>,
+                {nextItem.title}
+              </NavLink>,
             );
-            item?.items?.length &&
-              item.items.forEach(nextItem => {
-                sidebar.push(
-                  <NavLink
-                    to={nextItem.url === '' ? '/' : nextItem.url}
-                    exact={
-                      settings.isMultilingual
-                        ? nextItem.url === `/${props.lang}}`
-                        : nextItem.url === ''
-                    }
-                    key={`${key}_${nextItem.url}`}
-                    className={
-                      activeItem === key
-                        ? `tabs__item show depth__${depth + 1}`
-                        : `tabs__item hidden depth__${depth + 1}`
-                    }
-                    activeClassName="tabs__item_active"
-                  >
-                    {nextItem.title}
-                  </NavLink>,
-                );
-                sidebar.push(...getSidebar(nextItem, depth + 2));
-              });
-          },
-        );
+            sidebar.push(...getSidebar(nextItem, depth + 2));
+          });
+      });
     } else {
       item?.items?.length &&
         item.items.forEach(nextItem => {
           sidebar.push(
             <NavLink
+              onClick={() => {
+                let deleteQueries = false;
+                Object.keys(queryParameters).forEach(key => {
+                  if (globalQuery[key] && !deleteQueries) deleteQueries = true;
+                });
+                if (multiply && deleteQueries) {
+                  props.deleteQueryParam({
+                    queryParam: Object.keys(queryParameters),
+                  });
+                }
+              }}
               to={nextItem.url === '' ? `/}` : nextItem.url}
               exact={
                 settings.isMultilingual
@@ -129,46 +179,29 @@ const View = ({ content, ...props }) => {
     }
     return sidebar;
   };
+
   return (
-    <div className="sidebar-block-container">
-      {/* <button
-        style={{
-          display: 'block',
-          position: 'absolute',
-        }}
-        onClick={() => {
-          const event = new Event('sidebarToggle');
-          sidebarRef.current.dispatchEvent(event);
-          const sidebarOpened = !state.sidebarOpened;
-          setState({ ...state, sidebarOpened });
-        }}
-      >
-        Toggle sidebar
-      </button> */}
-      <div
-        ref={sidebarRef}
-        className={`sidebar ${
-          state.sidebarOpened === true ? 'show' : 'hidden'
-        }`}
-      >
-        {props.navigation?.items?.length && parent ? (
+    <DiscodataSqlBuilderView {...props}>
+      <div className="sidebar-block-container">
+        <div
+          ref={sidebarRef}
+          className={`sidebar ${
+            state.sidebarOpened === true ? 'show' : 'hidden'
+          }`}
+        >
           <nav className="tabs">{state?.sidebar?.map(item => item)}</nav>
-        ) : (
-          ''
-        )}
+        </div>
       </div>
-    </div>
+    </DiscodataSqlBuilderView>
   );
 };
 
 export default compose(
   connect(
     (state, props) => ({
-      router: state.router,
       location: state.router.location,
       content:
         state.prefetch?.[state.router.location.pathname] || state.content.data,
-      pathname: state.router.location.pathname,
       lang: state.intl.locale,
       navigation: getNavigationByParent(
         state.navigation.items,

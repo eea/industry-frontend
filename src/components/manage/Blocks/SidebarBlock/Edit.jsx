@@ -2,42 +2,101 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import _uniqueId from 'lodash/uniqueId';
-import RenderFields from 'volto-addons/Widgets/RenderFields';
+import qs from 'query-string';
 import View from './View';
+import DiscodataSqlBuilderEdit from 'volto-datablocks/DiscodataSqlBuilder/Edit';
 
 const makeChoices = keys => keys && keys.map(k => [k, k]);
 
 const getSchema = props => {
-  const { search, key, resourceKey } = props.discodata_query.data;
-  const discodataResources = Object.keys(props.discodata_resources.data) || [];
-  const selectedDiscodataResource =
-    props.discodata_resources.data?.[resourceKey]?.[search?.[key]] || null;
+  const { query } = props;
+  const { search } = props.discodata_query;
+  const { data } = props.discodata_resources;
+  const globalQuery = { ...query, ...search };
+  /* ===================== */
+  /* ===================== */
+  const resourcePackageKey = props.data.resource_package_key?.value;
+  const key = props.data.key?.value;
+  const selectedResource =
+    resourcePackageKey && !key
+      ? data[resourcePackageKey]
+      : resourcePackageKey && key
+      ? data[resourcePackageKey]?.[globalQuery[key]]
+      : data;
   return {
     parent: {
       type: 'link',
       title: 'Parent page',
     },
-    multiply_second_level: {
+    multiply: {
       type: 'boolean',
-      title: 'Multiply second level',
+      title: 'Multiply',
     },
-    discodata_resource: {
-      type: 'array',
-      title: 'Discodata resource',
-      choices: makeChoices(discodataResources),
+    depth_of_multiplication: {
+      type: 'text',
+      title: 'Depth of multiplication',
     },
-    discodata_resource_property: {
+    resource_package_key: {
+      title: 'Resource package key',
       type: 'array',
+      choices: data ? makeChoices(Object.keys(data)) : [],
+    },
+    key: {
+      title: 'Query to use',
+      type: 'array',
+      choices: globalQuery ? makeChoices(Object.keys(globalQuery)) : [],
+    },
+    source: {
       title: 'Source',
-      // items: {
-      choices: selectedDiscodataResource
-        ? makeChoices(Object.keys(selectedDiscodataResource))
+      type: 'array',
+      choices: selectedResource
+        ? makeChoices(Object.keys(selectedResource))
         : [],
-      // },
     },
     query_parameter: {
       type: 'text',
-      title: 'Query to set',
+      title: 'Query identifier',
+    },
+    query_parameters: {
+      title: 'Queries to set',
+      type: 'schema',
+      fieldSetTitle: 'Queries metadata',
+      fieldSetId: 'queries_metadata',
+      fieldSetSchema: {
+        fieldsets: [
+          {
+            id: 'default',
+            title: 'title',
+            fields: ['title', 'id', 'queryParam'],
+          },
+        ],
+        properties: {
+          title: {
+            title: 'Title',
+            type: 'text',
+          },
+          id: {
+            title: 'Id',
+            type: 'text',
+          },
+          queryParam: {
+            title: 'Query param',
+            type: 'text',
+            // type: formData => (!formData.urlQuery ? 'text' : 'array'),
+            // choices: formData => {
+            //   if (!formData.urlQuery) return undefined;
+            //   let keys = query ? Object.keys(query) : [];
+            //   Object.keys(search).forEach(key => {
+            //     if (keys.indexOf(key) === -1) keys.push(key);
+            //   });
+            //   return [...makeChoices(keys)];
+            // },
+          },
+        },
+        required: ['id', 'title', 'queryParam'],
+      },
+      editFieldset: false,
+      deleteFieldset: false,
     },
   };
 };
@@ -66,17 +125,21 @@ const Edit = props => {
       }),
     });
     /* eslint-disable-next-line */
-  }, [state.item, props.data, props.discodata_resources, props.discodata_query])
+  }, [state.item, props.data, props.discodata_resources, props.discodata_query.search])
   return (
-    <div>
-      <RenderFields schema={state.schema} {...props} title="Navigation block" />
-      <View {...props} id={state.id} />
-    </div>
+    <DiscodataSqlBuilderEdit
+      {...props}
+      optionalSchema={state.schema}
+      title="Discodata components block"
+    >
+      <View {...props} />
+    </DiscodataSqlBuilderEdit>
   );
 };
 
 export default compose(
   connect((state, props) => ({
+    query: qs.parse(state.router.location.search),
     pathname: state.router.location.pathname,
     discodata_resources: state.discodata_resources,
     discodata_query: state.discodata_query,
