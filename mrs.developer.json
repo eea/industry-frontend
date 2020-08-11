@@ -14,7 +14,6 @@
   "volto-addons": {
     "url": "https://github.com/eea/volto-addons.git",
     "path": "src",
-    "branch": "arcgis_search_filter"
   },
   "volto-ckeditor": {
     "url": "https://github.com/eea/volto-ckeditor.git",
