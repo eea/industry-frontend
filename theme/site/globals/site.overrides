@@ -890,7 +890,7 @@ space-around {
 
   div.input {
     padding: 0 4rem;
-    border: 1px solid #606060;
+    border: none;
     height: 50px;
     font-weight: 300;
     font-size: 18px;
@@ -900,7 +900,7 @@ space-around {
   }
 
   .icon {
-    fill: #606060 !important;
+    fill: #32536B !important;
     position: absolute;
     z-index: 1;
     left: 1rem;
@@ -908,14 +908,23 @@ space-around {
     transform: translateY(-50%);
   }
 
+  .searchIcon {
+    fill: #32536B !important;
+  }
+
   .clearIcon {
+    fill: #D63D27 !important;
     left: unset;
     right: 1rem;
     cursor: pointer;
+    &:hover {
+      fill: #32536B !important;
+    }
   }
 }
 
 .search-meta {
+  margin-top: 0.5em;
   margin-bottom: 3rem;
 
   span {
@@ -941,45 +950,49 @@ space-around {
   }
 }
 
-button.outline {
-  background: transparent;
-  color: #000;
-  border: 1px solid #000;
-  padding: 0.6rem 2rem;
-  border-radius: 2rem;
-  cursor: pointer;
-  text-transform: uppercase;
-
-  &.dark-blue {
-    border: 1px solid #32536B;
-
-    &:hover {
-      background: #32536B;
-      color: #fff;
-    }
-  }
-
-  &:hover {
-    background: #000;
-    color: #fff;
-  }
-}
-
 button.solid,
 .ui.form .searchbox.field button.solid {
-  background: transparent;
-  color: #000;
+  border-color: #000;
+  background-color: #000;
+  color: #fff;
   padding: 0.6rem 2rem;
   border-radius: 2rem;
   cursor: pointer;
-
+  &:focus {
+    outline: none;
+  }
   &.dark-blue {
-    background: #32536B;
+    border: none;
+    background-color: #32536B;
     color: #fff;
     font-weight: bold;
 
     &:hover {
-      background: #32536B;
+      background-color: #32536B;
+      color: #fff;
+    }
+  }
+}
+
+button.outline,
+.ui.form .searchbox.field button.outline {
+  background-color: transparent;
+  color: #000;
+  border-color: #000;
+  padding: 0.6rem 2rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  &:focus {
+    outline: none;
+  }
+  &.dark-blue {
+    border-color: #32536B;
+    color: #32536B;
+    font-weight: bold;
+
+    &:hover {
+      background-color: #32536B;
+      border-color: #32536B;
       color: #fff;
     }
   }
@@ -1047,6 +1060,19 @@ body.has-sidebar {
         }
       }
     }
+    &.grey-menu {
+      background-color: #EDEDED;
+      .item {
+        color: #000;
+        &:before {
+          width: 0;
+          background-color: transparent;
+        }
+      }
+      .active.item {
+        background-color: transparent;
+      }
+    }
     &.item {
       text-align: left !important;
       justify-content: start !important;
@@ -1079,6 +1105,7 @@ body.has-sidebar {
       color: #4296B3;
       font-weight: bold;
       border-bottom: 2px solid #4296B3;
+      border-radius: 0;
       &:hover {
         background: transparent;
         color: #3b849e;

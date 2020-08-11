@@ -100,7 +100,11 @@ const DefaultView = props => {
         <div className="glossary-search">
           <SearchBlock
             data={{
-              title: { value: 'Glossary page results' },
+              title: { value: 'Glossary' },
+              description: {
+                value:
+                  'This section provides a close-up picture of air pollution from various sources such as road transport, shipping, aviation, domestic heating, agriculture and small business (diffuse emissions). Pollution from diffuse sources occurs over large areas from often indistinct elements. Although the large numbers of houses and vehicles in cities represent many point sources, they collectively represent a large, diffuse source of pollution.',
+              },
               query: {
                 value: {
                   properties: {

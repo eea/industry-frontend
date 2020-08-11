@@ -67,7 +67,7 @@ const getSchema = props => {
           {
             id: 'default',
             title: 'title',
-            fields: ['title', 'id', 'queryParam'],
+            fields: ['title', 'id', 'queryParam', 'universalQuery'],
           },
         ],
         properties: {
@@ -91,6 +91,10 @@ const getSchema = props => {
             //   });
             //   return [...makeChoices(keys)];
             // },
+          },
+          universalQuery: {
+            title: 'Universal query',
+            type: 'boolean',
           },
         },
         required: ['id', 'title', 'queryParam'],

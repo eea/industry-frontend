@@ -255,10 +255,15 @@ class Search extends Component {
                   />
                 )}
               </h1>
-
+              {this.props.description ? (
+                <p style={{ marginBottom: '3em' }}>{this.props.description}</p>
+              ) : (
+                ''
+              )}
               <SearchBlock
                 data={{
                   title: { value: this.props.title },
+                  description: { value: this.props.description },
                   query: {
                     value: {
                       properties: {
@@ -297,7 +302,16 @@ class Search extends Component {
                   id={`article_${item['@id']}`}
                 >
                   <Link to={item['@id']}>
-                    <h2 className="tileHeadline mb-1">{item.title}</h2>
+                    <h2 className="tileHeadline mb-1">
+                      <Highlighter
+                        highlightClassName="highlight"
+                        searchWords={
+                          this.props.searchableText?.split(' ') || []
+                        }
+                        autoEscape={true}
+                        textToHighlight={item.title}
+                      />
+                    </h2>
                   </Link>
                   <div className="tileBody">
                     <div className="description">
@@ -320,7 +334,7 @@ class Search extends Component {
                         : item.description}
                     </div>
                     <button
-                      className="expendButton"
+                      className="outline dark-blue expendButton"
                       onClick={() => {
                         if (this.state.expendedItemIndex === index) {
                           this.setState({ expendedItemIndex: -1 }, () => {
@@ -422,6 +436,7 @@ export default compose(
       subject: qs.parse(props.location.search).Subject,
       query: qs.parse(props.location.search),
       title: qs.parse(props.location.search).title,
+      description: qs.parse(props.location.search).description,
       pathname: props.location.pathname,
     }),
     { searchContent },

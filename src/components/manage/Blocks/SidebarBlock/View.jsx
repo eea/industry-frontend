@@ -152,16 +152,35 @@ const View = ({ content, ...props }) => {
             <NavLink
               onClick={() => {
                 let deleteQueries = false;
+                const universalQueries = {};
                 Object.keys(queryParameters).forEach(key => {
                   if (globalQuery[key] && !deleteQueries) deleteQueries = true;
+                });
+                Object.entries(queryParameters).forEach(([qKey, value]) => {
+                  if (
+                    value.universalQuery &&
+                    typeof data[resourcePackageKey]?.[globalQuery[key]]?.[
+                      value.queryParam
+                    ] !== 'undefined'
+                  ) {
+                    universalQueries[qKey] =
+                      data[resourcePackageKey]?.[globalQuery[key]]?.[
+                        value.queryParam
+                      ];
+                  }
                 });
                 if (multiply && deleteQueries) {
                   props.deleteQueryParam({
                     queryParam: Object.keys(queryParameters),
                   });
                 }
+                if (multiply && Object.keys(universalQueries).length > 0) {
+                  props.setQueryParam({
+                    queryParam: universalQueries,
+                  });
+                }
               }}
-              to={nextItem.url === '' ? `/}` : nextItem.url}
+              to={nextItem.url === '' ? `/` : nextItem.url}
               exact={
                 settings.isMultilingual
                   ? nextItem.url === `/${props.lang}}`
