@@ -31,6 +31,9 @@ import CompanyHeaderView from '~/components/manage/Blocks/CompanyHeader/View';
 import EprtrSidebarBlockEdit from '~/components/manage/Blocks/SidebarBlock/Edit';
 import EprtrSidebarBlockView from '~/components/manage/Blocks/SidebarBlock/View';
 
+import EprtrFiltersBlockEdit from '~/components/manage/Blocks/FiltersBlock/Edit';
+import EprtrFiltersBlockView from '~/components/manage/Blocks/FiltersBlock/View';
+
 const applyConfig = config => {
   config.views = {
     ...config.views,
@@ -120,6 +123,15 @@ const applyConfig = config => {
     title: 'Eprtr sidebar block',
     view: EprtrSidebarBlockView,
     edit: EprtrSidebarBlockEdit,
+    icon: chartIcon,
+    group: 'data_blocks',
+  };
+
+  config.blocks.blocksConfig.eprtr_filters_block = {
+    id: 'eprtr_filters_block',
+    title: 'Eprtr filters block',
+    view: EprtrFiltersBlockView,
+    edit: EprtrFiltersBlockEdit,
     icon: chartIcon,
     group: 'data_blocks',
   };

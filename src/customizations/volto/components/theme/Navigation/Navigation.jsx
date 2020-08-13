@@ -119,7 +119,7 @@ const Navigation = props => {
         {props.items.map(item => (
           <NavLink
             to={
-              (item.title === 'Glossary' &&
+              (['Glossary', 'Browse the data'].includes(item.title) &&
                 deepSearch({
                   inputArray: item.items,
                   pattern: {
