@@ -1,5 +1,5 @@
 /* REACT */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -11,6 +11,7 @@ import {
   Select,
   Input,
   Radio,
+  List,
 } from 'semantic-ui-react';
 import { Icon } from '@plone/volto/components';
 import { setQueryParam } from 'volto-datablocks/actions';
@@ -21,7 +22,7 @@ import axios from 'axios';
 import circlePlus from '@plone/volto/icons/circle-plus.svg';
 import circleMinus from '@plone/volto/icons/circle-minus.svg';
 import clear from '@plone/volto/icons/clear.svg';
-
+import Highlighter from 'react-highlight-words';
 import './style.css';
 
 let nrOfRequests = 0;
@@ -40,6 +41,7 @@ const View = ({ content, ...props }) => {
       'industries',
       'countries',
       'regions',
+      'river_basins',
       'town_village',
       'pollutant_groups',
       'pollutants',
@@ -48,8 +50,18 @@ const View = ({ content, ...props }) => {
     ],
     mounted: false,
     firstLoad: false,
+    searchRadioButtons: [
+      { key: 'bySiteName', label: 'By site name' },
+      { key: 'byLocation', label: 'By location' },
+    ],
+    searchType: 'bySiteName',
+    searchResults: [],
+    searchResultsActive: false,
   });
+  const [searchTerm, setSearchTerm] = useState('');
+  const searchContainer = useRef(null);
   const title = props.data.title?.value;
+
   useEffect(() => {
     setState({ ...state, mounted: true });
     return () => {
@@ -57,6 +69,24 @@ const View = ({ content, ...props }) => {
     };
     /* eslint-disable-next-line */
   }, []);
+
+  useEffect(() => {
+    if (state.open && state.searchResultsActive) {
+      setState({ ...state, searchResultsActive: false });
+    }
+    /* eslint-disable-next-line */
+  }, [state.open]);
+
+  useEffect(() => {
+    // register eventListener on each state update
+    document.addEventListener('mousedown', handleClickOutside, false);
+    return () => {
+      // unregister eventListener
+      document.removeEventListener('mousedown', handleClickOutside, false);
+    };
+    /* eslint-disable-next-line */
+  }, [state]);
+
   useEffect(() => {
     if (state.mounted) {
       let promises = [];
@@ -183,6 +213,15 @@ const View = ({ content, ...props }) => {
             return "'" + country + "'";
           })}) AND LEVL_CODE = 1
           ORDER BY NUTS_NAME`,
+          // RIVER BASIN DISTRICT QUERY
+          siteCountryFilters &&
+            siteCountryFilters.length > 0 &&
+            `SELECT DISTINCT thematicIdIdentifier, nameText
+            FROM [IED].[latest].[refRBD_NoGeo]
+            WHERE countryCode IN (${siteCountryFilters.map(country => {
+              return "'" + country + "'";
+            })})
+          ORDER BY nameText`,
           // TOWN/VILLAGE QUERY
           siteCountryFilters &&
             regionFilters &&
@@ -233,6 +272,22 @@ const View = ({ content, ...props }) => {
               optionValue: 'NUTS_ID',
               optionText: 'NUTS_NAME',
             },
+          // RIVER BASIN DISTRICT META
+          siteCountryFilters &&
+            siteCountryFilters.length > 0 && {
+              key: 'river_basins',
+              title: null,
+              queryToSet: 'riverBasin',
+              firstInput: {
+                id: _uniqueId('select_'),
+                type: 'select',
+                position: 0,
+              },
+              placeholder: 'Select river basin district',
+              optionKey: 'thematicIdIdentifier',
+              optionValue: 'thematicIdIdentifier',
+              optionText: 'nameText',
+            },
           // TOWN/VILLAGE META
           siteCountryFilters &&
             regionFilters &&
@@ -240,7 +295,7 @@ const View = ({ content, ...props }) => {
             regionFilters.length && {
               key: 'town_village',
               title: null,
-              queryToSet: 'town_village',
+              queryToSet: 'townVillage',
               firstInput: {
                 id: _uniqueId('select_'),
                 type: 'select',
@@ -335,11 +390,13 @@ const View = ({ content, ...props }) => {
     /* eslint-disable-next-line */
   }, [
     state.mounted,
-    JSON.stringify(state.filters.eprtrSectorName),
-    JSON.stringify(state.filters.siteCountry),
-    JSON.stringify(state.filters.region),
-    JSON.stringify(state.filters.town_village),
-    JSON.stringify(state.filters.pollutantGroup),
+    state.filters?.eprtrSectorName &&
+      JSON.stringify(state.filters.eprtrSectorName),
+    state.filters?.siteCountry && JSON.stringify(state.filters.siteCountry),
+    state.filters?.region && JSON.stringify(state.filters.region),
+    state.filters?.townVillage && JSON.stringify(state.filters.townVillage),
+    state.filters?.pollutantGroup &&
+      JSON.stringify(state.filters.pollutantGroup),
   ]);
   // console.log('HERE', nrOfRequests);
   useEffect(() => {
@@ -365,34 +422,36 @@ const View = ({ content, ...props }) => {
   };
 
   const updateFilters = () => {
-    const newFilters = { ...state.filters };
-    const newFiltersKeys = Object.keys(newFilters);
-    const filtersMetaEntries = Object.entries(state.filtersMeta);
-    const filtersMetaKeys = filtersMetaEntries.map(([key, value]) => {
-      return value.queryToSet;
-    });
+    if (state.filters && state.filtersMeta) {
+      const newFilters = { ...state.filters };
+      const newFiltersKeys = Object.keys(newFilters);
+      const filtersMetaEntries = Object.entries(state.filtersMeta);
+      const filtersMetaKeys = filtersMetaEntries.map(([key, value]) => {
+        return value.queryToSet;
+      });
 
-    newFiltersKeys
-      .filter(key => !filtersMetaKeys.includes(key))
-      .forEach(key => {
-        newFilters[key] = [];
+      newFiltersKeys
+        .filter(key => !filtersMetaKeys.includes(key))
+        .forEach(key => {
+          newFilters[key] = [];
+        });
+      filtersMetaEntries.forEach(([key, value]) => {
+        if (newFilters[value.queryToSet]) {
+          const options = value.options.map(item => item.value);
+          newFilters[value.queryToSet] = newFilters[value.queryToSet].map(
+            item => {
+              if (options.includes(item)) return item;
+              return null;
+            },
+          );
+        }
       });
-    filtersMetaEntries.forEach(([key, value]) => {
-      if (newFilters[value.queryToSet]) {
-        const options = value.options.map(item => item.value);
-        newFilters[value.queryToSet] = newFilters[value.queryToSet].map(
-          item => {
-            if (options.includes(item)) return item;
-            return null;
-          },
-        );
+      if (JSON.stringify(newFilters) !== JSON.stringify(state.filters)) {
+        setState({
+          ...state,
+          filters: newFilters,
+        });
       }
-    });
-    if (JSON.stringify(newFilters) !== JSON.stringify(state.filters)) {
-      setState({
-        ...state,
-        filters: newFilters,
-      });
     }
   };
 
@@ -439,12 +498,67 @@ const View = ({ content, ...props }) => {
     setState({
       ...state,
       filters: newFilters,
+      searchResults: [],
     });
+    setSearchTerm('');
+  };
+
+  function handleClickOutside(e) {
+    if (
+      state.mounted &&
+      searchContainer &&
+      searchContainer.current &&
+      !searchContainer.current.contains(e.target)
+    ) {
+      return setState({ ...state, searchResultsActive: false });
+    } else if (state.mounted) {
+      setState({ ...state, searchResultsActive: true });
+    }
+  }
+
+  const autoComplete = data => {
+    let req, reqKey, searchKey;
+    if (state.searchType === 'bySiteName') {
+      const sql = `SELECT DISTINCT site FROM [IED].[latest].[Browse3_4_infotable] WHERE [site] LIKE '${
+        data.value
+      }%' ORDER BY [site]`;
+      req = providerUrl + `?query=${encodeURI(sql)}&p=1&nrOfHits=5`;
+      reqKey = 'results';
+      searchKey = 'site';
+    } else if (state.searchType === 'byLocation') {
+      req =
+        'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?f=json&text=' +
+        data.value +
+        '&maxSuggestions=5';
+      reqKey = 'suggestions';
+      searchKey = 'text';
+    }
+    if (data.value.length > 2) {
+      axios
+        .get(req)
+        .then(response => {
+          const searchResults = JSON.parse(response.request.response)[reqKey];
+          if (state.mounted) {
+            setState({
+              ...state,
+              searchResults: searchResults.map(result => result[searchKey]),
+            });
+          }
+        })
+        .catch(error => {});
+    } else if (state.searchResults.length) {
+      setState({ ...state, searchResults: [] });
+    }
+    setSearchTerm(data.value);
   };
 
   const submit = () => {
     props.setQueryParam({
-      queryParam: { ...state.filters },
+      queryParam: {
+        ...state.filters,
+        searchTerm: searchTerm,
+        searchType: state.searchType,
+      },
     });
     setState({ ...state, open: false });
   };
@@ -471,23 +585,69 @@ const View = ({ content, ...props }) => {
       <Modal.Content>
         <Header>Search terms</Header>
         <div className="search-input-container">
-          <Radio label="By site name" name="searchType" value="bySiteName" />
-          <Radio
-            label="By facility name"
-            name="searchType"
-            value="byFacilityName"
-          />
-          <Radio label="By country" name="searchType" value="byCountry" />
-          <Radio label="By region" name="searchType" value="byRegion" />
-          <Radio label="By ZIP code" name="searchType" value="byZipCode" />
-        </div>
-        <div className="search-input-container">
-          <Input
-            className="search"
-            icon="search"
-            placeholder="Try search for a facility name, country, city, region or ZIP code"
-            iconPosition="left"
-          />
+          <div className="search-input-container">
+            {state.searchRadioButtons
+              ? state.searchRadioButtons.map(radioButton => {
+                  return (
+                    <Radio
+                      key={radioButton.key}
+                      label={radioButton.label}
+                      name="searchType"
+                      value={radioButton.key}
+                      checked={state.searchType === radioButton.key}
+                      onChange={() => {
+                        setState({
+                          ...state,
+                          searchResults: [],
+                          searchType: radioButton.key,
+                        });
+                      }}
+                    />
+                  );
+                })
+              : ''}
+          </div>
+          <div ref={searchContainer}>
+            <Input
+              className="search"
+              icon="search"
+              placeholder="Try search for a site name, country, city, region or ZIP code"
+              iconPosition="left"
+              value={searchTerm}
+              onChange={(event, data) => {
+                autoComplete(data);
+              }}
+            />
+            {state.searchResultsActive && state.searchResults.length ? (
+              <div className="search-results">
+                <List>
+                  {state.searchResults.map((result, index) => {
+                    return (
+                      <List.Item
+                        key={`search-result-${index}`}
+                        onClick={() => {
+                          setState({
+                            ...state,
+                            searchResultsActive: false,
+                          });
+                          setSearchTerm(result);
+                        }}
+                      >
+                        <Highlighter
+                          highlightClassName="highlight"
+                          searchWords={searchTerm?.split(' ') || []}
+                          autoEscape={true}
+                          textToHighlight={result}
+                        />
+                      </List.Item>
+                    );
+                  })}
+                </List>
+              </div>
+            ) : (
+              ''
+            )}
+          </div>
         </div>
         {state.filtersMeta &&
           state.filtersMetaOrder &&
