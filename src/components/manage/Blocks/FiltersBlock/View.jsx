@@ -18,11 +18,12 @@ import { setQueryParam } from 'volto-datablocks/actions';
 import { settings } from '~/config';
 import _uniqueId from 'lodash/uniqueId';
 import axios from 'axios';
+import Highlighter from 'react-highlight-words';
 
+import menuSVG from '@plone/volto/icons/menu-alt.svg';
 import circlePlus from '@plone/volto/icons/circle-plus.svg';
 import circleMinus from '@plone/volto/icons/circle-minus.svg';
 import clear from '@plone/volto/icons/clear.svg';
-import Highlighter from 'react-highlight-words';
 import './style.css';
 
 let nrOfRequests = 0;
@@ -59,6 +60,7 @@ const View = ({ content, ...props }) => {
     searchResultsActive: false,
   });
   const [searchTerm, setSearchTerm] = useState('');
+  const [sidebar, setSidebar] = useState(false);
   const searchContainer = useRef(null);
   const title = props.data.title?.value;
 
@@ -404,7 +406,12 @@ const View = ({ content, ...props }) => {
     /* eslint-disable-next-line */
   }, [JSON.stringify(state.filters), JSON.stringify(state.filtersMeta)])
 
-  const changeFilter = (data, filter, position = 0) => {
+  const changeFilter = (
+    data,
+    filter,
+    position = 0,
+    triggerQueryUpdate = false,
+  ) => {
     const newFilters = { ...state.filters };
     if (!newFilters[filter.queryToSet]) newFilters[filter.queryToSet] = [];
     if (newFilters[filter.queryToSet]?.length >= position) {
@@ -419,6 +426,13 @@ const View = ({ content, ...props }) => {
       ...state,
       filters: newFilters,
     });
+    if (triggerQueryUpdate) {
+      props.setQueryParam({
+        queryParam: {
+          [filter.queryToSet]: newFilters[filter.queryToSet],
+        },
+      });
+    }
   };
 
   const updateFilters = () => {
@@ -564,208 +578,256 @@ const View = ({ content, ...props }) => {
   };
 
   return (
-    <Modal
-      className="filters-block"
-      onClose={() => setState({ ...state, open: false })}
-      onOpen={() => setState({ ...state, open: true })}
-      open={state.open}
-      trigger={<Button>{title ? title : 'Show modal'}</Button>}
-    >
-      <Modal.Header>
-        {/* eslint-disable-next-line */}
-        Advanced search and filter
-        <Icon
-          className="add-button"
-          onClick={() => setState({ ...state, open: false })}
-          color="red"
-          name={clear}
-          size="1em"
-        />
-      </Modal.Header>
-      <Modal.Content>
-        <Header>Search terms</Header>
-        <div className="search-input-container">
+    <>
+      <Modal
+        className="filters-block"
+        onClose={() => setState({ ...state, open: false })}
+        onOpen={() => setState({ ...state, open: true })}
+        open={state.open}
+        trigger={<Button>{title ? title : 'Show modal'}</Button>}
+      >
+        <Modal.Header>
+          {/* eslint-disable-next-line */}
+          Advanced search and filter
+          <Icon
+            className="add-button"
+            onClick={() => setState({ ...state, open: false })}
+            color="red"
+            name={clear}
+            size="1em"
+          />
+        </Modal.Header>
+        <Modal.Content>
+          <Header>Search terms</Header>
           <div className="search-input-container">
-            {state.searchRadioButtons
-              ? state.searchRadioButtons.map(radioButton => {
-                  return (
-                    <Radio
-                      key={radioButton.key}
-                      label={radioButton.label}
-                      name="searchType"
-                      value={radioButton.key}
-                      checked={state.searchType === radioButton.key}
-                      onChange={() => {
-                        setState({
-                          ...state,
-                          searchResults: [],
-                          searchType: radioButton.key,
-                        });
-                      }}
-                    />
-                  );
-                })
-              : ''}
-          </div>
-          <div ref={searchContainer}>
-            <Input
-              className="search"
-              icon="search"
-              placeholder="Try search for a site name, country, city, region or ZIP code"
-              iconPosition="left"
-              value={searchTerm}
-              onChange={(event, data) => {
-                autoComplete(data);
-              }}
-            />
-            {state.searchResultsActive && state.searchResults.length ? (
-              <div className="search-results">
-                <List>
-                  {state.searchResults.map((result, index) => {
+            <div className="search-input-container">
+              {state.searchRadioButtons
+                ? state.searchRadioButtons.map(radioButton => {
                     return (
-                      <List.Item
-                        key={`search-result-${index}`}
-                        onClick={() => {
+                      <Radio
+                        key={radioButton.key}
+                        label={radioButton.label}
+                        name="searchType"
+                        value={radioButton.key}
+                        checked={state.searchType === radioButton.key}
+                        onChange={() => {
                           setState({
                             ...state,
-                            searchResultsActive: false,
+                            searchResults: [],
+                            searchType: radioButton.key,
                           });
-                          setSearchTerm(result);
                         }}
-                      >
-                        <Highlighter
-                          highlightClassName="highlight"
-                          searchWords={searchTerm?.split(' ') || []}
-                          autoEscape={true}
-                          textToHighlight={result}
-                        />
-                      </List.Item>
+                      />
                     );
-                  })}
-                </List>
-              </div>
-            ) : (
-              ''
-            )}
+                  })
+                : ''}
+            </div>
+            <div ref={searchContainer}>
+              <Input
+                className="search"
+                icon="search"
+                placeholder="Try search for a site name, country, city, region or ZIP code"
+                iconPosition="left"
+                value={searchTerm}
+                onChange={(event, data) => {
+                  autoComplete(data);
+                }}
+              />
+              {state.searchResultsActive && state.searchResults.length ? (
+                <div className="search-results">
+                  <List>
+                    {state.searchResults.map((result, index) => {
+                      return (
+                        <List.Item
+                          key={`search-result-${index}`}
+                          onClick={() => {
+                            setState({
+                              ...state,
+                              searchResultsActive: false,
+                            });
+                            setSearchTerm(result);
+                          }}
+                        >
+                          <Highlighter
+                            highlightClassName="highlight"
+                            searchWords={searchTerm?.split(' ') || []}
+                            autoEscape={true}
+                            textToHighlight={result}
+                          />
+                        </List.Item>
+                      );
+                    })}
+                  </List>
+                </div>
+              ) : (
+                ''
+              )}
+            </div>
           </div>
-        </div>
-        {state.filtersMeta &&
-          state.filtersMetaOrder &&
-          state.filtersMetaOrder.map(filterKey => {
-            return (
-              <div key={filterKey} className="filter-container">
-                {state.filtersMeta[filterKey]?.title ? (
-                  <Header>{state.filtersMeta[filterKey].title}</Header>
-                ) : (
-                  ''
-                )}
-                {state.filtersMeta[filterKey]?.filteringInputs?.length &&
-                  state.filtersMeta[filterKey].filteringInputs.map(
-                    (input, index) => {
-                      if (input.type === 'select') {
-                        const options = state.filtersMeta[
-                          filterKey
-                        ].options.filter(option => {
-                          if (
-                            state.filters[
-                              state.filtersMeta[filterKey].queryToSet
-                            ] &&
-                            !state.filters[
-                              state.filtersMeta[filterKey].queryToSet
-                            ]
-                              .filter((item, itemIndex) => index !== itemIndex)
-                              .includes(option.value)
-                          ) {
-                            return true;
-                          } else if (
-                            state.filters[
-                              state.filtersMeta[filterKey].queryToSet
-                            ] &&
-                            state.filters[
-                              state.filtersMeta[filterKey].queryToSet
-                            ].includes(option.value)
-                          ) {
-                            return false;
-                          }
-                          return true;
-                        });
-                        const value =
-                          state.filters?.[
-                            state.filtersMeta[filterKey].queryToSet
-                          ]?.[index];
-                        return (
-                          <div key={input.id} className="input-container">
-                            <Select
-                              key={input.id}
-                              search
-                              onChange={(event, data) =>
-                                changeFilter(
-                                  data,
-                                  state.filtersMeta[filterKey],
-                                  input.position,
+          {state.filtersMeta &&
+            state.filtersMetaOrder &&
+            state.filtersMetaOrder.map(filterKey => {
+              return (
+                <div key={filterKey} className="filter-container">
+                  {state.filtersMeta[filterKey]?.title ? (
+                    <Header>{state.filtersMeta[filterKey].title}</Header>
+                  ) : (
+                    ''
+                  )}
+                  {state.filtersMeta[filterKey]?.filteringInputs?.length &&
+                    state.filtersMeta[filterKey].filteringInputs.map(
+                      (input, index) => {
+                        if (input.type === 'select') {
+                          const options = state.filtersMeta[
+                            filterKey
+                          ].options.filter(option => {
+                            if (
+                              state.filters[
+                                state.filtersMeta[filterKey].queryToSet
+                              ] &&
+                              !state.filters[
+                                state.filtersMeta[filterKey].queryToSet
+                              ]
+                                .filter(
+                                  (item, itemIndex) => index !== itemIndex,
                                 )
-                              }
-                              placeholder={
-                                state.filtersMeta[filterKey].placeholder
-                              }
-                              options={options}
-                              value={value}
-                            />
-                            {state.filtersMeta[filterKey].filteringInputs
-                              .length -
-                              1 ===
-                            index ? (
-                              <div className="actions-container">
-                                <Icon
-                                  className="add-button"
-                                  onClick={() =>
-                                    addNewInput(filterKey, 'select', index + 1)
-                                  }
-                                  color="red"
-                                  name={circlePlus}
-                                  size="2em"
-                                />
-                                {state.filtersMeta[filterKey].filteringInputs
-                                  .length > 1 ? (
+                                .includes(option.value)
+                            ) {
+                              return true;
+                            } else if (
+                              state.filters[
+                                state.filtersMeta[filterKey].queryToSet
+                              ] &&
+                              state.filters[
+                                state.filtersMeta[filterKey].queryToSet
+                              ].includes(option.value)
+                            ) {
+                              return false;
+                            }
+                            return true;
+                          });
+                          const value =
+                            state.filters?.[
+                              state.filtersMeta[filterKey].queryToSet
+                            ]?.[index];
+                          return (
+                            <div key={input.id} className="input-container">
+                              <Select
+                                key={input.id}
+                                search
+                                onChange={(event, data) =>
+                                  changeFilter(
+                                    data,
+                                    state.filtersMeta[filterKey],
+                                    input.position,
+                                  )
+                                }
+                                placeholder={
+                                  state.filtersMeta[filterKey].placeholder
+                                }
+                                options={options}
+                                value={value}
+                              />
+                              {state.filtersMeta[filterKey].filteringInputs
+                                .length -
+                                1 ===
+                              index ? (
+                                <div className="actions-container">
                                   <Icon
-                                    className="remove-button"
+                                    className="add-button"
                                     onClick={() =>
-                                      removeInput(
+                                      addNewInput(
                                         filterKey,
-                                        state.filtersMeta[filterKey],
-                                        index,
+                                        'select',
+                                        index + 1,
                                       )
                                     }
                                     color="red"
-                                    name={circleMinus}
+                                    name={circlePlus}
                                     size="2em"
                                   />
-                                ) : (
-                                  ''
-                                )}
-                              </div>
-                            ) : (
-                              ''
-                            )}
-                          </div>
-                        );
-                      }
-                      return '';
-                    },
-                  )}
-              </div>
-            );
-          })}
-      </Modal.Content>
-      <Modal.Actions>
-        <button className="solid orange" onClick={clearFilters}>
-          CLEAR FILTERS
+                                  {state.filtersMeta[filterKey].filteringInputs
+                                    .length > 1 ? (
+                                    <Icon
+                                      className="remove-button"
+                                      onClick={() =>
+                                        removeInput(
+                                          filterKey,
+                                          state.filtersMeta[filterKey],
+                                          index,
+                                        )
+                                      }
+                                      color="red"
+                                      name={circleMinus}
+                                      size="2em"
+                                    />
+                                  ) : (
+                                    ''
+                                  )}
+                                </div>
+                              ) : (
+                                ''
+                              )}
+                            </div>
+                          );
+                        }
+                        return '';
+                      },
+                    )}
+                </div>
+              );
+            })}
+        </Modal.Content>
+        <Modal.Actions>
+          <button className="solid orange" onClick={clearFilters}>
+            CLEAR FILTERS
+          </button>
+          <button className="solid dark-blue" onClick={submit}>
+            SEARCH AND FILTER
+          </button>
+        </Modal.Actions>
+      </Modal>
+      <div id="dynamic-filter-toggle" className="ol-unselectable ol-control">
+        <button
+          className="toggle-button"
+          onClick={() => {
+            setSidebar(!sidebar);
+          }}
+        >
+          <Icon name={menuSVG} size="1em" fill="white" />
         </button>
-        <button className="solid dark-blue" onClick={submit}>
-          SEARCH AND FILTER
-        </button>
-      </Modal.Actions>
-    </Modal>
+      </div>
+      <div
+        id="dynamic-filter"
+        className={sidebar ? 'show filters-block' : 'filters-block'}
+      >
+        <div className="dynamic-filter-header">
+          <Header as="h2">Dynamic filter</Header>
+        </div>
+        <div className="dynamic-filter-body">
+          <Header as="h3">Reporting year</Header>
+          <div className="input-container">
+            <Select
+              search
+              onChange={(event, data) => {
+                changeFilter(
+                  data,
+                  state.filtersMeta['reporting_years'],
+                  0,
+                  true,
+                );
+              }}
+              placeholder={state.filtersMeta['reporting_years']?.placeholder}
+              options={state.filtersMeta['reporting_years']?.options}
+              value={state.filters['reportingYear']?.[0]}
+            />
+          </div>
+        </div>
+        <div className="dynamic-filter-actions">
+          <Header as="h3">Quick facts</Header>
+        </div>
+      </div>
+    </>
   );
 };
 
