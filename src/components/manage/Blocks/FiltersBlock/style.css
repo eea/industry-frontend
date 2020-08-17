@@ -1,3 +1,20 @@
+.filters-container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.filters-container > .search-input-container {
+  padding: 0.5em 1em;
+}
+
+.filters-container .search-input-container .ref {
+  position: relative;
+}
+
+.filters-container > .buttons-container {
+  padding: 0.5em;
+}
+
 .filters-block.ui.modal>.header:not(.ui) {
   display: flex;
   justify-content: space-between;
@@ -8,7 +25,7 @@
 
 .filters-block.ui.modal>.header span {
   cursor: pointer;
-  color: #E16D5D;
+  color: #d63d27;
   font-weight: bold;
 }
 
@@ -63,15 +80,18 @@
   border-bottom: 1px dotted #4296B2;
 }
 
+.filters-container .ui.search.selection.dropdown > input.search,
 .filters-block.ui.modal .ui.search.selection.dropdown > input.search,
 .filters-block .ui.search.selection.dropdown > input.search  {
   padding: .78571429em 2.1em .78571429em 1em;
 }
 
+.filters-container .search,
 .filters-block.ui.modal .search {
   width: 100%;
 }
 
+.filters-container .search-results,
 .filters-block.ui.modal .search-results {
   position: absolute;
   z-index: 98;
@@ -88,8 +108,21 @@
   box-shadow: 0px 2px 4px -3px;
 }
 
+.filters-container .search-results .ui.list .item,
 .filters-block.ui.modal .search-results .ui.list .item {
   cursor: pointer;
+}
+
+.filters-container .search-results .ui.list .item .info,
+.filters-block.ui.modal .search-results .ui.list .item .info {
+  position: absolute;
+  right: 1em;
+  color: #B8C6C8;
+}
+
+.filters-container .search-results .ui.list .item:hover .info,
+.filters-block.ui.modal .search-results .ui.list .item:hover .info {
+  color: #000;
 }
 
 .filters-block.ui.modal .ui.selection.dropdown>.dropdown.icon,
@@ -106,7 +139,7 @@
   padding: .91666667em;
   opacity: .8;
   transition: opacity .1s ease;
-  color: #E16D5D;
+  color: #d63d27;
 }
 
 .filters-block.ui.modal .input-container,
@@ -130,7 +163,7 @@
 
 .filters-block.ui.modal .add-button.icon,
 .filters-block.ui.modal .remove-button.icon {
-  fill: #E16D5D !important;
+  fill: #d63d27 !important;
   cursor: pointer;
 }
 
@@ -141,4 +174,20 @@
 
 .filters-block.ui.modal .filter-container {
   display: block;
+}
+
+.filters-container .flex {
+  display: flex;
+}
+
+.filters-container .space-between {
+  justify-content: space-between;
+}
+
+#dynamic-filter-toggle {
+  display: none;
+}
+
+#dynamic-filter {
+  display: none;
 }
