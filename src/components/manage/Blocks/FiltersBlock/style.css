@@ -36,6 +36,10 @@
   margin: 0.5em 0;
 }
 
+.filters-block.ui.modal h3.ui.header {
+  margin-top: 1em;
+}
+
 .filters-block.ui.modal .actions {
   text-align: center;
 }

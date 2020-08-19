@@ -49,10 +49,13 @@ const View = ({ content, ...props }) => {
       'reporting_years',
       'bat_conclusions',
     ],
+    factsDataOrder: ['Country_quick_facts', 'EU_quick_facts'],
     mounted: false,
     firstLoad: false,
     searchResultsActive: false,
   });
+  const [factsData, setFactsData] = useState({});
+  const [alphaFeature, setAlphaFeature] = useState({});
   const [sitesResults, setSitesResults] = useState([]);
   const [locationResults, setLocationResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -60,25 +63,113 @@ const View = ({ content, ...props }) => {
   const searchContainerModal = useRef(null);
   const searchContainer = useRef(null);
   const title = props.data.title?.value;
-
+  const locationResultsTexts = locationResults.map(result => result.text);
   const searchResults = [
     ...sitesResults.slice(
       0,
       locationResults.length < 3 ? 6 - locationResults.length : 3,
     ),
-    ...locationResults.slice(
-      0,
-      sitesResults.length < 3 ? 6 - sitesResults.length : 3,
-    ),
+    ...locationResults
+      .map(result => result.text)
+      .slice(0, sitesResults.length < 3 ? 6 - sitesResults.length : 3),
   ];
 
-  useEffect(() => {
+  const updateFactsData = (initialization = false) => {
+    const promises = [];
+    let reqs;
+    if (initialization) {
+      reqs = [
+        {
+          factId: 'EU_quick_facts',
+          sql: 'SELECT AllSites FROM [IED].[latest].[vw_BrowseMainMap_EUFacts]',
+          descriptionDiscodataKey: ['AllSites'],
+          title: 'EU Quick facts',
+          description: [':descriptionDiscodataKey reporting sites'],
+          type: 'firstElement',
+        },
+      ];
+    } else {
+      reqs = [
+        alphaFeature?.getProperties?.()?.country
+          ? {
+              factId: 'Country_quick_facts',
+              sql: `SELECT DISTINCT MP.siteCountry, MP.siteCountryName, MM.siteCount
+              FROM [IED].[latest].[vw_Browse2_MapPOPUP] as MP
+              LEFT JOIN [IED].[latest].[vw_MainMap_totalSitesPerCountry] as MM
+              ON MP.siteCountry = MM.countryCode
+              WHERE siteCountry = '${alphaFeature.getProperties().country}'`,
+              titleDiscodataKey: 'siteCountryName',
+              descriptionDiscodataKey: ['siteCount'],
+              title: ':titleDiscodataKey quick facts',
+              description: [':descriptionDiscodataKey reporting sites'],
+              type: 'firstElement',
+            }
+          : null,
+      ].filter(req => req);
+    }
+    reqs.forEach(req => {
+      promises.push(axios.get(makeUrl(providerUrl, req.sql)));
+    });
+
+    Promise.all(promises)
+      .then(response => {
+        const newFactsData = { ...factsData };
+        response.forEach((res, index) => {
+          const results = JSON.parse(res.request.response).results;
+          if (reqs[index].type === 'firstElement') {
+            const title = reqs[index].title.includes(':titleDiscodataKey')
+              ? reqs[index].title.replace(
+                  ':titleDiscodataKey',
+                  results[0]?.[reqs[index].titleDiscodataKey],
+                )
+              : reqs[index].title;
+            const description = reqs[index].description.map((descr, index) => {
+              return descr.includes(':descriptionDiscodataKey') &&
+                results[0]?.[reqs[index].descriptionDiscodataKey?.[index]]
+                ? descr.replace(
+                    ':descriptionDiscodataKey',
+                    results[0]?.[reqs[index].descriptionDiscodataKey?.[index]],
+                  )
+                : descr;
+            });
+            newFactsData[reqs[index].factId] = {
+              title,
+              description,
+            };
+          }
+        });
+        setFactsData({
+          ...factsData,
+          ...newFactsData,
+        });
+      })
+      .catch(error => {});
+  };
+
+  useEffect(function() {
     setState({ ...state, mounted: true });
+    updateFactsData(true);
+    document
+      .getElementById(`dynamic-filter`)
+      .addEventListener('featurechange', e => {
+        if (
+          JSON.stringify(e.detail.features?.[0]?.getProperties?.()?.country) !==
+          JSON.stringify(alphaFeature?.getProperties?.()?.country)
+        ) {
+          setAlphaFeature(e.detail.features?.[0]);
+        }
+      });
+
     return () => {
       setState({ ...state, mounted: false });
     };
     /* eslint-disable-next-line */
   }, []);
+
+  useEffect(() => {
+    updateFactsData(false);
+    /* eslint-disable-next-line */
+  }, [alphaFeature])
 
   useEffect(() => {
     if (state.open && state.searchResultsActive) {
@@ -378,7 +469,6 @@ const View = ({ content, ...props }) => {
                 static: metadata[index]?.static,
                 options: [
                   { key: null, value: null, text: 'No value' },
-                  { key: '2020', value: '2020', text: '2020' },
                   ...(results.map(item => {
                     return {
                       key: item[(metadata[index]?.optionKey)],
@@ -523,24 +613,26 @@ const View = ({ content, ...props }) => {
     setSitesResults([]);
     setLocationResults([]);
     setSearchTerm('');
+    props.setQueryParam({
+      queryParam: {
+        ...props.discodata_query.search,
+        ...newFilters,
+      },
+    });
   };
 
   function handleClickOutside(e) {
-    let searchResultsActive = true;
-    if (
-      state.mounted &&
+    let searchResultsActive = false;
+    const searchContainerModalActive =
       searchContainerModal &&
       searchContainerModal.current &&
-      !searchContainerModal.current.contains(e.target)
-    ) {
-      searchResultsActive = false;
-    } else if (
-      state.mounted &&
+      searchContainerModal.current.contains(e.target);
+    const searchContainerActive =
       searchContainer &&
       searchContainer.current &&
-      !searchContainer.current.contains(e.target)
-    ) {
-      searchResultsActive = false;
+      searchContainer.current.contains(e.target);
+    if (searchContainerModalActive || searchContainerActive) {
+      searchResultsActive = true;
     }
     return setState({ ...state, searchResultsActive });
   }
@@ -563,11 +655,11 @@ const View = ({ content, ...props }) => {
           data.value
         }&maxSuggestions=6`,
         reqKey: 'suggestions',
-        searchKey: 'text',
+        searchKeys: ['text', 'magicKey'],
         updateState: setLocationResults,
       },
     ];
-    if (data.value.length > 2) {
+    if (data.value.length > 1) {
       sqls.forEach(sql => {
         promises.push({
           get: axios.get(
@@ -589,9 +681,19 @@ const View = ({ content, ...props }) => {
               ? JSON.parse(res.request.response) || {}
               : {};
             promises[index].metadata.updateState(
-              data[promises[index].metadata.reqKey].map(
-                result => result[promises[index].metadata.searchKey],
-              ),
+              data[promises[index].metadata.reqKey].map(result => {
+                if (promises[index].metadata.searchKey) {
+                  return result[promises[index].metadata.searchKey];
+                } else if (promises[index].metadata.searchKeys) {
+                  const obj = {};
+                  promises[index].metadata.searchKeys.forEach(key => {
+                    if (result[key]) {
+                      obj[key] = result[key];
+                    }
+                  });
+                  return obj;
+                }
+              }),
             );
           });
         })
@@ -607,7 +709,7 @@ const View = ({ content, ...props }) => {
     const searchTermType =
       sitesResults.indexOf(searchTerm) > -1
         ? 'siteTerm'
-        : locationResults.indexOf(searchTerm) > -1
+        : locationResultsTexts.indexOf(searchTerm) > -1
         ? 'locationTerm'
         : sitesResults.length >= locationResults.length
         ? 'siteTerm'
@@ -617,7 +719,10 @@ const View = ({ content, ...props }) => {
     props.setQueryParam({
       queryParam: {
         ...state.filters,
-        [searchTermType]: searchTerm,
+        [searchTermType]:
+          searchTermType === 'locationTerm'
+            ? locationResults[locationResultsTexts.indexOf(searchTerm)]
+            : searchTerm,
         [emptyTermType]: null,
       },
     });
@@ -664,7 +769,7 @@ const View = ({ content, ...props }) => {
                       ''
                     )}
                     {sitesResults.indexOf(result) === -1 &&
-                    locationResults.indexOf(result) > -1 ? (
+                    locationResultsTexts.indexOf(result) > -1 ? (
                       <span className="info">location</span>
                     ) : (
                       ''
@@ -878,12 +983,44 @@ const View = ({ content, ...props }) => {
               value={state.filters['reportingYear']?.[0]}
             />
           </div>
+          <Header as="h3">Industry</Header>
+          <div className="input-container">
+            <Select
+              search
+              onChange={(event, data) => {
+                changeFilter(data, state.filtersMeta['industries'], 0, true);
+              }}
+              placeholder={state.filtersMeta['industries']?.placeholder}
+              options={state.filtersMeta['industries']?.options}
+              value={state.filters['EEASector']?.[0]}
+            />
+          </div>
         </div>
         <div className="dynamic-filter-actions">
-          <Header as="h3">Quick facts</Header>
-          <button className="solid red" onClick={clearFilters}>
+          <button
+            className="solid red"
+            onClick={clearFilters}
+            style={{ margin: 0 }}
+          >
             CLEAR FILTERS
           </button>
+          <Header as="h3">Quick facts</Header>
+          {state.factsDataOrder &&
+            state.factsDataOrder.map(key => {
+              return factsData[key] ? (
+                <React.Fragment key={key}>
+                  {factsData[key]?.title && (
+                    <Header as="h4">{factsData[key].title}</Header>
+                  )}
+                  {factsData[key]?.description &&
+                    factsData[key].description.map((description, index) => {
+                      return <p key={`${key}_${index}`}>{description}</p>;
+                    })}
+                </React.Fragment>
+              ) : (
+                ''
+              );
+            })}
         </div>
       </div>
     </div>
