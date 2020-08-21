@@ -1,43 +1,16 @@
-const path = require('path');
+/**
+ * Replace with custom razzle config when needed.
+ * @module razzle.config
+ */
 
-// const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
-// const autoprefixer = require('autoprefixer');
-// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer');
-// const projectRootPath = path.resolve('.');
-// const voltoConfig = require(`${voltoPath}/razzle.config`);
-// const voltoPath = base.resolveVoltoPath('.');
+const jsConfig = require('./jsconfig').compilerOptions;
 
-const base = require('./src/develop/volto-base/src').razzle;
+const pathsConfig = jsConfig.paths;
+let voltoPath = './node_modules/@plone/volto';
+Object.keys(pathsConfig).forEach(pkg => {
+  if (pkg === '@plone/volto') {
+    voltoPath = `./${jsConfig.baseUrl}/${pathsConfig[pkg][0]}`;
+  }
+});
 
-const config = base.BaseConfig(path.resolve('.'));
-
-const localSvgPlugin = config => {
-  const SVGLOADER = {
-    test: /icons\/.*\.svg$/,
-    use: [
-      {
-        loader: 'svg-loader',
-      },
-      {
-        loader: 'svgo-loader',
-        options: {
-          plugins: [
-            { removeTitle: true },
-            { convertPathData: false },
-            { removeUselessStrokeAndFill: true },
-            { removeViewBox: false },
-          ],
-        },
-      },
-    ],
-  };
-
-  config.module.rules.push(SVGLOADER);
-  return config;
-};
-
-module.exports = {
-  plugins: { ...base.plugins, localSvgPlugin },
-  modify: config.modify, //razzleModify(voltoPath),
-};
+module.exports = require(`${voltoPath}/razzle.config`);

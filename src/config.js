@@ -1,71 +1,41 @@
-import * as voltoConfig from '@plone/volto/config';
+/**
+ * Add your config changes here.
+ * @module config
+ * @example
+ * export const settings = {
+ *   ...defaultSettings,
+ *   port: 4300,
+ *   listBlockTypes: {
+ *     ...defaultSettings.listBlockTypes,
+ *     'my-list-item',
+ *   }
+ * }
+ */
 
 import {
-  applyConfig as addonsConfig,
-  installFolderListing,
-  installTableau,
-  installExpendableList,
-} from 'volto-addons/config';
-import { applyConfig as ckeditorConfig } from 'volto-ckeditor/config';
-import { applyConfig as dataBlocksConfig } from 'volto-datablocks/config';
-import { applyConfig as blocksConfig } from 'volto-blocks/config';
-import { applyConfig as mosaicConfig } from 'volto-mosaic/config';
-import { applyConfig as plotlyConfig } from 'volto-plotlycharts/config';
-// import { applyConfig as installEPRTRFrontend } from './localconfig';
-import { applyConfig as gridLayoutConfig } from 'volto-gridlayout/config';
-import { applyConfig as tabsViewConfig } from 'volto-tabsview/config';
-
-// import { applyConfig as installEPRTRFrontend } from './localconfig';
-import installEPRTR from './localconfig';
-
-const config = [
-  addonsConfig,
-  installFolderListing,
-  installTableau,
-  installExpendableList,
-  plotlyConfig,
-  // ckeditorConfig,
-  tabsViewConfig,
-  mosaicConfig,
-  blocksConfig,
-  dataBlocksConfig,
-  gridLayoutConfig,
-  installEPRTR,
-].reduce((acc, apply) => apply(acc), voltoConfig);
-
-// config.settings.contentExpand=[breadcrumbs,actions,workflow]
+  settings as defaultSettings,
+  views as defaultViews,
+  widgets as defaultWidgets,
+  blocks as defaultBlocks,
+  addonReducers as defaultAddonReducers,
+  addonRoutes as defaultAddonRoutes,
+} from '@plone/volto/config';
 
 export const settings = {
-  ...config.settings,
-  contentExpand: [
-    ...config.settings.contentExpand,
-    'navigation',
-    '&expand.navigation.depth=5',
-  ],
-  providerUrl: 'https://discodata.eea.europa.eu/sql',
-  sectionsWithTabsView: ['/raw-data', '/glossary'],
+  ...defaultSettings,
 };
 
 export const views = {
-  ...config.views,
+  ...defaultViews,
 };
 
 export const widgets = {
-  ...config.widgets,
+  ...defaultWidgets,
 };
 
 export const blocks = {
-  ...config.blocks,
+  ...defaultBlocks,
 };
 
-export const addonReducers = { ...config.addonReducers };
-export const addonRoutes = [...(config.addonRoutes || [])];
-export const viewlets = [...(config.viewlets || [])];
-
-export const portlets = {
-  ...config.portlets,
-};
-
-export const editForms = {
-  ...config.editForms,
-};
+export const addonRoutes = [...defaultAddonRoutes];
+export const addonReducers = { ...defaultAddonReducers };

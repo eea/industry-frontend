@@ -1,44 +1,80 @@
-## Energy Union: Volto Frontend
+# IMS: Volto Frontend
 
-[![Pipeline](https://ci.eionet.europa.eu/buildStatus/icon?job=energy-union%2Fenergy_union_frontend%2Fmaster&subject=pipeline)](https://ci.eionet.europa.eu/view/Github/job/energy-union/job/energy_union_frontend/job/master/display/redirect)
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/eea/energy_union_frontend?sort=semver)](https://github.com/eea/energy_union_frontend/releases)
+[![Pipeline](https://ci.eionet.europa.eu/buildStatus/icon?job=volto%2Fims-frontend%2Fmaster&subject=pipeline)](https://ci.eionet.europa.eu/view/Github/job/volto/job/ims-frontend/job/master/display/redirect)
+[![Release](https://img.shields.io/github/v/release/eea/ims-frontend?sort=semver)](https://github.com/eea/ims-frontend/releases)
+
+## Documentation
+
+A training on how to create your own website using Volto is available as part of the Plone training at [https://training.plone.org/5/volto/index.html](https://training.plone.org/5/volto/index.html).
 
 
-A frontend component for the Energy Union website.
+## Getting started
 
-## Quick Start
+1. Clone:
 
-Below is a list of commands you will probably find useful.
+        $ git clone https://github.com/eea/ims-frontend.git
+        $ cd ims-frontend
 
-### `yarn start`
+1. Install `nvm`
 
-Runs the project in development mode.
-You can view your application at `http://localhost:3000`
+        $ touch ~/.bash_profile
+        $ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
 
-The page will reload if you make edits.
+        $ source ~/.bash_profile
+        $ nvm version
 
-### `yarn build`
+1. Install latest `NodeJS 12.x`:
 
-Builds the app for production to the build folder.
+        $ nvm install 12
+        $ nvm use 12
+        $ node -v
+        v12.16.2
 
-The build is minified and the filenames include the hashes.
-Your app is ready to be deployed!
+1. Install `yarn`
 
-### `yarn start:prod`
+        $ curl -o- -L https://yarnpkg.com/install.sh | bash
+        $ yarn -v
 
-Runs the compiled app in production.
+1. Install
 
-You can again view your application at `http://localhost:3000`
+        $ yarn
 
-### `yarn test`
+1. Start and setup backend
 
-Runs the test watcher (Jest) in an interactive mode.
-By default, runs tests related to files changed since the last commit.
+         $ docker-compose up -d
 
-### `yarn i18n`
+   * Go to `http://localhost:8080` [Advanced](http://localhost:8080/@@plone-addsite?site_id=Plone&advanced=1):
+   * Add `Plone` site with add-ons enabled (**user:** `admin`, **password:** `admin`):
+     * `kitconcept.volto`
 
-Runs the test i18n runner which extracts all the translation strings and
-generates the needed files.
+1. Start frontend
+
+        $ yarn start
+
+1. See application at http://localhost:3000
+
+## Try it
+
+1. Install [Docker](https://docs.docker.com/install/)
+1. Install [Docker Compose](https://docs.docker.com/compose/install/)
+1. Start:
+
+        $ git clone https://github.com/eea/ims-frontend.git
+        $ cd ims-frontend
+
+        $ docker-compose pull
+        $ docker-compose up -d
+
+    optionally change `PORTS` via `.env`:
+
+        $ FRONTEND=9000 BACKEND=9100 docker-compose up -d
+
+1. Go to `http://localhost:8080` [Advanced](http://localhost:8080/@@plone-addsite?site_id=Plone&advanced=1):
+   * Add `Plone` site with add-ons enabled (**user:** `admin`, **password:** `admin`):
+     * `kitconcept.volto`
+
+1. See application at http://localhost:8000
+
 
 ## Production
 
@@ -46,14 +82,13 @@ We use [Docker](https://www.docker.com/), [Rancher](https://rancher.com/) and [J
 
 ### Deploy
 
-* Within `Rancher > Catalog > EEA` deploy [Volto - Energy Union](https://github.com/eea/eea.rancher.catalog/tree/master/templates/volto-energy-union)
+* Within `Rancher > Catalog > EEA` deploy [Volto - IMS](https://github.com/eea/eea.rancher.catalog/tree/master/templates/volto-ims)
 
 ### Release
 
-* Create a new release of this code via `git tag` command or [Draft new release](https://github.com/eea/energy_union_frontend/releases/new) on Github.
-  * A new Docker image is built and released automatically on [DockerHub](https://hub.docker.com/r/eeacms/energy-union-frontend) based on this tag.
-  * A new entry is automatically added to [Volto - Energy Union](https://github.com/eea/eea.rancher.catalog/tree/master/templates/volto-energy-union) `EEA Rancher Catalog`
-  * The [Jenkins job](https://ci.eionet.europa.eu/blue/organizations/jenkins/energy-union%2Fenergy_union_frontend/)
+* Create a new release of this code via `git tag` command or [Draft new release](https://github.com/eea/ims-frontend/releases/new) on Github.
+  * A new Docker image is built and released automatically on [DockerHub](https://hub.docker.com/r/eeacms/ims-frontend) based on this tag.
+  * A new entry is automatically added to [Volto - IMS](https://github.com/eea/eea.rancher.catalog/tree/master/templates/volto-ims) `EEA Rancher Catalog`
 
 ### Upgrade
 

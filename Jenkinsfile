@@ -1,9 +1,7 @@
 pipeline {
   environment {
-    registry = "eeacms/eprtr-frontend"
-    template = "templates/volto-eprtr"
-    RANCHER_STACKID = "1st1851"
-    RANCHER_ENVID = "1a332957"
+    registry = "eeacms/ims-frontend"
+    template = "templates/volto-ims"
     dockerImage = ''
     tagName = ''
   }
@@ -12,9 +10,6 @@ pipeline {
 
   stages {
     stage('Build & Push') {
-      when {
-        buildingTag()
-      }
       steps{
         node(label: 'docker-host') {
           script {
@@ -25,7 +20,7 @@ pipeline {
               tagName = "$BRANCH_NAME"
             }
             try {
-              dockerImage = docker.build registry + ":" + tagName
+              dockerImage = docker.build("$registry:$tagName", "--no-cache .")
               docker.withRegistry( '', 'eeajenkins' ) {
                 dockerImage.push()
               }
@@ -50,7 +45,7 @@ pipeline {
       }
     }
 
-   stage('Upgrade demo') {
+    stage('Upgrade demo') {
       when {
         buildingTag()
       }
@@ -64,7 +59,7 @@ pipeline {
         }
       }
     }
-    
+
   }
 
   post {

@@ -3,7 +3,7 @@
  * @module client
  */
 
-import client from './start-client';
+import client from '@plone/volto/start-client';
 
 client();
 
