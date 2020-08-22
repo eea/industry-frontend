@@ -1,0 +1,390 @@
+/*******************************
+         Site Settings
+*******************************/
+
+/*-------------------
+       Fonts
+--------------------*/
+
+@fontName          : 'Source Sans Pro';
+
+@googleFontSizes   : '300,400,500,700,400italic,700italic';
+
+
+/*-------------------
+      Base Sizes
+--------------------*/
+@headlineFontSize: 24px;
+@titleFontSize: 20px;
+@contentFontSize: 15px;
+
+@extraBold: 600;
+@lightWeight: 200;
+
+
+/*-------------------
+    Border Radius
+--------------------*/
+
+@themeBorderRadius: 30px;
+
+
+/*-------------------
+    Brand Colors
+--------------------*/
+
+@primaryColor        : @lightblue;
+
+@secondaryColor      : @darkBlue;
+
+@bodyColor           : @bodyGrey;
+
+@darkPrimaryColor    : @darkOrange;
+
+@lightPrimaryColor   : @lightBodyGrey;
+
+@lightSecondaryColor : @lightOrange;
+
+
+/*--------------
+  Page Heading
+---------------*/
+
+@headerFontWeight : 500;
+
+
+/*--------------
+   Form Input
+---------------*/
+
+/* This adjusts the default form input across all elements */
+@inputHorizontalPadding : 0;
+
+/* Input Text Color */
+@inputPlaceholderColor: #B8C6C8;
+
+
+/*-------------------
+    Focused Input
+--------------------*/
+
+/*-------------------
+  Spacing
+--------------------*/
+@smallMargin: 5px;
+@normalMargin: 10px;
+@mediumMargin: 15px;
+@extraMargin: 20px;
+@bigMargin: 30px;
+
+@buttonPadding: 10px 30px;
+
+/*-------------------
+        Sizes
+--------------------*/
+
+/*
+  Sizes are all expressed in terms of 14px/em (default em)
+  This ensures these "ratios" remain constant despite changes in EM
+*/
+
+@bigSize         : (19 / 14);
+@hugeSize        : (22 / 14);
+@massiveSize     : (26 / 14);
+
+
+/*-------------------
+        Page
+--------------------*/
+
+@pageBackground      : @white;
+
+
+/*-------------------
+      Paragraph
+--------------------*/
+
+
+/*-------------------
+       Links
+--------------------*/
+
+@linkColor           : @lighterOrange;
+
+
+/*-------------------
+    Scroll Bars
+--------------------*/
+
+
+/*-------------------
+  Highlighted Text
+--------------------*/
+
+
+/*-------------------
+       Loader
+--------------------*/
+
+
+/*-------------------
+        Grid
+--------------------*/
+
+@columnCount: 12;
+
+/*-------------------
+     Transitions
+--------------------*/
+
+
+/*-------------------
+     Breakpoints
+--------------------*/
+
+@mobileBreakpoint            : 320px;
+@tabletBreakpoint            : 903px;
+@computerBreakpoint          : 992px;
+@largeMonitorBreakpoint      : 1200px;
+@widescreenMonitorBreakpoint : 1920px;
+
+@500Breakpoint: 500px;
+
+/*-------------------
+      Site Colors
+--------------------*/
+
+/*---  Colors  ---*/
+@orange           : #FA5C2A; // Palette: reddishOrange
+@yellow           : #F6A808; // Palette: goldenRod
+@green            : #51AA55; // Palette: darkPastelGreen
+@teal             : #517776; // Palette: slate
+@blue             : #007EB1; // Palette: Plone (tealBlue/cerulean)
+@pink             : #E40166; // Palette: darkHotPink
+@brown            : #826A6A; // Palette: reddishGrey
+@grey             : #68778D; // Palette: blueishGrey
+@black            : #252525; // Palette: darkishGrey
+@darkBlue         : #32536B;
+@darkOrange       : #D63D27;
+@darkGreen        : #009590;
+
+
+/*---  Light Colors  ---*/
+@lightOlive       : #C9EAB1; // Palette: lightSage
+@lightGrey        : #878F93;
+@lightblue        : #4296B2;
+@lightOrange      : #F3EFEE;
+@lighterOrange    : #ED776A;
+@lightBodyGrey    : #F6F6F6;
+@greyBlue         : #6C8BA2;
+
+
+/*---   Neutrals  ---*/
+@fullBlack        : #000000;
+@offWhite         : #F9FAFB;
+@darkWhite        : #F3F4F5;
+@midWhite         : #DCDDDE;
+@white            : #FFFFFF;
+@bodyGrey         : #333333;
+
+
+/*--- Colored Backgrounds ---*/
+@redBackground    : #F5C1C1; // Palette: alertError
+@tealBackground   : #EDF1F2; // Palette: Breadcrumbs
+@blueBackground   : #005384;
+@purpleBackground : #B8C6C8; // Dublin Core Summary
+
+/*--- Colored Headers ---*/
+
+/*--- Colored Text ---*/
+@tealTextColor   : @teal;
+
+/*--- Colored Border ---*/
+// Pastanaga custom borders colors
+@greyBorderColor      : #C7D5D8; // breadcrumbs border
+@lightGreyBorderColor : #EDF1F2; // breadcrumbs background
+
+/*-------------------
+     Alpha Colors
+--------------------*/
+
+
+/*-------------------
+       Accents
+--------------------*/
+
+
+/*******************************
+           Power-User
+*******************************/
+
+
+/*-------------------
+    Emotive Colors
+--------------------*/
+
+/* Positive */
+
+/* Negative */
+@negativeBackgroundColor : rgb(237, 195, 194);
+@negativeHeaderColor     : @black;
+@negativeTextColor       : @black;
+
+/* Info */
+
+/* Warning */
+
+
+/*-------------------
+        Paths
+--------------------*/
+
+
+/*-------------------
+       Em Sizes
+--------------------*/
+
+/* em */
+
+/* rem */
+
+
+/*-------------------
+       Icons
+--------------------*/
+
+
+/*-------------------
+     Neutral Text
+--------------------*/
+
+@selectedTextColor           : @lightGrey;
+@inverteditemlinkcolor       : @white;
+
+/*-------------------
+     Brand Colors
+--------------------*/
+
+@youtubeColor    : #CC181E;
+
+
+/*-------------------
+      Borders
+--------------------*/
+
+@borderColor               : @greyBorderColor;
+
+
+/*-------------------
+    Derived Values
+--------------------*/
+
+/* Loaders Position Offset */
+
+
+/* Rendered Scrollbar Width */
+
+/* Maximum Single Character Glyph Width, aka Capital "W" */
+
+/* Used to match floats with text */
+
+/* Header Spacing */
+
+/* Minimum Mobile Width */
+
+
+/* Positive / Negative Dupes */
+
+
+/* Responsive */
+@largestMobileScreen : (@tabletBreakpoint - 1px);
+@largestTabletScreen : (@computerBreakpoint - 1px);
+@largestSmallMonitor : (@largeMonitorBreakpoint - 1px);
+@largestLargeMonitor : (@widescreenMonitorBreakpoint - 1px);
+
+
+/*-------------------
+  Exact Pixel Values
+--------------------*/
+/*
+  These are used to specify exact pixel values in em
+  for things like borders that remain constantly
+  sized as emSize adjusts
+
+  Since there are many more sizes than names for sizes,
+  these are named by their original pixel values.
+
+*/
+
+/* Columns */
+
+
+/*******************************
+             States
+*******************************/
+
+/*-------------------
+      Disabled
+--------------------*/
+
+
+/*-------------------
+        Hover
+--------------------*/
+
+/*---  Shadows  ---*/
+
+/*---  Colors  ---*/
+
+/*---  Emotive  ---*/
+
+/*---  Brand   ---*/
+
+/*---  Dark Tones  ---*/
+
+/*---  Light Tones  ---*/
+
+
+/*-------------------
+        Focus
+--------------------*/
+
+/*---  Colors  ---*/
+
+/*---  Emotive  ---*/
+
+/*---  Brand   ---*/
+
+/*---  Dark Tones  ---*/
+
+/*---  Light Tones  ---*/
+
+
+/*-------------------
+    Down (:active)
+--------------------*/
+
+/*---  Colors  ---*/
+
+/*---  Emotive  ---*/
+
+/*---  Brand   ---*/
+
+/*---  Dark Tones  ---*/
+
+/*---  Light Tones  ---*/
+
+
+/*-------------------
+        Active
+--------------------*/
+
+/*---  Colors  ---*/
+
+/*---  Emotive  ---*/
+
+/*---  Brand   ---*/
+
+/*---  Dark Tones  ---*/
+
+/*---  Light Tones  ---*/

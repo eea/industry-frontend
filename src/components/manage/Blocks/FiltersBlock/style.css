@@ -1,0 +1,197 @@
+.filters-container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.filters-container > .search-input-container {
+  padding: 0.5em 1em;
+}
+
+.filters-container .search-input-container .ref {
+  position: relative;
+}
+
+.filters-container > .buttons-container {
+  padding: 0.5em;
+}
+
+.filters-block.ui.modal>.header:not(.ui) {
+  display: flex;
+  justify-content: space-between;
+  color: #4296B2;
+  font-weight: bold;
+  font-size: 2em;
+}
+
+.filters-block.ui.modal>.header span {
+  cursor: pointer;
+  color: #d63d27;
+  font-weight: bold;
+}
+
+.filters-block.ui.modal .ui.header {
+  color: #4296B2;
+  font-weight: bold;
+  font-size: 1.3em;
+  margin: 0.5em 0;
+}
+
+.filters-block.ui.modal h3.ui.header {
+  margin-top: 1em;
+}
+
+.filters-block.ui.modal .actions {
+  text-align: center;
+}
+
+.filters-block.ui.modal .actions button.solid {
+  padding: 1em 2em;
+}
+
+.filters-block.ui.modal .ui.selection.dropdown,
+.filters-block .ui.selection.dropdown {
+  cursor: pointer;
+  word-wrap: break-word;
+  line-height: 1em;
+  white-space: normal;
+  outline: 0;
+  transform: rotateZ(0);
+  min-width: 14em;
+  min-height: 2.71428571em;
+  background: #fff;
+  display: inline-block !important;
+  padding: .78571429em 2.1em .78571429em 1em;
+  color: rgba(0, 0, 0, .87);
+  box-shadow: none;
+  border: 1px solid rgba(34, 36, 38, .15);
+  border-radius: .28571429rem;
+  transition: width .1s ease, -webkit-box-shadow .1s ease;
+  transition: box-shadow .1s ease, width .1s ease;
+  transition: box-shadow .1s ease, width .1s ease, -webkit-box-shadow .1s ease;
+}
+
+.filters-block.ui.modal .ui.active.selection.dropdown,
+.filters-block .ui.active.selection.dropdown {
+  border: 1px solid;
+  border-color: rgba(34, 36, 38, .15);
+  border-bottom: 1px dotted rgba(34, 36, 38, .15);
+}
+
+.filters-block.ui.modal .ui.selection.active.dropdown:hover,
+.filters-block .ui.selection.active.dropdown:hover {
+  border: 1px solid;
+  border-color: #4296B2;
+  border-bottom: 1px dotted #4296B2;
+}
+
+.filters-container .ui.search.selection.dropdown > input.search,
+.filters-block.ui.modal .ui.search.selection.dropdown > input.search,
+.filters-block .ui.search.selection.dropdown > input.search  {
+  padding: .78571429em 2.1em .78571429em 1em;
+}
+
+.filters-container .search,
+.filters-block.ui.modal .search {
+  width: 100%;
+}
+
+.filters-container .search-results,
+.filters-block.ui.modal .search-results {
+  position: absolute;
+  z-index: 98;
+  width: 100%;
+  margin: 0;
+  list-style-type: none;
+  overflow: auto;
+  margin: 0;
+  padding: 1rem;
+  background: white;
+  color: #000;
+  border: 1px solid #EDEDED;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px -3px;
+}
+
+.filters-container .search-results .ui.list .item,
+.filters-block.ui.modal .search-results .ui.list .item {
+  cursor: pointer;
+}
+
+.filters-container .search-results .ui.list .item .info,
+.filters-block.ui.modal .search-results .ui.list .item .info {
+  position: absolute;
+  right: 1em;
+  color: #B8C6C8;
+}
+
+.filters-container .search-results .ui.list .item:hover .info,
+.filters-block.ui.modal .search-results .ui.list .item:hover .info {
+  color: #000;
+}
+
+.filters-block.ui.modal .ui.selection.dropdown>.dropdown.icon,
+.filters-block .ui.selection.dropdown>.dropdown.icon {
+  cursor: pointer;
+  position: absolute;
+  width: auto;
+  height: auto;
+  line-height: 1.21428571em;
+  top: .78571429em;
+  right: 1em;
+  z-index: 3;
+  margin: -.78571429em;
+  padding: .91666667em;
+  opacity: .8;
+  transition: opacity .1s ease;
+  color: #d63d27;
+}
+
+.filters-block.ui.modal .input-container,
+.filters-block .input-container {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5em 0;
+  margin-right: 1em;
+}
+
+.filters-block.ui.modal .search-input-container {
+  padding: 0.5em 0;
+  margin-right: 1em;
+  position: relative;
+}
+
+.filters-block.ui.modal .actions-container {
+  margin-left: 0.5em;
+  display: flex;
+}
+
+.filters-block.ui.modal .add-button.icon,
+.filters-block.ui.modal .remove-button.icon {
+  fill: #d63d27 !important;
+  cursor: pointer;
+}
+
+.filters-block.ui.modal .add-button.icon:hover,
+.filters-block.ui.modal .remove-button.icon:hover  {
+  fill: #b6564a !important;
+}
+
+.filters-block.ui.modal .filter-container {
+  display: block;
+}
+
+.filters-container .flex {
+  display: flex;
+}
+
+.filters-container .space-between {
+  justify-content: space-between;
+}
+
+#dynamic-filter-toggle {
+  display: none;
+}
+
+#dynamic-filter {
+  display: none;
+}

@@ -1,6 +1,24 @@
 {
     "compilerOptions": {
         "paths": {
+            "volto-datablocks": [
+                "develop/volto-datablocks/src"
+            ],
+            "volto-addons": [
+                "develop/volto-addons/src"
+            ],
+            "volto-embed": [
+                "develop/volto-embed/src"
+            ],
+            "volto-tabsview": [
+                "develop/volto-tabsview/src"
+            ],
+            "volto-mosaic": [
+                "develop/volto-mosaic/src"
+            ],
+            "volto-gridlayout": [
+                "develop/volto-gridlayout/src"
+            ]
         },
         "baseUrl": "src"
     }
