@@ -1,6 +1,6 @@
 // import RedirectView from '~/components/theme/View/RedirectView';
 import DiscodataView from '~/components/theme/View/DiscodataView';
-import MosaicForm from 'volto-mosaic/components/manage/Form';
+// import MosaicForm from 'volto-mosaic/components/manage/Form';
 
 import DetailedLinkView from '~/components/manage/Blocks/DetailedLink/View';
 import DetailedLinkEdit from '~/components/manage/Blocks/DetailedLink/Edit';
@@ -43,7 +43,7 @@ export function applyConfig(voltoConfig) {
     ...config.editForms,
     byLayout: {
       ...config.editForms?.byLayout,
-      discodata_view: MosaicForm,
+      // discodata_view: MosaicForm,
     },
   };
 

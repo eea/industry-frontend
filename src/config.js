@@ -11,45 +11,15 @@
  *   }
  * }
  */
-import * as voltoConfig from '@plone/volto/config';
 
-import { settings as defaultSettings } from '@plone/volto/config';
-
-// import {
-//   installFolderListing,
-//   installTableau,
-//   installExpendableList,
-// } from 'volto-addons/config';
-// import { applyConfig as datablocksConfig } from 'volto-datablocks/config';
-// import { applyConfig as gridlayoutConfig } from 'volto-gridlayout/config';
-import { applyConfig as mosaicConfig } from 'volto-mosaic/config';
-// import { applyConfig as tabsviewConfig } from 'volto-tabsview/config';
-import { applyConfig as eprtrConfig } from './localconfig';
-
-const newConfig = [
-  // datablocksConfig,
-  // gridlayoutConfig,
-  mosaicConfig,
-  // tabsviewConfig,
-  // installFolderListing,
-  // installTableau,
-  // installExpendableList,
-  eprtrConfig,
-].reduce((acc, apply) => apply(acc), voltoConfig);
-const config = { ...voltoConfig };
+import * as config from '@plone/volto/config';
 
 export const settings = {
-  ...defaultSettings,
-  navDepth: 5,
-  providerUrl: 'https://discodata.eea.europa.eu/sql',
+  ...config.settings,
 };
 
 export const views = {
   ...config.views,
-  // layoutViews: {
-  //   ...config.views.layoutViews,
-  //   default_view: null,
-  // },
 };
 
 export const widgets = {
@@ -60,17 +30,5 @@ export const blocks = {
   ...config.blocks,
 };
 
-export const addonRoutes = [...config.addonRoutes];
 export const addonReducers = { ...config.addonReducers };
-export const viewlets = [...(config.viewlets || [])];
-
-export const portlets = {
-  ...config.portlets,
-};
-
-export const editForms = {
-  ...config.editForms,
-  ...newConfig.editForms,
-};
-
-console.log(config, newConfig);
+export const addonRoutes = [...(config.addonRoutes || [])];
