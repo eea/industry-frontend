@@ -17,6 +17,7 @@
   },
   "volto-mosaic": {
     "url": "https://github.com/eea/volto-mosaic.git",
+    "branch": "volto-7",
     "path": "src"
   },
   "volto-gridlayout": {

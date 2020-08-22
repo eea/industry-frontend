@@ -14,21 +14,49 @@
 
 import * as config from '@plone/volto/config';
 
+import {
+  installTableau,
+  installExpendableList,
+  installFolderListing,
+} from 'volto-addons';
+import { applyEditForms as mosaicEditForms } from 'volto-mosaic/config';
+import {
+  applyConfig as eprtrConfig,
+  applyEditForms as eprtrEditForms,
+} from './localconfig';
+
+const addonConfig = [
+  mosaicEditForms,
+  eprtrEditForms,
+  installTableau,
+  installExpendableList,
+  installFolderListing,
+  eprtrConfig,
+].reduce((acc, apply) => apply(acc), config);
+
 export const settings = {
-  ...config.settings,
+  ...addonConfig.settings,
 };
 
 export const views = {
-  ...config.views,
+  ...addonConfig.views,
 };
 
 export const widgets = {
-  ...config.widgets,
+  ...addonConfig.widgets,
 };
 
 export const blocks = {
-  ...config.blocks,
+  ...addonConfig.blocks,
 };
 
-export const addonReducers = { ...config.addonReducers };
-export const addonRoutes = [...(config.addonRoutes || [])];
+export const addonReducers = { ...addonConfig.addonReducers };
+export const addonRoutes = [...(addonConfig.addonRoutes || [])];
+
+export const portlets = {
+  ...addonConfig.portlets,
+};
+
+export const editForms = {
+  ...addonConfig.editForms,
+};
