@@ -1,0 +1,25 @@
+.children-links-container {
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+}
+.children-links-container .ui.grid {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.children-links-container  .children-link-container {
+  display: inline-block;
+  border: 1px solid #32536B;
+  box-sizing: border-box;
+  border-radius: 30px;
+  padding: 0.7em 1.5em;
+  margin: 0.5em 0;
+}
+
+.children-links-container  .children-link {
+  color: #32536B;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 21px;
+}

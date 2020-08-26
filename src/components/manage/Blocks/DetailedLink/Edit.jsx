@@ -6,61 +6,53 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { injectIntl } from 'react-intl';
-
+import InlineForm from '@plone/volto/components/manage/Form/InlineForm';
 import { SidebarPortal } from '@plone/volto/components';
-import { Segment } from 'semantic-ui-react';
-
-import AddLinkForm from './AddLinkForm';
 import View from './View';
-
 import { getPage } from '~/actions';
+import getSchema from './schema';
 
 const Edit = (props) => {
   const [state, setState] = useState({
-    link: null,
+    schema: getSchema(props),
   });
+  const pageLink = props.data.page;
+
   useEffect(() => {
-    if (props.pages && props.pages?.[state.link?.value]) {
-      props.onChangeBlock(props.block, {
-        ...props.data,
-        detailedLink: {
-          ...props.data.detailedLink,
-          title: props.pages[state.link.value].title,
-          description: props.pages[state.link.value].description,
-          path: state.link.value,
-        },
+    if (props.pages && props.pages?.[pageLink]) {
+      handleChangeBlock('detailedLink', {
+        ...props.data.detailedLink,
+        title: props.pages[pageLink].title,
+        description: props.pages[pageLink].description,
+        path: pageLink,
       });
     }
     /* eslint-disable-next-line */
   }, [props.pages])
+
+  useEffect(() => {
+    props.dispatch(getPage(pageLink));
+    /* eslint-disable-next-line */
+  }, [pageLink])
+
+  const handleChangeBlock = (id, value) => {
+    const { data } = props;
+    props.onChangeBlock(props.block, {
+      ...data,
+      [id]: value,
+    });
+  };
+
   return (
     <div>
       <SidebarPortal selected={props.selected}>
-        <Segment.Group raised>
-          <header className="header pulled">
-            <h2>{'Detailed Link'}</h2>
-          </header>
-          <Segment className="form sidebar-image-data">
-            <div className="segment-row">
-              <AddLinkForm
-                onAddLink={(link) => {
-                  setState({ ...state, link });
-                  props.dispatch(getPage(link.value));
-                  props.onChangeBlock(props.block, {
-                    ...props.data,
-                    detailedLink: {
-                      ...props.data.detailedLink,
-                      title: link.text,
-                      description: link.description,
-                      path: link.value,
-                    },
-                  });
-                }}
-                initialValue={props.data?.link?.text}
-              />
-            </div>
-          </Segment>
-        </Segment.Group>
+        <InlineForm
+          schema={state.schema}
+          title={state.schema.title}
+          onChangeField={handleChangeBlock}
+          formData={props.data}
+          block={props.block}
+        />
       </SidebarPortal>
       <View {...props} />
     </div>

@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import qs from 'query-string';
 /* ROOT IMPORTS */
-import MosaicView from 'volto-mosaic/components/theme/View';
+import DefaultViewNoHeading from './DefaultViewNoHeading';
 /* LOCAL IMPORTS */
 import { getDiscodataResource, setQueryParam } from 'volto-datablocks/actions';
 import { Dimmer, Loader } from 'semantic-ui-react';
@@ -53,13 +53,12 @@ const DiscodataView = (props) => {
   //   }
   //   /* eslint-disable-next-line */
   // }, [props.query])
-
   return (
     <div id="discodata-mosaic-view">
       <Dimmer active={props.discodata_resources.loading}>
         <Loader />
       </Dimmer>
-      <MosaicView {...props} />
+      <DefaultViewNoHeading {...props} />
     </div>
   );
 };

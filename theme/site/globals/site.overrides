@@ -218,7 +218,7 @@ h2 {
 }
 
 h3 {
-  font-size: 1.8rem;
+  font-size: 1.7rem;
 }
 
 h4 {
@@ -1022,7 +1022,6 @@ button.outline,
 
 body.has-sidebar {
   .ui.modal {
-    width: calc(100% - 400px) !important;
     left: 1rem !important;
     transform: none !important;
     top: auto;
@@ -1052,20 +1051,22 @@ body.has-sidebar {
       .item {
         color: #D63D27;
         background-color: transparent;
+        padding: 0 2em !important;
+        border-radius: 2em;
         &:before {
           width: 0;
           background-color: transparent;
         }
       }
       .active.item {
-        color: #fff;
+        color: #fff !important;
         border-bottom: none;
-        background-color: #D63D27;
         padding: 0 2em !important;
         border-radius: 2em;
+        background-color: #D63D27 !important;
         &:hover {
-          background: #a32e1c;
-          color: #fff;
+          background: #D63D27 !important;
+          color: #fff !important;
         }
         &:before {
           width: 0;
@@ -1075,9 +1076,9 @@ body.has-sidebar {
       }
     }
     &.grey-menu {
-      background-color: #EDEDED;
+      background-color: #EDEDED !important;
       .item {
-        color: #000;
+        color: #000 !important;
         &:before {
           width: 0;
           background-color: transparent;
@@ -1111,7 +1112,7 @@ body.has-sidebar {
     .item {
       font-size: 18px;
       &:before {
-        background: #fff;
+        display: none;
       }
     }
     .active.item {
@@ -1275,5 +1276,53 @@ h3 {
 
   .scrolling.content {
     overflow: visible !important;
+  }
+}
+
+.tabsblock {
+  .ui.grid {
+    flex-wrap: inherit;
+  }
+
+  .ui.container.edit > div > .ui.menu {
+    flex-flow: column;
+  }
+
+  .ui.vertical.tabular.menu .active.item.depth_1,
+  .depth_1 {
+    margin-left: 2em;
+  }
+
+  .ui.vertical.tabular.menu .active.item.depth_2,
+  .depth_2 {
+    margin-left: 3em;
+  }
+
+  .ui.menu .item.edit,
+  .ui.menu .active.item.edit {
+    margin-left: 0 !important;
+  }
+
+  .ui.vertical.menu .item.hidden,
+  .ui.horizontal.menu .item.hidden,
+  .ui.menu .item.hidden {
+    display: none;
+  }
+}
+
+.section-analysis {
+  h3 {
+    color: #4296B3;
+  }
+}
+
+.section-browse-the-data {
+  #page-document.ui.container {
+    width: 100%!important;
+    margin: 0!important;
+    margin-left: 0!important;
+    margin-right: 0!important;
+    margin-top: 0!important;
+    margin-bottom: 0!important;
   }
 }

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
-import articles from './articles.json'
-import { Grid} from 'semantic-ui-react';
+import articles from './articles.json';
+import { Grid } from 'semantic-ui-react';
 
-const items = articles.items
+const items = articles.items;
 
 class Edit extends Component {
   /**
@@ -28,13 +28,12 @@ class Edit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      list: items
+      list: items,
     };
   }
 
-
   componentDidMount() {
-    this.onChangeData()
+    this.onChangeData();
   }
 
   onChangeData() {
@@ -44,28 +43,24 @@ class Edit extends Component {
     });
   }
 
-
-
-
   render() {
     return (
       <Grid columns={1}>
         <Grid.Column>
-        {items &&
-            items.map(item =>
+          {items &&
+            items.map((item) => (
               <div className="article-list-row">
                 <img className="article-img" src={item.imgUrl} />
                 <Grid.Column>
-                  <p className="article-title">
-                    {item.title}</p>
-                  <p class="article-date">{item.date}</p>
+                  <p className="article-title">{item.title}</p>
+                  <p className="article-date">{item.date}</p>
                   <p className="article-description">{item.description}</p>
                   <a className="read-article" target="_blank" href={item.url}>
                     READ ARTICLE
-</a>
+                  </a>
                 </Grid.Column>
-              </div>)
-          }
+              </div>
+            ))}
         </Grid.Column>
       </Grid>
     );

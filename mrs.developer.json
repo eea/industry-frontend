@@ -1,28 +1,29 @@
 {
+  "volto-tabs-block": {
+    "url": "https://github.com/eea/volto-tabsblock.git",
+    "branch": "master",
+    "path": "src",
+    "package": "@eeacms/volto-tabs-block"
+  },
+  "volto-tabsview": {
+    "url": "https://github.com/eea/volto-tabsview.git",
+    "branch": "master",
+    "path": "src"
+  },
   "volto-datablocks": {
     "url": "https://github.com/eea/volto-datablocks.git",
+    "branch": "master",
     "path": "src"
   },
   "volto-addons": {
     "url": "https://github.com/eea/volto-addons.git",
+    "branch": "master",
     "path": "src"
   },
   "volto-embed": {
     "url": "https://github.com/eea/volto-embed.git",
+    "branch": "master",
     "path": "src"
-  },
-  "volto-tabsview": {
-    "url": "https://github.com/eea/volto-tabsview.git",
-    "path": "src"
-  },
-  "volto-mosaic": {
-    "url": "https://github.com/eea/volto-mosaic.git",
-    "branch": "volto-7",
-    "path": "src"
-  },
-  "volto-gridlayout": {
-    "url": "https://github.com/eea/volto-gridlayout.git",
-    "path": "src"
-  }
+  } 
 }
   

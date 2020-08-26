@@ -1,0 +1,35 @@
+.detailed-link-container {
+  font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+}
+
+.detailed-link-container .detailed-link-title {
+  color: #4296B3;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 23px;
+  margin-bottom: 1em;
+}
+
+.detailed-link-container .detailed-link-description {
+  color: #333;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 18px;
+  margin-bottom: 1em;
+}
+
+.detailed-link-container .detailed-link-button {
+  display: inline-block;
+  border: 1px solid #32536B;
+  color: #32536B;
+  box-sizing: border-box;
+  border-radius: 30px;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 18px;
+  padding: 1em 2em;
+}
+
+.detailed-link-container .detailed-link-placeholder {
+    
+}

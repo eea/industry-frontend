@@ -23,7 +23,7 @@ import clearSVG from '@plone/volto/icons/clear.svg';
 import 'ol/ol.css';
 import './style.css';
 
-const getHtmlAttributes = obj => {
+const getHtmlAttributes = (obj) => {
   return Object.entries(obj)
     .map(([key, value]) => {
       return `${key}="${value}"`;
@@ -35,8 +35,8 @@ const splitBy = (arr, delimiter) => {
   if (Array.isArray(arr)) {
     return (
       arr
-        .filter(value => value)
-        .map(value => `'${value}'`)
+        .filter((value) => value)
+        .map((value) => `'${value}'`)
         .join(delimiter) || ''
     );
   }
@@ -82,7 +82,7 @@ const initialExtent = [
   6199975.99999531,
   10421410.9999871,
 ];
-const OpenlayersMapView = props => {
+const OpenlayersMapView = (props) => {
   const stateRef = useRef({
     map: {
       element: null,
@@ -107,7 +107,7 @@ const OpenlayersMapView = props => {
     locationTerm: null,
     updateMapPosition: null,
   });
-  // const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(false);
   const [mapRendered, setMapRendered] = useState(false);
   const [firstFilteringUpdate, setFirstFilteringUpdate] = useState(false);
   const ToggleSidebarControl = useRef(null);
@@ -154,7 +154,7 @@ const OpenlayersMapView = props => {
         OL_LOADED = true;
       }
       if (OL_LOADED && !ToggleSidebarControl.current && hasSidebar) {
-        ToggleSidebarControl.current = /*@__PURE__*/ (function(Control) {
+        ToggleSidebarControl.current = /*@__PURE__*/ (function (Control) {
           function ToggleSidebarControl(opt_options) {
             const options = opt_options || {};
             const buttonContainer = document.getElementById(
@@ -406,7 +406,7 @@ const OpenlayersMapView = props => {
             '&maxLocations=6',
         ),
       )
-      .then(response => {
+      .then((response) => {
         const data = JSON.parse(response.request.response) || {};
         if (data.error) {
           // setLoader(false);
@@ -422,7 +422,7 @@ const OpenlayersMapView = props => {
               ],
               {
                 ...options,
-                callback: function() {
+                callback: function () {
                   if (noRefresh) {
                     // setLoader(false);
                     stateRef.current.map.sitesSourceLayer &&
@@ -435,7 +435,7 @@ const OpenlayersMapView = props => {
             );
         }
       })
-      .catch(error => {});
+      .catch((error) => {});
   }
 
   function onSourceChange(source) {
@@ -494,7 +494,7 @@ const OpenlayersMapView = props => {
 
   function setFeatureInfo(map, pixel, coordinate, detailed) {
     let features = [];
-    map.forEachFeatureAtPixel(pixel, function(feature) {
+    map.forEachFeatureAtPixel(pixel, function (feature) {
       features.push(feature);
     });
     if (features.length) {
@@ -604,7 +604,7 @@ const OpenlayersMapView = props => {
       //  Make sites source
       let reqs = 0;
       sitesSource = new VectorSource({
-        loader: function(extent, resolution, projection) {
+        loader: function (extent, resolution, projection) {
           const updateMapPosition =
             !!stateRef.current.updateMapPosition &&
             !['byLocationTerm', 'byLocationTermNoRefresh'].includes(
@@ -665,7 +665,7 @@ const OpenlayersMapView = props => {
       });
       //  Make regions source layer
       regionsSource = new VectorSource({
-        loader: function(extent, resolution, projection) {
+        loader: function (extent, resolution, projection) {
           var url =
             'https://services.arcgis.com/LcQjj2sL7Txk9Lag/ArcGIS/rest/services/ly_IED_SiteClusters_WM/FeatureServer/0/query/?f=json' +
             '&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=' +
@@ -749,33 +749,33 @@ const OpenlayersMapView = props => {
       );
       //  Center by user location
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(position =>
+        navigator.geolocation.getCurrentPosition((position) =>
           centerPosition(map, position, 12),
         );
       }
       //  Events
-      sitesSource.on('updateFilters', function(e) {
+      sitesSource.on('updateFilters', function (e) {
         if (!reqs && e.target.getState() === 'ready') {
           // setLoader(false);
           onSourceChange(e.target);
         }
       });
       if (hasPopups) {
-        map.on('pointermove', function(evt) {
+        map.on('pointermove', function (evt) {
           if (evt.dragging) {
             return;
           }
           const pixel = map.getEventPixel(evt.originalEvent);
           displayPopup(map, pixel, evt.coordinate, popup);
         });
-        map.on('click', function(evt) {
+        map.on('click', function (evt) {
           let newZoom = map.getView().getZoom();
           if (newZoom > zoomSwitch) {
             displayPopup(map, evt.pixel, evt.coordinate, popupDetails, true);
           }
         });
       }
-      map.on('moveend', function(e) {
+      map.on('moveend', function (e) {
         if (hasSidebar && document.getElementById('dynamic-filter')) {
           document.getElementById('dynamic-filter').dispatchEvent(
             new CustomEvent('featurechange', {
@@ -825,14 +825,10 @@ const OpenlayersMapView = props => {
     axios
       .get(
         encodeURI(
-          `${
-            settings.providerUrl
-          }?query=SELECT DISTINCT siteId, siteInspireId FROM [IED].[latest].[FacilitiesPerSite] WHERE siteId = '${
-            state.popupDetails.properties.id
-          }'`,
+          `${settings.providerUrl}?query=SELECT DISTINCT siteId, siteInspireId FROM [IED].[latest].[FacilitiesPerSite] WHERE siteId = '${state.popupDetails.properties.id}'`,
         ),
       )
-      .then(response => {
+      .then((response) => {
         const data = JSON.parse(response.request.response);
         props.setQueryParam({
           queryParam: {
@@ -843,7 +839,7 @@ const OpenlayersMapView = props => {
           },
         });
       })
-      .catch(error => {});
+      .catch((error) => {});
   };
 
   return (
@@ -856,9 +852,7 @@ const OpenlayersMapView = props => {
               {currentMapZoom && currentMapZoom > zoomSwitch ? (
                 <Header as="h3">{state.popup.properties.sitename}</Header>
               ) : (
-                <Header as="h3">{`${state.popup.properties.NUTS_NAME}, ${
-                  state.popup.properties.CNTR_CODE
-                }, ${state.popup.properties.COUNTRY}`}</Header>
+                <Header as="h3">{`${state.popup.properties.NUTS_NAME}, ${state.popup.properties.CNTR_CODE}, ${state.popup.properties.COUNTRY}`}</Header>
               )}
             </div>
             <div className="popover-body">

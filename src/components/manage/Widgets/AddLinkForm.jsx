@@ -54,6 +54,13 @@ class AddLinkForm extends Component {
   }
 
   componentDidMount() {
+    if (this.props.value !== this.state.value.text) {
+      this.setState({
+        value: {
+          text: this.props.value,
+        },
+      });
+    }
     this.input.focus();
     this.props.resetSearchContent();
     document.addEventListener('mousedown', this.handleClickOutside, false);
@@ -63,7 +70,7 @@ class AddLinkForm extends Component {
     document.removeEventListener('mousedown', this.handleClickOutside, false);
   }
 
-  handleClickOutside = e => {
+  handleClickOutside = (e) => {
     if (
       this.linkFormContainer.current &&
       doesNodeContainClick(this.linkFormContainer.current, e)
@@ -83,6 +90,7 @@ class AddLinkForm extends Component {
   linkFormContainer = React.createRef();
 
   onChange({ target: { value } }) {
+    this.props.onAddLink(value);
     const nextState = { value };
     if (this.state.isInvalid && URLUtils.isUrl(URLUtils.normalizeUrl(value))) {
       nextState.isInvalid = false;
@@ -171,7 +179,9 @@ class AddLinkForm extends Component {
             onKeyDown={this.onKeyDown}
             ref={this.onRef}
             type="text"
-            value={value.text}
+            value={
+              value.text !== this.props?.value ? value.text : this.props?.value
+            }
             defaultValue={this.props.initialValue}
             placeholder={this.props.intl.formatMessage(messages.placeholder)}
           />
@@ -184,12 +194,12 @@ class AddLinkForm extends Component {
             flexWrap: 'wrap',
           }}
         >
-          {map(this.props.search, item => (
+          {map(this.props.search, (item) => (
             <div key={item['@id']} className="child-container">
               <button
                 className="child-link"
                 style={{ cursor: 'pointer' }}
-                onClick={e => this.onSelectItem(e, item)}
+                onClick={(e) => this.onSelectItem(e, item)}
                 title={item['@id']}
                 role="link"
               >
@@ -206,7 +216,7 @@ class AddLinkForm extends Component {
 export default compose(
   injectIntl,
   connect(
-    state => ({
+    (state) => ({
       search: state.search.items,
     }),
     { resetSearchContent, searchContent },

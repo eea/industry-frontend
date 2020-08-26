@@ -19,15 +19,21 @@ import {
   installExpendableList,
   installFolderListing,
 } from 'volto-addons';
-import { applyEditForms as mosaicEditForms } from 'volto-mosaic/config';
-import {
-  applyConfig as eprtrConfig,
-  applyEditForms as eprtrEditForms,
-} from './localconfig';
+import { applyConfig as eprtrConfig } from './localconfig';
+
+const consoleError = console.error.bind(console);
+// eslint-disable-next-line
+  console.error = (message, ...args) => {
+  if (
+    typeof message === 'string' &&
+    message.startsWith('[React Intl] Missing message:')
+  ) {
+    return;
+  }
+  consoleError(message, ...args);
+};
 
 const addonConfig = [
-  mosaicEditForms,
-  eprtrEditForms,
   installTableau,
   installExpendableList,
   installFolderListing,
@@ -35,7 +41,9 @@ const addonConfig = [
 ].reduce((acc, apply) => apply(acc), config);
 
 export const settings = {
-  ...addonConfig.settings,
+  ...config.settings,
+  navDepth: 5,
+  providerUrl: 'https://discodata.eea.europa.eu/sql',
 };
 
 export const views = {
@@ -50,13 +58,13 @@ export const blocks = {
   ...addonConfig.blocks,
 };
 
-export const addonReducers = { ...addonConfig.addonReducers };
-export const addonRoutes = [...(addonConfig.addonRoutes || [])];
+export const addonReducers = { ...config.addonReducers };
+export const addonRoutes = [...(config.addonRoutes || [])];
 
 export const portlets = {
   ...addonConfig.portlets,
 };
 
 export const editForms = {
-  ...addonConfig.editForms,
+  ...addonConfig.portlets,
 };

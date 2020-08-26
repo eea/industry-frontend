@@ -1,48 +1,45 @@
-/**
- * Edit map block.
- * @module components/manage/Blocks/Maps/Edit
- */
-
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { injectIntl } from 'react-intl';
 import { Grid } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import _ from 'lodash';
-import { getBasePath } from '~/helpers';
+import { settings } from '~/config';
+import './style.css';
 
-class View extends Component {
-  /**
-   * Property types.
-   * @property {Object} propTypes Property types.
-   * @static
-   */
-  static propTypes = {
-    data: PropTypes.objectOf(PropTypes.any).isRequired,
-    // pathname: PropTypes.string.isRequired,
-  };
+const getPath = (url) => {
+  if (!url) return '';
+  return url
+    .replace(settings.apiPath, '')
+    .replace(settings.internalApiPath, '');
+};
 
-  render() {
-    const childrenLinks = this.props.data.links;
-    return (
-      <div style={{ marginBottom: '40px', marginTop: '40px' }}>
-        <Grid columns={1}>
-          {childrenLinks &&
-            childrenLinks.map((child) => (
-              <div className="child-container">
-                <Link
-                  target="_blank"
-                  className="child-link"
-                  to={getBasePath(child?.['@id'] || '')}
-                >
-                  {_.capitalize(child.title)}
-                </Link>
-              </div>
+const View = (props) => {
+  const childrenLinks = props.data.childrenLinks || null;
+  const { columns } = props.data;
+  return (
+    (childrenLinks && childrenLinks.length && (
+      <div className="children-links-container">
+        <Grid columns={columns || 1}>
+          <Grid.Row>
+            {childrenLinks.map((child) => (
+              <Grid.Column>
+                <div className="children-link-container">
+                  <Link
+                    target="_blank"
+                    className="children-link"
+                    to={getPath(child?.['@id'] || '')}
+                  >
+                    {child.title}
+                  </Link>
+                </div>
+              </Grid.Column>
             ))}
+          </Grid.Row>
         </Grid>
       </div>
-    );
-  }
-}
+    )) || (
+      <p className="children-links-placeholder">Select a page from sidebar</p>
+    )
+  );
+};
 
 export default injectIntl(View);

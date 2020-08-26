@@ -10,10 +10,8 @@
     "@eeacms/volto-slate-metadata-mentions",
     "@eeacms/volto-metadata-block",
     "@eeacms/volto-tabs-block",
-    "volto-mosaic",
     "volto-addons",
-    "volto-datablocks",
-    "volto-tabsview"
+    "volto-datablocks"
   ],
   "scripts": {
     "start": "razzle start",
@@ -104,9 +102,12 @@
     "@eeacms/volto-image-zoom-and-flip": "github:eea/volto-image-zoom-and-flip#0.1.0",
     "@eeacms/volto-metadata-block": "github:eea/volto-metadata-block#0.2.0",
     "@eeacms/volto-slate-metadata-mentions": "github:eea/volto-slate-metadata-mentions#0.2.0",
-    "@eeacms/volto-tabs-block": "github:eea/volto-tabs-block#0.2.0",
     "@eeacms/volto-widgets-view": "github:eea/volto-widgets-view#0.2.4",
     "@plone/volto": "github:eea/volto#7.8.2-beta.3",
+    "axios": "^0.20.0",
+    "jsonp": "^0.2.1",
+    "ol": "^6.4.3",
+    "performant-array-to-tree": "^1.7.1",
     "react": "^16.13.1",
     "react-component-queries": "^2.3.0",
     "react-dom": "^16.13.1",

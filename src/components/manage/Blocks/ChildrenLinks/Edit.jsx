@@ -1,96 +1,62 @@
-import React, { Component } from 'react';
-import { injectIntl } from 'react-intl';
-import PropTypes from 'prop-types';
-import { Grid } from 'semantic-ui-react';
-import AddLinkForm from '../DetailedLink/AddLinkForm';
-import { compose } from 'redux';
+/**
+ * Edit map block.
+ * @module components/manage/Blocks/Maps/Edit
+ */
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { injectIntl } from 'react-intl';
+import InlineForm from '@plone/volto/components/manage/Form/InlineForm';
+import { SidebarPortal } from '@plone/volto/components';
+import View from './View';
 import { getParentFolderData } from '~/actions';
-import { Link } from 'react-router-dom';
-import _ from 'lodash';
-import { getBasePath } from '~/helpers';
+import getSchema from './schema';
 
-class Edit extends Component {
-  /**
-   * Property types.
-   * @property {Object} propTypes Property types.
-   * @static
-   */
-  static propTypes = {
-    selected: PropTypes.bool.isRequired,
-    block: PropTypes.string.isRequired,
-    index: PropTypes.number.isRequired,
-    data: PropTypes.objectOf(PropTypes.any).isRequired,
-    pathname: PropTypes.string.isRequired,
-    onChangeBlock: PropTypes.func.isRequired,
-    onSelectBlock: PropTypes.func.isRequired,
-    onDeleteBlock: PropTypes.func.isRequired,
-    onFocusPreviousBlock: PropTypes.func.isRequired,
-    onFocusNextBlock: PropTypes.func.isRequired,
-  };
+const Edit = (props) => {
+  const [state, setState] = useState({
+    schema: getSchema(props),
+  });
+  const pageLink = props.data.page;
 
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.childrenLinks !== this.props.childrenLinks) {
-      this.onEditData();
+  useEffect(() => {
+    if (props.childrenLinks && props.childrenLinks.length) {
+      handleChangeBlock('childrenLinks', [...props.childrenLinks]);
     }
-  }
+    /* eslint-disable-next-line */
+  }, [props.childrenLinks])
 
-  handleLinkData = (link) => {
-    this.props.getParentFolderData(link.value);
+  useEffect(() => {
+    props.dispatch(getParentFolderData(pageLink));
+    /* eslint-disable-next-line */
+  }, [pageLink])
+
+  const handleChangeBlock = (id, value) => {
+    const { data } = props;
+    props.onChangeBlock(props.block, {
+      ...data,
+      [id]: value,
+    });
   };
 
-  onEditData() {
-    const childrenLinks = this.props.childrenLinks;
-    this.props.onChangeBlock(this.props.block, {
-      ...this.props.data,
-      links: childrenLinks,
-    });
-  }
-
-  render() {
-    const childrenLinks = this.props.data.links;
-    console.log('props in childrenlist', this.props);
-    return (
-      <Grid columns={1}>
-        <Grid.Row>
-          {childrenLinks &&
-            childrenLinks.map((child) => (
-              <div className="child-container">
-                <Link
-                  target="_blank"
-                  className="child-link"
-                  to={getBasePath(child?.['@id'] || '')}
-                >
-                  {_.capitalize(child.title)}
-                </Link>
-              </div>
-            ))}
-        </Grid.Row>
-        <Grid.Column>
-          <p className="search-text">Search page</p>
-          <AddLinkForm onAddLink={this.handleLinkData} />
-        </Grid.Column>
-      </Grid>
-    );
-  }
-}
-
-const mapDispatchToProps = {
-  getParentFolderData,
+  return (
+    <div>
+      <SidebarPortal selected={props.selected}>
+        <InlineForm
+          schema={state.schema}
+          title={state.schema.title}
+          onChangeField={handleChangeBlock}
+          formData={props.data}
+          block={props.block}
+        />
+      </SidebarPortal>
+      <View {...props} />
+    </div>
+  );
 };
 
 export default compose(
   injectIntl,
-  connect(
-    (state) => ({
-      state,
-      childrenLinks: state.parent_folder_data.items,
-    }),
-    mapDispatchToProps,
-  ),
+  connect((state, props) => ({
+    childrenLinks: state.parent_folder_data.items,
+  })),
 )(Edit);

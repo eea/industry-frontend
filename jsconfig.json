@@ -1,6 +1,12 @@
 {
     "compilerOptions": {
         "paths": {
+            "@eeacms/volto-tabs-block": [
+                "develop/volto-tabsblock/src"
+            ],
+            "volto-tabsview": [
+                "develop/volto-tabsview/src"
+            ],
             "volto-datablocks": [
                 "develop/volto-datablocks/src"
             ],
@@ -9,15 +15,6 @@
             ],
             "volto-embed": [
                 "develop/volto-embed/src"
-            ],
-            "volto-tabsview": [
-                "develop/volto-tabsview/src"
-            ],
-            "volto-mosaic": [
-                "develop/volto-mosaic/src"
-            ],
-            "volto-gridlayout": [
-                "develop/volto-gridlayout/src"
             ]
         },
         "baseUrl": "src"

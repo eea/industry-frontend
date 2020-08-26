@@ -1,36 +1,65 @@
 import React from 'react';
 import { injectIntl } from 'react-intl';
-import { Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-
 import { settings } from '~/config';
+import './style.css';
 
-const getPath = url => {
+const getPath = (url) => {
   if (!url) return '';
   return url
     .replace(settings.apiPath, '')
     .replace(settings.internalApiPath, '');
 };
 
-const View = props => {
+const View = (props) => {
+  const detailedLink = props.data.detailedLink || null;
+  const { hideTitle = false, hideDescription = false } = props.data;
+  const {
+    textAlign = null,
+    title = '',
+    description = '',
+    buttonTitle = '',
+  } = props.data;
+  const {
+    titleClassname = '',
+    descriptionClassname = '',
+    buttonClassname = '',
+  } = props.data;
   return (
-    <div>
-      {(props.data?.detailedLink && (
+    <div
+      className={`detailed-link-container text-align-${textAlign || 'left'}`}
+    >
+      {(detailedLink && (
         <div>
-          <div className="detailed-link-block-item-title">
-            {props.data.detailedLink.title || ''}
-          </div>
-          <p>{props.data.detailedLink.description || ''}</p>
+          {!hideTitle ? (
+            <div className={`detailed-link-title ${titleClassname || ''}`}>
+              {title || detailedLink.title || ''}
+            </div>
+          ) : (
+            ''
+          )}
+          {!hideDescription ? (
+            <p
+              className={`detailed-link-description ${
+                descriptionClassname || ''
+              }`}
+            >
+              {description || detailedLink.description || ''}
+            </p>
+          ) : (
+            ''
+          )}
           <Link
-            className="detailed-link-block"
-            onClick={e => e.preventDefault}
-            to={getPath(props.data.detailedLink.path)}
+            className={`detailed-link-button ${buttonClassname || ''}`}
+            onClick={(e) => e.preventDefault}
+            to={getPath(detailedLink.path)}
           >
-            <Button basic>Read more</Button>
+            {buttonTitle || detailedLink.title || 'Go'}
           </Link>
         </div>
-      )) ||
-        'Select a page from sidebar'}
+      )) || (
+        <p className="detailed-link-placeholder">Select a page from sidebar</p>
+      )}
     </div>
   );
 };
