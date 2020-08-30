@@ -58,7 +58,10 @@ const View = ({ content, ...props }) => {
       </Menu>
     </div>
   ) : (
-    ''
+    <p>
+      There are no pages inside of selected page. Make sure you add pages or
+      delete the block
+    </p>
   );
 };
 

@@ -10,6 +10,11 @@
     "branch": "master",
     "path": "src"
   },
+  "volto-grid-block": {
+    "url": "https://github.com/eea/volto-grid-block.git",
+    "branch": "master",
+    "path": "src"
+  },
   "volto-datablocks": {
     "url": "https://github.com/eea/volto-datablocks.git",
     "branch": "master",

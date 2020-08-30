@@ -16,17 +16,17 @@ import ArticlesListEdit from '~/components/manage/Blocks/ArticlesList/Edit';
 import ChildrenLinksView from '~/components/manage/Blocks/ChildrenLinks/View';
 import ChildrenLinksEdit from '~/components/manage/Blocks/ChildrenLinks/Edit';
 
-import EprtrSidebarBlockEdit from '~/components/manage/Blocks/SidebarBlock/Edit';
-import EprtrSidebarBlockView from '~/components/manage/Blocks/SidebarBlock/View';
-
 import EprtrFiltersBlockEdit from '~/components/manage/Blocks/FiltersBlock/Edit';
 import EprtrFiltersBlockView from '~/components/manage/Blocks/FiltersBlock/View';
 
 import DiscodataOpenlayersMapBlockEdit from '~/components/manage/Blocks/DiscodataOpenlayersMapBlock/Edit';
 import DiscodataOpenlayersMapBlockView from '~/components/manage/Blocks/DiscodataOpenlayersMapBlock/View';
 
-import NavigationBlockEdit from 'volto-tabsview/components/theme/NavigationBlock/Edit';
-import NavigationBlockView from 'volto-tabsview/components/theme/NavigationBlock/View';
+import NavigationBlockEdit from '~/components/manage/Blocks/NavigationBlock/Edit';
+import NavigationBlockView from '~/components/manage/Blocks/NavigationBlock/View';
+
+import SidebarBlockEdit from '~/components/manage/Blocks/SidebarBlock/Edit';
+import SidebarBlockView from '~/components/manage/Blocks/SidebarBlock/View';
 
 import BlocksWidget from '~/components/manage/Widgets/BlocksWidget';
 
@@ -37,8 +37,6 @@ import folderSVG from '@plone/volto/icons/folder.svg';
 import linkSVG from '@plone/volto/icons/link.svg';
 import listSVG from '@plone/volto/icons/content-listing.svg';
 import worldSVG from '@plone/volto/icons/world.svg';
-
-import { SIDEBAR } from '~/constants/Blocks';
 
 export function applyConfig(voltoConfig) {
   const config = { ...voltoConfig };
@@ -109,13 +107,13 @@ export function applyConfig(voltoConfig) {
     icon: linkSVG,
   };
 
-  config.blocks.blocksConfig[SIDEBAR] = {
-    id: SIDEBAR,
-    title: 'Eprtr sidebar block',
+  config.blocks.blocksConfig.sidebar_block = {
+    id: 'sidebar_block',
+    title: 'Sidebar Block',
     group: 'eprtr_blocks',
-    view: EprtrSidebarBlockView,
-    edit: EprtrSidebarBlockEdit,
-    icon: packSVG,
+    view: SidebarBlockView,
+    edit: SidebarBlockEdit,
+    icon: linkSVG,
   };
 
   config.blocks.blocksConfig.eprtr_filters_block = {

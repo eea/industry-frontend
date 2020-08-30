@@ -1050,12 +1050,12 @@ body.has-sidebar {
     &.red-menu {
       .item {
         color: #D63D27;
-        background-color: transparent;
+        background-color: transparent !important;
         padding: 0 2em !important;
         border-radius: 2em;
         &:before {
           width: 0;
-          background-color: transparent;
+          background-color: transparent !important;
         }
       }
       .active.item {
@@ -1070,8 +1070,8 @@ body.has-sidebar {
         }
         &:before {
           width: 0;
-          background: transparent;
-          background-color: transparent;
+          background: transparent !important;
+          background-color: transparent !important;
         }
       }
     }
@@ -1081,11 +1081,12 @@ body.has-sidebar {
         color: #000 !important;
         &:before {
           width: 0;
-          background-color: transparent;
+          background-color: transparent !important;
         }
       }
       .active.item {
-        background-color: transparent;
+        border: none !important;
+        background-color: transparent !important;
       }
     }
     &.item {
@@ -1116,7 +1117,7 @@ body.has-sidebar {
       }
     }
     .active.item {
-      background: #fff;
+      background-color: transparent !important;
       color: #4296B3;
       font-weight: bold;
       border-bottom: 2px solid #4296B3;
@@ -1316,13 +1317,11 @@ h3 {
   }
 }
 
-.section-browse-the-data {
-  #page-document.ui.container {
-    width: 100%!important;
-    margin: 0!important;
-    margin-left: 0!important;
-    margin-right: 0!important;
-    margin-top: 0!important;
-    margin-bottom: 0!important;
-  }
+#page-document.ui.container {
+  width: 100%!important;
+  margin: 0!important;
+  margin-left: 0!important;
+  margin-right: 0!important;
+  margin-top: 0!important;
+  margin-bottom: 0!important;
 }

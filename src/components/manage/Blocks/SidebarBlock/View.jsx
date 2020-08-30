@@ -1,77 +1,24 @@
-import React, { useState } from 'react';
+/* REACT */
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { Tab, Menu } from 'semantic-ui-react';
-import { useDispatch, useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
-import { setActiveTab } from '@eeacms/volto-tabs-block/actions';
-import { blocks, settings } from '~/config';
-import { defineMessages, injectIntl } from 'react-intl';
-import cx from 'classnames';
-import { getBlocksFieldname, getBaseUrl } from '@plone/volto/helpers';
-import { isEqual } from '@eeacms/volto-tabs-block/Tabs/utils';
-import { arrayToTree } from 'performant-array-to-tree';
-import '@eeacms/volto-tabs-block/Tabs/public.less';
-
-import { isObject, isArray } from 'lodash';
-
-import qs from 'query-string';
-import { getNavigationByParent } from 'volto-tabsview/helpers';
+/* SEMANTIC UI */
+import { Menu } from 'semantic-ui-react';
+/* HELPERS */
 import {
-  getDiscodataResource,
-  setQueryParam,
-  deleteQueryParam,
-} from 'volto-datablocks/actions';
+  isActive,
+  getNavigationByParent,
+  getBasePath,
+} from 'volto-tabsview/helpers';
 
-const messages = defineMessages({
-  unknownBlock: {
-    id: 'Unknown Block',
-    defaultMessage: 'Unknown Block {block}',
-  },
-});
+import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
 
-const flattenArray = (array, depth = 0) => {
-  let flattenedArray = [];
-  array.forEach((item) => {
-    if (item.children?.length > 0) {
-      flattenedArray.push({ ...item, depth });
-      flattenedArray = [
-        ...flattenedArray,
-        ...flattenArray(item.children, depth + 1),
-      ];
-    } else {
-      flattenedArray.push({ ...item, depth });
-    }
-  });
-  return flattenedArray;
-};
+import { getFacilities, getInstallations, getLcps } from '~/helpers/api';
 
-const hasChildActive = (tabs, tab, activeTabIndex) => {
-  const activeTab = tabs[activeTabIndex];
-  if (activeTab?.parentTitle === tab?.title) return true;
-  if (tab.children) {
-    let active = false;
-    tab.children.forEach((child) => {
-      active = hasChildActive(tabs, child, activeTabIndex);
-    });
-    return active;
-  }
-  return false;
-};
+import './style.css';
 
-const isHidden = (tabs, tab, activeTabIndex) => {
-  if (!hasChildActive(tabs, tab, activeTabIndex)) {
-    const activeTab = tabs[activeTabIndex];
-    if (tab.title === activeTab?.title) return false;
-    if (tab.parentTitle === activeTab?.title) return false;
-    if (tab.depth > 0) return true;
-    return false;
-  }
-  return false;
-};
-
-const _flattenArray = (array, prevItem = {}, depth = 0) => {
+const flattenArray = (array, prevItem = {}, depth = 0, maxDepth) => {
   let flattenedArray = [];
   if (!array) return flattenedArray;
   array.forEach((item) => {
@@ -79,7 +26,11 @@ const _flattenArray = (array, prevItem = {}, depth = 0) => {
       flattenedArray.push({ ...item, parent: prevItem.url || null, depth });
       flattenedArray = [
         ...flattenedArray,
-        ..._flattenArray(item.items, item, depth + 1),
+        ...(typeof maxDepth === 'number' && depth < maxDepth
+          ? flattenArray(item.items, item, depth + 1, maxDepth)
+          : typeof maxDepth !== 'number' && !maxDepth
+          ? flattenArray(item.items, item, depth + 1, maxDepth)
+          : []),
       ];
     } else {
       flattenedArray.push({ ...item, parent: prevItem.url || null, depth });
@@ -88,269 +39,520 @@ const _flattenArray = (array, prevItem = {}, depth = 0) => {
   return flattenedArray;
 };
 
-const _hasChildActive = (tabs, tab, pathname) => {
-  const activeChildTab = tabs.filter(
-    (child) => child.parent === tab.url && child.url === pathname,
-  )[0];
-  if (!activeChildTab) return false;
-  return true;
-};
-
-const _hasParentActive = (tabs, tab, pathname) => {
-  if (!tab.parent) return -1;
+const hasAscendentActive = (tabs, tab, pathname) => {
+  if (!tab.parent || pathname === tab.url) return -1;
   const parentTab = tabs.filter((parentTab) => parentTab.url === tab.parent)[0];
-  if (parentTab && pathname === parentTab.url) return 1;
+  if (parentTab && pathname === parentTab.url) {
+    return 1;
+  } else if (parentTab.parent) {
+    return hasAscendentActive(tabs, parentTab, pathname);
+  }
   return 0;
 };
 
-const _isHidden = (tabs, tab, pathname) => {
-  if (!_hasChildActive(tabs, tab, pathname)) {
-    if (tab.url === pathname) return false;
-    if (_hasParentActive(tabs, tab, pathname) === 1) return false;
-    if (tab.depth > 0) return true;
-    return false;
+const hasDescendentActive = (tab, pathname) => {
+  let ok = false;
+  if (pathname === tab.url) return true;
+  if (tab.items) {
+    tab.items.forEach((item) => {
+      if (hasDescendentActive(item, pathname) && !ok) {
+        ok = true;
+      }
+    });
   }
-  return false;
+  return ok;
 };
 
-const View = ({
-  id,
-  onTabChange,
-  data,
-  mode = 'view',
-  properties,
-  intl,
-  location,
-  navigation,
-  ...rest
-}) => {
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const pathKey = useSelector((state) => state.router.location.key);
-  const tabsState = useSelector((state) => state.tabs_block[pathKey] || {});
-  const mounted = React.useRef();
-  const saved_blocks_layout = React.useRef([]);
-  const blocks_layout = properties.blocks_layout?.items;
-  const pathname = location.pathname.replace(/\/$/, '');
-  const [navTabs, setNavTabs] = useState(_flattenArray(navigation.items));
-  const { useNavigation = false, tabsLayout = [] } = data;
-  const globalActiveTab = tabsState[id] || 0;
-  const tabs = data.tabs
-    ? [
-        ...data.tabs.map((tab, index) => ({
-          ...tab,
-          index,
-          id: tab.title,
-          parentId:
-            tab.parentTitle !== tab.title ? tab.parentTitle || null : null,
-        })),
-      ]
-    : [];
-  const orderedTabs = flattenArray(arrayToTree(tabs, { dataField: null }));
-  // We have the following "racing" condition:
-  // The tabsblockview is mounted sometime before the GET_CONTENT_SUCCESS
-  // action is triggered, so even if we "fix" the display,
-  // the global state.data.blocks_layout will be overwritten with the "wrong"
-  // content. So we need to watch if the blocks_layout is rewritten, to trigger
-  // the tab change again
-  React.useEffect(() => {
-    if (!mounted.current && mode === 'view') {
-      const newTabsState = {};
-      Object.keys(tabsState).forEach((blockid) => {
-        newTabsState[blockid] = 0;
-      });
-      dispatch(setActiveTab(id, 0, mode, newTabsState, pathKey));
-      mounted.current = true;
-    }
-    if (
-      mode === 'view' &&
-      !isEqual(blocks_layout, saved_blocks_layout.current)
-    ) {
-      const newTabsState = {};
-      saved_blocks_layout.current = blocks_layout;
-      Object.keys(tabsState).forEach((blockid) => {
-        newTabsState[blockid] = 0;
-      });
-      dispatch(setActiveTab(id, 0, mode, newTabsState, pathKey));
-    }
-  }, [dispatch, id, mode, tabsState, blocks_layout, pathKey]);
-
-  React.useEffect(() => {
-    setNavTabs(_flattenArray(navigation.items));
-  }, [navigation]);
-
-  const blocksFieldname = getBlocksFieldname(properties);
-
-  const renderTab = React.useCallback(
-    (tab, index = 0) => {
-      const blockIds = tabsLayout[index] || [];
-      return (
-        <Tab.Pane>
-          {blockIds.map((block) => {
-            const Block =
-              blocks.blocksConfig[
-                properties[blocksFieldname]?.[block]?.['@type']
-              ]?.['view'] || null;
-            return Block !== null ? (
-              <>
-                <Block
-                  key={block}
-                  id={block}
-                  properties={properties}
-                  data={properties[blocksFieldname][block]}
-                  path={getBaseUrl(location?.pathname || '')}
-                />
-              </>
-            ) : (
-              <div key={block}>
-                {intl.formatMessage(messages.unknownBlock, {
-                  block: properties[blocksFieldname]?.[block]?.['@type'],
-                })}
-              </div>
-            );
-          })}
-        </Tab.Pane>
-      );
-    },
-    [tabsLayout, blocksFieldname, intl, location?.pathname, properties], // TODO: fill in the rest of the array
-  );
-
-  const menu = { pointing: true };
-  const grid = { paneWidth: 9, tabWidth: 3, stackable: true };
-  const position = data?.position || 'top';
-  if (mode === 'edit') {
-    menu.attached = false;
-    menu.tabular = false;
-  } else {
-    switch (position) {
-      case 'top':
-        break;
-      case 'bottom':
-        menu.attached = 'bottom';
-        break;
-      case 'left':
-        menu.fluid = true;
-        menu.vertical = true;
-        menu.tabular = true;
-        break;
-      case 'right':
-        menu.fluid = true;
-        menu.vertical = true;
-        menu.tabular = 'right';
-        break;
-      default:
-    }
-  }
-  if (!useNavigation) {
-    return (
-      <div className={cx('tabsblock', data.css_class)}>
-        <div className={`ui container ${mode}`}>
-          {tabs.length ? (
-            <Tab
-              grid={grid}
-              menu={menu}
-              onTabChange={(event, { activeIndex }) => {
+const makeNewNavigation = (
+  items,
+  preset,
+  collection,
+  search,
+  history,
+  dispatch,
+) => {
+  if (preset === 'facilities') {
+    return items.map((item) => ({
+      ...item,
+      onClick: () => {
+        dispatch(deleteQueryParam({ queryParam: ['facilityInspireId'] }));
+        history.push(item.url);
+      },
+      items: item.items
+        ? collection.map((facility) => ({
+            title: facility.facilityInspireId,
+            url: facility.facilityInspireId,
+            presetItem: true,
+            onClick: (pathname) => {
+              if (facility.facilityInspireId !== search.facilityInspireId) {
                 dispatch(
-                  setActiveTab(id, activeIndex, mode, tabsState, pathKey),
+                  setQueryParam({
+                    queryParam: {
+                      facilityInspireId: facility.facilityInspireId,
+                    },
+                  }),
                 );
-              }}
-              activeIndex={globalActiveTab}
-              panes={orderedTabs.map((child, index) => {
-                const menuItemClassName = `${position} ${mode} ${
-                  hasChildActive(orderedTabs, child, globalActiveTab)
-                    ? 'active by-child'
-                    : ''
-                } ${
-                  isHidden(orderedTabs, child, globalActiveTab) ? 'hidden' : ''
-                } depth_${child.depth || 0}`;
-                return {
-                  render: () =>
-                    mode === 'view' && renderTab(child, child.index),
-                  menuItem: (
-                    <Menu.Item
-                      key={`menu-item-${child.index}-${child.title}`}
-                      className={menuItemClassName}
-                      active={globalActiveTab === index}
-                      index={index}
-                    >
-                      {child.title}
-                    </Menu.Item>
-                  ),
-                };
-              })}
-            />
-          ) : (
-            <>
-              <hr className="block section" />
-              {mode === 'view' ? renderTab(0, {}) : ''}
-            </>
-          )}
-        </div>
-      </div>
-    );
+              }
+              if (pathname !== item.items[0].url) {
+                history.push(item.items[0].url);
+              }
+            },
+            active: (pathname) => {
+              return (
+                search.facilityInspireId === facility.facilityInspireId &&
+                pathname.includes(item.url)
+              );
+            },
+            items: [
+              ...item.items.map((child) => ({
+                ...child,
+                redirect: (pathname) => {
+                  // if (
+                  //   search.facilityInspireId !== facility.facilityInspireId &&
+                  //   pathname === child.url
+                  // ) {
+                  //   history.push(item.url);
+                  // }
+                },
+                active: (pathname) => {
+                  return (
+                    search.facilityInspireId === facility.facilityInspireId &&
+                    pathname.includes(child.url)
+                  );
+                },
+                onClick: (pathname) => {
+                  if (facility.facilityInspireId !== search.facilityInspireId) {
+                    dispatch(
+                      setQueryParam({
+                        queryParam: {
+                          facilityInspireId: facility.facilityInspireId,
+                        },
+                      }),
+                    );
+                  }
+                  if (pathname !== child.url) {
+                    history.push(child.url);
+                  }
+                },
+              })),
+            ],
+          }))
+        : [],
+    }));
+  } else if (preset === 'installations') {
+    return items.map((item) => ({
+      ...item,
+      onClick: () => {
+        dispatch(
+          deleteQueryParam({
+            queryParam: ['facilityInspireId', 'installationInspireId'],
+          }),
+        );
+        history.push(item.url);
+      },
+      items: item.items
+        ? collection.map((facility) => ({
+            title: facility.facilityInspireId,
+            url: facility.facilityInspireId,
+            presetItem: true,
+            onClick: (pathname) => {
+              if (facility.facilityInspireId !== search.facilityInspireId) {
+                dispatch(
+                  setQueryParam({
+                    queryParam: {
+                      facilityInspireId: facility.facilityInspireId,
+                      installationInspireId: facility.installations[0],
+                    },
+                  }),
+                );
+              }
+              if (pathname !== item.items[0].url) {
+                history.push(item.items[0].url);
+              }
+            },
+            active: (pathname) => {
+              return (
+                search.facilityInspireId === facility.facilityInspireId &&
+                pathname.includes(item.url)
+              );
+            },
+            items: [
+              ...facility.installations.map((installation) => ({
+                title: installation,
+                url: installation,
+                presetItem: true,
+                onClick: (pathname) => {
+                  if (
+                    installation !== search.installationInspireId ||
+                    facility.facilityInspireId !== search.facilityInspireId
+                  ) {
+                    dispatch(
+                      setQueryParam({
+                        queryParam: {
+                          facilityInspireId: facility.facilityInspireId,
+                          installationInspireId: installation,
+                        },
+                      }),
+                    );
+                  }
+                  if (pathname !== item.items[0].url) {
+                    history.push(item.items[0].url);
+                  }
+                },
+                active: (pathname) => {
+                  return (
+                    search.facilityInspireId === facility.facilityInspireId &&
+                    pathname.includes(item.url)
+                  );
+                },
+                items: [
+                  ...item.items.map((child) => ({
+                    ...child,
+                    redirect: (pathname) => {
+                      // if (
+                      //   search.facilityInspireId !== facility.facilityInspireId &&
+                      //   pathname === child.url
+                      // ) {
+                      //   history.push(item.url);
+                      // }
+                    },
+                    active: (pathname) => {
+                      return (
+                        search.facilityInspireId ===
+                          facility.facilityInspireId &&
+                        pathname.includes(child.url)
+                      );
+                    },
+                    onClick: (pathname) => {
+                      if (
+                        facility.facilityInspireId !== search.facilityInspireId
+                      ) {
+                        dispatch(
+                          setQueryParam({
+                            queryParam: {
+                              facilityInspireId: facility.facilityInspireId,
+                            },
+                          }),
+                        );
+                      }
+                      if (pathname !== child.url) {
+                        history.push(child.url);
+                      }
+                    },
+                  })),
+                ],
+              })),
+            ],
+          }))
+        : [],
+    }));
+  } else if (preset === 'lcps') {
+    console.log(collection);
+    return items.map((item) => ({
+      ...item,
+      onClick: () => {
+        dispatch(
+          deleteQueryParam({
+            queryParam: [
+              'facilityInspireId',
+              'installationInspireId',
+              'lcpInspireId',
+            ],
+          }),
+        );
+        history.push(item.url);
+      },
+      items: item.items
+        ? collection.map((facility) => ({
+            title: facility.facilityInspireId,
+            url: facility.facilityInspireId,
+            presetItem: true,
+            onClick: (pathname) => {
+              if (facility.facilityInspireId !== search.facilityInspireId) {
+                dispatch(
+                  setQueryParam({
+                    queryParam: {
+                      facilityInspireId: facility.facilityInspireId,
+                      installationInspireId:
+                        facility.installations[0].installationInspireId,
+                      lcpInspireId: facility.installations[0].lcps[0],
+                    },
+                  }),
+                );
+              }
+              if (pathname !== item.items[0].url) {
+                history.push(item.items[0].url);
+              }
+            },
+            active: (pathname) => {
+              return (
+                search.facilityInspireId === facility.facilityInspireId &&
+                pathname.includes(item.url)
+              );
+            },
+            items: [
+              ...facility.installations.map((installation) => ({
+                title: installation.installationInspireId,
+                url: installation.installationInspireId,
+                presetItem: true,
+                onClick: (pathname) => {
+                  if (
+                    installation.installationInspireId !==
+                      search.installationInspireId ||
+                    facility.facilityInspireId !== search.facilityInspireId
+                  ) {
+                    dispatch(
+                      setQueryParam({
+                        queryParam: {
+                          facilityInspireId: facility.facilityInspireId,
+                          installationInspireId:
+                            installation.installationInspireId,
+                          lcpInspireId: installation.lcps[0],
+                        },
+                      }),
+                    );
+                  }
+                  if (pathname !== item.items[0].url) {
+                    history.push(item.items[0].url);
+                  }
+                },
+                active: (pathname) => {
+                  return (
+                    search.installationInspireId ===
+                      installation.installationInspireId &&
+                    pathname.includes(item.url)
+                  );
+                },
+                items: [
+                  ...installation.lcps.map((lcp) => ({
+                    title: lcp,
+                    url: lcp,
+                    presetItem: true,
+                    onClick: (pathname) => {
+                      if (
+                        lcp !== search.lcpInspireId ||
+                        installation.installationInspireId !==
+                          search.installationInspireId ||
+                        facility.facilityInspireId !== search.facilityInspireId
+                      ) {
+                        dispatch(
+                          setQueryParam({
+                            queryParam: {
+                              facilityInspireId: facility.facilityInspireId,
+                              installationInspireId:
+                                installation.installationInspireId,
+                              lcpInspireId: lcp,
+                            },
+                          }),
+                        );
+                      }
+                      if (pathname !== item.items[0].url) {
+                        history.push(item.items[0].url);
+                      }
+                    },
+                    active: (pathname) => {
+                      return (
+                        search.lcpInspireId === lcp &&
+                        pathname.includes(item.url)
+                      );
+                    },
+                    items: [
+                      ...item.items.map((child) => ({
+                        ...child,
+                        redirect: (pathname) => {
+                          // if (
+                          //   search.facilityInspireId !== facility.facilityInspireId &&
+                          //   pathname === child.url
+                          // ) {
+                          //   history.push(item.url);
+                          // }
+                        },
+                        active: (pathname) => {
+                          return (
+                            search.facilityInspireId ===
+                              facility.facilityInspireId &&
+                            search.installationInspireId ===
+                              installation.installationInspireId &&
+                            search.lcpInspireId === lcp &&
+                            pathname.includes(child.url)
+                          );
+                        },
+                        onClick: (pathname) => {
+                          if (
+                            lcp !== search.lcpInspireId ||
+                            installation.installationInspireId !==
+                              search.installationInspireId ||
+                            facility.facilityInspireId !==
+                              search.facilityInspireId
+                          ) {
+                            dispatch(
+                              setQueryParam({
+                                queryParam: {
+                                  facilityInspireId: facility.facilityInspireId,
+                                  installationInspireId:
+                                    installation.installationInspireId,
+                                  lcpInspireId: lcp,
+                                },
+                              }),
+                            );
+                          }
+                          if (pathname !== child.url) {
+                            history.push(child.url);
+                          }
+                        },
+                      })),
+                    ],
+                  })),
+                ],
+              })),
+            ],
+          }))
+        : [],
+    }));
   }
-  return (
-    <div className={cx('tabsblock', data.css_class)}>
-      <div className={`ui container ${mode}`}>
-        {navTabs.length ? (
-          <Tab
-            grid={grid}
-            menu={menu}
-            onTabChange={(event, { activeIndex }) => {
-              const item = navTabs[activeIndex];
-              history.push(item.url === '' ? '/' : item.url);
-              // dispatch(setActiveTab(id, activeIndex, mode, tabsState, pathKey));
-            }}
-            activeIndex={globalActiveTab}
-            panes={navTabs.map((child, index) => {
-              const menuItemClassName = `${position} ${mode} ${
-                _isHidden(navTabs, child, pathname) ? 'hidden' : ''
-              } depth_${child.depth || 0}`;
-              return {
-                render: () => mode === 'view' && renderTab(child),
-                menuItem: (
-                  <Menu.Item
-                    as={NavLink}
-                    to={child.url === '' ? '/' : child.url}
-                    key={`menu-navlink-${index}-${child.title}`}
-                    className={menuItemClassName}
-                    active={child.url === pathname}
-                  >
-                    {child.title}
-                  </Menu.Item>
-                ),
-              };
-            })}
-          />
-        ) : (
-          <>
-            <hr className="block section" />
-            {mode === 'view' ? renderTab({}) : ''}
-          </>
-        )}
-      </div>
+};
+
+const View = ({ content, ...props }) => {
+  const customPresets = {
+    facilities: {
+      get: getFacilities,
+      key: 'facilities',
+    },
+    installations: {
+      get: getInstallations,
+      key: 'installations',
+    },
+    lcps: {
+      get: getLcps,
+      key: 'lcps',
+    },
+  };
+  const history = useHistory();
+  const { data } = props;
+  const [collection, setCollection] = useState([]);
+  const pathname = props.pathname;
+  const preset = customPresets[data.preset?.value] || {};
+  const parent = data.parent?.value;
+  let navigation = [];
+
+  const updateCollcetion = () => {
+    const newCollection =
+      props.discodata_resources.data[preset?.key]?.[
+        props.search.siteInspireId
+      ] || [];
+    if (JSON.stringify(newCollection) !== JSON.stringify(collection)) {
+      setCollection(newCollection);
+    }
+  };
+
+  useEffect(() => {
+    updateCollcetion();
+    /* eslint-disable-next-line */
+  }, [])
+
+  useEffect(() => {
+    if (preset.get && preset.key) {
+      const key = `${preset.key}-${props.search.siteInspireId}`;
+      if (
+        !props.discodata_resources.data[preset.key]?.[
+          props.search.siteInspireId
+        ] &&
+        !props.discodata_resources.pendingRequests[key]
+      ) {
+        preset.get(props.dispatch, props.search.siteInspireId);
+      }
+    }
+    /* eslint-disable-next-line */
+  }, [preset])
+
+  useEffect(() => {
+    updateCollcetion();
+    /* eslint-disable-next-line */
+  }, [props.discodata_resources.data[preset?.key]?.[props.search.siteInspireId]])
+
+  if (props.navigation?.items?.length && parent) {
+    if (preset.key && collection.length) {
+      navigation = flattenArray(
+        makeNewNavigation(
+          props.navigation.items,
+          preset.key,
+          collection,
+          props.search,
+          history,
+          props.dispatch,
+        ),
+      );
+      console.log(navigation);
+    } else if (preset.key && !collection.length) {
+      navigation = flattenArray(props.navigation.items, {}, 0, 0);
+    } else {
+      navigation = flattenArray(props.navigation.items);
+    }
+  }
+
+  useEffect(() => {
+    for (let i = 0; i < navigation.length; i++) {
+      if (navigation[i].redirect) {
+        navigation[i].redirect(pathname);
+        break;
+      }
+    }
+    /* eslint-disable-next-line */
+  }, [navigation])
+
+  return navigation.length ? (
+    <div className="sidebar-block">
+      <Menu
+        className={
+          props.data.className?.value ? props.data.className.value : ''
+        }
+      >
+        {navigation.map((item, index) => {
+          const url = !item.presetItem ? getBasePath(item.url) : '';
+          const name = item.title;
+          const active = pathname.includes(item.url);
+          const hasDescendents = hasDescendentActive(item, pathname);
+          const hasAscendents =
+            hasAscendentActive(navigation, item, pathname) === 1;
+          const isHidden = false;
+          // !active && item.depth > 0
+          //   ? !hasAscendents && !hasDescendents
+          //   : false;
+          return (
+            <Menu.Item
+              className={`depth__${item.depth} ${isHidden ? 'hidden' : ''}`}
+              name={name}
+              key={item.presetItem ? `${name}` : `${index}-${url}`}
+              active={item.active ? item.active(pathname) : active}
+              onClick={() => {
+                item.onClick ? item.onClick(pathname) : history.push(url);
+              }}
+            />
+          );
+        })}
+      </Menu>
     </div>
+  ) : props.mode === 'edit' ? (
+    <p>
+      There are no pages inside of selected page. Make sure you add pages or
+      delete the block
+    </p>
+  ) : (
+    ''
   );
 };
 
 export default compose(
-  connect(
-    (state, props) => ({
-      location: state.router.location,
-      content:
-        state.prefetch?.[state.router.location.pathname] || state.content.data,
-      lang: state.intl.locale,
-      navigation: getNavigationByParent(
-        state.navigation.items,
-        props.data?.parent,
-      ),
-      discodata_resources: state.discodata_resources,
-      discodata_query: state.discodata_query,
-    }),
-    {
-      getDiscodataResource,
-      setQueryParam,
-      deleteQueryParam,
-    },
-  ),
+  connect((state, props) => ({
+    query: state.router.location.search,
+    content:
+      state.prefetch?.[state.router.location.pathname] || state.content.data,
+    pathname: state.router.location.pathname,
+    search: state.discodata_query.search,
+    discodata_resources: state.discodata_resources,
+    navigation: getNavigationByParent(
+      state.navigation.items,
+      props.data?.parent?.value,
+    ),
+  })),
 )(View);

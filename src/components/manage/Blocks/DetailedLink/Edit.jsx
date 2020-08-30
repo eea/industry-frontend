@@ -31,7 +31,9 @@ const Edit = (props) => {
   }, [props.pages])
 
   useEffect(() => {
-    props.dispatch(getPage(pageLink));
+    if (pageLink) {
+      props.dispatch(getPage(pageLink));
+    }
     /* eslint-disable-next-line */
   }, [pageLink])
 

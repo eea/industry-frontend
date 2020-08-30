@@ -2,10 +2,13 @@
     "compilerOptions": {
         "paths": {
             "@eeacms/volto-tabs-block": [
-                "develop/volto-tabsblock/src"
+                "develop/volto-tabs-block/src"
             ],
             "volto-tabsview": [
                 "develop/volto-tabsview/src"
+            ],
+            "volto-grid-block": [
+                "develop/volto-grid-block/src"
             ],
             "volto-datablocks": [
                 "develop/volto-datablocks/src"

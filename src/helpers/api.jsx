@@ -1,0 +1,146 @@
+import { settings } from '~/config';
+import {
+  setDiscodataResource,
+  setDiscodataResourcePending,
+} from 'volto-datablocks/actions';
+import axios from 'axios';
+
+export const parseResponse = (response) => {
+  try {
+    return JSON.parse(response.request.response);
+  } catch {
+    return {};
+  }
+};
+
+export const getFacilities = (dispatch, siteInspireId) => {
+  const sql = encodeURI(`SELECT DISTINCT facilityInspireId
+  FROM [IED].[latest].[Browse6Header] as R
+  WHERE R.[siteInspireId] = '${siteInspireId}'
+  GROUP BY R.[facilityInspireId]`);
+  const url = `${settings.providerUrl}?query=${sql}`;
+  return new Promise((resolve, reject) => {
+    dispatch(
+      setDiscodataResourcePending({ key: `facilities-${siteInspireId}` }),
+    );
+    axios
+      .get(url)
+      .then((response) => {
+        dispatch(
+          setDiscodataResource({
+            collection: parseResponse(response).results,
+            resourceKey: 'facilities',
+            key: siteInspireId,
+          }),
+        );
+        resolve(parseResponse(response).results);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const getInstallations = (dispatch, siteInspireId) => {
+  const sql = encodeURI(`SELECT DISTINCT
+    facilityInspireId,
+    string_agg(concat(installationInspireId, ''), ',') as installations
+  FROM [IED].[latest].[Browse8Header] as Results
+  WHERE siteInspireId LIKE 'UK.CAED/NRW170267.SITE'
+  GROUP BY facilityInspireId`);
+  const url = `${settings.providerUrl}?query=${sql}`;
+  return new Promise((resolve, reject) => {
+    dispatch(
+      setDiscodataResourcePending({ key: `installations-${siteInspireId}` }),
+    );
+    axios
+      .get(url)
+      .then((response) => {
+        dispatch(
+          setDiscodataResource({
+            collection: parseResponse(response).results.map((item) => ({
+              ...item,
+              installations: [...new Set(item.installations.split(','))],
+            })),
+            resourceKey: 'installations',
+            key: siteInspireId,
+          }),
+        );
+        resolve(parseResponse(response).results);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const getLcps = (dispatch, siteInspireId) => {
+  const sql = encodeURI(`SELECT DISTINCT
+    facilityInspireId,
+    installationInspireId,
+    string_agg(concat(lcpInspireId, ''), ',') as lcps
+  FROM [IED].[latest].[vw_Browse10_Header] as Results
+  WHERE siteInspireId LIKE '${siteInspireId}'
+  GROUP BY facilityInspireId, installationInspireId`);
+  const url = `${settings.providerUrl}?query=${sql}`;
+  return new Promise((resolve, reject) => {
+    dispatch(setDiscodataResourcePending({ key: `lcps-${siteInspireId}` }));
+    axios
+      .get(url)
+      .then((response) => {
+        const parsedResponse = parseResponse(response).results;
+        const collection = [];
+        parsedResponse.forEach((item) => {
+          const facilityIndex = collection
+            .map((facility) => facility.facilityInspireId)
+            .indexOf(item.facilityInspireId);
+          if (facilityIndex > -1) {
+            const installationIndex = collection[facilityIndex].installations
+              .map((installation) => installation.installationInspireId)
+              .indexOf(item.installationInspireId);
+            if (installationIndex > -1) {
+              collection[facilityIndex].installations[installationIndex] = {
+                ...collection[facilityIndex].installations[installationIndex],
+                lcps: [
+                  ...collection[facilityIndex].installations[installationIndex]
+                    .lcps,
+                  [...new Set(item.lcps.split(','))],
+                ],
+              };
+            }
+            // else {
+            //   collection[facilityIndex].installations[installationIndex] = {
+            //     ...collection[facilityIndex].installations[installationIndex],
+            //     lcps: [
+            //       ...collection[facilityIndex].installations[installationIndex]
+            //         .lcps,
+            //       [...new Set(item.lcps.split(','))],
+            //     ],
+            //   };
+            // }
+          } else {
+            collection.push({
+              facilityInspireId: item.facilityInspireId,
+              installations: [
+                {
+                  installationInspireId: item.installationInspireId,
+                  lcps: [...new Set(item.lcps.split(','))],
+                },
+              ],
+            });
+          }
+        });
+        dispatch(
+          setDiscodataResource({
+            collection: [...collection],
+            resourceKey: 'lcps',
+            key: siteInspireId,
+          }),
+        );
+        resolve(parseResponse(response).results);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};

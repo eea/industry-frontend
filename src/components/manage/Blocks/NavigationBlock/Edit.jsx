@@ -10,7 +10,7 @@ const getSchema = (props) => {
   return {
     parent: {
       title: 'Parent page',
-      type: 'link',
+      widget: 'object_by_path',
     },
     className: {
       title: 'Classname',
