@@ -1047,6 +1047,7 @@ body.has-sidebar {
   .ui.menu {
     border: none;
     box-shadow: none;
+    background-color: transparent;
     &.red-menu {
       .item {
         color: #D63D27;

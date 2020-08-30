@@ -843,7 +843,7 @@ const OpenlayersMapView = (props) => {
   };
 
   return (
-    <React.Fragment>
+    <div className="openlayer-map-container">
       <div id="map" className="map" />
       <div id="popup" className="popup">
         {state.popup.element && (
@@ -971,7 +971,7 @@ const OpenlayersMapView = (props) => {
       <Dimmer id="map-loader" active={loader}>
         <Loader />
       </Dimmer>
-    </React.Fragment>
+    </div>
   );
 };
 

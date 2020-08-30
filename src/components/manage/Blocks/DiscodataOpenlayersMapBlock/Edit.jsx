@@ -6,7 +6,7 @@ import RenderFields from 'volto-addons/Widgets/RenderFields';
 import View from './View';
 import { settings } from '~/config';
 
-const getSchema = props => {
+const getSchema = (props) => {
   return {
     draggable: {
       type: 'boolean',
@@ -26,7 +26,7 @@ const getSchema = props => {
   };
 };
 
-const Edit = props => {
+const Edit = (props) => {
   const [state, setState] = useState({
     schema: getSchema({ ...props, providerUrl: settings.providerUrl }),
     id: _uniqueId('block_'),
@@ -41,14 +41,14 @@ const Edit = props => {
     /* eslint-disable-next-line */
   }, [props.data.isExpandable])
   return (
-    <div>
+    <>
       <RenderFields
         schema={state.schema}
         {...props}
         title="Discodata openlayers map"
       />
       <View {...props} id={state.id} />
-    </div>
+    </>
   );
 };
 
