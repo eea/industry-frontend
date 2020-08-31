@@ -1,6 +1,6 @@
 {
   "volto-tabs-block": {
-    "url": "https://github.com/eea/volto-tabsblock.git",
+    "url": "https://github.com/eea/volto-tabs-block.git",
     "branch": "master",
     "path": "src",
     "package": "@eeacms/volto-tabs-block"

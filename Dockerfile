@@ -29,7 +29,7 @@ RUN rm -rf node_modules .git package-lock.json
 #RUN node_modules/.bin/mrdeveloper --config=jsconfig.json --no-config --output=addons
 RUN missdev --config=jsconfig.json --output=develop
 
-RUN make activate-all
+# RUN make activate-all
 
 # RUN NPM_CONFIG_REGISTRY=$NPM_CONFIG_REGISTRY npm ci
 # RUN NPM_CONFIG_REGISTRY=$NPM_CONFIG_REGISTRY npm install

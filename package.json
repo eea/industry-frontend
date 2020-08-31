@@ -3,6 +3,12 @@
   "description": "IMS: Volto Frontend",
   "license": "MIT",
   "version": "0.4.1",
+  "private": true,
+  "workspaces": [
+    "src/develop/volto-grid-block",
+    "src/develop/volto-addons",
+    "src/develop/volto-datablocks"
+  ],
   "addons": [
     "volto-slate:asDefault",
     "@eeacms/volto-image-zoom-and-flip",
