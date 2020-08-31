@@ -27,7 +27,7 @@ RUN rm -rf node_modules .git package-lock.json
 # RUN npm install mr-developer
 
 #RUN node_modules/.bin/mrdeveloper --config=jsconfig.json --no-config --output=addons
-RUN missdev
+RUN missdev --config=jsconfig.json --output=develop
 
 RUN make activate-all
 
