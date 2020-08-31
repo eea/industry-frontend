@@ -62,15 +62,16 @@ const View = ({ content, ...props }) => {
   const [sidebar, setSidebar] = useState(false);
   const searchContainerModal = useRef(null);
   const searchContainer = useRef(null);
-  const title = props.data.title?.value;
-  const locationResultsTexts = locationResults.map(result => result.text);
+  const modalButtonTitle = props.data.modalButtonTitle?.value;
+  const searchButtonTitle = props.data.searchButtonTitle?.value;
+  const locationResultsTexts = locationResults.map((result) => result.text);
   const searchResults = [
     ...sitesResults.slice(
       0,
       locationResults.length < 3 ? 6 - locationResults.length : 3,
     ),
     ...locationResults
-      .map(result => result.text)
+      .map((result) => result.text)
       .slice(0, sitesResults.length < 3 ? 6 - sitesResults.length : 3),
   ];
 
@@ -105,14 +106,14 @@ const View = ({ content, ...props }) => {
               type: 'firstElement',
             }
           : null,
-      ].filter(req => req);
+      ].filter((req) => req);
     }
-    reqs.forEach(req => {
+    reqs.forEach((req) => {
       promises.push(axios.get(makeUrl(providerUrl, req.sql)));
     });
 
     Promise.all(promises)
-      .then(response => {
+      .then((response) => {
         const newFactsData = { ...factsData };
         response.forEach((res, index) => {
           const results = JSON.parse(res.request.response).results;
@@ -143,15 +144,15 @@ const View = ({ content, ...props }) => {
           ...newFactsData,
         });
       })
-      .catch(error => {});
+      .catch((error) => {});
   };
 
-  useEffect(function() {
+  useEffect(function () {
     setState({ ...state, mounted: true });
     updateFactsData(true);
     document
       .getElementById(`dynamic-filter`)
-      .addEventListener('featurechange', e => {
+      .addEventListener('featurechange', (e) => {
         if (
           JSON.stringify(e.detail.features?.[0]?.getProperties?.()?.country) !==
           JSON.stringify(alphaFeature?.getProperties?.()?.country)
@@ -194,12 +195,12 @@ const View = ({ content, ...props }) => {
       let metadata = [];
       const siteCountryFilters =
         state.filters.siteCountry &&
-        state.filters.siteCountry.filter(country => country);
+        state.filters.siteCountry.filter((country) => country);
       const regionFilters =
-        state.filters.region && state.filters.region.filter(region => region);
+        state.filters.region && state.filters.region.filter((region) => region);
       const pollutantGroupFilter =
         state.filters.pollutantGroup &&
-        state.filters.pollutantGroup.filter(pollutant => pollutant);
+        state.filters.pollutantGroup.filter((pollutant) => pollutant);
       const onMountRequests = {
         sqls: [
           // INDUSTRIES QUERY
@@ -310,7 +311,7 @@ const View = ({ content, ...props }) => {
             siteCountryFilters.length > 0 &&
             `SELECT DISTINCT NUTS_ID, NUTS_NAME
           FROM [IED].[latest].[refNuts_NoGeo]
-          WHERE CNTR_CODE IN (${siteCountryFilters.map(country => {
+          WHERE CNTR_CODE IN (${siteCountryFilters.map((country) => {
             return "'" + country + "'";
           })}) AND LEVL_CODE = 1
           ORDER BY NUTS_NAME`,
@@ -319,7 +320,7 @@ const View = ({ content, ...props }) => {
             siteCountryFilters.length > 0 &&
             `SELECT DISTINCT thematicIdIdentifier, nameText
             FROM [IED].[latest].[refRBD_NoGeo]
-            WHERE countryCode IN (${siteCountryFilters.map(country => {
+            WHERE countryCode IN (${siteCountryFilters.map((country) => {
               return "'" + country + "'";
             })})
           ORDER BY nameText`,
@@ -330,7 +331,7 @@ const View = ({ content, ...props }) => {
             regionFilters.length &&
             `SELECT DISTINCT NUTS_ID, NUTS_NAME
           FROM [IED].[latest].[refNuts_NoGeo]
-          WHERE CNTR_CODE IN (${siteCountryFilters.map(country => {
+          WHERE CNTR_CODE IN (${siteCountryFilters.map((country) => {
             return "'" + country + "'";
           })}) AND (${regionFilters
               .map((region, index) => {
@@ -440,7 +441,7 @@ const View = ({ content, ...props }) => {
         }
       });
       Promise.all(promises)
-        .then(response => {
+        .then((response) => {
           if (state.mounted) {
             const filtersMeta = {
               ...state.filtersMeta,
@@ -454,12 +455,12 @@ const View = ({ content, ...props }) => {
               nrOfRequests++;
               const results = JSON.parse(res.request.response).results;
               let filteringInputs = [];
-              if (state.filtersMeta[(metadata[index]?.key)]?.filteringInputs) {
+              if (state.filtersMeta[metadata[index]?.key]?.filteringInputs) {
                 filteringInputs = [
                   ...state.filtersMeta[metadata[index].key].filteringInputs,
                 ];
               }
-              filtersMeta[(metadata[index]?.key)] = {
+              filtersMeta[metadata[index]?.key] = {
                 filteringInputs: filteringInputs.length
                   ? filteringInputs
                   : [metadata[index]?.firstInput],
@@ -469,11 +470,11 @@ const View = ({ content, ...props }) => {
                 static: metadata[index]?.static,
                 options: [
                   { key: null, value: null, text: 'No value' },
-                  ...(results.map(item => {
+                  ...(results.map((item) => {
                     return {
-                      key: item[(metadata[index]?.optionKey)],
-                      value: item[(metadata[index]?.optionValue)],
-                      text: item[(metadata[index]?.optionText)],
+                      key: item[metadata[index]?.optionKey],
+                      value: item[metadata[index]?.optionValue],
+                      text: item[metadata[index]?.optionText],
                     };
                   }) || []),
                 ],
@@ -486,7 +487,7 @@ const View = ({ content, ...props }) => {
             });
           }
         })
-        .catch(error => {});
+        .catch((error) => {});
     }
     /* eslint-disable-next-line */
   }, [
@@ -542,15 +543,15 @@ const View = ({ content, ...props }) => {
       });
 
       newFiltersKeys
-        .filter(key => !filtersMetaKeys.includes(key))
-        .forEach(key => {
+        .filter((key) => !filtersMetaKeys.includes(key))
+        .forEach((key) => {
           newFilters[key] = [];
         });
       filtersMetaEntries.forEach(([key, value]) => {
         if (newFilters[value.queryToSet]) {
-          const options = value.options.map(item => item.value);
+          const options = value.options.map((item) => item.value);
           newFilters[value.queryToSet] = newFilters[value.queryToSet].map(
-            item => {
+            (item) => {
               if (options.includes(item)) return item;
               return null;
             },
@@ -603,8 +604,8 @@ const View = ({ content, ...props }) => {
 
   const clearFilters = () => {
     const newFilters = { ...state.filters };
-    Object.keys(newFilters).forEach(filter => {
-      newFilters[filter] = newFilters[filter].map(value => null);
+    Object.keys(newFilters).forEach((filter) => {
+      newFilters[filter] = newFilters[filter].map((value) => null);
     });
     setState({
       ...state,
@@ -637,13 +638,11 @@ const View = ({ content, ...props }) => {
     return setState({ ...state, searchResultsActive });
   }
 
-  const autoComplete = data => {
+  const autoComplete = (data) => {
     let promises = [];
     const sqls = [
       {
-        query: `SELECT DISTINCT site FROM [IED].[latest].[Browse3_4_infotable] WHERE [site] LIKE '${
-          data.value
-        }%' ORDER BY [site]`,
+        query: `SELECT DISTINCT site FROM [IED].[latest].[Browse3_4_infotable] WHERE [site] LIKE '${data.value}%' ORDER BY [site]`,
         reqKey: 'results',
         searchKey: 'site',
         updateState: setSitesResults,
@@ -651,16 +650,14 @@ const View = ({ content, ...props }) => {
     ];
     const reqs = [
       {
-        url: `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?f=json&text=${
-          data.value
-        }&maxSuggestions=6`,
+        url: `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?f=json&text=${data.value}&maxSuggestions=6`,
         reqKey: 'suggestions',
         searchKeys: ['text', 'magicKey'],
         updateState: setLocationResults,
       },
     ];
     if (data.value.length > 1) {
-      sqls.forEach(sql => {
+      sqls.forEach((sql) => {
         promises.push({
           get: axios.get(
             providerUrl + `?query=${encodeURI(sql.query)}&p=1&nrOfHits=6`,
@@ -668,25 +665,25 @@ const View = ({ content, ...props }) => {
           metadata: sql,
         });
       });
-      reqs.forEach(req => {
+      reqs.forEach((req) => {
         promises.push({
           get: axios.get(req.url),
           metadata: req,
         });
       });
-      Promise.all(promises.map(promise => promise.get))
-        .then(response => {
+      Promise.all(promises.map((promise) => promise.get))
+        .then((response) => {
           response.forEach((res, index) => {
             const data = res.request.response
               ? JSON.parse(res.request.response) || {}
               : {};
             promises[index].metadata.updateState(
-              data[promises[index].metadata.reqKey].map(result => {
+              data[promises[index].metadata.reqKey].map((result) => {
                 if (promises[index].metadata.searchKey) {
                   return result[promises[index].metadata.searchKey];
                 } else if (promises[index].metadata.searchKeys) {
                   const obj = {};
-                  promises[index].metadata.searchKeys.forEach(key => {
+                  promises[index].metadata.searchKeys.forEach((key) => {
                     if (result[key]) {
                       obj[key] = result[key];
                     }
@@ -697,10 +694,10 @@ const View = ({ content, ...props }) => {
             );
           });
         })
-        .catch(error => {});
+        .catch((error) => {});
     } else {
-      sqls.forEach(sql => sql.updateState([]));
-      reqs.forEach(req => req.updateState([]));
+      sqls.forEach((sql) => sql.updateState([]));
+      reqs.forEach((req) => req.updateState([]));
     }
     setSearchTerm(data.value);
   };
@@ -729,7 +726,7 @@ const View = ({ content, ...props }) => {
     setState({ ...state, open: false });
   };
 
-  const searchView = ref => (
+  const searchView = (ref) => (
     <div className="search-input-container">
       <div className="ref" ref={ref}>
         <Input
@@ -797,7 +794,7 @@ const View = ({ content, ...props }) => {
           open={state.open}
           trigger={
             <button className="solid red">
-              {title ? title : 'Show modal'}
+              {modalButtonTitle ? modalButtonTitle : 'Show modal'}
             </button>
           }
         >
@@ -817,7 +814,7 @@ const View = ({ content, ...props }) => {
             {searchView(searchContainerModal)}
             {state.filtersMeta &&
               state.filtersMetaOrder &&
-              state.filtersMetaOrder.map(filterKey => {
+              state.filtersMetaOrder.map((filterKey) => {
                 return (
                   <div key={filterKey} className="filter-container">
                     {state.filtersMeta[filterKey]?.title ? (
@@ -831,7 +828,7 @@ const View = ({ content, ...props }) => {
                           if (input.type === 'select') {
                             const options = state.filtersMeta[
                               filterKey
-                            ].options.filter(option => {
+                            ].options.filter((option) => {
                               if (
                                 state.filters[
                                   state.filtersMeta[filterKey].queryToSet
@@ -945,7 +942,7 @@ const View = ({ content, ...props }) => {
           </Modal.Actions>
         </Modal>
         <button className="solid dark-blue" onClick={submit}>
-          SEARCH
+          {searchButtonTitle ? searchButtonTitle : 'Search'}
         </button>
       </div>
       <div id="dynamic-filter-toggle" className="ol-unselectable ol-control">
@@ -1006,7 +1003,7 @@ const View = ({ content, ...props }) => {
           </button>
           <Header as="h3">Quick facts</Header>
           {state.factsDataOrder &&
-            state.factsDataOrder.map(key => {
+            state.factsDataOrder.map((key) => {
               return factsData[key] ? (
                 <React.Fragment key={key}>
                   {factsData[key]?.title && (

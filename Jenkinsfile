@@ -1,7 +1,9 @@
 pipeline {
   environment {
-    registry = "eeacms/ims-frontend"
-    template = "templates/volto-ims"
+    registry = "eeacms/eprtr-frontend"
+    template = "templates/volto-eprtr"
+    RANCHER_STACKID = "1st1851"
+    RANCHER_ENVID = "1a332957"
     dockerImage = ''
     tagName = ''
   }

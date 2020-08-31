@@ -6,16 +6,20 @@ import RenderFields from 'volto-addons/Widgets/RenderFields';
 import View from './View';
 import { settings } from '~/config';
 
-const getSchema = props => {
+const getSchema = (props) => {
   return {
-    title: {
+    modalButtonTitle: {
       type: 'text',
-      title: 'Title',
+      title: 'Modal button title',
+    },
+    searchButtonTitle: {
+      type: 'text',
+      title: 'Search button title',
     },
   };
 };
 
-const Edit = props => {
+const Edit = (props) => {
   const [state, setState] = useState({
     schema: getSchema({ ...props }),
     id: _uniqueId('block_'),

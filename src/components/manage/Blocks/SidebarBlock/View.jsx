@@ -226,7 +226,9 @@ const makeNewNavigation = (
                     },
                     onClick: (pathname) => {
                       if (
-                        facility.facilityInspireId !== search.facilityInspireId
+                        facility.facilityInspireId !==
+                          search.facilityInspireId ||
+                        installation !== search.installationInspireId
                       ) {
                         dispatch(
                           setQueryParam({
