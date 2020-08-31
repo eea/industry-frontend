@@ -7,7 +7,7 @@ RUN apt-get update -y \
  && apt-get install -y git bsdmainutils vim-nox mc \
  && rm -rf /var/lib/apt/lists/*
 
-RUN npm i -g mrs-developer
+RUN yarn global add mrs-developer
 
 WORKDIR /opt/frontend/
 
@@ -24,7 +24,7 @@ USER node
 RUN echo "prefix = \"/home/node\"\n" > /home/node/.npmrc
 RUN rm -rf node_modules .git package-lock.json
 
-RUN npm install mr-developer
+# RUN npm install mr-developer
 
 #RUN node_modules/.bin/mrdeveloper --config=jsconfig.json --no-config --output=addons
 RUN missdev --config=jsconfig.json --output=develop
