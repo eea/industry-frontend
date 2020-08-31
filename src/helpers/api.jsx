@@ -46,7 +46,7 @@ export const getInstallations = (dispatch, siteInspireId) => {
     facilityInspireId,
     string_agg(concat(installationInspireId, ''), ',') as installations
   FROM [IED].[latest].[Browse8Header] as Results
-  WHERE siteInspireId LIKE 'UK.CAED/NRW170267.SITE'
+  WHERE siteInspireId = '${siteInspireId}'
   GROUP BY facilityInspireId`);
   const url = `${settings.providerUrl}?query=${sql}`;
   return new Promise((resolve, reject) => {
@@ -80,7 +80,7 @@ export const getLcps = (dispatch, siteInspireId) => {
     installationInspireId,
     string_agg(concat(lcpInspireId, ''), ',') as lcps
   FROM [IED].[latest].[vw_Browse10_Header] as Results
-  WHERE siteInspireId LIKE '${siteInspireId}'
+  WHERE siteInspireId = '${siteInspireId}'
   GROUP BY facilityInspireId, installationInspireId`);
   const url = `${settings.providerUrl}?query=${sql}`;
   return new Promise((resolve, reject) => {

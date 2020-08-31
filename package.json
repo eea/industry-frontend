@@ -10,9 +10,9 @@
     "@eeacms/volto-slate-metadata-mentions",
     "@eeacms/volto-metadata-block",
     "@eeacms/volto-tabs-block",
+    "@eeacms/volto-grid-block",
     "volto-addons",
-    "volto-datablocks",
-    "volto-grid-block"
+    "volto-datablocks"
   ],
   "scripts": {
     "start": "razzle start",

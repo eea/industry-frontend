@@ -7,7 +7,7 @@
             "volto-tabsview": [
                 "develop/volto-tabsview/src"
             ],
-            "volto-grid-block": [
+            "@eeacms/volto-grid-block": [
                 "develop/volto-grid-block/src"
             ],
             "volto-datablocks": [

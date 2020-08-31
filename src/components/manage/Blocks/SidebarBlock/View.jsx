@@ -201,7 +201,7 @@ const makeNewNavigation = (
                 },
                 active: (pathname) => {
                   return (
-                    search.facilityInspireId === facility.facilityInspireId &&
+                    search.installationInspireId === installation &&
                     pathname.includes(item.url)
                   );
                 },
@@ -220,6 +220,7 @@ const makeNewNavigation = (
                       return (
                         search.facilityInspireId ===
                           facility.facilityInspireId &&
+                        search.installationInspireId === installation &&
                         pathname.includes(child.url)
                       );
                     },
@@ -231,6 +232,7 @@ const makeNewNavigation = (
                           setQueryParam({
                             queryParam: {
                               facilityInspireId: facility.facilityInspireId,
+                              installationInspireId: installation,
                             },
                           }),
                         );

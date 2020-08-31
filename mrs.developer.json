@@ -13,7 +13,8 @@
   "volto-grid-block": {
     "url": "https://github.com/eea/volto-grid-block.git",
     "branch": "master",
-    "path": "src"
+    "path": "src",
+    "package": "@eeacms/volto-grid-block"
   },
   "volto-datablocks": {
     "url": "https://github.com/eea/volto-datablocks.git",
@@ -22,7 +23,7 @@
   },
   "volto-addons": {
     "url": "https://github.com/eea/volto-addons.git",
-    "branch": "master",
+    "branch": "volto_7",
     "path": "src"
   },
   "volto-embed": {
