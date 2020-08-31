@@ -18,10 +18,10 @@ const View = (props) => {
   return (
     (childrenLinks && childrenLinks.length && (
       <div className="children-links-container">
-        <Grid columns={columns || 1}>
-          <Grid.Row>
+        <div className="grid-layout">
+          <div className="row">
             {childrenLinks.map((child) => (
-              <Grid.Column>
+              <div className="column text-align-center">
                 <div className="children-link-container">
                   <Link
                     target="_blank"
@@ -31,10 +31,10 @@ const View = (props) => {
                     {child.title}
                   </Link>
                 </div>
-              </Grid.Column>
+              </div>
             ))}
-          </Grid.Row>
-        </Grid>
+          </div>
+        </div>
       </div>
     )) || (
       <p className="children-links-placeholder">Select a page from sidebar</p>

@@ -28,6 +28,12 @@ import NavigationBlockView from '~/components/manage/Blocks/NavigationBlock/View
 import SidebarBlockEdit from '~/components/manage/Blocks/SidebarBlock/Edit';
 import SidebarBlockView from '~/components/manage/Blocks/SidebarBlock/View';
 
+import QueryParamTextEdit from '~/components/manage/Blocks/QueryParamText/Edit';
+import QueryParamTextView from '~/components/manage/Blocks/QueryParamText/View';
+
+import QueryParamButtonEdit from '~/components/manage/Blocks/QueryParamButton/Edit';
+import QueryParamButtonView from '~/components/manage/Blocks/QueryParamButton/View';
+
 import BlocksWidget from '~/components/manage/Widgets/BlocksWidget';
 
 import { addCustomGroup } from '~/helpers';
@@ -122,6 +128,24 @@ export function applyConfig(voltoConfig) {
     group: 'eprtr_blocks',
     view: EprtrFiltersBlockView,
     edit: EprtrFiltersBlockEdit,
+    icon: packSVG,
+  };
+
+  config.blocks.blocksConfig.eprtr_query_param_text = {
+    id: 'eprtr_query_param_text',
+    title: 'Eprtr query param text',
+    group: 'eprtr_blocks',
+    view: QueryParamTextView,
+    edit: QueryParamTextEdit,
+    icon: packSVG,
+  };
+
+  config.blocks.blocksConfig.eprtr_query_param_button = {
+    id: 'eprtr_query_param_button',
+    title: 'Eprtr query param button',
+    group: 'eprtr_blocks',
+    view: QueryParamButtonView,
+    edit: QueryParamButtonEdit,
     icon: packSVG,
   };
 

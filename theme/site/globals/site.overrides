@@ -950,6 +950,7 @@ space-around {
   }
 }
 
+a.solid,
 button.solid,
 .ui.form .searchbox.field button.solid {
   border-color: #000;

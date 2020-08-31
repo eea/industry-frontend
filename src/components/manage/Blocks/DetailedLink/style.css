@@ -18,7 +18,7 @@
   margin-bottom: 1em;
 }
 
-.detailed-link-container .detailed-link-button {
+.detailed-link-container .detailed-link-button:not(.solid) {
   display: inline-block;
   border: 1px solid #32536B;
   color: #32536B;
