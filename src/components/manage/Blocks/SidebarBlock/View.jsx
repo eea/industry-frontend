@@ -247,7 +247,6 @@ const makeNewNavigation = (
         : [],
     }));
   } else if (preset === 'lcps') {
-    console.log(collection);
     return items.map((item) => ({
       ...item,
       onClick: () => {
@@ -482,7 +481,6 @@ const View = ({ content, ...props }) => {
           props.dispatch,
         ),
       );
-      console.log(navigation);
     } else if (preset.key && !collection.length) {
       navigation = flattenArray(props.navigation.items, {}, 0, 0);
     } else {
