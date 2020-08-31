@@ -7,7 +7,7 @@ RUN apt-get update -y \
  && apt-get install -y git bsdmainutils vim-nox mc \
  && rm -rf /var/lib/apt/lists/*
 
-RUN npm i -g mrs-developer
+# RUN npm i -g mrs-developer
 
 WORKDIR /opt/frontend/
 
@@ -15,7 +15,7 @@ COPY docker-image.txt /
 COPY . .
 # RUN chmod +x optimize_node_modules.sh
 
-RUN mkdir -p /opt/frontend/src/develop
+# RUN mkdir -p /opt/frontend/src/develop
 
 RUN chown -R node /opt/frontend
 
@@ -27,9 +27,9 @@ RUN rm -rf node_modules .git package-lock.json
 # RUN npm install mr-developer
 
 #RUN node_modules/.bin/mrdeveloper --config=jsconfig.json --no-config --output=addons
-RUN missdev --config=jsconfig.json --output=develop
+# RUN missdev --config=jsconfig.json --output=develop
 
-RUN make activate-all
+# RUN make activate-all
 
 # RUN NPM_CONFIG_REGISTRY=$NPM_CONFIG_REGISTRY npm ci
 RUN NPM_CONFIG_REGISTRY=$NPM_CONFIG_REGISTRY npm install
