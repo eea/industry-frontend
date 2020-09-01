@@ -989,6 +989,10 @@ button.solid,
   }
 }
 
+a.solid {
+  margin: 0;
+}
+
 button.outline,
 .ui.form .searchbox.field button.outline {
   background-color: transparent;
@@ -1057,6 +1061,7 @@ body.has-sidebar {
           background-color: transparent !important;
           padding: 0 2em !important;
           border-radius: 2em;
+          border-bottom: none !important;
           &:before {
             width: 0;
             background-color: transparent !important;
@@ -1068,6 +1073,7 @@ body.has-sidebar {
           padding: 0 2em !important;
           border-radius: 2em;
           background-color: #D63D27 !important;
+          border-bottom: none !important;
           &:hover {
             background: #D63D27 !important;
             color: #fff !important;

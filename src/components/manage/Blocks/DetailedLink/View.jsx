@@ -2,6 +2,7 @@ import React from 'react';
 import { injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { settings } from '~/config';
+import cx from 'classnames';
 import './style.css';
 
 const getPath = (url) => {
@@ -27,36 +28,45 @@ const View = (props) => {
   } = props.data;
   return (
     <div
-      className={`detailed-link-container text-align-${textAlign || 'left'}`}
+      className={cx(
+        'detailed-link-container display-flex flex-column',
+        `text-align-${textAlign || 'left'}`,
+      )}
     >
       {(detailedLink && (
-        <div>
+        <>
           {!hideTitle ? (
-            <div className={`detailed-link-title ${titleClassname || ''}`}>
+            <div className={cx('detailed-link-title', titleClassname || '')}>
               {title || detailedLink.title || ''}
             </div>
           ) : (
             ''
           )}
-          {!hideDescription ? (
+          {!hideDescription && (description || detailedLink.description) ? (
             <p
-              className={`detailed-link-description ${
-                descriptionClassname || ''
-              }`}
+              className={cx(
+                'detailed-link-description',
+                descriptionClassname || '',
+              )}
             >
               {description || detailedLink.description || ''}
             </p>
           ) : (
             ''
           )}
-          <Link
-            className={`detailed-link-button ${buttonClassname || ''}`}
-            onClick={(e) => e.preventDefault}
-            to={getPath(detailedLink.path)}
-          >
-            {buttonTitle || detailedLink.title || 'Go'}
-          </Link>
-        </div>
+          <div>
+            <Link
+              className={cx(
+                'detailed-link-button display-inline-block',
+                buttonClassname || '',
+              )}
+              onClick={(e) => e.preventDefault}
+              to={getPath(detailedLink.path)}
+            >
+              {buttonTitle || detailedLink.title || 'Go'}
+            </Link>
+          </div>
+        </>
       )) || (
         <p className="detailed-link-placeholder">Select a page from sidebar</p>
       )}

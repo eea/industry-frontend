@@ -11,7 +11,7 @@ const RedirectView = (props) => {
   const [redirect, setRedirect] = useState(false);
   const [mounted, setMounted] = useState(false);
   const currentPage = props.content['@id'];
-  const redirectPage = props.content.relatedItems[0]?.['@id'];
+  const redirectPage = props.content.relatedItems?.[0]?.['@id'];
   useEffect(() => {
     setMounted(true);
     /* eslint-disable-next-line */

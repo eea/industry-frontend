@@ -26,6 +26,7 @@ export const getFacilities = (dispatch, siteInspireId) => {
     axios
       .get(url)
       .then((response) => {
+        const parsedResponse = parseResponse(response)?.results || [];
         dispatch(
           setDiscodataResource({
             collection: parseResponse(response).results,
@@ -33,7 +34,7 @@ export const getFacilities = (dispatch, siteInspireId) => {
             key: siteInspireId,
           }),
         );
-        resolve(parseResponse(response).results);
+        resolve(parsedResponse);
       })
       .catch((error) => {
         reject(error);
@@ -56,9 +57,10 @@ export const getInstallations = (dispatch, siteInspireId) => {
     axios
       .get(url)
       .then((response) => {
+        const parsedResponse = parseResponse(response)?.results || [];
         dispatch(
           setDiscodataResource({
-            collection: parseResponse(response).results.map((item) => ({
+            collection: parsedResponse.map((item) => ({
               ...item,
               installations: [...new Set(item.installations.split(','))],
             })),
@@ -66,7 +68,7 @@ export const getInstallations = (dispatch, siteInspireId) => {
             key: siteInspireId,
           }),
         );
-        resolve(parseResponse(response).results);
+        resolve(parsedResponse);
       })
       .catch((error) => {
         reject(error);
@@ -88,7 +90,7 @@ export const getLcps = (dispatch, siteInspireId) => {
     axios
       .get(url)
       .then((response) => {
-        const parsedResponse = parseResponse(response).results;
+        const parsedResponse = parseResponse(response)?.results || [];
         const collection = [];
         parsedResponse.forEach((item) => {
           const facilityIndex = collection
@@ -137,7 +139,7 @@ export const getLcps = (dispatch, siteInspireId) => {
             key: siteInspireId,
           }),
         );
-        resolve(parseResponse(response).results);
+        resolve(parsedResponse);
       })
       .catch((error) => {
         reject(error);

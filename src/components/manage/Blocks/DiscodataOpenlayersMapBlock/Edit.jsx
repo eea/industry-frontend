@@ -23,6 +23,47 @@ const getSchema = (props) => {
       title: 'Has sidebar',
       defaultValue: false,
     },
+    filterSource: {
+      type: 'array',
+      title: 'Filter source',
+      choices: [
+        ['eprtr_filters', 'EPRTR filters'],
+        ['query_params', 'Query params'],
+      ],
+    },
+    query: {
+      title: 'Query parameters',
+      type: 'schema',
+      fieldSetTitle: 'Query metadata',
+      fieldSetId: 'query-metadata',
+      fieldSetSchema: {
+        fieldsets: [
+          {
+            id: 'default',
+            title: 'title',
+            fields: ['title', 'id', 'param'],
+          },
+        ],
+        properties: {
+          title: {
+            type: 'string',
+            title: 'Query title',
+          },
+          id: {
+            type: 'string',
+            title: 'Query id',
+            description: 'This will be used as query parameter key',
+          },
+          param: {
+            type: 'string',
+            title: 'Query to use',
+          },
+        },
+        required: ['id', 'title', 'param'],
+      },
+      editFieldset: false,
+      deleteFieldset: false,
+    },
   };
 };
 

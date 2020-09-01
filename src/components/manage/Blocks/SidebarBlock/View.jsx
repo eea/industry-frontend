@@ -71,8 +71,14 @@ const makeNewNavigation = (
   history,
   dispatch,
 ) => {
+  if (
+    ['facilities', 'installations', 'lcps'].includes(preset) &&
+    !collection.length
+  ) {
+    return [];
+  }
   if (preset === 'facilities') {
-    return items.map((item) => ({
+    return items?.map((item) => ({
       ...item,
       onClick: () => {
         dispatch(deleteQueryParam({ queryParam: ['facilityInspireId'] }));
@@ -104,7 +110,7 @@ const makeNewNavigation = (
               );
             },
             items: [
-              ...item.items.map((child) => ({
+              ...item.items?.map((child) => ({
                 ...child,
                 redirect: (pathname) => {
                   // if (
@@ -140,7 +146,7 @@ const makeNewNavigation = (
         : [],
     }));
   } else if (preset === 'installations') {
-    return items.map((item) => ({
+    return items?.map((item) => ({
       ...item,
       onClick: () => {
         dispatch(
@@ -177,7 +183,7 @@ const makeNewNavigation = (
               );
             },
             items: [
-              ...facility.installations.map((installation) => ({
+              ...(facility.installations?.map((installation) => ({
                 title: installation,
                 url: installation,
                 presetItem: true,
@@ -245,13 +251,13 @@ const makeNewNavigation = (
                     },
                   })),
                 ],
-              })),
+              })) || []),
             ],
           }))
         : [],
     }));
   } else if (preset === 'lcps') {
-    return items.map((item) => ({
+    return items?.map((item) => ({
       ...item,
       onClick: () => {
         dispatch(
@@ -266,7 +272,7 @@ const makeNewNavigation = (
         history.push(item.url);
       },
       items: item.items
-        ? collection.map((facility) => ({
+        ? collection?.map((facility) => ({
             title: facility.facilityInspireId,
             url: facility.facilityInspireId,
             presetItem: true,
@@ -294,7 +300,7 @@ const makeNewNavigation = (
               );
             },
             items: [
-              ...facility.installations.map((installation) => ({
+              ...(facility.installations?.map((installation) => ({
                 title: installation.installationInspireId,
                 url: installation.installationInspireId,
                 presetItem: true,
@@ -327,7 +333,7 @@ const makeNewNavigation = (
                   );
                 },
                 items: [
-                  ...installation.lcps.map((lcp) => ({
+                  ...(installation.lcps?.map((lcp) => ({
                     title: lcp,
                     url: lcp,
                     presetItem: true,
@@ -405,9 +411,9 @@ const makeNewNavigation = (
                         },
                       })),
                     ],
-                  })),
+                  })) || []),
                 ],
-              })),
+              })) || []),
             ],
           }))
         : [],
@@ -501,7 +507,6 @@ const View = ({ content, ...props }) => {
     }
     /* eslint-disable-next-line */
   }, [navigation])
-
   return navigation.length ? (
     <div className="sidebar-block">
       <Menu

@@ -17,19 +17,9 @@ import { setQueryParam } from 'volto-datablocks/actions';
 import { Grid, Header, Loader, Dimmer } from 'semantic-ui-react';
 // SVGs
 import clearSVG from '@plone/volto/icons/clear.svg';
-// import pinSVG from '~/icons/pin.svg';
-// import bluePinSVG from '~/icons/blue_pin.svg';
 // STYLES
 import 'ol/ol.css';
 import './style.css';
-
-const getHtmlAttributes = (obj) => {
-  return Object.entries(obj)
-    .map(([key, value]) => {
-      return `${key}="${value}"`;
-    })
-    .join(' ');
-};
 
 const splitBy = (arr, delimiter) => {
   if (Array.isArray(arr)) {
@@ -42,16 +32,6 @@ const splitBy = (arr, delimiter) => {
   }
   return '';
 };
-
-// const encodedPinSVG = encodeURIComponent(
-//   `<svg ${getHtmlAttributes(pinSVG.attributes)}>${pinSVG.content}</svg>`,
-// );
-
-// const encodedBluePinSVG = encodeURIComponent(
-//   `<svg ${getHtmlAttributes(bluePinSVG.attributes)}>${
-//     bluePinSVG.content
-//   }</svg>`,
-// );
 
 let Map,
   View,
@@ -82,6 +62,7 @@ const initialExtent = [
   6199975.99999531,
   10421410.9999871,
 ];
+let renderExtent = [];
 const OpenlayersMapView = (props) => {
   const stateRef = useRef({
     map: {
@@ -115,10 +96,23 @@ const OpenlayersMapView = (props) => {
   const draggable = !!props.data?.draggable?.value;
   const hasPopups = !!props.data?.hasPopups?.value;
   const hasSidebar = !!props.data?.hasSidebar?.value;
+  const filterSource = props.data?.filterSource?.value || 'query_params';
   const zoomSwitch = 6;
   const currentMapZoom = state.map?.element
     ? state.map.element.getView().getZoom()
     : null;
+  let queryParams;
+  if (filterSource === 'query_params') {
+    try {
+      queryParams = JSON.parse(props.data?.query?.value)?.properties;
+      Object.entries(queryParams).forEach(([key, value]) => {
+        queryParams[key].sql = `(${value.param} = ':options')`;
+        queryParams[key].type = 'string';
+      });
+    } catch {
+      queryParams = {};
+    }
+  }
 
   if (mapRendered && !firstFilteringUpdate) {
     updateFilters();
@@ -220,7 +214,6 @@ const OpenlayersMapView = (props) => {
           updateMapPosition: null,
         });
       } else {
-        console.log('UPDATE FILTERS', state.map.sitesSourceQuery);
         state.map.sitesSourceLayer &&
           state.map.sitesSourceLayer.getSource().refresh();
       }
@@ -231,11 +224,11 @@ const OpenlayersMapView = (props) => {
   function updateFilters() {
     const sitesSourceQuery = { ...state.map.sitesSourceQuery };
     const locationTerm = props.discodata_query.search.locationTerm || null;
-    if (hasSidebar) {
+    if (hasSidebar && filterSource === 'eprtr_filters') {
       sitesSourceQuery.whereStatements = {
         ...sitesSourceQuery.whereStatements,
         siteTerm: {
-          sql: `(sitename LIKE ':options%')`,
+          sql: `(siteName LIKE ':options%')`,
           type: 'string',
         },
         //?  Industries
@@ -279,19 +272,10 @@ const OpenlayersMapView = (props) => {
         //! Permit type
         //! Permit year
       };
-    } else {
+    } else if (filterSource === 'query_params') {
       sitesSourceQuery.whereStatements = {
         ...sitesSourceQuery.whereStatements,
-        // Country
-        siteCountry: {
-          sql: `(country = ':options')`,
-          type: 'string',
-        },
-        // Site inspire id
-        siteId: {
-          sql: `(id = ':options')`,
-          type: 'string',
-        },
+        ...queryParams,
       };
     }
 
@@ -319,7 +303,7 @@ const OpenlayersMapView = (props) => {
       let updateMapPosition = null;
       if (
         sitesSourceQuery.whereStatements.siteTerm?.sql ||
-        sitesSourceQuery.whereStatements.siteId?.sql
+        sitesSourceQuery.whereStatements.siteName?.sql
       ) {
         updateMapPosition = 'bySiteTerm';
       } else if (locationTerm?.text) {
@@ -850,7 +834,7 @@ const OpenlayersMapView = (props) => {
           <>
             <div className="popover-header">
               {currentMapZoom && currentMapZoom > zoomSwitch ? (
-                <Header as="h3">{state.popup.properties.sitename}</Header>
+                <Header as="h3">{state.popup.properties.siteName}</Header>
               ) : (
                 <Header as="h3">{`${state.popup.properties.NUTS_NAME}, ${state.popup.properties.CNTR_CODE}, ${state.popup.properties.COUNTRY}`}</Header>
               )}
@@ -888,8 +872,8 @@ const OpenlayersMapView = (props) => {
           <>
             <div className="popover-header">
               <Header as="h2">
-                {state.popupDetails.properties.sitename
-                  ? state.popupDetails.properties.sitename
+                {state.popupDetails.properties.siteName
+                  ? state.popupDetails.properties.siteName
                   : ''}
               </Header>
               <VoltoIcon
@@ -901,58 +885,79 @@ const OpenlayersMapView = (props) => {
               />
             </div>
             <div className="popover-body">
-              <Grid.Column stretched>
+              <div className="grid-layout">
                 {/* SITE CONTENTS */}
-                <Grid.Row>
-                  <Header as="h3">Site contents</Header>
-                  <p>
-                    <Link
-                      onClick={setSiteQueryParams}
-                      to={'/industrial-sites/introduction'}
-                    >
-                      {state.popupDetails.properties.n_fac || 0} Facilities
-                    </Link>
-                  </p>
-                  <p>
-                    <Link
-                      onClick={setSiteQueryParams}
-                      to={'/industrial-sites/introduction'}
-                    >
-                      {state.popupDetails.properties.n_lcp || 0} Large comustion
-                      plants
-                    </Link>
-                  </p>
-                  <p>
-                    <Link
-                      onClick={setSiteQueryParams}
-                      to={'/industrial-sites/introduction'}
-                    >
-                      {state.popupDetails.properties.n_inst || 0} Installations
-                    </Link>
-                  </p>
-                </Grid.Row>
-                {/* SITE POLLUTANT EMISSIONS */}
-                <Grid.Row>
-                  <Header as="h3">Pollutant emissions</Header>
-                  {state.popupDetails.properties.pollutants ? (
-                    <p>{state.popupDetails.properties.pollutants}</p>
-                  ) : (
-                    <p>There are no data regarding the pollutants</p>
-                  )}
-                </Grid.Row>
-                {/* REGULATORY INFORMATION */}
-                <Grid.Row>
-                  <Header as="h3">Regulatory information</Header>
-                  {state.popupDetails.properties.rep_yr ? (
+                <div className="row mb-1-super mt-0-super">
+                  <div className="column column-12">
+                    <Header Header as="h3">
+                      Site contents
+                    </Header>
+                  </div>
+                  <div className="column  column-12">
                     <p>
-                      Inspections in {state.popupDetails.properties.rep_yr}:{' '}
-                      {state.popupDetails.properties.n_inspect || 0}
+                      <Link
+                        onClick={setSiteQueryParams}
+                        to={'/industrial-sites/introduction'}
+                      >
+                        {state.popupDetails.properties.nFacilities || 0}{' '}
+                        Facilities
+                      </Link>
                     </p>
-                  ) : (
-                    ''
-                  )}
-                </Grid.Row>
-              </Grid.Column>
+                  </div>
+                  <div className="column  column-12">
+                    <p>
+                      <Link
+                        onClick={setSiteQueryParams}
+                        to={'/industrial-sites/introduction'}
+                      >
+                        {state.popupDetails.properties.nLCP || 0} Large
+                        comustion plants
+                      </Link>
+                    </p>
+                  </div>
+                  <div className="column  column-12">
+                    <p>
+                      <Link
+                        onClick={setSiteQueryParams}
+                        to={'/industrial-sites/introduction'}
+                      >
+                        {state.popupDetails.properties.nInstallations || 0}{' '}
+                        Installations
+                      </Link>
+                    </p>
+                  </div>
+                </div>
+                {/* SITE POLLUTANT EMISSIONS */}
+                <div className="row mb-1-super mt-0-super">
+                  <div className="column  column-12">
+                    <Header as="h3">Pollutant emissions</Header>
+                  </div>
+                  <div className="column  column-12">
+                    {state.popupDetails.properties.pollutants ? (
+                      <p>{state.popupDetails.properties.pollutants}</p>
+                    ) : (
+                      <p>There are no data regarding the pollutants</p>
+                    )}
+                  </div>
+                </div>
+                {/* REGULATORY INFORMATION */}
+                <div className="row mb-1-super mt-0-super">
+                  <div className="column  column-12">
+                    <Header as="h3">Regulatory information</Header>
+                  </div>
+                  <div className="column  column-12">
+                    {state.popupDetails.properties.Site_reporting_year ? (
+                      <p>
+                        Inspections in{' '}
+                        {state.popupDetails.properties.Site_reporting_year}:{' '}
+                        {state.popupDetails.properties.numInspections || 0}
+                      </p>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="popover-actions">
               <button
