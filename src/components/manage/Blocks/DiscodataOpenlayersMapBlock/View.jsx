@@ -184,7 +184,7 @@ const OpenlayersMapView = (props) => {
   }, [
     JSON.stringify(props.discodata_query.search.siteTerm),
     JSON.stringify(props.discodata_query.search.locationTerm),
-    JSON.stringify(props.discodata_query.search.EEASector),
+    JSON.stringify(props.discodata_query.search.EEASubSector),
     JSON.stringify(props.discodata_query.search.siteCountry),
     JSON.stringify(props.discodata_query.search.region),
     JSON.stringify(props.discodata_query.search.riverBasin),
@@ -230,26 +230,30 @@ const OpenlayersMapView = (props) => {
           sql: `(siteName LIKE ':options%')`,
           type: 'string',
         },
-        //?  Industries
-        EEASector: {
-          sql: `(EEASector IN (:options))`,
+        //  Industries
+        EEASubSector: {
+          sql: `(eea_activities IN (:options))`,
         },
-        // Country
-        siteCountry: {
-          sql: `(country IN (:options))`,
+        nuts_regions: {
+          sql: `(nuts_regions LIKE '%:options%')`,
+          type: 'multiple',
         },
-        //? Regions
-        region: {
-          sql: `(region IN (:options))`,
-        },
-        //? River Basin
-        riverBasin: {
-          sql: `(riverBasinDistrict IN (:options))`,
-        },
-        //? Town/Village
-        townVillage: {
-          sql: `(townVillage IN (:options))`,
-        },
+        // // Country
+        // siteCountry: {
+        //   sql: `(countryCode IN (:options))`,
+        // },
+        // //? Regions
+        // region: {
+        //   sql: `(region IN (:options))`,
+        // },
+        // //? River Basin
+        // riverBasin: {
+        //   sql: `(riverBasinDistrict IN (:options))`,
+        // },
+        // //? Town/Village
+        // townVillage: {
+        //   sql: `(townVillage IN (:options))`,
+        // },
         // Pollutant groups
         // pollutantGroup: {
         //   sql: `(pollutantGroup IN (:options))`,
@@ -260,7 +264,7 @@ const OpenlayersMapView = (props) => {
         },
         // Reporting year
         reportingYear: {
-          sql: `(rep_yr IN (:options))`,
+          sql: `(Site_reporting_year IN (:options))`,
         },
         //! Installation specifics
         //? BAT conclusion
@@ -282,12 +286,27 @@ const OpenlayersMapView = (props) => {
       let options;
       if (where.type === 'string') {
         options = props.discodata_query.search[id];
+      } else if (where.type === 'multiple') {
+        options = props.discodata_query.search[id];
       } else if (!props.discodata_query.search[id]) {
         options = null;
       } else {
         options = splitBy(props.discodata_query.search[id], ',');
       }
-      where.sql = options ? where.sql.replace(':options', options) : null;
+      if (where.type === 'multiple') {
+        const conditions = [];
+        if (options?.length) {
+          options.forEach((option) => {
+            let baseSql = where.sql;
+            option && conditions.push(baseSql.replace(':options', option));
+          });
+          where.sql = conditions.join(' AND ');
+        } else {
+          where.sql = null;
+        }
+      } else {
+        where.sql = options ? where.sql.replace(':options', options) : null;
+      }
       if (!where.sql) delete sitesSourceQuery.whereStatements[id];
     });
 
@@ -720,12 +739,12 @@ const OpenlayersMapView = (props) => {
           layers: [worldLightGrayBase, worldHillshade],
         }),
       );
-      //  Append popups to the map
-      popup && map.addOverlay(popup);
       popupDetails && map.addOverlay(popupDetails);
       //  Append dynamic filters to the map
       dynamicFilters && map.addOverlay(dynamicFilters);
       dynamicFilters && dynamicFilters.setPosition([0, 0]);
+      //  Append popups to the map
+      popup && map.addOverlay(popup);
       //  Append source layers to the map
       map.addLayer(
         new Group({

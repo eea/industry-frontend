@@ -2,10 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
-/* ROOT IMPORTS */
-import DiscodataView from './DiscodataView';
-/* LOCAL IMPORTS */
 import { getBasePath } from '~/helpers';
+import { Dimmer, Loader } from 'semantic-ui-react';
 const RedirectView = (props) => {
   const history = useHistory();
   const [redirect, setRedirect] = useState(false);
@@ -27,9 +25,9 @@ const RedirectView = (props) => {
     }
   }
   return (
-    <div id="discodata-mosaic-view">
-      <h1>Redirecting...</h1>
-    </div>
+    <Dimmer active inverted>
+      <Loader inverted>European Environment Agency</Loader>
+    </Dimmer>
   );
 };
 

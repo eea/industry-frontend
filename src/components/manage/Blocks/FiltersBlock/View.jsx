@@ -103,7 +103,7 @@ const View = ({ content, ...props }) => {
           ? {
               factId: 'Country_quick_facts',
               sql: `SELECT DISTINCT MP.siteCountry, MP.siteCountryName, MM.siteCount
-              FROM [IED].[latest].[vw_Browse2_MapPOPUP] as MP
+              FROM [IED].[latest].[Browse2_MapPOPUP] as MP
               LEFT JOIN [IED].[latest].[vw_MainMap_totalSitesPerCountry] as MM
               ON MP.siteCountry = MM.countryCode
               WHERE siteCountry = '${alphaFeature.getProperties().country}'`,
@@ -211,38 +211,38 @@ const View = ({ content, ...props }) => {
       const onMountRequests = {
         sqls: [
           // INDUSTRIES QUERY
-          `SELECT DISTINCT EEASector
+          `SELECT DISTINCT EEASubSector
         FROM [IED].[latest].[EPRTR_sectors]
-        ORDER BY EEASector`,
+        ORDER BY EEASubSector`,
           // COUNTRIES QUERY
           `SELECT DISTINCT siteCountry, siteCountryName
-        FROM [IED].[latest].[vw_Browse2_MapPOPUP]
+        FROM [IED].[latest].[Browse2_MapPOPUP]
         ORDER BY siteCountryName`,
           // POLLUTANT GROUPS QUERY
           `SELECT DISTINCT pollutantgroup
-        FROM [IED].[latest].[vw_Browse2_MapPOPUP]
+        FROM [IED].[latest].[Browse2_MapPOPUP]
         WHERE NOT(pollutantgroup='')
         ORDER BY pollutantgroup`,
           // REPORTING YEARS QUERY
           `SELECT DISTINCT reportingYear FROM [IED].[latest].[ReportData] ORDER BY reportingYear`,
           // BAT CONCLUSSIONS QUERY
-          `SELECT DISTINCT code, Label, AcceptedDate FROM [IED].[latest].[BATConclusionValue] ORDER BY Label`,
+          `SELECT DISTINCT id, Label, AcceptedDate FROM [IED].[latest].[BATConclusionValue] ORDER BY Label`,
         ],
         meta: [
           // INDUSTRIES META
           {
             key: 'industries',
             title: 'Industries',
-            queryToSet: 'EEASector',
+            queryToSet: 'EEASubSector',
             firstInput: {
               id: _uniqueId('select_'),
               type: 'select',
               position: 0,
             },
             placeholder: 'Select industry',
-            optionKey: 'EEASector',
-            optionValue: 'EEASector',
-            optionText: 'EEASector',
+            optionKey: 'EEASubSector',
+            optionValue: 'EEASubSector',
+            optionText: 'EEASubSector',
             static: true,
           },
           // COUNTRIES META
@@ -304,8 +304,8 @@ const View = ({ content, ...props }) => {
               position: 0,
             },
             placeholder: 'Select BAT conclusion',
-            optionKey: 'code',
-            optionValue: 'code',
+            optionKey: 'id',
+            optionValue: 'id',
             optionText: 'Label',
             static: true,
           },
@@ -509,7 +509,7 @@ const View = ({ content, ...props }) => {
     /* eslint-disable-next-line */
   }, [
     state.mounted,
-    state.filters?.EEASector && JSON.stringify(state.filters.EEASector),
+    state.filters?.EEASubSector && JSON.stringify(state.filters.EEASubSector),
     state.filters?.siteCountry && JSON.stringify(state.filters.siteCountry),
     state.filters?.region && JSON.stringify(state.filters.region),
     state.filters?.townVillage && JSON.stringify(state.filters.townVillage),
@@ -635,6 +635,7 @@ const View = ({ content, ...props }) => {
       queryParam: {
         ...props.discodata_query.search,
         ...newFilters,
+        nuts_regions: [],
       },
     });
   };
@@ -730,6 +731,36 @@ const View = ({ content, ...props }) => {
         : 'locationTerm';
     const emptyTermType =
       searchTermType === 'siteTerm' ? 'locationTerm' : 'siteTerm';
+    const siteCountries = state.filters.siteCountry;
+    const regions = state.filters.region;
+    const townVillages = state.filters.townVillage;
+    let nuts = [];
+    siteCountries &&
+      siteCountries.forEach((country) => {
+        const filteredRegions = regions
+          ? regions.filter((region) => {
+              return region.includes(country);
+            })
+          : [];
+        if (filteredRegions.length) {
+          filteredRegions.forEach((region) => {
+            const filteredTowns = townVillages
+              ? townVillages.filter((town) => {
+                  return town.includes(region);
+                })
+              : [];
+            if (filteredTowns.length) {
+              filteredTowns.forEach((town) => {
+                nuts.push(`${town},${region},${country}`);
+              });
+            } else {
+              nuts.push(`${region},${country}`);
+            }
+          });
+        } else {
+          nuts.push(country);
+        }
+      });
     props.setQueryParam({
       queryParam: {
         ...state.filters,
@@ -738,6 +769,7 @@ const View = ({ content, ...props }) => {
             ? locationResults[locationResultsTexts.indexOf(searchTerm)]
             : searchTerm,
         [emptyTermType]: null,
+        nuts_regions: nuts,
       },
     });
     setState({ ...state, open: false });
@@ -1017,7 +1049,7 @@ const View = ({ content, ...props }) => {
                   }}
                   placeholder={state.filtersMeta['industries']?.placeholder}
                   options={state.filtersMeta['industries']?.options}
-                  value={state.filters['EEASector']?.[0]}
+                  value={state.filters['EEASubSector']?.[0]}
                 />
               </div>
             </div>

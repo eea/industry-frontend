@@ -81,7 +81,7 @@ export const getLcps = (dispatch, siteInspireId) => {
     facilityInspireId,
     installationInspireId,
     string_agg(concat(lcpInspireId, ''), ',') as lcps
-  FROM [IED].[latest].[vw_Browse10_Header] as Results
+  FROM [IED].[latest].[Browse10_Header] as Results
   WHERE siteInspireId = '${siteInspireId}'
   GROUP BY facilityInspireId, installationInspireId`);
   const url = `${settings.providerUrl}?query=${sql}`;

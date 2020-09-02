@@ -132,7 +132,7 @@ class View extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.content['@id'] !== this.props.content['@id']) {
+    if (prevProps.content?.['@id'] !== this.props.content?.['@id']) {
       const RenderedView = this.getRenderedView();
       this.setState({ RenderedView });
     }
@@ -187,7 +187,7 @@ class View extends Component {
     ] || null;
 
   getRenderedView = () =>
-    getBasePath(this.props.content['@id']) === this.props.pathname
+    getBasePath(this.props.content?.['@id']) === this.props.pathname
       ? this.getViewByType() || this.getViewByLayout() || this.getViewDefault()
       : null;
 
