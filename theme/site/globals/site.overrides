@@ -1365,3 +1365,7 @@ h3 {
 .ui.inverted.dimmer {
   background-color: transparent !important;
 }
+
+b {
+  font-weight: bold;
+}

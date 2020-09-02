@@ -1279,6 +1279,10 @@
   version "0.2.0"
   resolved "https://codeload.github.com/eea/volto-slate-metadata-mentions/tar.gz/ff6b034418608ee7593f66c4e9725fba5dae20ef"
 
+"@eeacms/volto-tabs-block@github:eea/volto-tabs-block#0.2.2":
+  version "0.2.1"
+  resolved "https://codeload.github.com/eea/volto-tabs-block/tar.gz/d343ddb2b7ad69b60cc8445b04be27bdf803e797"
+
 "@eeacms/volto-widgets-view@github:eea/volto-widgets-view#0.2.4":
   version "0.2.4"
   resolved "https://codeload.github.com/eea/volto-widgets-view/tar.gz/c4146abe9202655772ced160046e20bb71e06785"
