@@ -24,10 +24,10 @@ export function getBasePath(url) {
   const parseUrl = url === '' ? '/' : url;
   if (parseUrl) {
     return getBaseUrl(url)
-    .replace(settings.apiPath, '')
-    .replace(settings.internalApiPath, '');
+      .replace(settings.apiPath, '')
+      .replace(settings.internalApiPath, '');
   }
-  return '/'
+  return '';
 }
 
 export const objectHasData = (obj) => {

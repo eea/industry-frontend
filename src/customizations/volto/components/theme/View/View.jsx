@@ -187,6 +187,7 @@ class View extends Component {
     ] || null;
 
   getRenderedView = () =>
+    this.props.content?.['@id'] &&
     getBasePath(this.props.content?.['@id']) === this.props.pathname
       ? this.getViewByType() || this.getViewByLayout() || this.getViewDefault()
       : null;
