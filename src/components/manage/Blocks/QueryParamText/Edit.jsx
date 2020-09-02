@@ -47,7 +47,7 @@ const Edit = (props) => {
       <RenderFields
         schema={state.schema}
         {...props}
-        title="Navigation block"
+        title="Query param text block"
         noValueKey={true}
       />
       <View {...props} id={state.id} mode="edit" />

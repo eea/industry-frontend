@@ -151,9 +151,8 @@ const OpenlayersMapView = (props) => {
         ToggleSidebarControl.current = /*@__PURE__*/ (function (Control) {
           function ToggleSidebarControl(opt_options) {
             const options = opt_options || {};
-            const buttonContainer = document.getElementById(
-              'dynamic-filter-toggle',
-            );
+            const buttonContainer = document.createElement('div');
+            buttonContainer.setAttribute('id', 'map-sidebar-button');
             Control.call(this, {
               element: buttonContainer,
               target: options.target,
@@ -577,8 +576,10 @@ const OpenlayersMapView = (props) => {
       }
       //  Make dynamic filters overlay
       if (hasSidebar) {
+        const sideBar = document.createElement('div');
+        sideBar.setAttribute('id', 'map-sidebar');
         dynamicFilters = makeOverlay(
-          document.getElementById(`dynamic-filter`),
+          sideBar,
           'ol-dynamic-filter',
           'center-center',
           true,

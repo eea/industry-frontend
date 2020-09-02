@@ -8,29 +8,43 @@ import { settings } from '~/config';
 
 const getSchema = (props) => {
   return {
-    queryParam: {
-      title: 'Query parameter',
+    component: {
+      title: 'Title component type',
+      type: 'array',
+      choices: [
+        ['h1', 'H1'],
+        ['h2', 'H2'],
+        ['h3', 'H3'],
+        ['p', 'Paragraph'],
+      ],
+    },
+    title: {
+      title: 'Title',
       type: 'text',
     },
-    page: {
-      title: 'Page',
+    description: {
+      title: 'Description',
+      type: 'text',
+    },
+    linkText: {
+      title: 'Link text',
+      type: 'text',
+    },
+    internalLink: {
+      title: 'Internal link',
       widget: 'object_by_path',
     },
-    leftText: {
-      title: 'Left text',
-      widget: 'textarea',
-    },
-    rightText: {
-      title: 'Right text',
-      widget: 'textarea',
-    },
-    className: {
-      title: 'Class name',
+    outsideLink: {
+      title: 'Outside link',
       type: 'text',
     },
-    inlineStyle: {
-      title: 'Inline style',
-      widget: 'textarea',
+    linkType: {
+      title: 'Use',
+      type: 'array',
+      choices: [
+        ['internalLink', 'Internal link'],
+        ['outsideLink', 'Outside link'],
+      ],
     },
   };
 };
@@ -45,7 +59,7 @@ const Edit = (props) => {
       <RenderFields
         schema={state.schema}
         {...props}
-        title="Query param button block"
+        title="Link button block"
         noValueKey={true}
       />
       <View {...props} id={state.id} mode="edit" />

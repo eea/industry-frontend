@@ -16,7 +16,7 @@ const RedirectView = (props) => {
     setMounted(true);
     /* eslint-disable-next-line */
   }, [])
-  if (mounted && !redirect) {
+  if (mounted && !redirect && !props.navigation.loading) {
     if (redirectPage) {
       const currentPath = getBasePath(currentPage);
       const redirectPath = getBasePath(redirectPage);
@@ -28,7 +28,7 @@ const RedirectView = (props) => {
   }
   return (
     <div id="discodata-mosaic-view">
-      <DiscodataView {...props} />
+      <h1>Redirecting...</h1>
     </div>
   );
 };
@@ -36,4 +36,5 @@ const RedirectView = (props) => {
 export default connect((state, props) => ({
   content:
     state.prefetch?.[state.router.location.pathname] || state.content.data,
+  navigation: state.navigation,
 }))(RedirectView);

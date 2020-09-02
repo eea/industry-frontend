@@ -991,6 +991,8 @@ button.solid,
 
 a.solid {
   margin: 0;
+  max-width: unset;
+  width: fit-content;
 }
 
 button.outline,
@@ -1358,4 +1360,8 @@ h3 {
   .documentFirstHeading {
     display: none;
   }
+}
+
+.ui.inverted.dimmer {
+  background-color: transparent !important;
 }

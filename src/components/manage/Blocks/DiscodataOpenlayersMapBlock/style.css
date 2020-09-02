@@ -11,6 +11,10 @@
   height: 90%;
 }
 
+#map-sidebar {
+  height: 100%;
+}
+
 #map-loader.ui.active {
   position: absolute !important;
   pointer-events: auto !important;

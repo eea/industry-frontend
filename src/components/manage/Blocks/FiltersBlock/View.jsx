@@ -13,6 +13,7 @@ import {
   Radio,
   List,
 } from 'semantic-ui-react';
+import { Portal } from 'react-portal';
 import { Icon } from '@plone/volto/components';
 import { setQueryParam } from 'volto-datablocks/actions';
 import { settings } from '~/config';
@@ -54,6 +55,7 @@ const View = ({ content, ...props }) => {
     firstLoad: false,
     searchResultsActive: false,
   });
+  const [loadingData, setLoadingData] = useState(false);
   const [factsData, setFactsData] = useState({});
   const [alphaFeature, setAlphaFeature] = useState({});
   const [sitesResults, setSitesResults] = useState([]);
@@ -65,6 +67,12 @@ const View = ({ content, ...props }) => {
   const modalButtonTitle = props.data.modalButtonTitle?.value;
   const searchButtonTitle = props.data.searchButtonTitle?.value;
   const locationResultsTexts = locationResults.map((result) => result.text);
+  const mapSidebarExists = document?.getElementById('map-sidebar');
+
+  useEffect(() => {
+    console.log(mapSidebarExists);
+    /* eslint-disable-next-line */
+  }, [mapSidebarExists])
   const searchResults = [
     ...sitesResults.slice(
       0,
@@ -150,17 +158,16 @@ const View = ({ content, ...props }) => {
   useEffect(function () {
     setState({ ...state, mounted: true });
     updateFactsData(true);
-    document
-      .getElementById(`dynamic-filter`)
-      .addEventListener('featurechange', (e) => {
-        if (
-          JSON.stringify(e.detail.features?.[0]?.getProperties?.()?.country) !==
-          JSON.stringify(alphaFeature?.getProperties?.()?.country)
-        ) {
-          setAlphaFeature(e.detail.features?.[0]);
-        }
-      });
-
+    // document
+    //   .getElementById(`dynamic-filter`)
+    //   .addEventListener('featurechange', (e) => {
+    //     if (
+    //       JSON.stringify(e.detail.features?.[0]?.getProperties?.()?.country) !==
+    //       JSON.stringify(alphaFeature?.getProperties?.()?.country)
+    //     ) {
+    //       setAlphaFeature(e.detail.features?.[0]);
+    //     }
+    //   });
     return () => {
       setState({ ...state, mounted: false });
     };
@@ -190,7 +197,7 @@ const View = ({ content, ...props }) => {
   }, [state]);
 
   useEffect(() => {
-    if (state.mounted) {
+    if (state.mounted && __CLIENT__) {
       let promises = [];
       let metadata = [];
       const siteCountryFilters =
@@ -426,20 +433,23 @@ const View = ({ content, ...props }) => {
             },
         ],
       };
-      onMountRequests.sqls.forEach((sql, index) => {
-        if (sql && onMountRequests.meta[index]) {
-          if (!state.firstLoad) {
-            promises.push(axios.get(makeUrl(providerUrl, sql)));
-            metadata.push(onMountRequests.meta[index]);
+      if (!loadingData) {
+        onMountRequests.sqls.forEach((sql, index) => {
+          if (sql && onMountRequests.meta[index]) {
+            if (!state.firstLoad) {
+              promises.push(axios.get(makeUrl(providerUrl, sql)));
+              metadata.push(onMountRequests.meta[index]);
+            }
           }
-        }
-      });
-      dynamicRequests.sqls.forEach((sql, index) => {
-        if (sql && dynamicRequests.meta[index]) {
-          promises.push(axios.get(makeUrl(providerUrl, sql)));
-          metadata.push(dynamicRequests.meta[index]);
-        }
-      });
+        });
+        dynamicRequests.sqls.forEach((sql, index) => {
+          if (sql && dynamicRequests.meta[index]) {
+            promises.push(axios.get(makeUrl(providerUrl, sql)));
+            metadata.push(dynamicRequests.meta[index]);
+          }
+        });
+        setLoadingData(true);
+      }
       Promise.all(promises)
         .then((response) => {
           if (state.mounted) {
@@ -480,6 +490,7 @@ const View = ({ content, ...props }) => {
                 ],
               };
             });
+            setLoadingData(false);
             setState({
               ...state,
               filtersMeta,
@@ -487,7 +498,13 @@ const View = ({ content, ...props }) => {
             });
           }
         })
-        .catch((error) => {});
+        .catch((error) => {
+          setLoadingData(false);
+          setState({
+            ...state,
+            ...(state.firstLoad === false ? { firstLoad: true } : {}),
+          });
+        });
     }
     /* eslint-disable-next-line */
   }, [
@@ -945,81 +962,96 @@ const View = ({ content, ...props }) => {
           {searchButtonTitle ? searchButtonTitle : 'Search'}
         </button>
       </div>
-      <div id="dynamic-filter-toggle" className="ol-unselectable ol-control">
-        <button
-          className="toggle-button"
-          onClick={() => {
-            setSidebar(!sidebar);
-          }}
-        >
-          <Icon name={menuSVG} size="1em" fill="white" />
-        </button>
-      </div>
-      <div
-        id="dynamic-filter"
-        className={sidebar ? 'show filters-block' : 'filters-block'}
-      >
-        <div className="dynamic-filter-header">
-          <Header as="h2">Dynamic filter</Header>
-        </div>
-        <div className="dynamic-filter-body">
-          <Header as="h3">Reporting year</Header>
-          <div className="input-container">
-            <Select
-              search
-              onChange={(event, data) => {
-                changeFilter(
-                  data,
-                  state.filtersMeta['reporting_years'],
-                  0,
-                  true,
-                );
-              }}
-              placeholder={state.filtersMeta['reporting_years']?.placeholder}
-              options={state.filtersMeta['reporting_years']?.options}
-              value={state.filters['reportingYear']?.[0]}
-            />
-          </div>
-          <Header as="h3">Industry</Header>
-          <div className="input-container">
-            <Select
-              search
-              onChange={(event, data) => {
-                changeFilter(data, state.filtersMeta['industries'], 0, true);
-              }}
-              placeholder={state.filtersMeta['industries']?.placeholder}
-              options={state.filtersMeta['industries']?.options}
-              value={state.filters['EEASector']?.[0]}
-            />
-          </div>
-        </div>
-        <div className="dynamic-filter-actions">
+      <Portal node={document.getElementById('map-sidebar-button')}>
+        <div id="dynamic-filter-toggle" className="ol-unselectable ol-control">
           <button
-            className="solid red"
-            onClick={clearFilters}
-            style={{ margin: 0 }}
+            className="toggle-button"
+            onClick={() => {
+              setSidebar(!sidebar);
+            }}
           >
-            CLEAR FILTERS
+            <Icon name={menuSVG} size="1em" fill="white" />
           </button>
-          <Header as="h3">Quick facts</Header>
-          {state.factsDataOrder &&
-            state.factsDataOrder.map((key) => {
-              return factsData[key] ? (
-                <React.Fragment key={key}>
-                  {factsData[key]?.title && (
-                    <Header as="h4">{factsData[key].title}</Header>
-                  )}
-                  {factsData[key]?.description &&
-                    factsData[key].description.map((description, index) => {
-                      return <p key={`${key}_${index}`}>{description}</p>;
-                    })}
-                </React.Fragment>
-              ) : (
-                ''
-              );
-            })}
         </div>
-      </div>
+      </Portal>
+      {mapSidebarExists ? (
+        <Portal node={document.getElementById('map-sidebar')}>
+          <div
+            id="dynamic-filter"
+            className={sidebar ? 'show filters-block' : 'filters-block'}
+          >
+            <div className="dynamic-filter-header">
+              <Header as="h2">Dynamic filter</Header>
+            </div>
+            <div className="dynamic-filter-body">
+              <Header as="h3">Reporting year</Header>
+              <div className="input-container">
+                <Select
+                  search
+                  onChange={(event, data) => {
+                    changeFilter(
+                      data,
+                      state.filtersMeta['reporting_years'],
+                      0,
+                      true,
+                    );
+                  }}
+                  placeholder={
+                    state.filtersMeta['reporting_years']?.placeholder
+                  }
+                  options={state.filtersMeta['reporting_years']?.options}
+                  value={state.filters['reportingYear']?.[0]}
+                />
+              </div>
+              <Header as="h3">Industry</Header>
+              <div className="input-container">
+                <Select
+                  search
+                  onChange={(event, data) => {
+                    changeFilter(
+                      data,
+                      state.filtersMeta['industries'],
+                      0,
+                      true,
+                    );
+                  }}
+                  placeholder={state.filtersMeta['industries']?.placeholder}
+                  options={state.filtersMeta['industries']?.options}
+                  value={state.filters['EEASector']?.[0]}
+                />
+              </div>
+            </div>
+            <div className="dynamic-filter-actions">
+              <button
+                className="solid red"
+                onClick={clearFilters}
+                style={{ margin: 0 }}
+              >
+                CLEAR FILTERS
+              </button>
+              <Header as="h3">Quick facts</Header>
+              {state.factsDataOrder &&
+                state.factsDataOrder.map((key) => {
+                  return factsData[key] ? (
+                    <React.Fragment key={key}>
+                      {factsData[key]?.title && (
+                        <Header as="h4">{factsData[key].title}</Header>
+                      )}
+                      {factsData[key]?.description &&
+                        factsData[key].description.map((description, index) => {
+                          return <p key={`${key}_${index}`}>{description}</p>;
+                        })}
+                    </React.Fragment>
+                  ) : (
+                    ''
+                  );
+                })}
+            </div>
+          </div>
+        </Portal>
+      ) : (
+        ''
+      )}
     </div>
   );
 };

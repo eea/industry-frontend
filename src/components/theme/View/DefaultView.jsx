@@ -35,7 +35,13 @@ const messages = defineMessages({
 const DefaultView = ({ content, intl, location }) => {
   const blocksFieldname = getBlocksFieldname(content);
   const blocksLayoutFieldname = getBlocksLayoutFieldname(content);
-
+  React.useEffect(() => {
+    console.log('MOUNTING DEFAULT VIEW');
+    return () => {
+      console.log('UNMOUNTING DEFAULT VIEW');
+    };
+    /* eslint-disable-next-line */
+  }, [])
   return hasBlocksData(content) ? (
     <div id="page-document" className="ui container">
       {map(content[blocksLayoutFieldname].items, (block) => {
