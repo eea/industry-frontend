@@ -21,9 +21,13 @@ export function addCustomGroup(config, customGroup) {
 }
 
 export function getBasePath(url) {
-  return getBaseUrl(url)
+  const parseUrl = url === '' ? '/' : url;
+  if (parseUrl) {
+    return getBaseUrl(url)
     .replace(settings.apiPath, '')
     .replace(settings.internalApiPath, '');
+  }
+  return '/'
 }
 
 export const objectHasData = (obj) => {
