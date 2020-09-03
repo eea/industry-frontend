@@ -36,6 +36,14 @@ const getSchema = (props) => {
         ['link', 'Outside link'],
       ],
     },
+    visible: {
+      title: 'Visible when',
+      type: 'array',
+      choices: [
+        ['hasQuery', 'Query parameter exists'],
+        ['always', 'Always'],
+      ],
+    },
     leftText: {
       title: 'Left text',
       widget: 'textarea',

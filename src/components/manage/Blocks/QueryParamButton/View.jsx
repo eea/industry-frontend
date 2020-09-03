@@ -17,6 +17,7 @@ const View = ({ content, ...props }) => {
     link = '',
     linkTarget = '_self',
     use = '',
+    visible = 'always',
   } = data;
   const queryText = props.search[queryParam] || '';
 
@@ -24,7 +25,11 @@ const View = ({ content, ...props }) => {
 
   const hasText = leftText || queryText || rightText;
 
+  const buttonMayRender =
+    (visible === 'always' && hasText) || (visible === 'hasQuery' && queryText);
+
   let parsedInlineStyle;
+
   try {
     parsedInlineStyle = JSON.parse(inlineStyle);
   } catch {
@@ -33,8 +38,12 @@ const View = ({ content, ...props }) => {
 
   return (
     <>
-      {props.mode === 'edit' && !hasText ? <p>Query param button</p> : ''}
-      {hasText ? (
+      {props.mode === 'edit' && !buttonMayRender ? (
+        <p>Query param button</p>
+      ) : (
+        ''
+      )}
+      {buttonMayRender ? (
         <button
           className={className}
           style={parsedInlineStyle}

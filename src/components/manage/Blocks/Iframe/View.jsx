@@ -36,17 +36,37 @@ const View = ({ content, ...props }) => {
     /* eslint-disable-next-line */
   }, [props.data.queryParameters])
 
+  useEffect(() => {
+    try {
+      new URL(url);
+      const newUrl = getUrl(url);
+      if (props.mode === 'edit' && url !== newUrl) {
+        props.onChangeBlock(props.block, {
+          ...props.data,
+          url: newUrl,
+        });
+      }
+    } catch {}
+
+    /* eslint-disable-next-line */
+  }, [url])
+
   const getUrl = (url) => {
     const newUrl = new URL(url);
     return newUrl.protocol + '//' + newUrl.host + newUrl.pathname;
   };
   const applyQueryParameters = (url, query) => {
-    const queryParameters = {
-      ...query,
-      ':toolbar': hideToolbar ? 'n' : 'y',
-      ':embed': 'y',
-    };
-    return `${getUrl(url)}?${qs.stringify(queryParameters)}`;
+    try {
+      new URL(url);
+      const queryParameters = {
+        ...query,
+        ':toolbar': hideToolbar ? 'n' : 'y',
+        ':embed': 'y',
+      };
+      return `${getUrl(url)}?${qs.stringify(queryParameters)}`;
+    } catch {
+      return '';
+    }
   };
   return (
     <div>
@@ -59,6 +79,7 @@ const View = ({ content, ...props }) => {
         display="initial"
         position="relative"
         overflow={overflow ? 'visible' : 'hidden'}
+        scrolling={false}
       />
     </div>
   );

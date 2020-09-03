@@ -63,7 +63,7 @@ const View = (props) => {
               onClick={(e) => e.preventDefault}
               to={getPath(detailedLink.path)}
             >
-              {buttonTitle || detailedLink.title || 'Go'}
+              <span>{buttonTitle || detailedLink.title || 'Go'}</span>
             </Link>
           </div>
         </>

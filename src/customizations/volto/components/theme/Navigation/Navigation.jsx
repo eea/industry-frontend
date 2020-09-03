@@ -15,6 +15,7 @@ import { getBaseUrl } from '@plone/volto/helpers';
 import { settings } from '~/config';
 
 import { getNavigation } from '@plone/volto/actions';
+import { resetQueryParam } from 'volto-datablocks/actions';
 
 const messages = defineMessages({
   closeMobileMenu: {
@@ -171,6 +172,14 @@ class Navigation extends Component {
               key={item.url}
               className="item"
               activeClassName="active"
+              onClick={() => {
+                if (
+                  !item.url.includes('/industrial-site') &&
+                  !item.url.includes('/analysis')
+                ) {
+                  this.props.resetQueryParam();
+                }
+              }}
               exact={
                 settings.isMultilingual
                   ? item.url === `/${lang}`
@@ -192,7 +201,8 @@ export default compose(
     (state) => ({
       items: state.navigation.items,
       lang: state.intl.locale,
+      discodata_query: state.discodata_query,
     }),
-    { getNavigation },
+    { getNavigation, resetQueryParam },
   ),
 )(Navigation);

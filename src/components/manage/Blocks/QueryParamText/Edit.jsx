@@ -12,6 +12,14 @@ const getSchema = (props) => {
       title: 'Query parameter',
       type: 'text',
     },
+    visible: {
+      title: 'Visible when',
+      type: 'array',
+      choices: [
+        ['hasQuery', 'Query parameter exists'],
+        ['always', 'Always'],
+      ],
+    },
     leftText: {
       title: 'Left text',
       widget: 'textarea',

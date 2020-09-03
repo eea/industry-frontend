@@ -33,20 +33,35 @@ const components = {
 const View = ({ content, ...props }) => {
   const { data } = props;
   const {
+    visible = 'always',
     component = 'h1',
     queryParam = '',
     leftText = '',
     rightText = '',
     color = '#000',
   } = data;
+
   const queryText = props.search[queryParam] || '';
 
   const text = `${leftText} ${queryText} ${rightText}`;
 
+  const hasText = leftText || queryText || rightText;
+
+  const textMayRender =
+    (visible === 'always' && hasText) || (visible === 'hasQuery' && queryText);
+
   return (
     <>
-      {props.mode === 'edit' ? !queryText ? <p>Query param text</p> : '' : ''}
-      {components[component]
+      {props.mode === 'edit' ? (
+        !textMayRender ? (
+          <p>Query param text</p>
+        ) : (
+          ''
+        )
+      ) : (
+        ''
+      )}
+      {textMayRender && components[component]
         ? components[component](text, isColor(color) ? color : '#000')
         : ''}
     </>
