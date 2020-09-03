@@ -13,8 +13,28 @@ const getSchema = (props) => {
       type: 'text',
     },
     page: {
-      title: 'Page',
+      title: 'Internal page',
       widget: 'object_by_path',
+    },
+    link: {
+      title: 'Outside link',
+      type: 'text',
+    },
+    linkTarget: {
+      title: 'Link target',
+      type: 'array',
+      choices: [
+        ['_blank', 'New window'],
+        ['_self', 'Current window'],
+      ],
+    },
+    use: {
+      title: 'Use',
+      type: 'array',
+      choices: [
+        ['page', 'Internal page'],
+        ['link', 'Outside link'],
+      ],
     },
     leftText: {
       title: 'Left text',

@@ -1,6 +1,9 @@
 {
     "compilerOptions": {
         "paths": {
+            "volto-slate": [
+                "develop/volto-slate/src"
+            ],
             "volto-tabsview": [
                 "develop/volto-tabsview/src"
             ],

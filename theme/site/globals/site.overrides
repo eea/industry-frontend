@@ -1369,3 +1369,11 @@ h3 {
 b {
   font-weight: bold;
 }
+
+.tox tox-silver-sink tox-tinymce-aux {
+  display: none;
+}
+
+.ui.dimmer.redirect-loader {
+  z-index: -1
+}

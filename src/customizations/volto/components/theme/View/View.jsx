@@ -186,11 +186,24 @@ class View extends Component {
       this.props.content[getLayoutFieldname(this.props.content)]
     ] || null;
 
-  getRenderedView = () =>
-    this.props.content?.['@id'] &&
-    getBasePath(this.props.content?.['@id']) === this.props.pathname
-      ? this.getViewByType() || this.getViewByLayout() || this.getViewDefault()
-      : null;
+  getRenderedView = () => {
+    if (this.props.content?.['@id']) {
+      const contentPathname = getBasePath(this.props.content?.['@id']).replace(
+        /\/$/,
+        '',
+      );
+      const pathname = this.props.pathname.replace(/\/$/, '');
+      if (contentPathname === pathname) {
+        return (
+          this.getViewByType() ||
+          this.getViewByLayout() ||
+          this.getViewDefault()
+        );
+      }
+      return null;
+    }
+    return null;
+  };
 
   /**
    * Cleans the component displayName (specially for connected components)

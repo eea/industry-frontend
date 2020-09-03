@@ -14,10 +14,15 @@ const View = ({ content, ...props }) => {
     className = '',
     inlineStyle = '',
     page = '',
+    link = '',
+    linkTarget = '_self',
+    use = '',
   } = data;
-  const queryText = props.search[queryParam];
+  const queryText = props.search[queryParam] || '';
 
   const text = `${leftText} ${queryText} ${rightText}`;
+
+  const hasText = leftText || queryText || rightText;
 
   let parsedInlineStyle;
   try {
@@ -27,15 +32,25 @@ const View = ({ content, ...props }) => {
   }
 
   return (
-    <div>
-      {props.mode === 'edit' ? !queryText ? <p>Query param button</p> : '' : ''}
-      {queryText ? (
+    <>
+      {props.mode === 'edit' && !hasText ? <p>Query param button</p> : ''}
+      {hasText ? (
         <button
           className={className}
           style={parsedInlineStyle}
           onClick={() => {
-            if (page) {
+            if (use === 'page') {
               history.push(page);
+            } else if (use === 'link') {
+              try {
+                new URL(link);
+                const linkElement = document.createElement('a');
+                linkElement.href = link;
+                linkElement.target = linkTarget;
+                linkElement.click();
+              } catch {
+                console.log('NOT URL');
+              }
             }
           }}
         >
@@ -44,7 +59,7 @@ const View = ({ content, ...props }) => {
       ) : (
         ''
       )}
-    </div>
+    </>
   );
 };
 

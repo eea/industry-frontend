@@ -44,12 +44,12 @@ const View = ({ content, ...props }) => {
   const text = `${leftText} ${queryText} ${rightText}`;
 
   return (
-    <div>
+    <>
       {props.mode === 'edit' ? !queryText ? <p>Query param text</p> : '' : ''}
       {components[component]
         ? components[component](text, isColor(color) ? color : '#000')
         : ''}
-    </div>
+    </>
   );
 };
 

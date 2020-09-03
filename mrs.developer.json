@@ -1,4 +1,9 @@
 {
+  "volto-slate": {
+    "url": "https://github.com/eea/volto-slate.git",
+    "path": "src",
+    "branch": "develop"
+  },
   "volto-tabsview": {
     "url": "https://github.com/eea/volto-tabsview.git",
     "branch": "master",

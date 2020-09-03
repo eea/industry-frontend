@@ -14,6 +14,7 @@ const RedirectView = (props) => {
     setMounted(true);
     /* eslint-disable-next-line */
   }, [])
+  console.log(mounted, redirect, props.navigation);
   if (mounted && !redirect && !props.navigation.loading) {
     if (redirectPage) {
       const currentPath = getBasePath(currentPage);
@@ -25,7 +26,7 @@ const RedirectView = (props) => {
     }
   }
   return (
-    <Dimmer active inverted>
+    <Dimmer active inverted className="redirect-loader">
       <Loader inverted>European Environment Agency</Loader>
     </Dimmer>
   );

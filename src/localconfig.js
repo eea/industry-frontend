@@ -34,6 +34,9 @@ import QueryParamTextView from '~/components/manage/Blocks/QueryParamText/View';
 import QueryParamButtonEdit from '~/components/manage/Blocks/QueryParamButton/Edit';
 import QueryParamButtonView from '~/components/manage/Blocks/QueryParamButton/View';
 
+import IframeEdit from '~/components/manage/Blocks/Iframe/Edit';
+import IframeView from '~/components/manage/Blocks/Iframe/View';
+
 // import QueryParamButtonEdit from '~/components/manage/Blocks/LinkButton/Edit';
 // import QueryParamButtonView from '~/components/manage/Blocks/QueryParamButton/View';
 
@@ -149,6 +152,15 @@ export function applyConfig(voltoConfig) {
     group: 'eprtr_blocks',
     view: QueryParamButtonView,
     edit: QueryParamButtonEdit,
+    icon: packSVG,
+  };
+
+  config.blocks.blocksConfig.eprtr_iframe = {
+    id: 'eprtr_iframe',
+    title: 'Eprtr iframe',
+    group: 'eprtr_blocks',
+    view: IframeView,
+    edit: IframeEdit,
     icon: packSVG,
   };
 
