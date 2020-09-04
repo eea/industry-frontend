@@ -917,7 +917,9 @@ const OpenlayersMapView = (props) => {
                     <p>
                       <Link
                         onClick={setSiteQueryParams}
-                        to={'/industrial-sites/introduction'}
+                        to={
+                          '/industrial-site/introduction/understanding-the-data'
+                        }
                       >
                         {state.popupDetails.properties.nFacilities || 0}{' '}
                         Facilities
@@ -928,7 +930,9 @@ const OpenlayersMapView = (props) => {
                     <p>
                       <Link
                         onClick={setSiteQueryParams}
-                        to={'/industrial-sites/introduction'}
+                        to={
+                          '/industrial-site/introduction/understanding-the-data'
+                        }
                       >
                         {state.popupDetails.properties.nLCP || 0} Large
                         comustion plants
@@ -939,7 +943,9 @@ const OpenlayersMapView = (props) => {
                     <p>
                       <Link
                         onClick={setSiteQueryParams}
-                        to={'/industrial-sites/introduction'}
+                        to={
+                          '/industrial-site/introduction/understanding-the-data'
+                        }
                       >
                         {state.popupDetails.properties.nInstallations || 0}{' '}
                         Installations

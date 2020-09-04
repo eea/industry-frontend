@@ -19,7 +19,7 @@ const View = ({ content, ...props }) => {
           .properties;
         properties &&
           Object.entries(properties).forEach(([key, value]) => {
-            if (props.searhc[value.queryParam]) {
+            if (props.search[value.queryParam]) {
               newDiscodataQuery[key] = props.search[value.queryParam] || '';
             }
           });
@@ -34,7 +34,7 @@ const View = ({ content, ...props }) => {
       }
     }
     /* eslint-disable-next-line */
-  }, [props.data.queryParameters])
+  }, [props.data.queryParameters, props.search])
 
   useEffect(() => {
     try {
@@ -55,6 +55,7 @@ const View = ({ content, ...props }) => {
     const newUrl = new URL(url);
     return newUrl.protocol + '//' + newUrl.host + newUrl.pathname;
   };
+
   const applyQueryParameters = (url, query) => {
     try {
       new URL(url);

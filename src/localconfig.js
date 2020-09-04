@@ -37,10 +37,16 @@ import QueryParamButtonView from '~/components/manage/Blocks/QueryParamButton/Vi
 import IframeEdit from '~/components/manage/Blocks/Iframe/Edit';
 import IframeView from '~/components/manage/Blocks/Iframe/View';
 
+// Discodata components
+import TextEdit from '~/components/manage/Blocks/DiscodataComponents/Text/Edit';
+import TextView from '~/components/manage/Blocks/DiscodataComponents/Text/View';
+
 // import QueryParamButtonEdit from '~/components/manage/Blocks/LinkButton/Edit';
 // import QueryParamButtonView from '~/components/manage/Blocks/QueryParamButton/View';
 
 import BlocksWidget from '~/components/manage/Widgets/BlocksWidget';
+import QueryParametersListWidget from '~/components/manage/Blocks/DiscodataComponents/Widgets/QueryParametersListWidget';
+import ColorPickerWidget from '~/components/manage/Blocks/DiscodataComponents/Widgets/ColorPickerWidget';
 
 import { addCustomGroup } from '~/helpers';
 
@@ -53,6 +59,10 @@ import worldSVG from '@plone/volto/icons/world.svg';
 export function applyConfig(voltoConfig) {
   const config = { ...voltoConfig };
   addCustomGroup(config, { id: 'eprtr_blocks', title: 'Eprtr Blocks' });
+  addCustomGroup(config, {
+    id: 'discodata_components',
+    title: 'Discodata components',
+  });
 
   config.views = {
     ...config.views,
@@ -71,6 +81,11 @@ export function applyConfig(voltoConfig) {
       ...config.widgets.id,
       blocks: BlocksWidget,
       blocks_layout: BlocksWidget,
+    },
+    widget: {
+      ...config.widgets.widget,
+      query_param_list: QueryParametersListWidget,
+      color_picker: ColorPickerWidget,
     },
   };
 
@@ -171,6 +186,17 @@ export function applyConfig(voltoConfig) {
     view: DiscodataOpenlayersMapBlockView,
     edit: DiscodataOpenlayersMapBlockEdit,
     icon: worldSVG,
+  };
+
+  // DISCODATA COMPONENTS
+
+  config.blocks.blocksConfig.discodata_components_text = {
+    id: 'discodata_components_text',
+    title: 'Text',
+    group: 'discodata_components',
+    view: TextView,
+    edit: TextEdit,
+    icon: packSVG,
   };
 
   return config;

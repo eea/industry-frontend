@@ -173,12 +173,12 @@ class Navigation extends Component {
               className="item"
               activeClassName="active"
               onClick={() => {
-                if (
-                  !item.url.includes('/industrial-site') &&
-                  !item.url.includes('/analysis')
-                ) {
-                  this.props.resetQueryParam();
-                }
+                // if (
+                //   !item.url.includes('/industrial-site') &&
+                //   !item.url.includes('/analysis')
+                // ) {
+                //   this.props.resetQueryParam();
+                // }
               }}
               exact={
                 settings.isMultilingual

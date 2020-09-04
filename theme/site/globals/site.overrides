@@ -1397,6 +1397,7 @@ b {
   display: none;
 }
 
-.ui.dimmer.redirect-loader {
+.ui.dimmer.redirect-loader,
+.ui.dimmer.view-loader {
   z-index: -1
 }

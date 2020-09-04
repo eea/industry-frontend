@@ -1,0 +1,33 @@
+.query-parameters-list-widget > p {
+  margin-bottom: 6px !important;
+  padding: 0 1em;
+}
+
+ul.query-parameters-list {
+  padding: 0;
+  display: flex;
+  padding: 0 1em;
+}
+
+ul.query-parameters-list li {
+  text-decoration: underline;
+  padding: 4px;
+  color: #007EB1;
+}
+
+ul.query-parameters-list li button {
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  color: #007EB1;
+}
+
+.color-picker-widget {
+  display: flex;
+  padding: 1em;
+  flex-flow: column;
+}
+
+.color-picker-label {
+  margin-bottom: 1em;
+}

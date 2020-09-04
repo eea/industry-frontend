@@ -128,7 +128,9 @@ class View extends Component {
 
   componentDidMount() {
     const RenderedView = this.getRenderedView();
-    this.setState({ isClient: true, RenderedView });
+    if (RenderedView !== -1) {
+      this.setState({ isClient: true, RenderedView });
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -200,7 +202,7 @@ class View extends Component {
           this.getViewDefault()
         );
       }
-      return null;
+      return -1;
     }
     return null;
   };
@@ -275,7 +277,7 @@ class View extends Component {
             history={this.props.history}
           />
         ) : (
-          <Dimmer active inverted>
+          <Dimmer active inverted className="view-loader">
             <Loader inverted>European Environment Agency</Loader>
           </Dimmer>
         )}
