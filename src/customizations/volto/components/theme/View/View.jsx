@@ -130,6 +130,8 @@ class View extends Component {
     const RenderedView = this.getRenderedView();
     if (RenderedView !== -1) {
       this.setState({ isClient: true, RenderedView });
+    } else {
+      this.setState({ isClient: true });
     }
   }
 
