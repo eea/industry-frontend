@@ -1401,3 +1401,21 @@ b {
 .ui.dimmer.view-loader {
   z-index: -1
 }
+
+.discodata_components_text {
+  a {
+    text-decoration: underline;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .ui.small.modal {
+    margin: 0!important;
+  }
+}
+
+@media only screen and (min-width: 903px) {
+  .ui.small.modal {
+    margin: 0!important;
+  }
+}

@@ -13,14 +13,12 @@ import { FormattedMessage } from 'react-intl';
 import { Portal } from 'react-portal';
 import { Container, Pagination } from 'semantic-ui-react';
 import qs from 'query-string';
-import moment from 'moment';
 import { isArray, isObject } from 'lodash';
 import { settings } from '~/config';
 import { Helmet } from '@plone/volto/helpers';
 import { searchContent } from '@plone/volto/actions';
 import { Toolbar, Icon } from '@plone/volto/components';
 import Highlighter from 'react-highlight-words';
-// import SearchBlock from 'volto-addons/SearchBlock/View';
 
 import paginationLeftSVG from '@plone/volto/icons/left-key.svg';
 import paginationRightSVG from '@plone/volto/icons/right-key.svg';

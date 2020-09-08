@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import './style.css';
 
 function isColor(strColor) {
   return /^#[0-9A-F]{6}$/i.test(strColor);

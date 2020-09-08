@@ -49,6 +49,9 @@ const View = ({ content, ...props }) => {
       'pollutants',
       'reporting_years',
       'bat_conclusions',
+      'bat_conclusion_years',
+      'permit_types',
+      'permit_years',
     ],
     factsDataOrder: ['Country_quick_facts', 'EU_quick_facts'],
     mounted: false,
@@ -70,7 +73,6 @@ const View = ({ content, ...props }) => {
   const mapSidebarExists = document?.getElementById('map-sidebar');
 
   useEffect(() => {
-    console.log(mapSidebarExists);
     /* eslint-disable-next-line */
   }, [mapSidebarExists])
   const searchResults = [
@@ -227,6 +229,14 @@ const View = ({ content, ...props }) => {
           `SELECT DISTINCT reportingYear FROM [IED].[latest].[ReportData] ORDER BY reportingYear`,
           // BAT CONCLUSSIONS QUERY
           `SELECT DISTINCT id, Label, AcceptedDate FROM [IED].[latest].[BATConclusionValue] ORDER BY Label`,
+          // BAT CONCLUSSIONS YEAR
+          `SELECT DISTINCT StatusModifiedYear as bat_conclusion_years
+        FROM [IED].[latest].[BATConclusionValue]
+        GROUP BY StatusModifiedYear`,
+          // PERMIT YEAR
+          `SELECT DISTINCT permitYear
+        FROM [IED].[latest].[PermitDetails]
+        GROUP BY permitYear`,
         ],
         meta: [
           // INDUSTRIES META
@@ -309,6 +319,36 @@ const View = ({ content, ...props }) => {
             optionText: 'Label',
             static: true,
           },
+          // BAT CONCLUSSIONS YEAR
+          {
+            key: 'bat_conclusion_years',
+            queryToSet: 'batConclustionYear',
+            firstInput: {
+              id: _uniqueId('select_'),
+              type: 'select',
+              position: 0,
+            },
+            placeholder: 'Select BAT conclusion year',
+            optionKey: 'bat_conclusion_years',
+            optionValue: 'bat_conclusion_years',
+            optionText: 'bat_conclusion_years',
+            static: true,
+          },
+          //  PERMIT YEAR
+          {
+            key: 'permit_years',
+            queryToSet: 'permitYear',
+            firstInput: {
+              id: _uniqueId('select_'),
+              type: 'select',
+              position: 0,
+            },
+            placeholder: 'Select permit year',
+            optionKey: 'permitYear',
+            optionValue: 'permitYear',
+            optionText: 'permitYear',
+            static: true,
+          },
         ],
       };
       const dynamicRequests = {
@@ -355,11 +395,19 @@ const View = ({ content, ...props }) => {
           FROM [IED].[latest].[PollutantDict]
           WHERE AirPollutantGroup ${pollutantGroupFilter
             .map((group, index) => {
-              return (!index ? "LIKE '%" : "OR '%") + group + "%'";
+              return (
+                (!index ? "LIKE '%" : "OR AirPollutantGroup LIKE '%") +
+                group +
+                "%'"
+              );
             })
             .join(' ')} OR WaterPollutantGroup ${pollutantGroupFilter
               .map((group, index) => {
-                return (!index ? "LIKE '%" : "OR '%") + group + "%'";
+                return (
+                  (!index ? "LIKE '%" : "OR WaterPollutantGroup LIKE '%") +
+                  group +
+                  "%'"
+                );
               })
               .join(' ')}
           ORDER BY pollutant`,
@@ -470,6 +518,37 @@ const View = ({ content, ...props }) => {
                   ...state.filtersMeta[metadata[index].key].filteringInputs,
                 ];
               }
+              if (metadata[index]?.key === 'permit_years') {
+                // YEAH...FU*K TRACASA
+                filtersMeta['permit_types'] = {
+                  filteringInputs: [{
+                    id: _uniqueId('select_'),
+                    type: 'select',
+                    position: 0,
+                  }],
+                  placeholder: 'Select permit type',
+                  queryToSet: 'permitType',
+                  title: 'Permit',
+                  static: true,
+                  options: [
+                    {
+                      key: 'permitGranted',
+                      value: 'permitGranted',
+                      text: 'Permit granted',
+                    },
+                    {
+                      key: 'permitReconsidered',
+                      value: 'permitReconsidered',
+                      text: 'Permit reconsidered',
+                    },
+                    {
+                      key: 'permitUpdated',
+                      value: 'permitUpdated',
+                      text: 'Permit updated',
+                    },
+                  ],
+                };
+              }
               filtersMeta[metadata[index]?.key] = {
                 filteringInputs: filteringInputs.length
                   ? filteringInputs
@@ -480,13 +559,15 @@ const View = ({ content, ...props }) => {
                 static: metadata[index]?.static,
                 options: [
                   { key: null, value: null, text: 'No value' },
-                  ...(results.map((item) => {
-                    return {
-                      key: item[metadata[index]?.optionKey],
-                      value: item[metadata[index]?.optionValue],
-                      text: item[metadata[index]?.optionText],
-                    };
-                  }) || []),
+                  ...(results
+                    .filter((item) => item[metadata[index]?.optionValue])
+                    .map((item) => {
+                      return {
+                        key: item[metadata[index]?.optionKey],
+                        value: item[metadata[index]?.optionValue],
+                        text: item[metadata[index]?.optionText],
+                      };
+                    }) || []),
                 ],
               };
             });
@@ -636,6 +717,9 @@ const View = ({ content, ...props }) => {
         ...props.discodata_query.search,
         ...newFilters,
         nuts_regions: [],
+        nuts_latest: [],
+        siteTerm: null,
+        locationTerm: null,
       },
     });
   };
@@ -735,30 +819,34 @@ const View = ({ content, ...props }) => {
     const regions = state.filters.region;
     const townVillages = state.filters.townVillage;
     let nuts = [];
+    let nuts_latest = [];
     siteCountries &&
       siteCountries.forEach((country) => {
         const filteredRegions = regions
           ? regions.filter((region) => {
-              return region.includes(country);
+              return region && region.includes(country);
             })
           : [];
         if (filteredRegions.length) {
           filteredRegions.forEach((region) => {
             const filteredTowns = townVillages
               ? townVillages.filter((town) => {
-                  return town.includes(region);
+                  return town && town.includes(region);
                 })
               : [];
             if (filteredTowns.length) {
               filteredTowns.forEach((town) => {
                 nuts.push(`${town},${region},${country}`);
+                nuts_latest.push(town);
               });
             } else {
               nuts.push(`${region},${country}`);
+              nuts_latest.push(region);
             }
           });
         } else {
           nuts.push(country);
+          nuts_latest.push(country);
         }
       });
     props.setQueryParam({
@@ -770,6 +858,7 @@ const View = ({ content, ...props }) => {
             : searchTerm,
         [emptyTermType]: null,
         nuts_regions: nuts,
+        nuts_latest,
       },
     });
     setState({ ...state, open: false });
@@ -907,6 +996,7 @@ const View = ({ content, ...props }) => {
                               state.filters?.[
                                 state.filtersMeta[filterKey].queryToSet
                               ]?.[index];
+
                             return (
                               <div key={input.id} className="input-container">
                                 <Select

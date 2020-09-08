@@ -70,6 +70,35 @@ export const getQueryParametersSchema = (props) => {
   };
 };
 
+export const getQueryParametersToSetSchema = (props) => {
+  return {
+    title: 'Query parameter',
+    fieldsets: [
+      {
+        id: 'default',
+        title: 'Default',
+        fields: ['selectorOptionKey', 'queryParameterToSet'],
+      },
+    ],
+    properties: {
+      selectorOptionKey: {
+        title: 'Selector option key',
+        type: 'array',
+        choices: [
+          ['key', 'Key'],
+          ['value', 'Value'],
+          ['text', 'Text'],
+        ],
+      },
+      queryParameterToSet: {
+        title: 'Query parameter to set',
+        type: 'string',
+      },
+    },
+    required: ['selectorOptionKey', 'queryParameterToSet'],
+  };
+};
+
 export const makeSchema = (props) => {
   const resourcesKeys = Object.keys({ ...props.discodata_resources.data });
   const queriesKeys = Object.keys({ ...props.discodata_query.search });
@@ -83,10 +112,6 @@ export const makeSchema = (props) => {
         : props.discodata_resources.data?.[resource.package] || null;
     });
 
-  const collectionsKeys =
-    Object.keys(resources).filter((key) => {
-      return isArray(resources[key]);
-    }) || [];
   const objectsKeys =
     Object.keys(resources).filter((key) => {
       return !isArray(resources[key]) && isObject(resources[key]);
@@ -121,8 +146,6 @@ export const makeSchema = (props) => {
 };
 
 export const makeTextSchema = (props) => {
-  const resources = props.data.resources;
-  const subResources = props.data.subResources;
   const schemaTitle = 'Text';
   const schemaFieldsets = [
     {
@@ -146,7 +169,7 @@ export const makeTextSchema = (props) => {
       id: 'link',
       title: 'Link',
       fields: props.data.isLink
-        ? ['isLink', 'internalLink', 'linkTarget', 'link']
+        ? ['isLink', 'internalLink', 'linkTarget', 'link', 'triggerOn']
         : ['isLink'],
     },
     {
@@ -212,7 +235,7 @@ export const makeTextSchema = (props) => {
       title: 'Target',
       type: 'array',
       choices: [
-        ['self', 'Same window'],
+        ['_self', 'Same window'],
         ['_blank', 'New window'],
       ],
     },
@@ -251,9 +274,79 @@ export const makeTextSchema = (props) => {
 };
 
 export const makeSelectSchema = (props) => {
-  const resources = props.data.resources;
-  const subResources = props.data.subResources;
-  const schemaTitle = 'Select';
+  const discodataValues = props.discodataValues;
+  const discodataKeys =
+    discodataValues &&
+    discodataValues[0] &&
+    !isArray(discodataValues[0]) &&
+    isObject(discodataValues[0])
+      ? makeChoices(Object.keys(discodataValues[0]))
+      : [];
+  const schemaTitle = 'Text';
+  const schemaFieldsets = [
+    {
+      id: 'settings',
+      title: 'Settings',
+      fields: [
+        'key',
+        'value',
+        'text',
+        'queryParametersToSet',
+        'placeholder',
+        'className',
+      ],
+    },
+  ];
+  const schemaProperties = {
+    key: {
+      title: 'Selector key',
+      type: 'array',
+      choices: discodataKeys || [],
+    },
+    value: {
+      title: 'Selector value',
+      type: 'array',
+      choices: discodataKeys || [],
+    },
+    text: {
+      title: 'Selector text',
+      type: 'array',
+      choices: discodataKeys || [],
+    },
+    queryParametersToSet: {
+      title: 'Query parameters',
+      widget: 'object_list',
+      schema: getQueryParametersToSetSchema(props),
+    },
+    placeholder: {
+      title: 'Placeholder',
+      widget: 'text',
+    },
+    className: {
+      title: 'Class name',
+      widget: 'text',
+    },
+  };
+  const schemaRequired = [];
+  return makeSchema({
+    ...props,
+    schemaTitle,
+    schemaFieldsets,
+    schemaProperties,
+    schemaRequired,
+  });
+};
+
+export const makeListSchema = (props) => {
+  const discodataValues = props.discodataValues;
+  const discodataKeys =
+    discodataValues &&
+    discodataValues[0] &&
+    !isArray(discodataValues[0]) &&
+    isObject(discodataValues[0])
+      ? makeChoices(Object.keys(discodataValues[0]))
+      : [];
+  const schemaTitle = 'Text';
   const schemaFieldsets = [
     {
       id: 'additional',
@@ -264,12 +357,12 @@ export const makeSelectSchema = (props) => {
       id: 'settings',
       title: 'Settings',
       fields: [
-        'visible',
-        'order',
-        'leftText',
-        'rightText',
-        'color',
-        'component',
+        'key',
+        'value',
+        'text',
+        'queryParametersToSet',
+        'placeholder',
+        'className',
       ],
     },
   ];
@@ -279,44 +372,33 @@ export const makeSelectSchema = (props) => {
       widget: 'query_param_list',
       schema: getQueryParametersSchema(props),
     },
-    visible: {
-      title: 'Visible',
+    key: {
+      title: 'Selector key',
       type: 'array',
-      choices: [
-        ['always', 'Always'],
-        ['hasQuery', 'Has query'],
-        ['hasDiscodata', 'hasDiscodata'],
-      ],
+      choices: discodataKeys || [],
     },
-    order: {
-      title: 'Text order',
+    value: {
+      title: 'Selector value',
       type: 'array',
-      choices: [
-        ['qd', 'Query - Discodata'],
-        ['dq', 'Discodata - Query'],
-      ],
+      choices: discodataKeys || [],
     },
-    leftText: {
-      title: 'Left text',
-      widget: 'textarea',
-    },
-    rightText: {
-      title: 'Right text',
-      widget: 'textarea',
-    },
-    color: {
-      title: 'Color',
-      widget: 'color_picker',
-    },
-    component: {
-      title: 'Component type',
+    text: {
+      title: 'Selector text',
       type: 'array',
-      choices: [
-        ['h1', 'H1'],
-        ['h2', 'H2'],
-        ['h3', 'H3'],
-        ['p', 'Paragraph'],
-      ],
+      choices: discodataKeys || [],
+    },
+    queryParametersToSet: {
+      title: 'Query parameters',
+      widget: 'object_list',
+      schema: getQueryParametersToSetSchema(props),
+    },
+    placeholder: {
+      title: 'Placeholder',
+      widget: 'text',
+    },
+    className: {
+      title: 'Class name',
+      widget: 'text',
     },
   };
   const schemaRequired = [];

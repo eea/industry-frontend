@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import _uniqueId from 'lodash/uniqueId';
-import RenderFields from 'volto-addons/Widgets/RenderFields';
+import RenderFields from 'volto-datablocks/Utils/RenderFields';
 import View from './View';
 import { settings } from '~/config';
 
@@ -21,6 +21,11 @@ const getSchema = (props) => {
     hasSidebar: {
       type: 'boolean',
       title: 'Has sidebar',
+      defaultValue: false,
+    },
+    hasRegionsFeatures: {
+      type: 'boolean',
+      title: 'Has regions features',
       defaultValue: false,
     },
     filterSource: {
@@ -88,7 +93,7 @@ const Edit = (props) => {
         {...props}
         title="Discodata openlayers map"
       />
-      <View {...props} id={state.id} />
+      <View {...props} id={state.id} mode="edit" />
     </>
   );
 };

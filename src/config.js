@@ -19,15 +19,13 @@ import {
   installExpendableList,
   installFolderListing,
 } from 'volto-addons';
+import { installDiscodataBlocks } from 'volto-datablocks';
 import { applyConfig as eprtrConfig } from './localconfig';
 
 const consoleError = console.error.bind(console);
 // eslint-disable-next-line
   console.error = (message, ...args) => {
-  if (
-    typeof message === 'string' &&
-    message.startsWith('[React Intl] Missing message:')
-  ) {
+  if (typeof message === 'string' && message.startsWith('[React Intl]')) {
     return;
   }
   consoleError(message, ...args);
@@ -37,6 +35,7 @@ const addonConfig = [
   installTableau,
   installExpendableList,
   installFolderListing,
+  installDiscodataBlocks,
   eprtrConfig,
 ].reduce((acc, apply) => apply(acc), config);
 

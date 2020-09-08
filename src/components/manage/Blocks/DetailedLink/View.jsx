@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { settings } from '~/config';
 import cx from 'classnames';
 import './style.css';
+import { useEffect } from 'react';
 
 const getPath = (url) => {
   if (!url) return '';
@@ -26,6 +27,7 @@ const View = (props) => {
     descriptionClassname = '',
     buttonClassname = '',
   } = props.data;
+
   return (
     <div
       className={cx(

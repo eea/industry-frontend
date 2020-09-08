@@ -4,6 +4,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 import Icon from '@plone/volto/components/theme/Icon/Icon';
+import { NavLink } from 'react-router-dom';
 
 import infoSVG from '@plone/volto/icons/info.svg';
 
@@ -39,13 +40,30 @@ const components = {
       {text}
     </p>
   ),
+  link: (text, internalLink, linkTarget, link, color) => {
+    return internalLink ? (
+      <NavLink
+        as="a"
+        target={linkTarget}
+        to={link === '' ? '/' : link}
+        key={link}
+        style={{ color }}
+      >
+        {text}
+      </NavLink>
+    ) : (
+      <a href={link} target={linkTarget}>
+        {text}
+      </a>
+    );
+  },
 };
 
 const View = ({ content, ...props }) => {
   const [discodataValues, setDiscodataValues] = useState([]);
   const [mounted, setMounted] = useState(false);
   const { data } = props;
-  const { resources = [], subResources = [] } = data;
+  const { resources = [], subResources = [], queryParameters = [] } = data;
   const {
     visible = 'always',
     component = 'h1',
@@ -100,20 +118,23 @@ const View = ({ content, ...props }) => {
     /* eslint-disable-next-line */
   }, [props.search, props.discodata_resources])
 
-  const queryParametersText = props.data.queryParameters
-    .map((value) => {
-      return props.search[value.queryParameter];
-    })
-    .filter((value) => value)
-    .join(' ');
+  const queryParametersText = queryParameters
+    ? queryParameters
+        .map((value) => {
+          return props.search[value.queryParameter];
+        })
+        .filter((value) => value)
+        .join(' ')
+    : '';
 
   const discodataText = discodataValues.join(' ');
 
-  const text = `${leftText} ${
+  const byOrder =
     order === 'dq'
       ? `${discodataText} ${queryParametersText}`
-      : `${queryParametersText} ${discodataText}`
-  } ${rightText}`;
+      : `${queryParametersText} ${discodataText}`;
+
+  const text = `${leftText} ${byOrder} ${rightText}`;
 
   const hasText = leftText || discodataText || queryParametersText || rightText;
 
@@ -122,11 +143,65 @@ const View = ({ content, ...props }) => {
     (visible === 'hasQuery' && queryParametersText) ||
     (visible === 'hasDiscodata' && discodataText);
 
+  const renderLinks = {
+    _all: (
+      <span>
+        {components.link(
+          `${leftText} ${byOrder} ${rightText}`,
+          internalLink,
+          linkTarget,
+          link,
+          color,
+        )}
+      </span>
+    ),
+    _query: (
+      <span>
+        {leftText}
+        {order === 'dq' ? discodataText : ''}
+        {components.link(
+          `${queryParametersText}`,
+          internalLink,
+          linkTarget,
+          link,
+          color,
+        )}
+        {order === 'dq' ? '' : 'discodataText'}
+        {rightText}
+      </span>
+    ),
+    _discodata: (
+      <span>
+        {leftText} {order === 'qd' ? queryParametersText : ''}
+        {components.link(
+          `${discodataText}`,
+          internalLink,
+          linkTarget,
+          link,
+          color,
+        )}
+        {order === 'qd' ? '' : queryParametersText} {rightText}
+      </span>
+    ),
+    _left: (
+      <span>
+        {components.link(`${leftText}`, internalLink, linkTarget, link, color)}{' '}
+        {byOrder} {rightText}
+      </span>
+    ),
+    _right: (
+      <span>
+        {leftText} {byOrder}{' '}
+        {components.link(`${rightText}`, internalLink, linkTarget, link, color)}
+      </span>
+    ),
+  };
+
   return (
     <>
       {props.mode === 'edit' ? (
         !textMayRender ? (
-          <p>Query param text</p>
+          <p>Discodata component text</p>
         ) : (
           ''
         )
@@ -135,7 +210,7 @@ const View = ({ content, ...props }) => {
       )}
       {textMayRender && components[component]
         ? components[component](
-            text,
+            isLink ? renderLinks[triggerOn] : text,
             isColor(color) ? color : '#000',
             tooltip,
             tooltipText,

@@ -21,13 +21,3 @@ ul.query-parameters-list li button {
   border: none;
   color: #007EB1;
 }
-
-.color-picker-widget {
-  display: flex;
-  padding: 1em;
-  flex-flow: column;
-}
-
-.color-picker-label {
-  margin-bottom: 1em;
-}

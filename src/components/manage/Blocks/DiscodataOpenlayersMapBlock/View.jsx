@@ -9,6 +9,7 @@ import qs from 'query-string';
 import axios from 'axios';
 import jsonp from 'jsonp';
 import { settings } from '~/config';
+import { isArray, isObject } from 'lodash';
 // VOLTO
 import { Icon as VoltoIcon } from '@plone/volto/components';
 // VOLTO-DATABLOCKS
@@ -96,6 +97,7 @@ const OpenlayersMapView = (props) => {
   const draggable = !!props.data?.draggable?.value;
   const hasPopups = !!props.data?.hasPopups?.value;
   const hasSidebar = !!props.data?.hasSidebar?.value;
+  const hasRegionsFeatures = !!props.data?.hasRegionsFeatures?.value;
   const filterSource = props.data?.filterSource?.value || 'query_params';
   const zoomSwitch = 6;
   const currentMapZoom = state.map?.element
@@ -106,13 +108,19 @@ const OpenlayersMapView = (props) => {
     try {
       queryParams = JSON.parse(props.data?.query?.value)?.properties;
       Object.entries(queryParams).forEach(([key, value]) => {
-        queryParams[key].sql = `(${value.param} = ':options')`;
+        queryParams[key].sql = `(${value.param} LIKE '%:options%')`;
         queryParams[key].type = 'string';
       });
     } catch {
       queryParams = {};
     }
   }
+
+  const searchQueryParams = isObject(queryParams)
+    ? Object.entries(queryParams).map(([key, value]) => {
+        return props.discodata_query.search[value.param] || null;
+      })
+    : [];
 
   if (mapRendered && !firstFilteringUpdate) {
     updateFilters();
@@ -189,10 +197,14 @@ const OpenlayersMapView = (props) => {
     JSON.stringify(props.discodata_query.search.region),
     JSON.stringify(props.discodata_query.search.riverBasin),
     JSON.stringify(props.discodata_query.search.townVillage),
-    // JSON.stringify(props.discodata_query.search.pollutantGroup),
+    JSON.stringify(props.discodata_query.search.pollutantGroup),
     JSON.stringify(props.discodata_query.search.pollutant),
     JSON.stringify(props.discodata_query.search.reportingYear),
     JSON.stringify(props.discodata_query.search.batConclusionCode),
+    JSON.stringify(props.discodata_query.search.batConclustionYear),
+    JSON.stringify(props.discodata_query.search.permitType),
+    JSON.stringify(props.discodata_query.search.permitYear),
+    JSON.stringify(searchQueryParams),
   ]);
 
   useEffect(() => {
@@ -230,50 +242,55 @@ const OpenlayersMapView = (props) => {
           sql: `(siteName LIKE ':options%')`,
           type: 'string',
         },
-        //  Industries
+        // Industries
         EEASubSector: {
-          sql: `(eea_activities IN (:options))`,
+          sql: `(eea_activities LIKE '%:options%')`,
+          type: 'multiple',
         },
-        nuts_regions: {
+        // Country / Region / Town
+        nuts_latest: {
           sql: `(nuts_regions LIKE '%:options%')`,
           type: 'multiple',
         },
-        // // Country
-        // siteCountry: {
-        //   sql: `(countryCode IN (:options))`,
-        // },
-        // //? Regions
-        // region: {
-        //   sql: `(region IN (:options))`,
-        // },
-        // //? River Basin
-        // riverBasin: {
-        //   sql: `(riverBasinDistrict IN (:options))`,
-        // },
-        // //? Town/Village
-        // townVillage: {
-        //   sql: `(townVillage IN (:options))`,
-        // },
-        // Pollutant groups
-        // pollutantGroup: {
-        //   sql: `(pollutantGroup IN (:options))`,
-        // },
+        // River basin district
+        riverBasin: {
+          sql: `(rbds LIKE '%:options%')`,
+          type: 'multiple',
+        },
+        // Pollutants grouops
+        pollutantGroup: {
+          sql: `((air_groups LIKE '%:options%') OR (water_groups LIKE '%:options%'))`,
+          type: 'multiple',
+        },
         // Pollutants
         pollutant: {
-          sql: `(pollutants IN (:options))`,
+          sql: `(pollutants LIKE '%:options%')`,
+          type: 'multiple',
         },
         // Reporting year
         reportingYear: {
           sql: `(Site_reporting_year IN (:options))`,
         },
-        //! Installation specifics
-        //? BAT conclusion
+        // BAT conclusion
         batConclusionCode: {
-          sql: `(batConclusion IN (:options))`,
+          sql: `(bat_conclusions LIKE '%:options%')`,
+          type: 'multiple',
         },
-        //! BAT conclusion year
-        //! Permit type
-        //! Permit year
+        // BAT conclusion year
+        batConclustionYear: {
+          sql: `(bat_conclusion_years LIKE '%:options%')`,
+          type: 'multiple',
+        },
+        // Permit type
+        permitType: {
+          sql: `(permit_types LIKE '%:options%')`,
+          type: 'multiple',
+        },
+        // Permit year
+        permitYear: {
+          sql: `(permit_years LIKE '%:options%')`,
+          type: 'multiple',
+        },
       };
     } else if (filterSource === 'query_params') {
       sitesSourceQuery.whereStatements = {
@@ -284,9 +301,7 @@ const OpenlayersMapView = (props) => {
 
     Object.entries(sitesSourceQuery.whereStatements).forEach(([id, where]) => {
       let options;
-      if (where.type === 'string') {
-        options = props.discodata_query.search[id];
-      } else if (where.type === 'multiple') {
+      if (['string', 'multiple'].includes(where.type)) {
         options = props.discodata_query.search[id];
       } else if (!props.discodata_query.search[id]) {
         options = null;
@@ -294,18 +309,19 @@ const OpenlayersMapView = (props) => {
         options = splitBy(props.discodata_query.search[id], ',');
       }
       if (where.type === 'multiple') {
+        options = isArray(options) ? options?.filter((option) => option) : [];
         const conditions = [];
         if (options?.length) {
           options.forEach((option) => {
             let baseSql = where.sql;
-            option && conditions.push(baseSql.replace(':options', option));
+            option && conditions.push(baseSql.replace(/:options/g, option));
           });
-          where.sql = conditions.join(' AND ');
+          where.sql = `(${conditions.join(' OR ')})`;
         } else {
           where.sql = null;
         }
       } else {
-        where.sql = options ? where.sql.replace(':options', options) : null;
+        where.sql = options ? where.sql.replace(/:options/g, options) : null;
       }
       if (!where.sql) delete sitesSourceQuery.whereStatements[id];
     });
@@ -320,6 +336,7 @@ const OpenlayersMapView = (props) => {
     ) {
       let updateMapPosition = null;
       if (
+        sitesSourceQuery.whereStatements.siteId?.sql ||
         sitesSourceQuery.whereStatements.siteTerm?.sql ||
         sitesSourceQuery.whereStatements.siteName?.sql
       ) {
@@ -636,9 +653,11 @@ const OpenlayersMapView = (props) => {
             url,
             {
               param:
-                qs.stringify({
-                  where: stateRef.current.map.sitesSourceQuery.where,
-                }) + '&callback',
+                (stateRef.current.map.sitesSourceQuery.where
+                  ? qs.stringify({
+                      where: stateRef.current.map.sitesSourceQuery.where,
+                    })
+                  : '') + '&callback',
             },
             (error, response) => {
               reqs--;
@@ -668,43 +687,45 @@ const OpenlayersMapView = (props) => {
         ),
       });
       //  Make regions source layer
-      regionsSource = new VectorSource({
-        loader: function (extent, resolution, projection) {
-          var url =
-            'https://services.arcgis.com/LcQjj2sL7Txk9Lag/ArcGIS/rest/services/ly_IED_SiteClusters_WM/FeatureServer/0/query/?f=json' +
-            '&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=' +
-            encodeURIComponent(
-              '{"xmin":' +
-                extent[0] +
-                ',"ymin":' +
-                extent[1] +
-                ',"xmax":' +
-                extent[2] +
-                ',"ymax":' +
-                extent[3] +
-                ',"spatialReference":{"wkid":102100}}',
-            ) +
-            '&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*' +
-            '&outSR=102100';
-          jsonp(url, null, (error, response) => {
-            if (error) {
-              console.log(error.message);
-            } else {
-              var features = esrijsonFormat.readFeatures(response, {
-                featureProjection: projection,
-              });
-              if (features.length > 0) {
-                regionsSource.addFeatures(features);
+      if (hasRegionsFeatures) {
+        regionsSource = new VectorSource({
+          loader: function (extent, resolution, projection) {
+            var url =
+              'https://services.arcgis.com/LcQjj2sL7Txk9Lag/ArcGIS/rest/services/ly_IED_SiteClusters_WM/FeatureServer/0/query/?f=json' +
+              '&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=' +
+              encodeURIComponent(
+                '{"xmin":' +
+                  extent[0] +
+                  ',"ymin":' +
+                  extent[1] +
+                  ',"xmax":' +
+                  extent[2] +
+                  ',"ymax":' +
+                  extent[3] +
+                  ',"spatialReference":{"wkid":102100}}',
+              ) +
+              '&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*' +
+              '&outSR=102100';
+            jsonp(url, null, (error, response) => {
+              if (error) {
+                console.log(error.message);
+              } else {
+                var features = esrijsonFormat.readFeatures(response, {
+                  featureProjection: projection,
+                });
+                if (features.length > 0) {
+                  regionsSource.addFeatures(features);
+                }
               }
-            }
-          });
-        },
-        strategy: tile(
-          createXYZ({
-            tileSize: 512,
-          }),
-        ),
-      });
+            });
+          },
+          strategy: tile(
+            createXYZ({
+              tileSize: 512,
+            }),
+          ),
+        });
+      }
       /* ======== SOURCE LAYERS ======== */
       //  Sites source layer
       sitesSourceLayer = new VectorLayer({
@@ -720,18 +741,20 @@ const OpenlayersMapView = (props) => {
         title: 'ly_IED_SiteMap_WM',
       });
       //  Regions source layer
-      regionsSourceLayer = new VectorLayer({
-        source: regionsSource,
-        style: new Style({
-          image: new CircleStyle({
-            radius: 3,
-            fill: new Fill({ color: '#4296B2' }),
-            stroke: new Stroke({ color: '#6A6A6A', width: 1 }),
+      if (hasRegionsFeatures) {
+        regionsSourceLayer = new VectorLayer({
+          source: regionsSource,
+          style: new Style({
+            image: new CircleStyle({
+              radius: 3,
+              fill: new Fill({ color: '#4296B2' }),
+              stroke: new Stroke({ color: '#6A6A6A', width: 1 }),
+            }),
           }),
-        }),
-        visible: true,
-        title: 'ly_IED_SiteClusters_WM',
-      });
+          visible: true,
+          title: 'ly_IED_SiteClusters_WM',
+        });
+      }
       /* ======== APPEND TO THE MAP ======== */
       //  Append TileLayers to the map
       map.addLayer(
@@ -748,14 +771,16 @@ const OpenlayersMapView = (props) => {
       //  Append source layers to the map
       map.addLayer(
         new Group({
-          layers: [sitesSourceLayer, regionsSourceLayer],
+          layers: hasRegionsFeatures
+            ? [sitesSourceLayer, regionsSourceLayer]
+            : [sitesSourceLayer],
         }),
       );
       //  Center by user location
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) =>
-          centerPosition(map, position, 12),
-        );
+        navigator.geolocation.getCurrentPosition((position) => {
+          return centerPosition(map, position, 12);
+        });
       }
       //  Events
       sitesSource.on('updateFilters', function (e) {
@@ -795,13 +820,13 @@ const OpenlayersMapView = (props) => {
         if (currentZoom !== newZoom) {
           if (newZoom > zoomSwitch) {
             sitesSourceLayer.setVisible(true);
-            regionsSourceLayer.setVisible(false);
+            hasRegionsFeatures && regionsSourceLayer.setVisible(false);
           } else if (newZoom > 2) {
             sitesSourceLayer.setVisible(false);
-            regionsSourceLayer.setVisible(true);
+            hasRegionsFeatures && regionsSourceLayer.setVisible(true);
           } else {
             sitesSourceLayer.setVisible(false);
-            regionsSourceLayer.setVisible(false);
+            hasRegionsFeatures && regionsSourceLayer.setVisible(false);
           }
           currentZoom = newZoom;
         }
@@ -848,6 +873,7 @@ const OpenlayersMapView = (props) => {
 
   return (
     <div className="openlayer-map-container">
+      {props.mode === 'edit' ? <p>Openlayer map</p> : ''}
       <div id="map" className="map" />
       <div id="popup" className="popup">
         {state.popup.element && (

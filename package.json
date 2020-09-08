@@ -17,10 +17,10 @@
     "@eeacms/volto-slate-metadata-mentions",
     "@eeacms/volto-metadata-block",
     "@eeacms/volto-tabs-block",
-    "@eeacms/volto-grid-block",
     "@eeacms/volto-widget-toggle",
     "volto-addons",
-    "volto-datablocks"
+    "volto-datablocks",
+    "@eeacms/volto-grid-block"
   ],
   "scripts": {
     "start": "razzle start",
@@ -121,7 +121,7 @@
     "ol": "^6.4.3",
     "performant-array-to-tree": "^1.7.1",
     "react": "^16.13.1",
-    "react-color": "^2.18.1",
+    "react-beautiful-dnd": "^13.0.0",
     "react-component-queries": "^2.3.0",
     "react-dom": "^16.13.1",
     "react-highlight-words": "^0.16.0",

@@ -1,78 +1,153 @@
 /* REACT */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { isArray } from 'lodash';
+import { Dropdown } from 'semantic-ui-react';
+import { setQueryParam } from 'volto-datablocks/actions';
 
-function isColor(strColor) {
-  return /^#[0-9A-F]{6}$/i.test(strColor);
-}
+import cx from 'classnames';
 
 const components = {
-  h1: (text, color) => (
-    <h1 className="query-param-text" style={{ color: color }}>
-      {text}
-    </h1>
-  ),
-  h2: (text, color) => (
-    <h2 className="query-param-text" style={{ color: color }}>
-      {text}
-    </h2>
-  ),
-  h3: (text, color) => (
-    <h3 className="query-param-text" style={{ color: color }}>
-      {text}
-    </h3>
-  ),
-  p: (text, color) => (
-    <p className="query-param-text" style={{ color: color }}>
-      {text}
-    </p>
-  ),
+  select: (
+    options,
+    queryParameters,
+    search,
+    setQueryParam,
+    placeholder,
+    className,
+    mode,
+  ) => {
+    let activeValue = '';
+    if (queryParameters[0]?.queryParameterToSet) {
+      activeValue = search[queryParameters[0].queryParameterToSet];
+    }
+    return (
+      <div className={cx(className, mode === 'edit' ? 'pa-1' : '')}>
+        <Dropdown
+          selection
+          onChange={(event, data) => {
+            const queryParametersToSet = {};
+            queryParameters.forEach((queryParam) => {
+              queryParametersToSet[
+                queryParam.queryParameterToSet
+              ] = data.options.filter((opt) => {
+                return opt.value === data.value;
+              })[0]?.[queryParam.selectorOptionKey];
+            });
+            setQueryParam({
+              queryParam: {
+                ...(queryParametersToSet || {}),
+              },
+            });
+          }}
+          placeholder={placeholder}
+          options={options}
+          value={activeValue}
+        />
+      </div>
+    );
+  },
 };
 
 const View = ({ content, ...props }) => {
+  const [discodataValues, setDiscodataValues] = useState([]);
+  const [mounted, setMounted] = useState(false);
   const { data } = props;
-  const {
-    visible = 'always',
-    component = 'h1',
-    queryParam = '',
-    leftText = '',
-    rightText = '',
-    color = '#000',
-  } = data;
+  const { resources = [], subResources = [] } = data;
+  const { placeholder = 'Select', className = '' } = data;
+  const { key = '', value = '', text = '', queryParametersToSet = [] } = data;
 
-  const queryText = props.search[queryParam] || '';
+  const options = discodataValues.map((discodata, index) => ({
+    key: discodata[key] || index,
+    value: discodata[value] || index,
+    text: discodata[text] || index,
+  }));
 
-  const text = `${leftText} ${queryText} ${rightText}`;
+  const updateDiscodataValues = (mounted) => {
+    if (props.discodata_resources && props.search && mounted) {
+      let newDiscodataValues = [];
+      resources.forEach((resource) => {
+        if (isArray(props.discodata_resources[resource.package])) {
+          newDiscodataValues = [
+            ...newDiscodataValues,
+            ...(props.discodata_resources[resource.package] || []),
+          ];
+        }
+      });
+      const selectedSubResources = subResources.map((subResource) => {
+        const keyValue = subResource.package?.split('@') || [null, null];
+        return {
+          package: keyValue[0],
+          query: keyValue[1],
+        };
+      });
+      selectedSubResources.forEach((subResource) => {
+        const discodataPackage = resources.filter(
+          (resource) => resource.package === subResource.package,
+        )[0];
+        if (
+          props.search[discodataPackage.queryParameter] &&
+          isArray(
+            props.discodata_resources[discodataPackage.package]?.[
+              props.search[discodataPackage.queryParameter]
+            ]?.[subResource.query],
+          )
+        ) {
+          newDiscodataValues = [
+            ...newDiscodataValues,
+            ...(props.discodata_resources[discodataPackage.package]?.[
+              props.search[discodataPackage.queryParameter]
+            ][subResource.query] || []),
+          ];
+        }
+      });
+      setDiscodataValues(newDiscodataValues);
+    }
+  };
 
-  const hasText = leftText || queryText || rightText;
+  useEffect(() => {
+    setMounted(true);
+    if (props.mode !== 'edit') {
+      updateDiscodataValues(true);
+    } else {
+      setDiscodataValues(props.discodataValues);
+    }
+    /* eslint-disable-next-line */
+  }, []);
 
-  const textMayRender =
-    (visible === 'always' && hasText) || (visible === 'hasQuery' && queryText);
+  useEffect(() => {
+    if (props.mode !== 'edit') {
+      updateDiscodataValues(mounted);
+    } else {
+      setDiscodataValues(props.discodataValues);
+    }
+    /* eslint-disable-next-line */
+  }, [props.search, props.discodata_resources])
+
 
   return (
     <>
-      {props.mode === 'edit' ? (
-        !textMayRender ? (
-          <p>Query param text</p>
-        ) : (
-          ''
-        )
-      ) : (
-        ''
+      {components.select(
+        options,
+        queryParametersToSet,
+        props.search,
+        props.setQueryParam,
+        placeholder,
+        className,
+        props.mode,
       )}
-      {textMayRender && components[component]
-        ? components[component](text, isColor(color) ? color : '#000')
-        : ''}
     </>
   );
 };
 
 export default compose(
-  connect((state, props) => ({
-    query: state.router.location.search,
-    content:
-      state.prefetch?.[state.router.location.pathname] || state.content.data,
-    search: state.discodata_query.search,
-  })),
+  connect(
+    (state, props) => ({
+      query: state.router.location.search,
+      search: state.discodata_query.search,
+      discodata_resources: state.discodata_resources.data,
+    }),
+    { setQueryParam },
+  ),
 )(View);

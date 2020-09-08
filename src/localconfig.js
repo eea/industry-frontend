@@ -38,15 +38,20 @@ import IframeEdit from '~/components/manage/Blocks/Iframe/Edit';
 import IframeView from '~/components/manage/Blocks/Iframe/View';
 
 // Discodata components
+import DiscodataComponentsBlockEdit from '~/components/manage/Blocks/DiscodataComponentsBlock/Edit';
+import DiscodataComponentsBlockView from '~/components/manage/Blocks/DiscodataComponentsBlock/View';
+
 import TextEdit from '~/components/manage/Blocks/DiscodataComponents/Text/Edit';
 import TextView from '~/components/manage/Blocks/DiscodataComponents/Text/View';
+
+import SelectEdit from '~/components/manage/Blocks/DiscodataComponents/Select/Edit';
+import SelectView from '~/components/manage/Blocks/DiscodataComponents/Select/View';
 
 // import QueryParamButtonEdit from '~/components/manage/Blocks/LinkButton/Edit';
 // import QueryParamButtonView from '~/components/manage/Blocks/QueryParamButton/View';
 
 import BlocksWidget from '~/components/manage/Widgets/BlocksWidget';
 import QueryParametersListWidget from '~/components/manage/Blocks/DiscodataComponents/Widgets/QueryParametersListWidget';
-import ColorPickerWidget from '~/components/manage/Blocks/DiscodataComponents/Widgets/ColorPickerWidget';
 
 import { addCustomGroup } from '~/helpers';
 
@@ -85,7 +90,6 @@ export function applyConfig(voltoConfig) {
     widget: {
       ...config.widgets.widget,
       query_param_list: QueryParametersListWidget,
-      color_picker: ColorPickerWidget,
     },
   };
 
@@ -197,6 +201,24 @@ export function applyConfig(voltoConfig) {
     view: TextView,
     edit: TextEdit,
     icon: packSVG,
+  };
+
+  config.blocks.blocksConfig.discodata_components_select = {
+    id: 'discodata_components_select',
+    title: 'Select',
+    group: 'discodata_components',
+    view: SelectView,
+    edit: SelectEdit,
+    icon: packSVG,
+  };
+
+  config.blocks.blocksConfig.discodata_components_block = {
+    id: 'discodata_components_block',
+    title: 'Discodata components block',
+    view: DiscodataComponentsBlockView,
+    edit: DiscodataComponentsBlockEdit,
+    icon: packSVG,
+    group: 'data_blocks',
   };
 
   return config;
