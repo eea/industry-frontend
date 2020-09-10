@@ -431,44 +431,73 @@ a.small h1 {
   outline: none;
 }
 
-.eprtrSelection h1.ui.header {
-  font-weight: bold;
-  font-size: 36px;
-  line-height: 45px;
-  color: #EC776A;
+.custom-selector h1.ui.header {
   margin-bottom: 0;
 }
 
-.eprtrSelection .ui.selection.dropdown {
+.custom-selector .ui.selection.dropdown {
   width: fit-content;
-  color: #EC776A;
   padding: 0;
   border-bottom: none;
   min-width: unset;
-  margin-right: 40px;
+  min-height: unset;
+  line-height: 1em;
 }
 
-.eprtrSelection .ui.selection.dropdown > .default.text,
-.eprtrSelection .ui.selection.dropdown > .text,
-.eprtrSelection .ui.selection.visible.dropdown > .text:not(.default) {
-  color: #EC776A;
-  font-weight: bold;
-  font-size: 30px;
-  line-height: 39px;
-  padding: 10px;
+.custom-selector .ui.selection.dropdown > .default.text,
+.custom-selector .ui.selection.dropdown > .text,
+.custom-selector .ui.selection.visible.dropdown > .text:not(.default) {
   padding-left: 0;
 }
 
-.eprtrSelection .ui.selection.dropdown > .dropdown.icon {
-  font-size: 30px !important;
-  line-height: 39px;
+.custom-selector .ui.selection.dropdown > .dropdown.icon {
   position: relative;
-  padding: 10px 0;
   margin: 0;
   margin-left: 0 !important;
   top: unset;
   left: unset;
   right: unset;
   bottom: unset;
+  line-height: 1em;
+  font-size: 1.7em!important;
+}
+
+.custom-selector.big h1.ui.header {
+  font-weight: bold;
+  font-size: 36px;
+  line-height: 45px;
+}
+
+.custom-selector.big .ui.selection.dropdown > .dropdown.icon {
+  font-size: 30px !important;
+  line-height: 39px;
+  padding: 10px 0;
+}
+
+.custom-selector.big .ui.selection.dropdown > .default.text,
+.custom-selector.big .ui.selection.dropdown > .text,
+.custom-selector.big .ui.selection.visible.dropdown > .text:not(.default) {
+  font-weight: bold;
+  font-size: 30px;
+  line-height: 39px;
+  padding: 10px;
+}
+
+.custom-selector.red h1.ui.header,
+.custom-selector.red .ui.selection.dropdown,
+.custom-selector.red .ui.selection.dropdown > .default.text,
+.custom-selector.red .ui.selection.dropdown > .text,
+.custom-selector.red .ui.selection.visible.dropdown > .text:not(.default) {
+  color: #EC776A;
+  background-color: transparent;
+}
+
+.custom-selector.white h1.ui.header,
+.custom-selector.white .ui.selection.dropdown,
+.custom-selector.white .ui.selection.dropdown > .default.text,
+.custom-selector.white .ui.selection.dropdown > .text,
+.custom-selector.white .ui.selection.visible.dropdown > .text:not(.default) {
+  color: #fff;
+  background-color: transparent;
 }
 

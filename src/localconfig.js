@@ -37,6 +37,9 @@ import QueryParamButtonView from '~/components/manage/Blocks/QueryParamButton/Vi
 import IframeEdit from '~/components/manage/Blocks/Iframe/Edit';
 import IframeView from '~/components/manage/Blocks/Iframe/View';
 
+import DummyBlockEdit from '~/components/manage/Blocks/DummyBlock/Edit';
+import DummyBlockView from '~/components/manage/Blocks/DummyBlock/View';
+
 // Discodata components
 import DiscodataComponentsBlockEdit from '~/components/manage/Blocks/DiscodataComponentsBlock/Edit';
 import DiscodataComponentsBlockView from '~/components/manage/Blocks/DiscodataComponentsBlock/View';
@@ -46,6 +49,9 @@ import TextView from '~/components/manage/Blocks/DiscodataComponents/Text/View';
 
 import SelectEdit from '~/components/manage/Blocks/DiscodataComponents/Select/Edit';
 import SelectView from '~/components/manage/Blocks/DiscodataComponents/Select/View';
+
+import CustomEdit from '~/components/manage/Blocks/DiscodataComponents/Custom/Edit';
+import CustomView from '~/components/manage/Blocks/DiscodataComponents/Custom/View';
 
 // import QueryParamButtonEdit from '~/components/manage/Blocks/LinkButton/Edit';
 // import QueryParamButtonView from '~/components/manage/Blocks/QueryParamButton/View';
@@ -183,6 +189,15 @@ export function applyConfig(voltoConfig) {
     icon: packSVG,
   };
 
+  config.blocks.blocksConfig.eprtr_dummy_block = {
+    id: 'eprtr_dummy_block',
+    title: 'Eprtr dummy block',
+    group: 'eprtr_blocks',
+    view: DummyBlockView,
+    edit: DummyBlockEdit,
+    icon: packSVG,
+  };
+
   config.blocks.blocksConfig.eprtr_openlayers_map_block = {
     id: 'eprtr_openlayers_map_block',
     title: 'Eprtr openlayers map block',
@@ -209,6 +224,15 @@ export function applyConfig(voltoConfig) {
     group: 'discodata_components',
     view: SelectView,
     edit: SelectEdit,
+    icon: packSVG,
+  };
+
+  config.blocks.blocksConfig.discodata_components_custom = {
+    id: 'discodata_components_custom',
+    title: 'Custom',
+    group: 'discodata_components',
+    view: CustomView,
+    edit: CustomEdit,
     icon: packSVG,
   };
 

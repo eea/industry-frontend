@@ -56,14 +56,15 @@ const View = ({ content, ...props }) => {
     factsDataOrder: ['Country_quick_facts', 'EU_quick_facts'],
     mounted: false,
     firstLoad: false,
-    searchResultsActive: false,
   });
   const [loadingData, setLoadingData] = useState(false);
   const [factsData, setFactsData] = useState({});
   const [alphaFeature, setAlphaFeature] = useState({});
   const [sitesResults, setSitesResults] = useState([]);
+  const [searchResultsActive, setSearchResultsActive] = useState(false);
   const [locationResults, setLocationResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [triggerSearch, setTriggerSearch] = useState(false);
   const [sidebar, setSidebar] = useState(false);
   const searchContainerModal = useRef(null);
   const searchContainer = useRef(null);
@@ -72,9 +73,6 @@ const View = ({ content, ...props }) => {
   const locationResultsTexts = locationResults.map((result) => result.text);
   const mapSidebarExists = document?.getElementById('map-sidebar');
 
-  useEffect(() => {
-    /* eslint-disable-next-line */
-  }, [mapSidebarExists])
   const searchResults = [
     ...sitesResults.slice(
       0,
@@ -92,7 +90,8 @@ const View = ({ content, ...props }) => {
       reqs = [
         {
           factId: 'EU_quick_facts',
-          sql: 'SELECT AllSites FROM [IED].[latest].[vw_BrowseMainMap_EUFacts]',
+          sql: `SELECT count(id) AS AllSites
+          FROM [IED].[latest].[ProductionSite_NoGeo]`,
           descriptionDiscodataKey: ['AllSites'],
           title: 'EU Quick facts',
           description: [':descriptionDiscodataKey reporting sites'],
@@ -159,7 +158,7 @@ const View = ({ content, ...props }) => {
 
   useEffect(function () {
     setState({ ...state, mounted: true });
-    updateFactsData(true);
+    // updateFactsData(true);
     // document
     //   .getElementById(`dynamic-filter`)
     //   .addEventListener('featurechange', (e) => {
@@ -182,8 +181,17 @@ const View = ({ content, ...props }) => {
   }, [alphaFeature])
 
   useEffect(() => {
-    if (state.open && state.searchResultsActive) {
-      setState({ ...state, searchResultsActive: false });
+    updateFactsData(false);
+    if (triggerSearch) {
+      submit();
+      setTriggerSearch(false);
+    }
+    /* eslint-disable-next-line */
+  }, [searchTerm, triggerSearch])
+
+  useEffect(() => {
+    if (state.open && searchResultsActive) {
+      setSearchResultsActive(false);
     }
     /* eslint-disable-next-line */
   }, [state.open]);
@@ -521,11 +529,13 @@ const View = ({ content, ...props }) => {
               if (metadata[index]?.key === 'permit_years') {
                 // YEAH...FU*K TRACASA
                 filtersMeta['permit_types'] = {
-                  filteringInputs: [{
-                    id: _uniqueId('select_'),
-                    type: 'select',
-                    position: 0,
-                  }],
+                  filteringInputs: [
+                    {
+                      id: _uniqueId('select_'),
+                      type: 'select',
+                      position: 0,
+                    },
+                  ],
                   placeholder: 'Select permit type',
                   queryToSet: 'permitType',
                   title: 'Permit',
@@ -737,7 +747,7 @@ const View = ({ content, ...props }) => {
     if (searchContainerModalActive || searchContainerActive) {
       searchResultsActive = true;
     }
-    return setState({ ...state, searchResultsActive });
+    return setSearchResultsActive(searchResultsActive);
   }
 
   const autoComplete = (data) => {
@@ -864,20 +874,20 @@ const View = ({ content, ...props }) => {
     setState({ ...state, open: false });
   };
 
-  const searchView = (ref) => (
+  const searchView = (ref, modal = true) => (
     <div className="search-input-container">
       <div className="ref" ref={ref}>
         <Input
           className="search"
           icon="search"
           placeholder="Try search for a site name, country, city, region or ZIP code"
-          iconPosition="left"
+          iconPosition="right"
           value={searchTerm}
           onChange={(event, data) => {
             autoComplete(data);
           }}
         />
-        {state.searchResultsActive && searchResults.length ? (
+        {searchResultsActive && searchResults.length ? (
           <div className="search-results">
             <List>
               {searchResults.map((result, index) => {
@@ -885,11 +895,9 @@ const View = ({ content, ...props }) => {
                   <List.Item
                     key={`search-result-${index}`}
                     onClick={() => {
-                      setState({
-                        ...state,
-                        searchResultsActive: false,
-                      });
+                      setSearchResultsActive(false);
                       setSearchTerm(result);
+                      setTriggerSearch(!modal);
                     }}
                   >
                     <Highlighter
@@ -923,7 +931,7 @@ const View = ({ content, ...props }) => {
 
   return (
     <div className="filters-container">
-      {searchView(searchContainer)}
+      {searchView(searchContainer, false)}
       <div className="flex space-between buttons-container">
         <Modal
           className="filters-block"
@@ -931,7 +939,7 @@ const View = ({ content, ...props }) => {
           onOpen={() => setState({ ...state, open: true })}
           open={state.open}
           trigger={
-            <button className="solid red">
+            <button className="outline red ml-0-super mr-0-super">
               {modalButtonTitle ? modalButtonTitle : 'Show modal'}
             </button>
           }
@@ -1072,17 +1080,14 @@ const View = ({ content, ...props }) => {
               })}
           </Modal.Content>
           <Modal.Actions>
-            <button className="solid red" onClick={clearFilters}>
-              CLEAR FILTERS
+            <button className="outline red ma-1" onClick={clearFilters}>
+              Clear Filters
             </button>
-            <button className="solid dark-blue" onClick={submit}>
-              SEARCH AND FILTER
+            <button className="outline dark-blue ma-1" onClick={submit}>
+              Search and Filter
             </button>
           </Modal.Actions>
         </Modal>
-        <button className="solid dark-blue" onClick={submit}>
-          {searchButtonTitle ? searchButtonTitle : 'Search'}
-        </button>
       </div>
       <Portal node={document.getElementById('map-sidebar-button')}>
         <div id="dynamic-filter-toggle" className="ol-unselectable ol-control">
@@ -1145,11 +1150,11 @@ const View = ({ content, ...props }) => {
             </div>
             <div className="dynamic-filter-actions">
               <button
-                className="solid red"
+                className="outline red"
                 onClick={clearFilters}
                 style={{ margin: 0 }}
               >
-                CLEAR FILTERS
+                Clear Filters
               </button>
               <Header as="h3">Quick facts</Header>
               {state.factsDataOrder &&

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 /* SEMANTIC UI */
 import { Menu } from 'semantic-ui-react';
 /* HELPERS */
+import cx from 'classnames';
 import {
   isActive,
   getNavigationByParent,
@@ -46,6 +47,12 @@ const View = ({ content, ...props }) => {
           }
           return (
             <Menu.Item
+              className={cx(
+                index > 0 ? 'sibling-on-left' : '',
+                index < props.navigation.items.length - 1
+                  ? 'sibling-on-right'
+                  : '',
+              )}
               name={name}
               key={url}
               active={state.activeItem === url}

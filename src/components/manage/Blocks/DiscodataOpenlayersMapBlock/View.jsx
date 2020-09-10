@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Portal } from 'react-portal';
 // HELPERS
 import qs from 'query-string';
 import axios from 'axios';
@@ -18,6 +19,7 @@ import { setQueryParam } from 'volto-datablocks/actions';
 import { Grid, Header, Loader, Dimmer } from 'semantic-ui-react';
 // SVGs
 import clearSVG from '@plone/volto/icons/clear.svg';
+import navigationSVG from '@plone/volto/icons/navigation.svg';
 // STYLES
 import 'ol/ol.css';
 import './style.css';
@@ -55,7 +57,8 @@ let Map,
   tile,
   Control,
   defaultsControls,
-  defaultsInteractions;
+  defaultsInteractions,
+  DragRotateAndZoom;
 let OL_LOADED = false;
 const initialExtent = [
   -10686671.0000035,
@@ -93,6 +96,7 @@ const OpenlayersMapView = (props) => {
   const [mapRendered, setMapRendered] = useState(false);
   const [firstFilteringUpdate, setFirstFilteringUpdate] = useState(false);
   const ToggleSidebarControl = useRef(null);
+  const ViewYourAreaControl = useRef(null);
   const history = useHistory();
   const draggable = !!props.data?.draggable?.value;
   const hasPopups = !!props.data?.hasPopups?.value;
@@ -153,6 +157,7 @@ const OpenlayersMapView = (props) => {
         Control = require('ol/control/Control.js').default;
         defaultsControls = require('ol/control.js').defaults;
         defaultsInteractions = require('ol/interaction.js').defaults;
+        DragRotateAndZoom = require('ol/interaction.js').DragRotateAndZoom;
         OL_LOADED = true;
       }
       if (OL_LOADED && !ToggleSidebarControl.current && hasSidebar) {
@@ -173,6 +178,27 @@ const OpenlayersMapView = (props) => {
           ToggleSidebarControl.prototype.constructor = ToggleSidebarControl;
 
           return ToggleSidebarControl;
+        })(Control);
+      }
+
+      if (OL_LOADED && !ViewYourAreaControl.current) {
+        ViewYourAreaControl.current = /*@__PURE__*/ (function (Control) {
+          function ViewYourAreaControl(opt_options) {
+            const options = opt_options || {};
+            const buttonContainer = document.createElement('div');
+            buttonContainer.setAttribute('id', 'map-view-your-area-button');
+            Control.call(this, {
+              element: buttonContainer,
+              target: options.target,
+            });
+          }
+          if (Control) ViewYourAreaControl.__proto__ = Control;
+          ViewYourAreaControl.prototype = Object.create(
+            Control && Control.prototype,
+          );
+          ViewYourAreaControl.prototype.constructor = ViewYourAreaControl;
+
+          return ViewYourAreaControl;
         })(Control);
       }
       renderMap();
@@ -376,10 +402,15 @@ const OpenlayersMapView = (props) => {
       const map = new Map({
         controls: draggable
           ? hasSidebar
-            ? defaultsControls().extend([new ToggleSidebarControl.current()])
-            : defaultsControls()
+            ? defaultsControls().extend([
+                new ToggleSidebarControl.current(),
+                new ViewYourAreaControl.current(),
+              ])
+            : defaultsControls().extend([new ViewYourAreaControl.current()])
           : [],
-        interactions: draggable ? defaultsInteractions() : [],
+        interactions: draggable
+          ? defaultsInteractions().extend([new DragRotateAndZoom()])
+          : [],
         target: document.getElementById('map'),
         view: new View({
           center: fromLonLat([20, 50]),
@@ -488,7 +519,6 @@ const OpenlayersMapView = (props) => {
         stateRef.current.map.oldSitesSourceQuery.where ||
       stateRef.current.updateMapPosition !== null
     ) {
-      console.log('ON SOURCE CHANGE');
       setState({
         ...stateRef.current,
         map: {
@@ -503,12 +533,11 @@ const OpenlayersMapView = (props) => {
   }
 
   function centerPosition(map, position, zoom) {
-    map
-      .getView()
-      .setCenter(
-        fromLonLat([position.coords.longitude, position.coords.latitude]),
-      );
-    map.getView().setZoom(zoom);
+    map.getView().animate({
+      center: fromLonLat([position.coords.longitude, position.coords.latitude]),
+      duration: 1000,
+      zoom,
+    });
   }
 
   function setFeatureInfo(map, pixel, coordinate, detailed) {
@@ -1015,7 +1044,9 @@ const OpenlayersMapView = (props) => {
               <button
                 onClick={() => {
                   setSiteQueryParams();
-                  history.push('/industrial-sites');
+                  history.push(
+                    '/industrial-site/introduction/understanding-the-data',
+                  );
                 }}
                 className="solid dark-blue"
               >
@@ -1028,6 +1059,22 @@ const OpenlayersMapView = (props) => {
       <Dimmer id="map-loader" active={loader}>
         <Loader />
       </Dimmer>
+      <Portal node={document.getElementById('map-view-your-area-button')}>
+        <div id="view-your-area" className="ol-unselectable ol-control">
+          <button
+            className="toggle-button"
+            onClick={() => {
+              if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                  return centerPosition(state.map.element, position, 12);
+                });
+              }
+            }}
+          >
+            <VoltoIcon name={navigationSVG} size="1em" fill="white" />
+          </button>
+        </div>
+      </Portal>
     </div>
   );
 };

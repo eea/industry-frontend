@@ -208,7 +208,12 @@
 
 .ol-overlaycontainer-stopevent #dynamic-filter-toggle {
   display: none;
-  top: 65px;
+  top: 80px;
+  left: .5em;
+}
+
+.ol-overlaycontainer-stopevent #view-your-area {
+  top: 55px;
   left: .5em;
 }
 

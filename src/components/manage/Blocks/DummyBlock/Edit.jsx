@@ -1,34 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import _uniqueId from 'lodash/uniqueId';
 import View from './View';
-import { settings } from '~/config';
-import { isArray, isObject } from 'lodash';
 
 import InlineForm from '@plone/volto/components/manage/Form/InlineForm';
 import { SidebarPortal } from '@plone/volto/components';
 
-import { makeTextSchema } from '../schema';
-
-const getSchema = (props) => {
-  return makeTextSchema(props);
-};
+import { makeSchema } from './schema';
 
 const Edit = (props) => {
   const [state, setState] = useState({
-    schema: getSchema({ ...props }),
+    schema: makeSchema({ ...props }),
     id: _uniqueId('block_'),
   });
-
-  useEffect(() => {
-    const schema = getSchema({ ...props });
-    setState({
-      ...state,
-      schema,
-    });
-    /* eslint-disable-next-line */
-  }, [props.discodata_query.search, props.discodata_resources.data, JSON.stringify(props.data)]);
 
   return (
     <div>

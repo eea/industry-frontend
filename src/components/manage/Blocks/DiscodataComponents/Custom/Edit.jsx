@@ -9,10 +9,10 @@ import { isArray, isObject } from 'lodash';
 import InlineForm from '@plone/volto/components/manage/Form/InlineForm';
 import { SidebarPortal } from '@plone/volto/components';
 
-import { makeSelectSchema } from '../schema';
+import { makeCustomSchema } from '../schema';
 
 const getSchema = (props) => {
-  return makeSelectSchema(props);
+  return makeCustomSchema(props);
 };
 
 const Edit = (props) => {
@@ -80,23 +80,19 @@ const Edit = (props) => {
   }, []);
 
   useEffect(() => {
-    updateDiscodataValues(mounted);
-    /* eslint-disable-next-line */
-  }, [
-    JSON.stringify(props.discodata_query.search),
-    JSON.stringify(props.discodata_resources.data),
-    JSON.stringify(props.data),
-  ]);
-
-  useEffect(() => {
-    const schema = getSchema({ ...props, discodataValues });
+    const schema = getSchema({
+      ...props,
+      discodataValues: updateDiscodataValues(mounted),
+    });
     setState({
       ...state,
       schema,
     });
     /* eslint-disable-next-line */
   }, [
-    JSON.stringify(discodataValues)
+    JSON.stringify(props.discodata_query.search),
+    JSON.stringify(props.discodata_resources.data),
+    JSON.stringify(props.data),
   ]);
 
   return (

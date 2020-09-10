@@ -337,6 +337,79 @@ export const makeSelectSchema = (props) => {
   });
 };
 
+export const makeCustomSchema = (props) => {
+  const discodataValues = props.discodataValues;
+  const discodataKeys =
+    discodataValues &&
+    discodataValues[0] &&
+    !isArray(discodataValues[0]) &&
+    isObject(discodataValues[0])
+      ? makeChoices(Object.keys(discodataValues[0]))
+      : [];
+  const schemaTitle = 'Text';
+  const schemaFieldsets = [
+    {
+      id: 'settings',
+      title: 'Settings',
+      fields: [
+        'key',
+        'value',
+        'text',
+        'queryParametersToSet',
+        'placeholder',
+        'className',
+        'component',
+      ],
+    },
+  ];
+  const schemaProperties = {
+    key: {
+      title: 'Selector key',
+      type: 'array',
+      choices: discodataKeys || [],
+    },
+    value: {
+      title: 'Selector value',
+      type: 'array',
+      choices: discodataKeys || [],
+    },
+    text: {
+      title: 'Selector text',
+      type: 'array',
+      choices: discodataKeys || [],
+    },
+    queryParametersToSet: {
+      title: 'Query parameters',
+      widget: 'object_list',
+      schema: getQueryParametersToSetSchema(props),
+    },
+    placeholder: {
+      title: 'Placeholder',
+      widget: 'text',
+    },
+    className: {
+      title: 'Class name',
+      widget: 'text',
+    },
+    component: {
+      title: 'Component',
+      type: 'array',
+      choices: [
+        ['eprtrReportingYears', 'EPRTR reporting years'],
+        ['eprtrBatConclusions', 'EPRTR bat conclusions'],
+      ],
+    },
+  };
+  const schemaRequired = [];
+  return makeSchema({
+    ...props,
+    schemaTitle,
+    schemaFieldsets,
+    schemaProperties,
+    schemaRequired,
+  });
+};
+
 export const makeListSchema = (props) => {
   const discodataValues = props.discodataValues;
   const discodataKeys =
