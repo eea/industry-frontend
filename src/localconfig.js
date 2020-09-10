@@ -53,6 +53,9 @@ import SelectView from '~/components/manage/Blocks/DiscodataComponents/Select/Vi
 import CustomEdit from '~/components/manage/Blocks/DiscodataComponents/Custom/Edit';
 import CustomView from '~/components/manage/Blocks/DiscodataComponents/Custom/View';
 
+import ListEdit from '~/components/manage/Blocks/DiscodataComponents/List/Edit';
+import ListView from '~/components/manage/Blocks/DiscodataComponents/List/View';
+
 // import QueryParamButtonEdit from '~/components/manage/Blocks/LinkButton/Edit';
 // import QueryParamButtonView from '~/components/manage/Blocks/QueryParamButton/View';
 
@@ -224,6 +227,15 @@ export function applyConfig(voltoConfig) {
     group: 'discodata_components',
     view: SelectView,
     edit: SelectEdit,
+    icon: packSVG,
+  };
+
+  config.blocks.blocksConfig.discodata_components_list = {
+    id: 'discodata_components_list',
+    title: 'List',
+    group: 'discodata_components',
+    view: ListView,
+    edit: ListEdit,
     icon: packSVG,
   };
 

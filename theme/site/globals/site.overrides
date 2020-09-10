@@ -647,8 +647,8 @@ p {
 
   .ui.table {
     border: none;
-    // border-collapse: separate;
-    // border-spacing: 0 4px;
+    border-collapse: separate;
+    border-spacing: 0 4px;
     color: #323232;
 
     thead {

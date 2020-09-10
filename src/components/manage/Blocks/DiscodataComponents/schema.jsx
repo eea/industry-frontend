@@ -70,7 +70,7 @@ export const getQueryParametersSchema = (props) => {
   };
 };
 
-export const getQueryParametersToSetSchema = (props) => {
+export const getQueryParametersToSetSchema = (props, keys = null) => {
   return {
     title: 'Query parameter',
     fieldsets: [
@@ -84,11 +84,13 @@ export const getQueryParametersToSetSchema = (props) => {
       selectorOptionKey: {
         title: 'Selector option key',
         type: 'array',
-        choices: [
-          ['key', 'Key'],
-          ['value', 'Value'],
-          ['text', 'Text'],
-        ],
+        choices: !keys
+          ? [
+              ['key', 'Key'],
+              ['value', 'Value'],
+              ['text', 'Text'],
+            ]
+          : keys,
       },
       queryParameterToSet: {
         title: 'Query parameter to set',
@@ -419,55 +421,33 @@ export const makeListSchema = (props) => {
     isObject(discodataValues[0])
       ? makeChoices(Object.keys(discodataValues[0]))
       : [];
-  const schemaTitle = 'Text';
+  const schemaTitle = 'List';
   const schemaFieldsets = [
-    {
-      id: 'additional',
-      title: 'Additional',
-      fields: ['queryParameters'],
-    },
     {
       id: 'settings',
       title: 'Settings',
-      fields: [
-        'key',
-        'value',
-        'text',
-        'queryParametersToSet',
-        'placeholder',
-        'className',
-      ],
+      fields: ['key', 'link', 'queryParametersToSet', 'limit', 'className'],
     },
   ];
   const schemaProperties = {
-    queryParameters: {
-      title: 'Query parameters',
-      widget: 'query_param_list',
-      schema: getQueryParametersSchema(props),
-    },
     key: {
-      title: 'Selector key',
+      title: 'Key',
       type: 'array',
       choices: discodataKeys || [],
     },
-    value: {
-      title: 'Selector value',
-      type: 'array',
-      choices: discodataKeys || [],
-    },
-    text: {
-      title: 'Selector text',
-      type: 'array',
-      choices: discodataKeys || [],
+    link: {
+      title: 'Page',
+      widget: 'object_by_path',
     },
     queryParametersToSet: {
       title: 'Query parameters',
       widget: 'object_list',
-      schema: getQueryParametersToSetSchema(props),
+      schema: getQueryParametersToSetSchema(props, discodataKeys),
     },
-    placeholder: {
-      title: 'Placeholder',
-      widget: 'text',
+    limit: {
+      title: 'Limit',
+      type: 'number',
+      minimum: '0',
     },
     className: {
       title: 'Class name',

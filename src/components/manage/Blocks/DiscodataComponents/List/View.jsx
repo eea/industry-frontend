@@ -2,67 +2,66 @@
 import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { isArray } from 'lodash';
-import { Dropdown } from 'semantic-ui-react';
+import { isArray, isDate } from 'lodash';
+import { Link } from 'react-router-dom';
 import { setQueryParam } from 'volto-datablocks/actions';
-
+import Icon from '@plone/volto/components/theme/Icon/Icon';
+import moment from 'moment';
 import cx from 'classnames';
+import './style.css';
 
 const components = {
-  select: (
-    options,
+  list: (
+    key,
+    link,
     queryParameters,
+    collection = [],
     search,
     setQueryParam,
-    placeholder,
+    limit,
     className,
     mode,
   ) => {
-    let activeValue = '';
-    if (queryParameters[0]?.queryParameterToSet) {
-      activeValue = search[queryParameters[0].queryParameterToSet];
-    }
     return (
-      <div className={cx(className, mode === 'edit' ? 'pa-1' : '')}>
-        <Dropdown
-          selection
-          onChange={(event, data) => {
-            const queryParametersToSet = {};
-            queryParameters.forEach((queryParam) => {
-              queryParametersToSet[
-                queryParam.queryParameterToSet
-              ] = data.options.filter((opt) => {
-                return opt.value === data.value;
-              })[0]?.[queryParam.selectorOptionKey];
-            });
-            setQueryParam({
-              queryParam: {
-                ...(queryParametersToSet || {}),
-              },
-            });
-          }}
-          placeholder={placeholder}
-          options={options}
-          value={activeValue}
-        />
+      <div className="discodata-list">
+        {collection.slice(0, limit || collection.length).map((item) => (
+          <Link
+            key={`item-${item[key]}`}
+            className={cx('', className)}
+            as="a"
+            to={link}
+            onClick={() => {
+              const queries = {};
+              queryParameters.forEach((queryParameter) => {
+                queries[queryParameter.queryParameterToSet] =
+                  item[queryParameter.selectorOptionKey];
+              });
+              setQueryParam({
+                queryParam: { ...queries },
+              });
+            }}
+          >
+            {item[key]}
+          </Link>
+        ))}
       </div>
     );
   },
 };
 
 const View = ({ content, ...props }) => {
+  const [packages, setPackages] = useState([]);
   const [discodataValues, setDiscodataValues] = useState([]);
   const [mounted, setMounted] = useState(false);
   const { data } = props;
   const { resources = [], subResources = [] } = data;
-  const { placeholder = 'Select', className = '' } = data;
-  const { key = '', value = '', text = '', queryParametersToSet = [] } = data;
-
-  const options = discodataValues.map((discodata, index) => ({
-    key: discodata[key] || index,
-    value: discodata[value] || index,
-    text: discodata[text] || index,
-  }));
+  const { className = '' } = data;
+  const {
+    key = '',
+    link = '/',
+    queryParametersToSet = [],
+    limit = null,
+  } = data;
 
   const updateDiscodataValues = (mounted) => {
     if (props.discodata_resources && props.search && mounted) {
@@ -106,8 +105,35 @@ const View = ({ content, ...props }) => {
     }
   };
 
+  const updatePackages = (mounted) => {
+    if (props.discodata_resources && props.search && mounted) {
+      let newDiscodataValues = [];
+      const selectedSubResources = subResources.map((subResource) => {
+        const keyValue = subResource.package?.split('@') || [null, null];
+        return {
+          package: keyValue[0],
+          query: keyValue[1],
+        };
+      });
+      selectedSubResources.forEach((subResource) => {
+        const discodataPackage = resources.filter(
+          (resource) => resource.package === subResource.package,
+        )[0];
+        if (props.search[discodataPackage.queryParameter]) {
+          newDiscodataValues.push(
+            props.discodata_resources[discodataPackage.package]?.[
+              props.search[discodataPackage.queryParameter]
+            ]?.[subResource.query],
+          );
+        }
+      });
+      setPackages(newDiscodataValues);
+    }
+  };
+
   useEffect(() => {
     setMounted(true);
+    updatePackages(true);
     if (props.mode !== 'edit') {
       updateDiscodataValues(true);
     } else {
@@ -117,26 +143,31 @@ const View = ({ content, ...props }) => {
   }, []);
 
   useEffect(() => {
+    updatePackages(mounted);
     if (props.mode !== 'edit') {
       updateDiscodataValues(mounted);
     } else {
       setDiscodataValues(props.discodataValues);
     }
     /* eslint-disable-next-line */
-  }, [props.search, props.discodata_resources])
+  }, [props.search, props.discodata_resources, props.discodataValues])
 
 
   return (
     <>
-      {components.select(
-        options,
-        queryParametersToSet,
-        props.search,
-        props.setQueryParam,
-        placeholder,
-        className,
-        props.mode,
-      )}
+      {components['list']
+        ? components['list'](
+            key,
+            link,
+            queryParametersToSet,
+            discodataValues,
+            props.search,
+            props.setQueryParam,
+            limit,
+            className,
+            props.mode,
+          )
+        : ''}
     </>
   );
 };

@@ -403,9 +403,9 @@ const renderComponents = {
       },
     ];
     return (
-      <div className="eprtrSelection">
+      <div className="custom-selector big red">
         <Header as="h1">Industrial pollution in</Header>
-        <div className="selector-container display-flex flex-flow-column">
+        <div className="selector-container display-flex flex-flow-row">
           {items && (
             <Dropdown
               selection

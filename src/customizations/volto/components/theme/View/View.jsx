@@ -271,7 +271,7 @@ class View extends Component {
               : null
           }
         />
-        {RenderedView ? (
+        {RenderedView && RenderedView !== -1 ? (
           <RenderedView
             content={this.props.content}
             location={this.props.location}

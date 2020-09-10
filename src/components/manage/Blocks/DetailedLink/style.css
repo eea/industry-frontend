@@ -18,16 +18,8 @@
   margin-bottom: 1em;
 }
 
-.detailed-link-container .detailed-link-button:not(.solid) {
+.detailed-link-container .detailed-link-button {
   display: inline-block;
-  border: 1px solid #32536B;
-  color: #32536B;
-  box-sizing: border-box;
-  border-radius: 30px;
-  font-weight: 300;
-  font-size: 14px;
-  line-height: 18px;
-  padding: 1em 2em;
 }
 
 .detailed-link-container .detailed-link-placeholder {
