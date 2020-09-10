@@ -198,17 +198,17 @@
   box-shadow: none;
 
   .item {
-    color: @linkColor;
+    // color: @linkColor;
 
-    &:before {
-      display: none;
-    }
+    // &:before {
+    //   display: none;
+    // }
   }
 
   .active.item {
-    background: none;
-    color: @linkColor;
-    font-weight: 700;
-    border-bottom: 2px solid @linkColor;
+    // background: none;
+    // color: @linkColor;
+    // font-weight: 700;
+    // border-bottom: 2px solid @linkColor;
   }
 }

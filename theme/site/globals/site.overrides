@@ -647,75 +647,12 @@ p {
 
   .ui.table {
     border: none;
-
-    tr {
-      border: none;
-
-      &.hidden-row {
-        &.hide {
-          td {
-            .table-flex-container {
-              padding: 0;
-              max-height: 0;
-              opacity: 0;
-            }
-          }
-        }
-
-        &.show {
-          td {
-            .table-flex-container {
-              padding: 20px 30px 40px 30px;
-              max-height: fit-content;
-              opacity: 1;
-            }
-          }
-        }
-
-        td {
-          padding: 0;
-
-          .table-flex-container {
-            display: flex;
-            justify-content: space-between;
-            overflow: hidden;
-            transition: opacity 0.4s cubic-bezier(0, 0, 1, 1);
-            padding: 0 0.4rem;
-
-            >div {
-              position: relative;
-              flex: 1;
-              margin: 0 0.4rem;
-            }
-
-            span.header {
-              font-weight: bold;
-            }
-
-            a.view-site-link {
-              width: 100%;
-              text-align: center;
-              background: #32536B;
-              color: white;
-              font-weight: bold;
-              text-transform: uppercase;
-              border-radius: 5rem;
-              padding: 1.5rem 3rem;
-            }
-          }
-        }
-      }
-    }
-
-    td {
-      border: none;
-      padding: 0.8em 0.8em;
-    }
+    // border-collapse: separate;
+    // border-spacing: 0 4px;
+    color: #323232;
 
     thead {
       tr {
-        border-bottom: 1px solid #CBCBCB;
-
         th {
           border: none;
           background: #fff;
@@ -726,45 +663,154 @@ p {
       }
     }
 
+    tbody {
+      tr {
+        border: none;
+        background-color: #F8F8F8;
+        &.hidden-row {
+          border: none;
+          display: none;
+          td {
+            padding: 0;
+  
+            .table-flex-container {
+              display: flex;
+              justify-content: space-between;
+              overflow: hidden;
+              transition: opacity 0.4s cubic-bezier(0, 0, 1, 1);
+              padding: 0 0.4rem;
+  
+              &.action {
+                padding: 0;
+              }
+  
+              >div {
+                position: relative;
+                flex: 1;
+                margin: 0 0.4rem;
+              }
+  
+              span.header {
+                font-weight: bold;
+                color: #4296B2;
+                margin-bottom: 1em;
+              }
+  
+              a.view-site-link {
+                width: 100%;
+                text-align: center;
+                background: #32536B;
+                color: white;
+                font-weight: bold;
+                text-transform: uppercase;
+                border-radius: 5rem;
+                padding: 1.5rem 3rem;
+              }
+            }
+          }
+  
+          &.show {
+            border: none;
+            display: table-row;
+            td {
+              padding: 20px 16px 20px 16px;
+              .table-flex-container {
+                padding: 1em;
+                max-height: fit-content;
+                opacity: 1;
+                &.action {
+                  padding: 0;
+                  margin-top: 1em;
+                }
+                &.white {
+                  color: #000;
+                  background: #fff;
+                }
+              }
+            }
+          }
+        }
+  
+        &.hide {
+          td {
+            .table-flex-container {
+              padding: 0;
+              max-height: 0;
+              opacity: 0;
+            }
+          }
+        }
+  
+        button {
+          cursor: pointer;
+          background: transparent;
+          border: none;
+          padding: 0;
+      
+          &:focus {
+            outline: none;
+          }
+      
+          svg.icon {
+            fill: #878787 !important;
+      
+            &:focus {
+              outline: none;
+            }
+          }
+        }
+  
+        &.row-active {
+          font-weight: bold;
+          button {
+            svg.icon {
+              fill: #D63D27 !important;
+            }
+          }
+        }
+  
+        &:hover:not(.hidden-row):not(.row-active) {
+          button {
+            svg.icon {
+              fill: #D63D27 !important;
+            }
+          }
+        }
+      }
+    }
+
     tfoot {
       th {
         border: none;
+        padding: 0.78571429em 0;
       }
+    }
+
+    td {
+      border: none;
+      padding: 4px 16px;
     }
   }
 
-  button {
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    padding: 0;
-
-    &:focus {
-      outline: none;
-    }
-
-    svg.icon {
-      fill: #D63D27 !important;
-
+  .ui.pagination.menu { 
+    border: 1px solid rgba(34,36,38,.15);
+    box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
+    border-radius: .28571429rem;
+    .item {
+      &:before {
+        position: absolute;
+        content: '';
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 1px;
+        background: rgba(34,36,38,.1);
+      }
+  
       &:focus {
-        outline: none;
+        outline: none !important;
       }
     }
-  }
-
-  .ui.pagination.menu .item {
-    color: #6B6B6B;
-    min-width: 0;
-    padding: 1em 0.4em;
-
-    &:focus {
-      outline: none !important;
-    }
-  }
-
-  .ui.pagination.menu .active.item {
-    color: #000;
-    border-bottom: none;
   }
 }
 
@@ -1042,12 +1088,13 @@ space-around {
 //   }
 // }
 
-button {
+button,
+a {
   cursor: pointer;
   outline: none;
+  text-decoration: none;
   &.outline {
     position: relative;
-    z-index: 3;
     background: transparent;
     color: #1172c4;
     font-size: 14px;
@@ -1058,7 +1105,7 @@ button {
     padding: 10px 40px;
     transition: all 0.2s linear;
     a {
-        text-decoration: none;
+      text-decoration: none;
     }
     &:hover {
       color: white;
@@ -1105,7 +1152,7 @@ button {
     padding: 10px 40px;
     transition: all 0.2s linear;
     a {
-        text-decoration: none;
+      text-decoration: none;
     }
     &:hover {
       color: white;
@@ -1258,6 +1305,9 @@ body.has-sidebar {
             width: 0;
             background-color: transparent !important;
           }
+          &:first-child {
+            margin-left: 0 !important;
+          }
         }
         .active.item {
           background-color: transparent !important;
@@ -1309,15 +1359,6 @@ body.has-sidebar {
         }
       }
     }
-  }
-}
-
-
-.ui.menu {
-  &.pagination {
-    .active.item {
-      background-color: transparent !important;
-    } 
   }
 }
 

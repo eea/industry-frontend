@@ -166,6 +166,7 @@ const OpenlayersMapView = (props) => {
             const options = opt_options || {};
             const buttonContainer = document.createElement('div');
             buttonContainer.setAttribute('id', 'map-sidebar-button');
+            buttonContainer.setAttribute('class', 'ol-unselectable ol-control');
             Control.call(this, {
               element: buttonContainer,
               target: options.target,
@@ -187,6 +188,7 @@ const OpenlayersMapView = (props) => {
             const options = opt_options || {};
             const buttonContainer = document.createElement('div');
             buttonContainer.setAttribute('id', 'map-view-your-area-button');
+            buttonContainer.setAttribute('class', 'ol-unselectable ol-control');
             Control.call(this, {
               element: buttonContainer,
               target: options.target,
@@ -661,7 +663,7 @@ const OpenlayersMapView = (props) => {
               stateRef.current.updateMapPosition,
             );
           var url =
-            'https://services.arcgis.com/LcQjj2sL7Txk9Lag/arcgis/rest/services/SiteMap/FeatureServer/0/query/?f=json&' +
+            'https://services.arcgis.com/LcQjj2sL7Txk9Lag/arcgis/rest/services/SiteMap_v2/FeatureServer/0/query/?f=json&' +
             'returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=' +
             encodeURIComponent(
               '{"xmin":' +
@@ -1013,9 +1015,18 @@ const OpenlayersMapView = (props) => {
                   <div className="column  column-12">
                     <Header as="h3">Pollutant emissions</Header>
                   </div>
-                  <div className="column  column-12">
+                  <div className="column  column-12 description">
                     {state.popupDetails.properties.pollutants ? (
-                      <p>{state.popupDetails.properties.pollutants}</p>
+                      <p>
+                        {state.popupDetails.properties.pollutants}
+                        {/* {state.popupDetails.properties.pollutants.substring(
+                          0,
+                          256,
+                        )}
+                        {state.popupDetails.properties.pollutants.length > 256
+                          ? '...'
+                          : ''} */}
+                      </p>
                     ) : (
                       <p>There are no data regarding the pollutants</p>
                     )}
@@ -1050,7 +1061,7 @@ const OpenlayersMapView = (props) => {
                 }}
                 className="solid dark-blue"
               >
-                VIEW SITE DETAIL
+                Site Details
               </button>
             </div>
           </>

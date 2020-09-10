@@ -214,3 +214,16 @@
 #dynamic-filter {
   display: none;
 }
+
+
+@media (max-width: 500px) {
+  .filters-container {
+    flex-flow: column;
+  }
+  .filters-container > .search-input-container {
+    margin-right: 0;
+  }
+  .filters-container .buttons-container button {
+    width: 100%;
+  }
+}
