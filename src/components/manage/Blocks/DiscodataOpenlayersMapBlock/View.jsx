@@ -104,6 +104,13 @@ const initialExtent = [
   10421410.9999871,
 ];
 let renderExtent = [];
+
+const getDistance = (P1, P2) => {
+  const cathetus_1 = Math.pow(P1[0] - P2[0], 2);
+  const cathetus_2 = Math.pow(P1[1] - P2[1], 2);
+  return Math.sqrt(cathetus_1 + cathetus_2);
+};
+
 const OpenlayersMapView = (props) => {
   const stateRef = useRef({
     map: {
@@ -899,12 +906,28 @@ const OpenlayersMapView = (props) => {
       }
       map.on('moveend', function (e) {
         if (hasSidebar && document.getElementById('dynamic-filter')) {
+          const closestFeature = {
+            feature: null,
+            distance: Infinity,
+          };
+          const features = stateRef.current.map.sitesSourceLayer
+            .getSource()
+            .getFeatures();
+
+          features.forEach((feature, index) => {
+            const distance = getDistance(
+              feature.getGeometry().flatCoordinates,
+              stateRef.current.map.element.getView().getCenter(),
+            );
+            if (closestFeature.distance > distance) {
+              closestFeature.feature = feature;
+              closestFeature.distance = distance;
+            }
+          });
           document.getElementById('dynamic-filter').dispatchEvent(
             new CustomEvent('featurechange', {
               detail: {
-                features: sitesSource.getFeaturesInExtent(
-                  map.getView().calculateExtent(),
-                ),
+                feature: closestFeature.feature,
               },
             }),
           );

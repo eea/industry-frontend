@@ -174,10 +174,10 @@ const View = ({ content, ...props }) => {
 
   const onFeaturechange = (e) => {
     if (
-      e.detail.features?.[0]?.getProperties?.()?.countryCode !==
+      e.detail.feature?.getProperties?.()?.countryCode !==
       alphaFeatureRef.current?.getProperties?.()?.countryCode
     ) {
-      setAlphaFeature(e.detail.features?.[0]);
+      setAlphaFeature(e.detail.feature);
     }
   };
 
