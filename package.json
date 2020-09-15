@@ -113,7 +113,7 @@
     "@eeacms/volto-tabs-block": "github:eea/volto-tabs-block#0.2.2",
     "@eeacms/volto-widget-toggle": "github:eea/volto-widget-toggle#0.1.0",
     "@eeacms/volto-widgets-view": "github:eea/volto-widgets-view#0.2.4",
-    "@plone/volto": "github:eea/volto#7.14.2-beta.2",
+    "@plone/volto": "github:eea/volto#7.11.1-beta.1",
     "@tinymce/tinymce-react": "^3.6.0",
     "axios": "^0.20.0",
     "jsonp": "^0.2.1",
