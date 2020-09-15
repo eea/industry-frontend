@@ -5,7 +5,6 @@
   "version": "0.4.1",
   "private": true,
   "workspaces": [
-    "src/develop/volto-slate",
     "src/develop/volto-grid-block",
     "src/develop/volto-addons",
     "src/develop/volto-datablocks"
@@ -114,7 +113,7 @@
     "@eeacms/volto-tabs-block": "github:eea/volto-tabs-block#0.2.2",
     "@eeacms/volto-widget-toggle": "github:eea/volto-widget-toggle#0.1.0",
     "@eeacms/volto-widgets-view": "github:eea/volto-widgets-view#0.2.4",
-    "@plone/volto": "github:eea/volto#7.11.1-beta.1",
+    "@plone/volto": "github:eea/volto#7.14.2-beta.2",
     "@tinymce/tinymce-react": "^3.6.0",
     "axios": "^0.20.0",
     "jsonp": "^0.2.1",
@@ -130,7 +129,7 @@
     "react-sizeme": "^2.6.12",
     "react-tooltip": "^4.2.9",
     "react-visibility-sensor": "^5.1.1",
-    "volto-slate": "github:eea/volto-slate#0.6.0.beta.1"
+    "volto-slate": "github:eea/volto-slate#0.6.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",

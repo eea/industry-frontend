@@ -1065,28 +1065,28 @@ space-around {
 //   }
 // }
 
-// a.back,
-// button.back {
-//   font-weight: bold;
-//   display: inline-flex;
-//   align-items: center;
-//   border: none !important;
-//   &.red {
-//     color: #EC776A !important;
-//   }
-//   &.dark-blue {
-//     color: #32536B !important;
-//   }
-//   padding: 0 !important;
-//   &:before {
-//     content: '\21E6';
-//     font-size: 2em;
-//     font-weight: bold;
-//   }
-//   span {
-//     margin-left: 4px;
-//   }
-// }
+a.back,
+button.back {
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  border: none !important;
+  &.red {
+    color: #EC776A !important;
+  }
+  &.dark-blue {
+    color: #32536B !important;
+  }
+  padding: 0 !important;
+  &:before {
+    content: '\21E6';
+    font-size: 2em;
+    font-weight: bold;
+  }
+  span {
+    margin-left: 4px;
+  }
+}
 
 button,
 a {

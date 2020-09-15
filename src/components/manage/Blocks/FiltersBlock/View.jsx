@@ -54,8 +54,8 @@ const View = ({ content, ...props }) => {
       'pollutant_groups',
       'pollutants',
       'reporting_years',
+      'plant_types',
       'bat_conclusions',
-      'bat_conclusion_years',
       'permit_types',
       'permit_years',
     ],
@@ -265,12 +265,10 @@ const View = ({ content, ...props }) => {
         ORDER BY pollutantgroup`,
           // REPORTING YEARS QUERY
           `SELECT DISTINCT reportingYear FROM [IED].[latest].[ReportData] ORDER BY reportingYear`,
+          // PLANT TYPE
+          `SELECT code, Label FROM [IED].[latest].[PlantTypeValue] ORDER BY Label`,
           // BAT CONCLUSSIONS QUERY
           `SELECT DISTINCT id, Label, AcceptedDate FROM [IED].[latest].[BATConclusionValue] ORDER BY Label`,
-          // BAT CONCLUSSIONS YEAR
-          `SELECT DISTINCT StatusModifiedYear as bat_conclusion_years
-        FROM [IED].[latest].[BATConclusionValue]
-        GROUP BY StatusModifiedYear`,
           // PERMIT YEAR
           `SELECT DISTINCT permitYear
         FROM [IED].[latest].[PermitDetails]
@@ -341,6 +339,22 @@ const View = ({ content, ...props }) => {
             optionText: 'reportingYear',
             static: true,
           },
+          // PLANT TYPE META
+          {
+            key: 'plant_types',
+            title: 'Combustion plant type',
+            queryToSet: 'plantTypes',
+            firstInput: {
+              id: _uniqueId('select_'),
+              type: 'select',
+              position: 0,
+            },
+            placeholder: 'Select plant type',
+            optionKey: 'code',
+            optionValue: 'code',
+            optionText: 'Label',
+            static: true,
+          },
           // BAT CONCLUSSIONS QUERY
           {
             key: 'bat_conclusions',
@@ -355,21 +369,6 @@ const View = ({ content, ...props }) => {
             optionKey: 'id',
             optionValue: 'id',
             optionText: 'Label',
-            static: true,
-          },
-          // BAT CONCLUSSIONS YEAR
-          {
-            key: 'bat_conclusion_years',
-            queryToSet: 'batConclustionYear',
-            firstInput: {
-              id: _uniqueId('select_'),
-              type: 'select',
-              position: 0,
-            },
-            placeholder: 'Select BAT conclusion year',
-            optionKey: 'bat_conclusion_years',
-            optionValue: 'bat_conclusion_years',
-            optionText: 'bat_conclusion_years',
             static: true,
           },
           //  PERMIT YEAR
@@ -971,6 +970,7 @@ const View = ({ content, ...props }) => {
                     }}
                   >
                     <Highlighter
+                      className="suggestion-term"
                       highlightClassName="highlight"
                       searchWords={searchTerm?.split(' ') || []}
                       autoEscape={true}

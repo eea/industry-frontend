@@ -135,6 +135,13 @@
 .filters-block.ui.modal .search-results .ui.list .item {
   cursor: pointer;
   padding: 4px;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+}
+
+.filters-container .search-results .ui.list .item .suggestion-term {
+  width: 80%;
 }
 
 .filters-container .search-results .ui.list .item .mark,

@@ -318,14 +318,14 @@ const OpenlayersMapView = (props) => {
         reportingYear: {
           sql: `(Site_reporting_year IN (:options))`,
         },
+        // Plant type
+        plantTypes: {
+          sql: `(plantTypes LIKE '%:options%')`,
+          type: 'multiple',
+        },
         // BAT conclusion
         batConclusionCode: {
           sql: `(bat_conclusions LIKE '%:options%')`,
-          type: 'multiple',
-        },
-        // BAT conclusion year
-        batConclustionYear: {
-          sql: `(bat_conclusion_years LIKE '%:options%')`,
           type: 'multiple',
         },
         // Permit type

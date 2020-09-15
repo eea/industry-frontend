@@ -500,3 +500,8 @@ a.small h1 {
   background-color: transparent;
 }
 
+@media (max-width: 500px) {
+  .custom-selector .selector-container {
+    flex-flow: column;
+  }
+}
