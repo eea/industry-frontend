@@ -134,13 +134,30 @@
 .filters-container .search-results .ui.list .item,
 .filters-block.ui.modal .search-results .ui.list .item {
   cursor: pointer;
+  padding: 4px;
+}
+
+.filters-container .search-results .ui.list .item .mark,
+.filters-block.ui.modal .search-results .ui.list .item .mark {
+  background-color: transparent;
+  color: #000;
+  font-weight: bold;
+}
+
+.filters-container .search-results .ui.list .item.selected,
+.filters-block.ui.modal .search-results .ui.list .item.selected {
+  background-color: #EFEFEF;
 }
 
 .filters-container .search-results .ui.list .item .info,
 .filters-block.ui.modal .search-results .ui.list .item .info {
   position: absolute;
-  right: 1em;
+  right: calc(1em + 4px);
   color: #B8C6C8;
+}
+
+.filters-container .search-results .ui.list .item.selected .info,
+.filters-block.ui.modal .search-results .ui.list .item.selected .info {
 }
 
 .filters-container .search-results .ui.list .item:hover .info,

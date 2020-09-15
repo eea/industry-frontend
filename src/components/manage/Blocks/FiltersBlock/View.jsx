@@ -32,6 +32,12 @@ const makeUrl = (providerUrl, url) => {
   return encodeURI(providerUrl + `?query=${url}`);
 };
 
+const keyCodes = {
+  ENTER: 13,
+  ARROW_UP: 38,
+  ARROW_DOWN: 40,
+};
+
 const View = ({ content, ...props }) => {
   const providerUrl = settings.providerUrl;
   const { search } = props.discodata_query;
@@ -61,11 +67,15 @@ const View = ({ content, ...props }) => {
   const [factsData, setFactsData] = useState({});
   const [alphaFeature, setAlphaFeature] = useState({});
   const [sitesResults, setSitesResults] = useState([]);
+  const [searchResultsIndex, setSearchResultsIndex] = useState(0);
   const [searchResultsActive, setSearchResultsActive] = useState(false);
   const [locationResults, setLocationResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [newSearchTerm, setNewSearchTerm] = useState('');
   const [triggerSearch, setTriggerSearch] = useState(false);
+  const [quickFactsListener, setQuickFactsListener] = useState(false);
   const [sidebar, setSidebar] = useState(false);
+  const alphaFeatureRef = useRef({});
   const searchContainerModal = useRef(null);
   const searchContainer = useRef(null);
   const modalButtonTitle = props.data.modalButtonTitle?.value;
@@ -100,16 +110,22 @@ const View = ({ content, ...props }) => {
       ];
     } else {
       reqs = [
-        alphaFeature?.getProperties?.()?.country
+        alphaFeature?.getProperties?.()?.countryCode
           ? {
               factId: 'Country_quick_facts',
-              sql: `SELECT DISTINCT MP.siteCountry, MP.siteCountryName, MM.siteCount
-              FROM [IED].[latest].[Browse2_MapPOPUP] as MP
-              LEFT JOIN [IED].[latest].[vw_MainMap_totalSitesPerCountry] as MM
-              ON MP.siteCountry = MM.countryCode
-              WHERE siteCountry = '${alphaFeature.getProperties().country}'`,
-              titleDiscodataKey: 'siteCountryName',
-              descriptionDiscodataKey: ['siteCount'],
+              sql: `SELECT DISTINCT
+                  PS.countryCode,
+                  LC.CountryName as countryName,
+                  count(*) as sites
+              FROM [IED].[latest].[ProductionSite_NoGeo] as PS
+              LEFT JOIN [IED].[latest].[LOV_Countries] as LC
+              ON PS.countryCode = LC.CountryCode
+              WHERE PS.countryCode = '${
+                alphaFeature.getProperties().countryCode
+              }'
+              GROUP BY PS.countryCode, LC.CountryName`,
+              titleDiscodataKey: 'countryName',
+              descriptionDiscodataKey: ['sites'],
               title: ':titleDiscodataKey quick facts',
               description: [':descriptionDiscodataKey reporting sites'],
               type: 'firstElement',
@@ -156,32 +172,46 @@ const View = ({ content, ...props }) => {
       .catch((error) => {});
   };
 
+  const onFeaturechange = (e) => {
+    if (
+      e.detail.features?.[0]?.getProperties?.()?.countryCode !==
+      alphaFeatureRef.current?.getProperties?.()?.countryCode
+    ) {
+      setAlphaFeature(e.detail.features?.[0]);
+    }
+  };
+
+  if (!quickFactsListener && document.getElementById('dynamic-filter')) {
+    setQuickFactsListener(true);
+    document
+      .getElementById(`dynamic-filter`)
+      .addEventListener('featurechange', onFeaturechange);
+  }
+
   useEffect(function () {
     setState({ ...state, mounted: true });
-    // updateFactsData(true);
-    // document
-    //   .getElementById(`dynamic-filter`)
-    //   .addEventListener('featurechange', (e) => {
-    //     if (
-    //       JSON.stringify(e.detail.features?.[0]?.getProperties?.()?.country) !==
-    //       JSON.stringify(alphaFeature?.getProperties?.()?.country)
-    //     ) {
-    //       setAlphaFeature(e.detail.features?.[0]);
-    //     }
-    //   });
+    updateFactsData(true);
+    updateFilters(true);
     return () => {
+      if (quickFactsListener && document.getElementById(`dynamic-filter`)) {
+        document
+          .getElementById(`dynamic-filter`)
+          .removeEventListener('featurechange', onFeaturechange);
+      }
       setState({ ...state, mounted: false });
     };
     /* eslint-disable-next-line */
   }, []);
 
   useEffect(() => {
-    updateFactsData(false);
+    alphaFeatureRef.current = alphaFeature;
+    if (state.mounted) {
+      updateFactsData(false);
+    }
     /* eslint-disable-next-line */
   }, [alphaFeature])
 
   useEffect(() => {
-    updateFactsData(false);
     if (triggerSearch) {
       submit();
       setTriggerSearch(false);
@@ -221,9 +251,9 @@ const View = ({ content, ...props }) => {
       const onMountRequests = {
         sqls: [
           // INDUSTRIES QUERY
-          `SELECT DISTINCT EEASubSector
-        FROM [IED].[latest].[EPRTR_sectors]
-        ORDER BY EEASubSector`,
+          `SELECT DISTINCT EEAActivity
+          FROM [IED].[latest].[EPRTR_sectors]
+          ORDER BY EEAActivity`,
           // COUNTRIES QUERY
           `SELECT DISTINCT siteCountry, siteCountryName
         FROM [IED].[latest].[Browse2_MapPOPUP]
@@ -251,16 +281,16 @@ const View = ({ content, ...props }) => {
           {
             key: 'industries',
             title: 'Industries',
-            queryToSet: 'EEASubSector',
+            queryToSet: 'EEAActivity',
             firstInput: {
               id: _uniqueId('select_'),
               type: 'select',
               position: 0,
             },
             placeholder: 'Select industry',
-            optionKey: 'EEASubSector',
-            optionValue: 'EEASubSector',
-            optionText: 'EEASubSector',
+            optionKey: 'EEAActivity',
+            optionValue: 'EEAActivity',
+            optionText: 'EEAActivity',
             static: true,
           },
           // COUNTRIES META
@@ -541,6 +571,7 @@ const View = ({ content, ...props }) => {
                   title: 'Permit',
                   static: true,
                   options: [
+                    { key: null, value: null, text: 'No value' },
                     {
                       key: 'permitGranted',
                       value: 'permitGranted',
@@ -600,7 +631,7 @@ const View = ({ content, ...props }) => {
     /* eslint-disable-next-line */
   }, [
     state.mounted,
-    state.filters?.EEASubSector && JSON.stringify(state.filters.EEASubSector),
+    state.filters?.EEAActivity && JSON.stringify(state.filters.EEAActivity),
     state.filters?.siteCountry && JSON.stringify(state.filters.siteCountry),
     state.filters?.region && JSON.stringify(state.filters.region),
     state.filters?.townVillage && JSON.stringify(state.filters.townVillage),
@@ -641,7 +672,7 @@ const View = ({ content, ...props }) => {
     }
   };
 
-  const updateFilters = () => {
+  const updateFilters = (mounted = false) => {
     if (state.filters && state.filtersMeta) {
       const newFilters = { ...state.filters };
       const newFiltersKeys = Object.keys(newFilters);
@@ -670,6 +701,7 @@ const View = ({ content, ...props }) => {
         setState({
           ...state,
           filters: newFilters,
+          mounted: mounted ? true : state.mounted,
         });
       }
     }
@@ -730,6 +762,10 @@ const View = ({ content, ...props }) => {
         nuts_latest: [],
         siteTerm: null,
         locationTerm: null,
+        advancedFiltering: false,
+        filtersCounter: props.discodata_query.search['filtersCounter']
+          ? props.discodata_query.search['filtersCounter'] + 1
+          : 1,
       },
     });
   };
@@ -754,7 +790,7 @@ const View = ({ content, ...props }) => {
     let promises = [];
     const sqls = [
       {
-        query: `SELECT DISTINCT site FROM [IED].[latest].[Browse3_4_infotable] WHERE [site] LIKE '${data.value}%' ORDER BY [site]`,
+        query: `SELECT DISTINCT site FROM [IED].[latest].[Browse3_4_infotable] WHERE [site] LIKE '%${data.value}%' ORDER BY [site]`,
         reqKey: 'results',
         searchKey: 'site',
         updateState: setSitesResults,
@@ -810,11 +846,14 @@ const View = ({ content, ...props }) => {
     } else {
       sqls.forEach((sql) => sql.updateState([]));
       reqs.forEach((req) => req.updateState([]));
+      if (searchResultsIndex > 0) {
+        setSearchResultsIndex(0);
+      }
     }
     setSearchTerm(data.value);
   };
 
-  const submit = () => {
+  const submit = (advancedFiltering = false) => {
     const searchTermType =
       sitesResults.indexOf(searchTerm) > -1
         ? 'siteTerm'
@@ -869,6 +908,10 @@ const View = ({ content, ...props }) => {
         [emptyTermType]: null,
         nuts_regions: nuts,
         nuts_latest,
+        filtersCounter: props.discodata_query.search['filtersCounter']
+          ? props.discodata_query.search['filtersCounter'] + 1
+          : 1,
+        advancedFiltering,
       },
     });
     setState({ ...state, open: false });
@@ -886,6 +929,31 @@ const View = ({ content, ...props }) => {
           onChange={(event, data) => {
             autoComplete(data);
           }}
+          onKeyDown={(event) => {
+            if (event.keyCode === keyCodes.ENTER) {
+              setSearchResultsActive(false);
+              setSearchTerm(searchResults[searchResultsIndex]);
+              setTriggerSearch(!modal);
+            } else if (event.keyCode === keyCodes.ARROW_DOWN) {
+              const index =
+                searchResultsIndex + 1 < searchResults.length
+                  ? searchResultsIndex + 1
+                  : 0;
+              setSearchResultsIndex(index);
+              setSearchTerm(searchResults[index]);
+              setTriggerSearch(!modal);
+            } else if (event.keyCode === keyCodes.ARROW_UP) {
+              const index =
+                searchResultsIndex > 0
+                  ? searchResultsIndex - 1
+                  : searchResults.length - 1;
+              setSearchResultsIndex(index);
+              setSearchTerm(searchResults[index]);
+              setTriggerSearch(!modal);
+            } else {
+              setSearchResultsActive(true);
+            }
+          }}
         />
         {searchResultsActive && searchResults.length ? (
           <div className="search-results">
@@ -894,7 +962,9 @@ const View = ({ content, ...props }) => {
                 return (
                   <List.Item
                     key={`search-result-${index}`}
+                    className={searchResultsIndex === index ? 'selected' : ''}
                     onClick={() => {
+                      setSearchResultsIndex(index);
                       setSearchResultsActive(false);
                       setSearchTerm(result);
                       setTriggerSearch(!modal);
@@ -956,8 +1026,8 @@ const View = ({ content, ...props }) => {
             />
           </Modal.Header>
           <Modal.Content>
-            <Header>Search terms</Header>
-            {searchView(searchContainerModal)}
+            {/* <Header>Search terms</Header> */}
+            {/* {searchView(searchContainerModal)} */}
             {state.filtersMeta &&
               state.filtersMetaOrder &&
               state.filtersMetaOrder.map((filterKey) => {
@@ -1083,7 +1153,12 @@ const View = ({ content, ...props }) => {
             <button className="outline red ma-1" onClick={clearFilters}>
               Clear Filters
             </button>
-            <button className="outline dark-blue ma-1" onClick={submit}>
+            <button
+              className="outline dark-blue ma-1"
+              onClick={() => {
+                submit(true);
+              }}
+            >
               Search and Filter
             </button>
           </Modal.Actions>
@@ -1122,6 +1197,17 @@ const View = ({ content, ...props }) => {
                       0,
                       true,
                     );
+                    props.setQueryParam({
+                      queryParam: {
+                        ...props.discodata_query.search,
+                        advancedFiltering: true,
+                        filtersCounter: props.discodata_query.search[
+                          'filtersCounter'
+                        ]
+                          ? props.discodata_query.search['filtersCounter'] + 1
+                          : 1,
+                      },
+                    });
                   }}
                   placeholder={
                     state.filtersMeta['reporting_years']?.placeholder
@@ -1141,10 +1227,21 @@ const View = ({ content, ...props }) => {
                       0,
                       true,
                     );
+                    props.setQueryParam({
+                      queryParam: {
+                        ...props.discodata_query.search,
+                        advancedFiltering: true,
+                        filtersCounter: props.discodata_query.search[
+                          'filtersCounter'
+                        ]
+                          ? props.discodata_query.search['filtersCounter'] + 1
+                          : 1,
+                      },
+                    });
                   }}
                   placeholder={state.filtersMeta['industries']?.placeholder}
                   options={state.filtersMeta['industries']?.options}
-                  value={state.filters['EEASubSector']?.[0]}
+                  value={state.filters['EEAActivity']?.[0]}
                 />
               </div>
             </div>

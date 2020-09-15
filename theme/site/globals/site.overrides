@@ -1601,3 +1601,9 @@ b {
     left: -26px
   }
 }
+
+.disabled-link {
+  pointer-events: none;
+  color: #333;
+  text-decoration: none !important;
+}
