@@ -505,3 +505,30 @@ a.small h1 {
     flex-flow: column;
   }
 }
+
+.eprtrBatConclusions.bat-container .bat-conclusion:last-child .bat-details {
+  margin-bottom: 0;
+}
+
+.eprtrBatDerogations .ui.table {
+  background: transparent !important;
+  border: none !important;
+  margin-left: -0.78571429em;
+}
+
+.eprtrBatDerogations .ui.table thead th {
+  color: #000;
+  font-weight: bold;
+  text-transform: none;
+  background: transparent;
+  border: none;
+  border-left: none !important;
+  border-right: none !important;
+}
+
+.eprtrBatDerogations .ui.table tbody td {
+  border-bottom: none !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+}

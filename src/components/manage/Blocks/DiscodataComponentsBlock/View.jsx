@@ -483,9 +483,38 @@ const renderComponents = {
     // );
   },
   eprtrBatDerogations: (props) => {
+    const items = props.item[props.component.value] || [];
     return (
       <div className="eprtrBatDerogations">
-        <h1>BAT DEROGATIONS</h1>
+        <h2 className="mb-0-super mr-1">BAT Derogations</h2>
+        <Table className="unstackable">
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Granted derogations</Table.HeaderCell>
+              <Table.HeaderCell>Date granted</Table.HeaderCell>
+              <Table.HeaderCell>End date</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+
+          <Table.Body>
+            {items.length &&
+              items.map((item) => (
+                <Table.Row key={item.id}>
+                  <Table.Cell>{item.BATAEL}</Table.Cell>
+                  <Table.Cell>
+                    {moment(item.derogationDurationStartDate).format(
+                      'DD MMM YYYY',
+                    )}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {moment(item.derogationDurationEndDate).format(
+                      'DD MMM YYYY',
+                    )}
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+          </Table.Body>
+        </Table>
       </div>
     );
   },
@@ -495,21 +524,21 @@ const renderComponents = {
       <>
         <div className="display-flex align-items-center mb-1">
           <h2 className="mb-0-super mr-1">BAT Conclusions</h2>
-          <Icon name={infoSVG} size="30" color="#EC776A" />
+          {/* <Icon name={infoSVG} size="30" color="#EC776A" /> */}
         </div>
         <div className="eprtrBatConclusions bat-container">
           {Object.entries(batConclusions).map(([key, conclusion]) => (
             <div key={key} className="bat-conclusion">
               <div className="bat-title mb-2">
-                <a>
+                <h3>
                   {key}
-                  <Icon name={blankSVG} size="20" color="#EC776A" />
-                </a>
+                  {/* <Icon name={blankSVG} size="20" color="#EC776A" /> */}
+                </h3>
               </div>
               <div className="bat-details grid grid-cl-2 mb-2">
                 <div>
                   <p className="bold">Status</p>
-                  <p className="info">{conclusion[0].conclusionStatus}</p>
+                  {/* <p className="info">{conclusion[0].conclusionStatus}</p> */}
                 </div>
                 {/* <div>
                 <p className="bold">Status Modified</p>
@@ -519,33 +548,37 @@ const renderComponents = {
               {props.show.aels && (
                 <div className="bat-aels mb-2">
                   <p className="bat-aels-title">BAT AELs</p>
-                  {conclusion.map((ael, index) => (
-                    <div
-                      className="bat-ael"
-                      key={`${index} - ${ael.BATAELName}`}
-                    >
-                      <div className="bat-title mb-2">
-                        <a>
-                          {ael.BATAELName}
-                          <Icon name={blankSVG} size="20" color="#EC776A" />
-                        </a>
+                  {conclusion.map((ael, index) =>
+                    ael.BATAELName ? (
+                      <div
+                        className="bat-ael"
+                        key={`${index} - ${ael.BATAELName}`}
+                      >
+                        <div className="bat-title mb-2">
+                          <h3>
+                            {ael.BATAELName}
+                            {/* <Icon name={blankSVG} size="20" color="#EC776A" /> */}
+                          </h3>
+                        </div>
+                        <div className="bat-details grid grid-cl-1 mb-2">
+                          <div>
+                            <p className="bold">Status</p>
+                            <p className="info">{ael.BATAELStatus}</p>
+                          </div>
+                          <div>
+                            <p className="bold">Accepted date</p>
+                            <p className="info">{ael.BATAELAcceptedDate}</p>
+                          </div>
+                          <div>
+                            <p className="bold">Description</p>
+                            <p className="info">{ael.Description}</p>
+                          </div>
+                        </div>
                       </div>
-                      <div className="bat-details grid grid-cl-1 mb-2">
-                        <div>
-                          <p className="bold">Status</p>
-                          <p className="info">{ael.BATAELStatus}</p>
-                        </div>
-                        <div>
-                          <p className="bold">Accepted date</p>
-                          <p className="info">{ael.BATAELAcceptedDate}</p>
-                        </div>
-                        <div>
-                          <p className="bold">Description</p>
-                          <p className="info">{ael.Description}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                    ) : (
+                      <p>No information available</p>
+                    ),
+                  )}
                 </div>
               )}
             </div>
@@ -557,7 +590,7 @@ const renderComponents = {
                 props.setShow({ ...props.show, aels: !props.show.aels });
               }}
             >
-              {props.show.aels ? 'Hide BAT Aels' : 'View BAT AELs'}
+              {props.show.aels ? 'Hide BAT AELs' : 'View BAT AELs'}
             </button>
           </div>
         </div>
@@ -667,6 +700,7 @@ const View = (props) => {
       };
     });
   let root = arrayToTree(componentsArray);
+  if (!__CLIENT__) return '';
   return (
     <DiscodataSqlBuilderView {...props}>
       <div className="facility-block-wrapper">

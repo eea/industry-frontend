@@ -405,6 +405,7 @@ const OpenlayersMapView = (props) => {
           updateMapPosition = 'bySiteTerm';
         }
       }
+      console.log(sitesSourceQuery.where);
       if (
         sitesSourceQuery.where !== state.map.sitesSourceQuery.where ||
         updateMapPosition !== stateRef.current.updateMapPosition
@@ -878,9 +879,14 @@ const OpenlayersMapView = (props) => {
       );
       //  Center by user location
       if (navigator.geolocation && filterSource !== 'query_params') {
-        navigator.geolocation.getCurrentPosition((position) => {
-          return centerPosition(map, position, 12);
-        });
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            return centerPosition(map, position, 12);
+          },
+          (error) => {
+            console.log(error);
+          },
+        );
       }
       //  Events
       sitesSource.on('updateFilters', function (e) {
@@ -906,28 +912,15 @@ const OpenlayersMapView = (props) => {
       }
       map.on('moveend', function (e) {
         if (hasSidebar && document.getElementById('dynamic-filter')) {
-          const closestFeature = {
-            feature: null,
-            distance: Infinity,
-          };
-          const features = stateRef.current.map.sitesSourceLayer
+          const closestFeature = stateRef.current.map.sitesSourceLayer
             .getSource()
-            .getFeatures();
-
-          features.forEach((feature, index) => {
-            const distance = getDistance(
-              feature.getGeometry().flatCoordinates,
+            .getClosestFeatureToCoordinate(
               stateRef.current.map.element.getView().getCenter(),
             );
-            if (closestFeature.distance > distance) {
-              closestFeature.feature = feature;
-              closestFeature.distance = distance;
-            }
-          });
           document.getElementById('dynamic-filter').dispatchEvent(
             new CustomEvent('featurechange', {
               detail: {
-                feature: closestFeature.feature,
+                feature: closestFeature,
               },
             }),
           );
@@ -987,7 +980,7 @@ const OpenlayersMapView = (props) => {
       })
       .catch((error) => {});
   };
-
+  if (!__CLIENT__) return '';
   return (
     <div className="openlayer-map-container">
       {props.mode === 'edit' ? <p>Openlayer map</p> : ''}

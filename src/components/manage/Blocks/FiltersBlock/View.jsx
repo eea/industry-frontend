@@ -40,7 +40,6 @@ const keyCodes = {
 
 const View = ({ content, ...props }) => {
   const providerUrl = settings.providerUrl;
-  const { search } = props.discodata_query;
   const [state, setState] = useState({
     open: false,
     filters: {},
@@ -63,6 +62,7 @@ const View = ({ content, ...props }) => {
     mounted: false,
     firstLoad: false,
   });
+  const [filtersMetaReady, setFiltersMetaReady] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
   const [factsData, setFactsData] = useState({});
   const [alphaFeature, setAlphaFeature] = useState({});
@@ -71,7 +71,6 @@ const View = ({ content, ...props }) => {
   const [searchResultsActive, setSearchResultsActive] = useState(false);
   const [locationResults, setLocationResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [newSearchTerm, setNewSearchTerm] = useState('');
   const [triggerSearch, setTriggerSearch] = useState(false);
   const [quickFactsListener, setQuickFactsListener] = useState(false);
   const [sidebar, setSidebar] = useState(false);
@@ -79,7 +78,6 @@ const View = ({ content, ...props }) => {
   const searchContainerModal = useRef(null);
   const searchContainer = useRef(null);
   const modalButtonTitle = props.data.modalButtonTitle?.value;
-  const searchButtonTitle = props.data.searchButtonTitle?.value;
   const locationResultsTexts = locationResults.map((result) => result.text);
   const mapSidebarExists = document?.getElementById('map-sidebar');
 
@@ -191,7 +189,10 @@ const View = ({ content, ...props }) => {
   useEffect(function () {
     setState({ ...state, mounted: true });
     updateFactsData(true);
-    updateFilters(true);
+    setState({
+      ...state,
+      mounted: true,
+    });
     return () => {
       if (quickFactsListener && document.getElementById(`dynamic-filter`)) {
         document
@@ -235,6 +236,27 @@ const View = ({ content, ...props }) => {
     };
     /* eslint-disable-next-line */
   }, [state]);
+
+  useEffect(() => {
+    if (typeof updateFilters === 'function') {
+      updateFilters();
+    }
+    if (Object.keys(state.filtersMeta).length && !filtersMetaReady) {
+      setFiltersMetaReady(true);
+    }
+    /* eslint-disable-next-line */
+  }, [JSON.stringify(state.filters), JSON.stringify(state.filtersMeta)])
+
+  useEffect(() => {
+    if (
+      typeof initialization === 'function' &&
+      filtersMetaReady &&
+      state.filtersMeta
+    ) {
+      initialization();
+    }
+    /* eslint-disable-next-line */
+  }, [filtersMetaReady])
 
   useEffect(() => {
     if (state.mounted && __CLIENT__) {
@@ -637,10 +659,6 @@ const View = ({ content, ...props }) => {
     state.filters?.pollutantGroup &&
       JSON.stringify(state.filters.pollutantGroup),
   ]);
-  useEffect(() => {
-    updateFilters();
-    /* eslint-disable-next-line */
-  }, [JSON.stringify(state.filters), JSON.stringify(state.filtersMeta)])
 
   const changeFilter = (
     data,
@@ -671,7 +689,7 @@ const View = ({ content, ...props }) => {
     }
   };
 
-  const updateFilters = (mounted = false) => {
+  const updateFilters = () => {
     if (state.filters && state.filtersMeta) {
       const newFilters = { ...state.filters };
       const newFiltersKeys = Object.keys(newFilters);
@@ -700,10 +718,30 @@ const View = ({ content, ...props }) => {
         setState({
           ...state,
           filters: newFilters,
-          mounted: mounted ? true : state.mounted,
         });
       }
     }
+  };
+
+  const initialization = () => {
+    let newFilters = {};
+    if (state.filters && state.filtersMeta) {
+      newFilters = { ...state.filters };
+      const filtersMetaEntries = Object.entries(state.filtersMeta);
+      const filtersMetaKeys = filtersMetaEntries.map(([key, value]) => {
+        return value.queryToSet;
+      });
+      filtersMetaKeys.forEach((key) => {
+        if (props.discodata_query.search[key]) {
+          newFilters[key] = props.discodata_query.search[key];
+        }
+      });
+    }
+
+    setState({
+      ...state,
+      filters: { ...newFilters },
+    });
   };
 
   const addNewInput = (key, type, position = 0) => {
@@ -998,7 +1036,7 @@ const View = ({ content, ...props }) => {
       </div>
     </div>
   );
-
+  if (!__CLIENT__) return '';
   return (
     <div className="filters-container">
       {searchView(searchContainer, false)}
@@ -1199,7 +1237,6 @@ const View = ({ content, ...props }) => {
                     );
                     props.setQueryParam({
                       queryParam: {
-                        ...props.discodata_query.search,
                         advancedFiltering: true,
                         filtersCounter: props.discodata_query.search[
                           'filtersCounter'
@@ -1229,7 +1266,6 @@ const View = ({ content, ...props }) => {
                     );
                     props.setQueryParam({
                       queryParam: {
-                        ...props.discodata_query.search,
                         advancedFiltering: true,
                         filtersCounter: props.discodata_query.search[
                           'filtersCounter'
