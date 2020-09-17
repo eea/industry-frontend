@@ -611,10 +611,20 @@ const View = ({ content, ...props }) => {
                   ],
                 };
               }
+              const queries =
+                props.discodata_query.search[metadata[index].queryToSet] || [];
+              const filteringInptsByQuery =
+                queries.length > 1
+                  ? queries.map((query, index) => ({
+                      id: _uniqueId('select_'),
+                      type: 'select',
+                      position: index,
+                    }))
+                  : [metadata[index]?.firstInput];
               filtersMeta[metadata[index]?.key] = {
                 filteringInputs: filteringInputs.length
                   ? filteringInputs
-                  : [metadata[index]?.firstInput],
+                  : filteringInptsByQuery,
                 placeholder: metadata[index]?.placeholder,
                 queryToSet: metadata[index]?.queryToSet,
                 title: metadata[index]?.title,
@@ -725,23 +735,58 @@ const View = ({ content, ...props }) => {
 
   const initialization = () => {
     let newFilters = {};
+    let newFiltersMeta = { ...state.filtersMeta };
+    const dynamicFiltersQuery = [
+      'region',
+      'riverBasin',
+      'townVillage',
+      'pollutant',
+    ];
     if (state.filters && state.filtersMeta) {
       newFilters = { ...state.filters };
-      const filtersMetaEntries = Object.entries(state.filtersMeta);
-      const filtersMetaKeys = filtersMetaEntries.map(([key, value]) => {
-        return value.queryToSet;
+      const filtersMetaKeys = Object.keys(state.filtersMeta);
+      const queryParamKeys = filtersMetaKeys.map((key) => {
+        return state.filtersMeta[key].queryToSet;
       });
-      filtersMetaKeys.forEach((key) => {
+      dynamicFiltersQuery.forEach((key) => {
+        if (queryParamKeys.indexOf(key) === -1) {
+          queryParamKeys.push(key);
+        }
+      });
+      queryParamKeys.forEach((key, keyIndex) => {
         if (props.discodata_query.search[key]) {
           newFilters[key] = props.discodata_query.search[key];
+          props.discodata_query.search[key].forEach((param, index) => {
+            if (
+              index > 0 &&
+              newFiltersMeta[filtersMetaKeys[keyIndex]]?.filteringInputs
+            ) {
+              newFiltersMeta[filtersMetaKeys[keyIndex]].filteringInputs.push({
+                id: _uniqueId('select_'),
+                type: 'select',
+                position: index,
+              });
+            }
+          });
         }
       });
     }
 
-    setState({
-      ...state,
-      filters: { ...newFilters },
-    });
+    if (
+      JSON.stringify(newFilters) !== JSON.stringify(state.filters) ||
+      JSON.stringify(newFiltersMeta) !== JSON.stringify(state.filtersMeta)
+    ) {
+      setState({
+        ...state,
+        filters: { ...newFilters },
+        filtersMeta: { ...newFiltersMeta },
+      });
+    }
+    if (props.discodata_query.search.siteTerm) {
+      setSearchTerm(props.discodata_query.search.siteTerm);
+    } else if (props.discodata_query.search.locationTerm?.text) {
+      setSearchTerm(props.discodata_query.search.locationTerm.text);
+    }
   };
 
   const addNewInput = (key, type, position = 0) => {
@@ -961,7 +1006,6 @@ const View = ({ content, ...props }) => {
           className="search"
           icon="search"
           placeholder="Try search for a site name, country, city, region or ZIP code"
-          iconPosition="right"
           value={searchTerm}
           onChange={(event, data) => {
             autoComplete(data);
@@ -1249,7 +1293,7 @@ const View = ({ content, ...props }) => {
                   placeholder={
                     state.filtersMeta['reporting_years']?.placeholder
                   }
-                  options={state.filtersMeta['reporting_years']?.options}
+                  options={state.filtersMeta['reporting_years']?.options || []}
                   value={state.filters['reportingYear']?.[0]}
                 />
               </div>
@@ -1276,7 +1320,7 @@ const View = ({ content, ...props }) => {
                     });
                   }}
                   placeholder={state.filtersMeta['industries']?.placeholder}
-                  options={state.filtersMeta['industries']?.options}
+                  options={state.filtersMeta['industries']?.options || []}
                   value={state.filters['EEAActivity']?.[0]}
                 />
               </div>

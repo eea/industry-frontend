@@ -409,6 +409,10 @@ a.small h1 {
   color: #EC776A;
   padding: 0;
   list-style: none;
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  grid-gap: 20px;
 }
 
 .link-list li {

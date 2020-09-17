@@ -165,6 +165,7 @@ export const makeTextSchema = (props) => {
         'rightText',
         'color',
         'component',
+        'bold',
       ],
     },
     {
@@ -224,6 +225,10 @@ export const makeTextSchema = (props) => {
         ['h3', 'H3'],
         ['p', 'Paragraph'],
       ],
+    },
+    bold: {
+      title: 'Bold',
+      type: 'boolean',
     },
     isLink: {
       title: 'Is link',

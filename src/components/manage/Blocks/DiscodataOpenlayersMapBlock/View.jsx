@@ -78,6 +78,7 @@ let Map,
   EsriJSON,
   VectorSource,
   VectorSourceEvent,
+  bboxStrategy,
   XYZ,
   fromLonLat,
   toLonLat,
@@ -141,9 +142,11 @@ const OpenlayersMapView = (props) => {
   const [loader, setLoader] = useState(false);
   const [mapRendered, setMapRendered] = useState(false);
   const [firstFilteringUpdate, setFirstFilteringUpdate] = useState(false);
+  const firstFilteringDone = useRef(false);
   const ToggleSidebarControl = useRef(null);
   const ViewYourAreaControl = useRef(null);
   const siteTermRef = useRef(null);
+  const mounted = useRef(false);
   const history = useHistory();
   const draggable = !!props.data?.draggable?.value;
   const hasPopups = !!props.data?.hasPopups?.value;
@@ -173,15 +176,6 @@ const OpenlayersMapView = (props) => {
       : props.discodata_query.search[queryParams?.siteName?.param] || null;
 
   useEffect(() => {
-    siteTermRef.current = siteTerm;
-  }, [siteTerm]);
-
-  if (mapRendered && !firstFilteringUpdate) {
-    updateFilters();
-    setFirstFilteringUpdate(true);
-  }
-
-  useEffect(() => {
     if (__CLIENT__ && document) {
       // MOuNT
       if (!OL_LOADED) {
@@ -191,6 +185,7 @@ const OpenlayersMapView = (props) => {
         EsriJSON = require('ol/format/EsriJSON').default;
         VectorSource = require('ol/source/Vector').default;
         VectorSourceEvent = require('ol/source/Vector').VectorSourceEvent;
+        bboxStrategy = require('ol/loadingstrategy').bbox;
         XYZ = require('ol/source/XYZ').default;
         fromLonLat = require('ol/proj').fromLonLat;
         toLonLat = require('ol/proj').toLonLat;
@@ -257,11 +252,16 @@ const OpenlayersMapView = (props) => {
       renderMap();
       setMapRendered(true);
     }
+    mounted.current = true;
     return () => {
-      // UNMOUNT
+      mounted.current = false;
     };
     /* eslint-disable-next-line */
   }, [])
+
+  useEffect(() => {
+    siteTermRef.current = siteTerm;
+  }, [siteTerm]);
 
   useEffect(() => {
     if (mapRendered) {
@@ -280,16 +280,24 @@ const OpenlayersMapView = (props) => {
   useEffect(() => {
     if (mapRendered) {
       if (['byLocationTerm', 'bySiteTerm'].includes(state.updateMapPosition)) {
-        onSourceChange(state.map.sitesSourceLayer.getSource());
+        onSourceChange();
       } else if (
         state.map.sitesSourceQuery.where !== state.map.oldSitesSourceQuery.where
       ) {
         state.map.sitesSourceLayer &&
           state.map.sitesSourceLayer.getSource().refresh();
       }
+      if (!firstFilteringDone.current) {
+        firstFilteringDone.current = true;
+      }
     }
     /* eslint-disable-next-line */
   }, [state.map.sitesSourceQuery?.where, state.updateMapPosition])
+
+  if (mapRendered && !firstFilteringUpdate) {
+    updateFilters();
+    setFirstFilteringUpdate(true);
+  }
 
   function updateFilters() {
     const sitesSourceQuery = { ...state.map.sitesSourceQuery };
@@ -383,7 +391,6 @@ const OpenlayersMapView = (props) => {
     sitesSourceQuery.where = Object.entries(sitesSourceQuery.whereStatements)
       .map(([id, where]) => where.sql)
       .join(' AND ');
-
     if (
       sitesSourceQuery.where !== state.map.sitesSourceQuery.where ||
       locationTerm?.text ||
@@ -405,7 +412,6 @@ const OpenlayersMapView = (props) => {
           updateMapPosition = 'bySiteTerm';
         }
       }
-      console.log(sitesSourceQuery.where);
       if (
         sitesSourceQuery.where !== state.map.sitesSourceQuery.where ||
         updateMapPosition !== stateRef.current.updateMapPosition
@@ -421,6 +427,8 @@ const OpenlayersMapView = (props) => {
           siteTerm,
         });
       }
+    } else if (!firstFilteringDone.current) {
+      firstFilteringDone.current = true;
     }
   }
 
@@ -507,6 +515,10 @@ const OpenlayersMapView = (props) => {
                   callback: function () {},
                 },
               );
+            setTimeout(() => {
+              stateRef?.current?.map?.sitesSourceLayer &&
+                stateRef.current.map.sitesSourceLayer.getSource().refresh();
+            }, options.duration + 100);
           }
         })
         .catch((error) => {});
@@ -533,12 +545,16 @@ const OpenlayersMapView = (props) => {
               zoom: 15,
             });
           }
+          setTimeout(() => {
+            stateRef?.current?.map?.sitesSourceLayer &&
+              stateRef.current.map.sitesSourceLayer.getSource().refresh();
+          }, 1100);
         })
         .catch((error) => {});
     }
   }
 
-  function onSourceChange(source) {
+  function onSourceChange() {
     const options = {
       duration: 2000,
       maxZoom: 15,
@@ -698,10 +714,8 @@ const OpenlayersMapView = (props) => {
       let reqs = 0;
       sitesSource = new VectorSource({
         loader: function (extent, resolution, projection) {
-          var url =
-            'https://services.arcgis.com/LcQjj2sL7Txk9Lag/arcgis/rest/services/SiteMap_v2/FeatureServer/0/query/?f=json&' +
-            'returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=' +
-            encodeURIComponent(
+          if (mounted.current && firstFilteringDone.current) {
+            var url = `https://services.arcgis.com/LcQjj2sL7Txk9Lag/arcgis/rest/services/SiteMap_v2/FeatureServer/0/query/?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=${encodeURIComponent(
               '{"xmin":' +
                 extent[0] +
                 ',"ymin":' +
@@ -711,68 +725,82 @@ const OpenlayersMapView = (props) => {
                 ',"ymax":' +
                 extent[3] +
                 ',"spatialReference":{"wkid":102100}}',
-            ) +
-            '&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*' +
-            '&outSR=102100';
-          // setLoader(true);
-          reqs++;
-          jsonp(
-            url,
-            {
-              param:
-                (stateRef.current.map.sitesSourceQuery.where
-                  ? qs.stringify({
-                      where: stateRef.current.map.sitesSourceQuery.where,
-                    })
-                  : '') + '&callback',
-            },
-            (error, response) => {
-              reqs--;
-              if (error) {
-                // setLoader(false);
-                console.log(error.message);
-              } else {
-                var features = esrijsonFormat.readFeatures(response, {
-                  featureProjection: projection,
-                });
-                if (features.length > 0) {
-                  sitesSource.addFeatures(features);
-                  sitesSource.dispatchEvent(
-                    new VectorSourceEvent('updateFilters', features),
-                  );
-                } else {
+            )}&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*&outSR=102100`;
+            reqs++;
+            jsonp(
+              url,
+              {
+                param:
+                  (stateRef.current.map.sitesSourceQuery.where
+                    ? qs.stringify({
+                        where: stateRef.current.map.sitesSourceQuery.where,
+                      })
+                    : '') + '&callback',
+              },
+              (error, response) => {
+                reqs--;
+                if (error) {
                   // setLoader(false);
+                  console.log(error.message);
+                } else {
+                  var features = esrijsonFormat.readFeatures(response, {
+                    featureProjection: projection,
+                  });
+                  if (features.length > 0) {
+                    sitesSource.addFeatures(features);
+                  } else {
+                    // setLoader(false);
+                  }
+                  sitesSource.dispatchEvent(
+                    new VectorSourceEvent('updateFilters'),
+                  );
                 }
-              }
-            },
-          );
+              },
+            );
+          }
         },
-        strategy: tile(
-          createXYZ({
+        strategy: function (extent, resolution) {
+          const tileGrid = createXYZ({
             tileSize: 512,
-          }),
-        ),
+            maxZoom: zoomSwitch,
+          });
+          var z = tileGrid.getZForResolution(resolution);
+          var tileRange = tileGrid.getTileRangeForExtentAndZ(extent, z);
+          /** @type {Array<import("./extent.js").Extent>} */
+          var extents = [];
+          /** @type {import("./tilecoord.js").TileCoord} */
+          var tileCoord = [z, 0, 0];
+          for (
+            tileCoord[1] = tileRange.minX;
+            tileCoord[1] <= tileRange.maxX;
+            ++tileCoord[1]
+          ) {
+            for (
+              tileCoord[2] = tileRange.minY;
+              tileCoord[2] <= tileRange.maxY;
+              ++tileCoord[2]
+            ) {
+              extents.push(tileGrid.getTileCoordExtent(tileCoord));
+            }
+          }
+          return extents;
+        },
       });
       //  Make regions source layer
       if (hasRegionsFeatures) {
         regionsSource = new VectorSource({
           loader: function (extent, resolution, projection) {
-            var url =
-              'https://services.arcgis.com/LcQjj2sL7Txk9Lag/ArcGIS/rest/services/ly_IED_SiteClusters_WM/FeatureServer/0/query/?f=json' +
-              '&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=' +
-              encodeURIComponent(
-                '{"xmin":' +
-                  extent[0] +
-                  ',"ymin":' +
-                  extent[1] +
-                  ',"xmax":' +
-                  extent[2] +
-                  ',"ymax":' +
-                  extent[3] +
-                  ',"spatialReference":{"wkid":102100}}',
-              ) +
-              '&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*' +
-              '&outSR=102100';
+            var url = `https://services.arcgis.com/LcQjj2sL7Txk9Lag/ArcGIS/rest/services/ly_IED_SiteClusters_WM/FeatureServer/0/query/?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=${encodeURIComponent(
+              '{"xmin":' +
+                extent[0] +
+                ',"ymin":' +
+                extent[1] +
+                ',"xmax":' +
+                extent[2] +
+                ',"ymax":' +
+                extent[3] +
+                ',"spatialReference":{"wkid":102100}}',
+            )}&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*&outSR=102100`;
             jsonp(url, null, (error, response) => {
               if (error) {
                 console.log(error.message);
@@ -797,47 +825,55 @@ const OpenlayersMapView = (props) => {
       //  Sites source layer
       sitesSourceLayer = new VectorLayer({
         source: sitesSource,
-        style: (feature, resolution) => {
-          const featureProperties = feature.getProperties();
-          if (
-            featureProperties.siteName === siteTermRef.current ||
-            (SVG_COLLECTION[featureProperties.eea_activities]?.() &&
-              stateRef.current.map.element.getView().getZoom() > 11)
-          ) {
-            return new Style({
-              image: new Icon({
-                src:
-                  featureProperties.siteName === siteTermRef.current
-                    ? `data:image/svg+xml;utf8,${encodeURIComponent(
-                        pinSVG('#50C878'),
-                      )}`
-                    : `data:image/svg+xml;utf8,${encodeURIComponent(
-                        SVG_COLLECTION[featureProperties.eea_activities](),
-                      )}`,
-                opacity: 1,
-                scale: 1,
-              }),
-              zIndex:
-                featureProperties.siteName === siteTermRef.current ? 1 : 0,
-            });
-          } else {
-            return new Style({
-              image: new CircleStyle({
-                radius: 3,
-                fill:
-                  featureProperties.siteName === siteTermRef.current
-                    ? new Fill({ color: '#50C878' })
-                    : new Fill({ color: '#000' }),
-                stroke:
-                  featureProperties.siteName === siteTermRef.current
-                    ? new Stroke({ color: '#6A6A6A', width: 1 })
-                    : new Stroke({ color: '#6A6A6A', width: 1 }),
-                zIndex:
-                  featureProperties.siteName === siteTermRef.current ? 1 : 0,
-              }),
-            });
-          }
-        },
+        style: new Style({
+          image: new CircleStyle({
+            radius: 3,
+            fill: new Fill({ color: '#000' }),
+            stroke: new Stroke({ color: '#6A6A6A', width: 1 }),
+            zIndex: 0,
+          }),
+        }),
+        // style: (feature, resolution) => {
+        //   const featureProperties = feature.getProperties();
+        //   if (
+        //     featureProperties.siteName === siteTermRef.current ||
+        //     (SVG_COLLECTION[featureProperties.eea_activities]?.() &&
+        //       stateRef.current.map.element?.getView?.()?.getZoom?.() > 11)
+        //   ) {
+        //     return new Style({
+        //       image: new Icon({
+        //         src:
+        //           featureProperties.siteName === siteTermRef.current
+        //             ? `data:image/svg+xml;utf8,${encodeURIComponent(
+        //                 pinSVG('#50C878'),
+        //               )}`
+        //             : `data:image/svg+xml;utf8,${encodeURIComponent(
+        //                 SVG_COLLECTION[featureProperties.eea_activities](),
+        //               )}`,
+        //         opacity: 1,
+        //         scale: 1,
+        //       }),
+        //       zIndex:
+        //         featureProperties.siteName === siteTermRef.current ? 1 : 0,
+        //     });
+        //   } else {
+        //     return new Style({
+        //       image: new CircleStyle({
+        //         radius: 3,
+        //         fill:
+        //           featureProperties.siteName === siteTermRef.current
+        //             ? new Fill({ color: '#50C878' })
+        //             : new Fill({ color: '#000' }),
+        //         stroke:
+        //           featureProperties.siteName === siteTermRef.current
+        //             ? new Stroke({ color: '#6A6A6A', width: 1 })
+        //             : new Stroke({ color: '#6A6A6A', width: 1 }),
+        //         zIndex:
+        //           featureProperties.siteName === siteTermRef.current ? 1 : 0,
+        //       }),
+        //     });
+        //   }
+        // },
         visible: true,
         title: 'ly_IED_SiteMap_WM',
       });
@@ -891,8 +927,7 @@ const OpenlayersMapView = (props) => {
       //  Events
       sitesSource.on('updateFilters', function (e) {
         if (!reqs && e.target.getState() === 'ready') {
-          // setLoader(false);
-          onSourceChange(e.target);
+          onSourceChange();
         }
       });
       if (hasPopups) {
@@ -911,33 +946,35 @@ const OpenlayersMapView = (props) => {
         });
       }
       map.on('moveend', function (e) {
-        if (hasSidebar && document.getElementById('dynamic-filter')) {
-          const closestFeature = stateRef.current.map.sitesSourceLayer
-            .getSource()
-            .getClosestFeatureToCoordinate(
-              stateRef.current.map.element.getView().getCenter(),
+        if (mounted.current) {
+          if (hasSidebar && document.getElementById('dynamic-filter')) {
+            const closestFeature = stateRef.current.map.sitesSourceLayer
+              ?.getSource?.()
+              ?.getClosestFeatureToCoordinate?.(
+                stateRef.current.map.element?.getView?.()?.getCenter?.(),
+              );
+            document.getElementById('dynamic-filter').dispatchEvent(
+              new CustomEvent('featurechange', {
+                detail: {
+                  feature: closestFeature,
+                },
+              }),
             );
-          document.getElementById('dynamic-filter').dispatchEvent(
-            new CustomEvent('featurechange', {
-              detail: {
-                feature: closestFeature,
-              },
-            }),
-          );
-        }
-        let newZoom = map.getView().getZoom();
-        if (currentZoom !== newZoom) {
-          if (newZoom > zoomSwitch) {
-            sitesSourceLayer.setVisible(true);
-            hasRegionsFeatures && regionsSourceLayer.setVisible(false);
-          } else if (newZoom > 2) {
-            sitesSourceLayer.setVisible(false);
-            hasRegionsFeatures && regionsSourceLayer.setVisible(true);
-          } else {
-            sitesSourceLayer.setVisible(false);
-            hasRegionsFeatures && regionsSourceLayer.setVisible(false);
           }
-          currentZoom = newZoom;
+          let newZoom = map.getView().getZoom();
+          if (currentZoom !== newZoom) {
+            if (newZoom > zoomSwitch) {
+              sitesSourceLayer.setVisible(true);
+              hasRegionsFeatures && regionsSourceLayer.setVisible(false);
+            } else if (newZoom > 2) {
+              sitesSourceLayer.setVisible(false);
+              hasRegionsFeatures && regionsSourceLayer.setVisible(true);
+            } else {
+              sitesSourceLayer.setVisible(false);
+              hasRegionsFeatures && regionsSourceLayer.setVisible(false);
+            }
+            currentZoom = newZoom;
+          }
         }
       });
       setState({
@@ -1045,9 +1082,7 @@ const OpenlayersMapView = (props) => {
                 {/* SITE CONTENTS */}
                 <div className="row mb-1-super mt-0-super">
                   <div className="column column-12">
-                    <Header Header as="h3">
-                      Site contents
-                    </Header>
+                    <Header as="h3">Site contents</Header>
                   </div>
                   <div className="column  column-12">
                     <p>
@@ -1078,12 +1113,10 @@ const OpenlayersMapView = (props) => {
                             : ''
                         }
                         onClick={setSiteQueryParams}
-                        to={
-                          '/industrial-site/introduction/understanding-the-data'
-                        }
+                        to={'/industrial-site/large-scale-fuel-combustion'}
                       >
                         {state.popupDetails.properties.nLCP || 0} Large
-                        comustion plants
+                        combustion plants
                       </Link>
                     </p>
                   </div>

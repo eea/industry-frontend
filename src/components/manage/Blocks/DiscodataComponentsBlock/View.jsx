@@ -196,12 +196,7 @@ const renderComponents = {
         .slice(0, maxElements);
     }
     const view = (
-      <ol
-        className={cx(
-          'link-list responsive grid grid-cl-4',
-          props.component?.className?.join(' '),
-        )}
-      >
+      <ol className={cx('link-list', props.component?.className?.join(' '))}>
         {items.map((value) => (
           <li key={_uniqueId('li-')}>
             <button
@@ -484,7 +479,7 @@ const renderComponents = {
   },
   eprtrBatDerogations: (props) => {
     const items = props.item[props.component.value] || [];
-    return (
+    return items.length ? (
       <div className="eprtrBatDerogations">
         <h2 className="mb-0-super mr-1">BAT Derogations</h2>
         <Table className="unstackable">
@@ -497,25 +492,24 @@ const renderComponents = {
           </Table.Header>
 
           <Table.Body>
-            {items.length &&
-              items.map((item) => (
-                <Table.Row key={item.id}>
-                  <Table.Cell>{item.BATAEL}</Table.Cell>
-                  <Table.Cell>
-                    {moment(item.derogationDurationStartDate).format(
-                      'DD MMM YYYY',
-                    )}
-                  </Table.Cell>
-                  <Table.Cell>
-                    {moment(item.derogationDurationEndDate).format(
-                      'DD MMM YYYY',
-                    )}
-                  </Table.Cell>
-                </Table.Row>
-              ))}
+            {items.map((item) => (
+              <Table.Row key={item.id}>
+                <Table.Cell>{item.BATAEL}</Table.Cell>
+                <Table.Cell>
+                  {moment(item.derogationDurationStartDate).format(
+                    'DD MMM YYYY',
+                  )}
+                </Table.Cell>
+                <Table.Cell>
+                  {moment(item.derogationDurationEndDate).format('DD MMM YYYY')}
+                </Table.Cell>
+              </Table.Row>
+            ))}
           </Table.Body>
         </Table>
       </div>
+    ) : (
+      ''
     );
   },
   eprtrBatConclusions: (props) => {
@@ -527,62 +521,64 @@ const renderComponents = {
           {/* <Icon name={infoSVG} size="30" color="#EC776A" /> */}
         </div>
         <div className="eprtrBatConclusions bat-container">
-          {Object.entries(batConclusions).map(([key, conclusion]) => (
-            <div key={key} className="bat-conclusion">
-              <div className="bat-title mb-2">
-                <h3>
-                  {key}
-                  {/* <Icon name={blankSVG} size="20" color="#EC776A" /> */}
-                </h3>
-              </div>
-              <div className="bat-details grid grid-cl-2 mb-2">
-                <div>
-                  <p className="bold">Status</p>
-                  {/* <p className="info">{conclusion[0].conclusionStatus}</p> */}
+          {Object.entries(batConclusions)
+            .filter((key) => key)
+            .map(([key, conclusion]) => (
+              <div key={key} className="bat-conclusion">
+                <div className="bat-title mb-2">
+                  <h3>
+                    {key}
+                    {/* <Icon name={blankSVG} size="20" color="#EC776A" /> */}
+                  </h3>
                 </div>
-                {/* <div>
-                <p className="bold">Status Modified</p>
-                <p className="info">{conclusion[0].Status}</p>
-              </div> */}
-              </div>
-              {props.show.aels && (
-                <div className="bat-aels mb-2">
-                  <p className="bat-aels-title">BAT AELs</p>
-                  {conclusion.map((ael, index) =>
-                    ael.BATAELName ? (
-                      <div
-                        className="bat-ael"
-                        key={`${index} - ${ael.BATAELName}`}
-                      >
-                        <div className="bat-title mb-2">
-                          <h3>
-                            {ael.BATAELName}
-                            {/* <Icon name={blankSVG} size="20" color="#EC776A" /> */}
-                          </h3>
-                        </div>
-                        <div className="bat-details grid grid-cl-1 mb-2">
-                          <div>
-                            <p className="bold">Status</p>
-                            <p className="info">{ael.BATAELStatus}</p>
-                          </div>
-                          <div>
-                            <p className="bold">Accepted date</p>
-                            <p className="info">{ael.BATAELAcceptedDate}</p>
-                          </div>
-                          <div>
-                            <p className="bold">Description</p>
-                            <p className="info">{ael.Description}</p>
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <p>No information available</p>
-                    ),
-                  )}
+                <div className="bat-details grid grid-cl-2 mb-2">
+                  <div>
+                    <p className="bold">Status</p>
+                    <p className="info">{conclusion[0].conclusionStatus}</p>
+                  </div>
+                  {/* <div>
+                    <p className="bold">Status Modified</p>
+                    <p className="info">{conclusion[0].Status}</p>
+                  </div> */}
                 </div>
-              )}
-            </div>
-          ))}
+                {props.show.aels && (
+                  <div className="bat-aels mb-2">
+                    <p className="bat-aels-title">BAT AELs</p>
+                    {conclusion.map((ael, index) =>
+                      ael.BATAELName ? (
+                        <div
+                          className="bat-ael"
+                          key={`${index} - ${ael.BATAELName}`}
+                        >
+                          <div className="bat-title mb-2">
+                            <h3>
+                              {ael.BATAELName}
+                              {/* <Icon name={blankSVG} size="20" color="#EC776A" /> */}
+                            </h3>
+                          </div>
+                          <div className="bat-details grid grid-cl-1 mb-2">
+                            <div>
+                              <p className="bold">Status</p>
+                              <p className="info">{ael.BATAELStatus}</p>
+                            </div>
+                            <div>
+                              <p className="bold">Accepted date</p>
+                              <p className="info">{ael.BATAELAcceptedDate}</p>
+                            </div>
+                            <div>
+                              <p className="bold">Description</p>
+                              <p className="info">{ael.Description}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <p>No information available</p>
+                      ),
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
           <div className="hr mb-1" />
           <div className="bat-action text-align-center">
             <button

@@ -13,9 +13,13 @@ function isColor(strColor) {
 }
 
 const components = {
-  h1: (text, color, tooltip = false, tooltipText = '') => (
+  bold: (bold, text) => {
+    if (bold) return <b>{text}</b>;
+    return text;
+  },
+  h1: (text, bold, color, tooltip = false, tooltipText = '') => (
     <h1 className="query-param-text" style={{ color: color }}>
-      {text}
+      {components.bold(bold, text)}
       {tooltip && tooltipText ? (
         <span data-tip={tooltip && tooltipText ? tooltipText : false}>
           <Icon name={infoSVG} size="20" color={color} />
@@ -25,19 +29,19 @@ const components = {
       )}
     </h1>
   ),
-  h2: (text, color) => (
+  h2: (text, bold, color) => (
     <h2 className="query-param-text" style={{ color: color }}>
-      {text}
+      {components.bold(bold, text)}
     </h2>
   ),
-  h3: (text, color) => (
+  h3: (text, bold, color) => (
     <h3 className="query-param-text" style={{ color: color }}>
-      {text}
+      {components.bold(bold, text)}
     </h3>
   ),
-  p: (text, color) => (
+  p: (text, bold, color) => (
     <p className="query-param-text" style={{ color: color }}>
-      {text}
+      {components.bold(bold, text)}
     </p>
   ),
   link: (text, internalLink, linkTarget, link, color) => {
@@ -71,6 +75,7 @@ const View = ({ content, ...props }) => {
     rightText = '',
     color = '#000',
     order = 'dq',
+    bold = false,
   } = data;
   const {
     isLink = false,
@@ -211,6 +216,7 @@ const View = ({ content, ...props }) => {
       {textMayRender && components[component]
         ? components[component](
             isLink ? renderLinks[triggerOn] : text,
+            bold,
             isColor(color) ? color : '#000',
             tooltip,
             tooltipText,
