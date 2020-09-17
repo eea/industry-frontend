@@ -1,10 +1,11 @@
 import React from 'react';
-import { injectIntl } from 'react-intl';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { settings } from '~/config';
 import cx from 'classnames';
 import './style.css';
-import { useEffect } from 'react';
+import { deleteQueryParam } from 'volto-datablocks/actions';
 
 const getPath = (url) => {
   if (!url) return '';
@@ -62,7 +63,22 @@ const View = (props) => {
                 'detailed-link-button display-inline-block',
                 buttonClassname || '',
               )}
-              onClick={(e) => e.preventDefault}
+              onClick={(e) => {
+                if (
+                  props.discodata_query.search.facilityInspireId ||
+                  props.discodata_query.search.installationInspireId ||
+                  props.discodata_query.search.lcpInspireId
+                ) {
+                  props.deleteQueryParam({
+                    queryParam: [
+                      'facilityInspireId',
+                      'installationInspireId',
+                      'lcpInspireId',
+                    ],
+                  });
+                }
+                return e.preventDefault;
+              }}
               to={getPath(detailedLink.path)}
             >
               <span>{buttonTitle || detailedLink.title || 'Go'}</span>
@@ -76,4 +92,11 @@ const View = (props) => {
   );
 };
 
-export default injectIntl(View);
+export default compose(
+  connect(
+    (state, props) => ({
+      discodata_query: state.discodata_query,
+    }),
+    { deleteQueryParam },
+  ),
+)(View);

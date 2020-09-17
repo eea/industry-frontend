@@ -1128,9 +1128,9 @@ const View = ({ content, ...props }) => {
                               filterKey
                             ].options.filter((option) => {
                               if (
-                                state.filters[
+                                typeof state.filters[
                                   state.filtersMeta[filterKey].queryToSet
-                                ] &&
+                                ]?.filter === 'function' &&
                                 !state.filters[
                                   state.filtersMeta[filterKey].queryToSet
                                 ]

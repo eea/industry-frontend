@@ -12,6 +12,7 @@ import {
   getNavigationByParent,
   getBasePath,
 } from 'volto-tabsview/helpers';
+import { deleteQueryParam } from 'volto-datablocks/actions';
 
 const View = ({ content, ...props }) => {
   const { data } = props;
@@ -58,6 +59,19 @@ const View = ({ content, ...props }) => {
               active={state.activeItem === url}
               onClick={() => {
                 history.push(`${url}${props.query}`);
+                if (
+                  props.discodata_query.search.facilityInspireId ||
+                  props.discodata_query.search.installationInspireId ||
+                  props.discodata_query.search.lcpInspireId
+                ) {
+                  props.deleteQueryParam({
+                    queryParam: [
+                      'facilityInspireId',
+                      'installationInspireId',
+                      'lcpInspireId',
+                    ],
+                  });
+                }
               }}
             />
           );
@@ -73,14 +87,18 @@ const View = ({ content, ...props }) => {
 };
 
 export default compose(
-  connect((state, props) => ({
-    query: state.router.location.search,
-    content:
-      state.prefetch?.[state.router.location.pathname] || state.content.data,
-    pathname: state.router.location.pathname,
-    navigation: getNavigationByParent(
-      state.navigation.items,
-      props.data?.parent?.value,
-    ),
-  })),
+  connect(
+    (state, props) => ({
+      query: state.router.location.search,
+      content:
+        state.prefetch?.[state.router.location.pathname] || state.content.data,
+      pathname: state.router.location.pathname,
+      discodata_query: state.discodata_query,
+      navigation: getNavigationByParent(
+        state.navigation.items,
+        props.data?.parent?.value,
+      ),
+    }),
+    { deleteQueryParam },
+  ),
 )(View);
