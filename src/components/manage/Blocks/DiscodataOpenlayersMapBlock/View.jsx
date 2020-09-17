@@ -642,7 +642,9 @@ const OpenlayersMapView = (props) => {
 
   function displayPopup(map, pixel, coordinate, popup, detailed = false) {
     if (setFeatureInfo(map, pixel, coordinate, detailed)) {
-      map.getTarget().style.cursor = 'pointer';
+      if (!detailed) {
+        map.getTarget().style.cursor = 'pointer';
+      }
       popup.element.classList.add('show');
       popup.setPosition(coordinate);
     } else {
@@ -833,47 +835,6 @@ const OpenlayersMapView = (props) => {
             zIndex: 0,
           }),
         }),
-        // style: (feature, resolution) => {
-        //   const featureProperties = feature.getProperties();
-        //   if (
-        //     featureProperties.siteName === siteTermRef.current ||
-        //     (SVG_COLLECTION[featureProperties.eea_activities]?.() &&
-        //       stateRef.current.map.element?.getView?.()?.getZoom?.() > 11)
-        //   ) {
-        //     return new Style({
-        //       image: new Icon({
-        //         src:
-        //           featureProperties.siteName === siteTermRef.current
-        //             ? `data:image/svg+xml;utf8,${encodeURIComponent(
-        //                 pinSVG('#50C878'),
-        //               )}`
-        //             : `data:image/svg+xml;utf8,${encodeURIComponent(
-        //                 SVG_COLLECTION[featureProperties.eea_activities](),
-        //               )}`,
-        //         opacity: 1,
-        //         scale: 1,
-        //       }),
-        //       zIndex:
-        //         featureProperties.siteName === siteTermRef.current ? 1 : 0,
-        //     });
-        //   } else {
-        //     return new Style({
-        //       image: new CircleStyle({
-        //         radius: 3,
-        //         fill:
-        //           featureProperties.siteName === siteTermRef.current
-        //             ? new Fill({ color: '#50C878' })
-        //             : new Fill({ color: '#000' }),
-        //         stroke:
-        //           featureProperties.siteName === siteTermRef.current
-        //             ? new Stroke({ color: '#6A6A6A', width: 1 })
-        //             : new Stroke({ color: '#6A6A6A', width: 1 }),
-        //         zIndex:
-        //           featureProperties.siteName === siteTermRef.current ? 1 : 0,
-        //       }),
-        //     });
-        //   }
-        // },
         visible: true,
         title: 'ly_IED_SiteMap_WM',
       });
@@ -931,13 +892,15 @@ const OpenlayersMapView = (props) => {
         }
       });
       if (hasPopups) {
-        map.on('pointermove', function (evt) {
-          if (evt.dragging) {
-            return;
-          }
-          const pixel = map.getEventPixel(evt.originalEvent);
-          displayPopup(map, pixel, evt.coordinate, popup);
-        });
+        if (document && document.documentElement?.clientWidth > 500) {
+          map.on('pointermove', function (evt) {
+            if (evt.dragging) {
+              return;
+            }
+            const pixel = map.getEventPixel(evt.originalEvent);
+            displayPopup(map, pixel, evt.coordinate, popup);
+          });
+        }
         map.on('click', function (evt) {
           let newZoom = map.getView().getZoom();
           if (newZoom > zoomSwitch) {

@@ -476,7 +476,7 @@ const View = ({ content, ...props }) => {
           props.dispatch,
         ),
       );
-    } else if (preset.key && !collection.length) {
+    } else if (preset.key) {
       navigation = flattenArray(props.navigation.items, {}, 0, 0);
     } else {
       navigation = flattenArray(props.navigation.items);

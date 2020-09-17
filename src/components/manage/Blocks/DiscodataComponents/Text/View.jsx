@@ -97,13 +97,14 @@ const View = ({ content, ...props }) => {
         };
       });
       selectedSubResources.forEach((subResource) => {
-        const discodataPackage = resources.filter(
-          (resource) => resource.package === subResource.package,
-        )[0];
-        if (props.search[discodataPackage.queryParameter]) {
+        const discodataPackage =
+          resources.filter(
+            (resource) => resource.package === subResource.package,
+          )[0] || {};
+        if (props.search[discodataPackage?.queryParameter]) {
           newDiscodataValues.push(
-            props.discodata_resources[discodataPackage.package]?.[
-              props.search[discodataPackage.queryParameter]
+            props.discodata_resources[discodataPackage?.package]?.[
+              props.search[discodataPackage?.queryParameter]
             ]?.[subResource.query],
           );
         }
