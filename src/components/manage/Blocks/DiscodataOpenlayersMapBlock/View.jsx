@@ -98,19 +98,6 @@ let Map,
   defaultsInteractions,
   DragRotateAndZoom;
 let OL_LOADED = false;
-const initialExtent = [
-  -10686671.0000035,
-  -2430148.00000588,
-  6199975.99999531,
-  10421410.9999871,
-];
-let renderExtent = [];
-
-const getDistance = (P1, P2) => {
-  const cathetus_1 = Math.pow(P1[0] - P2[0], 2);
-  const cathetus_2 = Math.pow(P1[1] - P2[1], 2);
-  return Math.sqrt(cathetus_1 + cathetus_2);
-};
 
 const OpenlayersMapView = (props) => {
   const stateRef = useRef({
@@ -838,7 +825,7 @@ const OpenlayersMapView = (props) => {
         visible: true,
         title: 'ly_IED_SiteMap_WM',
       });
-      //  Regions source layer
+      //  Regions source layerq
       if (hasRegionsFeatures) {
         regionsSourceLayer = new VectorLayer({
           source: regionsSource,
@@ -908,6 +895,11 @@ const OpenlayersMapView = (props) => {
           }
         });
       }
+
+      map.once('postrender', function(event) {
+        sitesSourceLayer.getSource().refresh();
+      });
+
       map.on('moveend', function (e) {
         if (mounted.current) {
           if (hasSidebar && document.getElementById('dynamic-filter')) {
@@ -927,6 +919,9 @@ const OpenlayersMapView = (props) => {
           let newZoom = map.getView().getZoom();
           if (currentZoom !== newZoom) {
             if (newZoom > zoomSwitch) {
+              if (!sitesSourceLayer.getVisible()) {
+                sitesSourceLayer.getSource().refresh();
+              }
               sitesSourceLayer.setVisible(true);
               hasRegionsFeatures && regionsSourceLayer.setVisible(false);
             } else if (newZoom > 2) {
