@@ -502,10 +502,6 @@ const OpenlayersMapView = (props) => {
                   callback: function () {},
                 },
               );
-            setTimeout(() => {
-              stateRef?.current?.map?.sitesSourceLayer &&
-                stateRef.current.map.sitesSourceLayer.getSource().refresh();
-            }, options.duration + 100);
           }
         })
         .catch((error) => {});
@@ -532,10 +528,6 @@ const OpenlayersMapView = (props) => {
               zoom: 15,
             });
           }
-          setTimeout(() => {
-            stateRef?.current?.map?.sitesSourceLayer &&
-              stateRef.current.map.sitesSourceLayer.getSource().refresh();
-          }, 1100);
         })
         .catch((error) => {});
     }
@@ -896,7 +888,7 @@ const OpenlayersMapView = (props) => {
         });
       }
 
-      map.once('postrender', function(event) {
+      map.once('postrender', function (event) {
         sitesSourceLayer.getSource().refresh();
       });
 

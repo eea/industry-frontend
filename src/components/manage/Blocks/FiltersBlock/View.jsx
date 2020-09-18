@@ -27,7 +27,6 @@ import circleMinus from '@plone/volto/icons/circle-minus.svg';
 import clear from '@plone/volto/icons/clear.svg';
 import './style.css';
 
-let nrOfRequests = 0;
 const makeUrl = (providerUrl, url) => {
   return encodeURI(providerUrl + `?query=${url}`);
 };
@@ -41,6 +40,7 @@ const keyCodes = {
 const View = ({ content, ...props }) => {
   const providerUrl = settings.providerUrl;
   const [state, setState] = useState({
+    id: _uniqueId('block_'),
     open: false,
     filters: {},
     filtersMeta: {},
@@ -59,7 +59,6 @@ const View = ({ content, ...props }) => {
       'permit_years',
     ],
     factsDataOrder: ['Country_quick_facts', 'EU_quick_facts'],
-    mounted: false,
     firstLoad: false,
   });
   const [filtersMetaReady, setFiltersMetaReady] = useState(false);
@@ -74,9 +73,11 @@ const View = ({ content, ...props }) => {
   const [triggerSearch, setTriggerSearch] = useState(false);
   const [quickFactsListener, setQuickFactsListener] = useState(false);
   const [sidebar, setSidebar] = useState(false);
+  const [mountState, setMountState] = useState(false);
   const alphaFeatureRef = useRef({});
   const searchContainerModal = useRef(null);
   const searchContainer = useRef(null);
+  const mounted = useRef(false);
   const modalButtonTitle = props.data.modalButtonTitle?.value;
   const locationResultsTexts = locationResults.map((result) => result.text);
   const mapSidebarExists = document?.getElementById('map-sidebar');
@@ -187,26 +188,24 @@ const View = ({ content, ...props }) => {
   }
 
   useEffect(function () {
-    setState({ ...state, mounted: true });
+    mounted.current = true;
+    setMountState(true);
     updateFactsData(true);
-    setState({
-      ...state,
-      mounted: true,
-    });
     return () => {
       if (quickFactsListener && document.getElementById(`dynamic-filter`)) {
         document
           .getElementById(`dynamic-filter`)
           .removeEventListener('featurechange', onFeaturechange);
       }
-      setState({ ...state, mounted: false });
+      mounted.current = false;
+      setMountState(false);
     };
     /* eslint-disable-next-line */
   }, []);
 
   useEffect(() => {
     alphaFeatureRef.current = alphaFeature;
-    if (state.mounted) {
+    if (mountState) {
       updateFactsData(false);
     }
     /* eslint-disable-next-line */
@@ -238,14 +237,14 @@ const View = ({ content, ...props }) => {
   }, [state]);
 
   useEffect(() => {
-    if (typeof updateFilters === 'function') {
+    if (mountState) {
       updateFilters();
-    }
-    if (Object.keys(state.filtersMeta).length && !filtersMetaReady) {
-      setFiltersMetaReady(true);
+      if (Object.keys(state.filtersMeta).length && !filtersMetaReady) {
+        setFiltersMetaReady(true);
+      }
     }
     /* eslint-disable-next-line */
-  }, [JSON.stringify(state.filters), JSON.stringify(state.filtersMeta)])
+  }, [JSON.stringify(state.filtersMeta)])
 
   useEffect(() => {
     if (
@@ -259,7 +258,7 @@ const View = ({ content, ...props }) => {
   }, [filtersMetaReady])
 
   useEffect(() => {
-    if (state.mounted && __CLIENT__) {
+    if (mountState && __CLIENT__) {
       let promises = [];
       let metadata = [];
       const siteCountryFilters =
@@ -559,7 +558,7 @@ const View = ({ content, ...props }) => {
       }
       Promise.all(promises)
         .then((response) => {
-          if (state.mounted) {
+          if (mounted.current) {
             const filtersMeta = {
               ...state.filtersMeta,
             };
@@ -569,7 +568,6 @@ const View = ({ content, ...props }) => {
               }
             });
             response.forEach((res, index) => {
-              nrOfRequests++;
               const results = JSON.parse(res.request.response).results;
               let filteringInputs = [];
               if (state.filtersMeta[metadata[index]?.key]?.filteringInputs) {
@@ -613,14 +611,14 @@ const View = ({ content, ...props }) => {
               }
               const queries =
                 props.discodata_query.search[metadata[index].queryToSet] || [];
-              const filteringInptsByQuery =
-                queries.length > 1
-                  ? queries.map((query, index) => ({
-                      id: _uniqueId('select_'),
-                      type: 'select',
-                      position: index,
-                    }))
-                  : [metadata[index]?.firstInput];
+              let filteringInptsByQuery = [metadata[index]?.firstInput];
+              if (Array.isArray(queries) && queries.length > 1) {
+                filteringInptsByQuery = queries.map((query, index) => ({
+                  id: _uniqueId('select_'),
+                  type: 'select',
+                  position: index,
+                }));
+              }
               filtersMeta[metadata[index]?.key] = {
                 filteringInputs: filteringInputs.length
                   ? filteringInputs
@@ -650,6 +648,7 @@ const View = ({ content, ...props }) => {
               ...(state.firstLoad === false ? { firstLoad: true } : {}),
             });
           }
+          return;
         })
         .catch((error) => {
           setLoadingData(false);
@@ -661,7 +660,7 @@ const View = ({ content, ...props }) => {
     }
     /* eslint-disable-next-line */
   }, [
-    state.mounted,
+    mountState,
     state.filters?.EEAActivity && JSON.stringify(state.filters.EEAActivity),
     state.filters?.siteCountry && JSON.stringify(state.filters.siteCountry),
     state.filters?.region && JSON.stringify(state.filters.region),
@@ -754,7 +753,7 @@ const View = ({ content, ...props }) => {
         }
       });
       queryParamKeys.forEach((key, keyIndex) => {
-        if (props.discodata_query.search[key]) {
+        if (Array.isArray(props.discodata_query.search[key])) {
           newFilters[key] = props.discodata_query.search[key];
           props.discodata_query.search[key].forEach((param, index) => {
             if (

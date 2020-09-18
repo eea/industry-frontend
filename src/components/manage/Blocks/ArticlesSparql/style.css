@@ -1,0 +1,80 @@
+.articles-sparql {
+  position: relative;
+}
+
+.articles .articles-row {
+  align-items: center;
+  height: 250px;
+  justify-content: center;
+}
+
+.articles .article {
+  display: block;
+}
+
+.articles .articles-row.can-be-half:last-child  {
+  -webkit-mask-image: -webkit-gradient(linear, left top, 
+    left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+}
+.articles .articles-row.can-be-half:last-child .article {
+  height: 50%;
+  overflow: hidden;
+  -webkit-mask-image: -webkit-gradient(linear, left top, 
+    left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+}
+
+.articles .article.hero img {
+  border-radius: 2em;
+}
+
+.articles .article-header,
+.articles .article-description {
+  display: block;
+  position: relative;
+}
+
+.articles .article-header h3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-height: 1.5em;
+  max-height: 1.5em;
+}
+
+.articles .article-description p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-height: 1.5em;
+  max-height: 4.5em;
+}
+
+.articles-slideshow {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 50%;
+  right: 1em;
+  transform: translateY(-50%);
+}
+
+.articles-slideshow .icon {
+  cursor: pointer;
+}
+
+.articles-redirect {
+  position: absolute;
+  bottom: 7em;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@media (min-width: 500px) and (max-width: 768px) {
+  .sm-height-fit-content {
+    height: fit-content !important;
+  }
+}

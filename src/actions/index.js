@@ -14,6 +14,7 @@ import {
   SET_SECTION_TABS,
   GET_PARENT_FOLDER_DATA,
   GET_PAGE,
+  GET_SPARQL_DATA,
 } from '~/constants/ActionTypes';
 
 export function setSectionTabs(payload) {
@@ -40,6 +41,17 @@ export function getPage(url) {
     request: {
       op: 'get',
       path: `${url}?fullobjects`,
+    },
+  };
+}
+
+export function getSparqlData(path) {
+  return {
+    type: GET_SPARQL_DATA,
+    path,
+    request: {
+      op: 'get',
+      path: `${path}/@sparql-data`,
     },
   };
 }

@@ -7,6 +7,9 @@ import RedirectView from '~/components/theme/View/RedirectView';
 import DetailedLinkView from '~/components/manage/Blocks/DetailedLink/View';
 import DetailedLinkEdit from '~/components/manage/Blocks/DetailedLink/Edit';
 
+import ArticlesSparqlView from '~/components/manage/Blocks/ArticlesSparql/View';
+import ArticlesSparqlEdit from '~/components/manage/Blocks/ArticlesSparql/Edit';
+
 import FolderContentsBlockView from '~/components/manage/Blocks/FolderContentsBlock/View';
 import FolderContentsBlockEdit from '~/components/manage/Blocks/FolderContentsBlock/Edit';
 
@@ -117,6 +120,15 @@ export function applyConfig(voltoConfig) {
     group: 'eprtr_blocks',
     view: ArticlesListView,
     edit: ArticlesListEdit,
+    icon: listSVG,
+  };
+
+  config.blocks.blocksConfig.articles_sparql = {
+    id: 'articles_sparql',
+    title: 'Articles sparql',
+    group: 'eprtr_blocks',
+    view: ArticlesSparqlView,
+    edit: ArticlesSparqlEdit,
     icon: listSVG,
   };
 
