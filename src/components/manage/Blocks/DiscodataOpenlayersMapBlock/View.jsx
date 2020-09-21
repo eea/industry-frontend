@@ -696,7 +696,7 @@ const OpenlayersMapView = (props) => {
       sitesSource = new VectorSource({
         loader: function (extent, resolution, projection) {
           if (mounted.current && firstFilteringDone.current) {
-            var url = `https://services.arcgis.com/LcQjj2sL7Txk9Lag/arcgis/rest/services/SiteMap_v2/FeatureServer/0/query/?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=${encodeURIComponent(
+            var url = `https://services.arcgis.com/LcQjj2sL7Txk9Lag/arcgis/rest/services/SiteMap/FeatureServer/0/query/?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=${encodeURIComponent(
               '{"xmin":' +
                 extent[0] +
                 ',"ymin":' +
@@ -802,6 +802,23 @@ const OpenlayersMapView = (props) => {
           ),
         });
       }
+
+      const siteStyle = new Style({
+        image: new CircleStyle({
+          radius: 3,
+          fill: new Fill({ color: '#000' }),
+          stroke: new Stroke({ color: '#6A6A6A', width: 1 }),
+          zIndex: 0,
+        }),
+      });
+      let selectedSite = null;
+
+      // function resetSelectedSite() {
+      //   if (selectedSite) {
+      //     selectedSite.setStyle(siteStyle);
+      //   }
+      // }
+
       /* ======== SOURCE LAYERS ======== */
       //  Sites source layer
       sitesSourceLayer = new VectorLayer({

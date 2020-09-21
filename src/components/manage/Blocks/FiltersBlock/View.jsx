@@ -48,8 +48,8 @@ const View = ({ content, ...props }) => {
       'industries',
       'countries',
       'regions',
+      'provinces',
       'river_basins',
-      'town_village',
       'pollutant_groups',
       'pollutants',
       'reporting_years',
@@ -420,16 +420,7 @@ const View = ({ content, ...props }) => {
             return "'" + country + "'";
           })}) AND LEVL_CODE = 1
           ORDER BY NUTS_NAME`,
-          // RIVER BASIN DISTRICT QUERY
-          siteCountryFilters &&
-            siteCountryFilters.length > 0 &&
-            `SELECT DISTINCT thematicIdIdentifier, nameText
-            FROM [IED].[latest].[refRBD_NoGeo]
-            WHERE countryCode IN (${siteCountryFilters.map((country) => {
-              return "'" + country + "'";
-            })})
-          ORDER BY nameText`,
-          // TOWN/VILLAGE QUERY
+          // PROVINCES QUERY
           siteCountryFilters &&
             regionFilters &&
             siteCountryFilters.length > 0 &&
@@ -440,12 +431,19 @@ const View = ({ content, ...props }) => {
             return "'" + country + "'";
           })}) AND (${regionFilters
               .map((region, index) => {
-                return (
-                  (!index ? '' : 'OR ') + "NUTS_ID LIKE '" + region + "1%'"
-                );
+                return (!index ? '' : 'OR ') + "NUTS_ID LIKE '" + region + "%'";
               })
-              .join(' ')}) AND LEVL_CODE = 3
+              .join(' ')}) AND LEVL_CODE = 2
           ORDER BY NUTS_NAME`,
+          // RIVER BASIN DISTRICT QUERY
+          siteCountryFilters &&
+            siteCountryFilters.length > 0 &&
+            `SELECT DISTINCT thematicIdIdentifier, nameText
+            FROM [IED].[latest].[refRBD_NoGeo]
+            WHERE countryCode IN (${siteCountryFilters.map((country) => {
+              return "'" + country + "'";
+            })})
+          ORDER BY nameText`,
           // POLLUTANTS QUERY
           pollutantGroupFilter &&
             pollutantGroupFilter.length > 0 &&
@@ -487,6 +485,24 @@ const View = ({ content, ...props }) => {
               optionValue: 'NUTS_ID',
               optionText: 'NUTS_NAME',
             },
+          // PROVINCES META
+          siteCountryFilters &&
+            regionFilters &&
+            siteCountryFilters.length > 0 &&
+            regionFilters.length && {
+              key: 'provinces',
+              title: null,
+              queryToSet: 'province',
+              firstInput: {
+                id: _uniqueId('select_'),
+                type: 'select',
+                position: 0,
+              },
+              placeholder: 'Select province',
+              optionKey: 'NUTS_ID',
+              optionValue: 'NUTS_ID',
+              optionText: 'NUTS_NAME',
+            },
           // RIVER BASIN DISTRICT META
           siteCountryFilters &&
             siteCountryFilters.length > 0 && {
@@ -502,24 +518,6 @@ const View = ({ content, ...props }) => {
               optionKey: 'thematicIdIdentifier',
               optionValue: 'thematicIdIdentifier',
               optionText: 'nameText',
-            },
-          // TOWN/VILLAGE META
-          siteCountryFilters &&
-            regionFilters &&
-            siteCountryFilters.length > 0 &&
-            regionFilters.length && {
-              key: 'town_village',
-              title: null,
-              queryToSet: 'townVillage',
-              firstInput: {
-                id: _uniqueId('select_'),
-                type: 'select',
-                position: 0,
-              },
-              placeholder: 'Select town/village',
-              optionKey: 'NUTS_ID',
-              optionValue: 'NUTS_ID',
-              optionText: 'NUTS_NAME',
             },
           // POLLUTANTS META
           pollutantGroupFilter &&
@@ -576,7 +574,6 @@ const View = ({ content, ...props }) => {
                 ];
               }
               if (metadata[index]?.key === 'permit_years') {
-                // YEAH...FU*K TRACASA
                 filtersMeta['permit_types'] = {
                   filteringInputs: [
                     {
@@ -664,7 +661,7 @@ const View = ({ content, ...props }) => {
     state.filters?.EEAActivity && JSON.stringify(state.filters.EEAActivity),
     state.filters?.siteCountry && JSON.stringify(state.filters.siteCountry),
     state.filters?.region && JSON.stringify(state.filters.region),
-    state.filters?.townVillage && JSON.stringify(state.filters.townVillage),
+    state.filters?.province && JSON.stringify(state.filters.province),
     state.filters?.pollutantGroup &&
       JSON.stringify(state.filters.pollutantGroup),
   ]);
@@ -737,8 +734,8 @@ const View = ({ content, ...props }) => {
     let newFiltersMeta = { ...state.filtersMeta };
     const dynamicFiltersQuery = [
       'region',
+      'province',
       'riverBasin',
-      'townVillage',
       'pollutant',
     ];
     if (state.filters && state.filtersMeta) {
@@ -871,7 +868,7 @@ const View = ({ content, ...props }) => {
     let promises = [];
     const sqls = [
       {
-        query: `SELECT DISTINCT site FROM [IED].[latest].[Browse3_4_infotable] WHERE [site] LIKE '%${data.value}%' ORDER BY [site]`,
+        query: `SELECT DISTINCT siteName FROM [IED].[latest].[SiteMap] WHERE [site] LIKE '%${data.value}%' ORDER BY [siteName]`,
         reqKey: 'results',
         searchKey: 'site',
         updateState: setSitesResults,
@@ -947,7 +944,7 @@ const View = ({ content, ...props }) => {
       searchTermType === 'siteTerm' ? 'locationTerm' : 'siteTerm';
     const siteCountries = state.filters.siteCountry;
     const regions = state.filters.region;
-    const townVillages = state.filters.townVillage;
+    const provinces = state.filters.province;
     let nuts = [];
     let nuts_latest = [];
     siteCountries &&
@@ -959,15 +956,15 @@ const View = ({ content, ...props }) => {
           : [];
         if (filteredRegions.length) {
           filteredRegions.forEach((region) => {
-            const filteredTowns = townVillages
-              ? townVillages.filter((town) => {
-                  return town && town.includes(region);
+            const filteredProvinces = provinces
+              ? provinces.filter((province) => {
+                  return province && province.includes(region);
                 })
               : [];
-            if (filteredTowns.length) {
-              filteredTowns.forEach((town) => {
-                nuts.push(`${town},${region},${country}`);
-                nuts_latest.push(town);
+            if (filteredProvinces.length) {
+              filteredProvinces.forEach((province) => {
+                nuts.push(`${province},${region},${country}`);
+                nuts_latest.push(province);
               });
             } else {
               nuts.push(`${region},${country}`);
