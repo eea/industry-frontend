@@ -126,6 +126,7 @@ const OpenlayersMapView = (props) => {
     siteTerm: null,
     updateMapPosition: null,
   });
+  const [selectedSite, setSelectedSite] = useState(null);
   const [loader, setLoader] = useState(false);
   const [mapRendered, setMapRendered] = useState(false);
   const [firstFilteringUpdate, setFirstFilteringUpdate] = useState(false);
@@ -246,6 +247,21 @@ const OpenlayersMapView = (props) => {
     };
     /* eslint-disable-next-line */
   }, [])
+
+  useEffect(() => {
+    if (selectedSite && mapRendered) {
+      selectedSite.setStyle(
+        new Style({
+          image: new CircleStyle({
+            radius: 3,
+            fill: new Fill({ color: '#00FF00' }),
+            stroke: new Stroke({ color: '#6A6A6A', width: 1 }),
+            zIndex: 0,
+          }),
+        }),
+      );
+    }
+  }, [selectedSite]);
 
   useEffect(() => {
     siteTermRef.current = siteTerm;
@@ -527,10 +543,16 @@ const OpenlayersMapView = (props) => {
           const data = JSON.parse(response.request.response);
           const item = data.results?.[0];
           if (item) {
-            const x_3857 = item.x;
-            const y_3857 = item.y;
+            setTimeout(() => {
+              setSelectedSite(
+                stateRef.current.map.sitesSourceLayer
+                  .getSource()
+                  .getClosestFeatureToCoordinate([item.x, item.y]),
+              );
+            }, 3000);
+
             stateRef.current.map.element.getView().animate({
-              center: [x_3857, y_3857],
+              center: [item.x, item.y],
               duration: filterSource !== 'query_params' ? 1000 : 0,
               zoom: 15,
             });
@@ -549,9 +571,11 @@ const OpenlayersMapView = (props) => {
       getSiteTermLocation(options);
     }
     if (stateRef.current.updateMapPosition === 'byLocationTerm') {
+      setSelectedSite(null);
       getLocation(options);
     }
     if (stateRef.current.updateMapPosition === 'byAdvancedFilters') {
+      setSelectedSite(null);
       stateRef.current.map.element
         .getView()
         .fit(stateRef.current.map.sitesSourceLayer.getSource().getExtent());
@@ -820,23 +844,6 @@ const OpenlayersMapView = (props) => {
           ),
         });
       }
-
-      const siteStyle = new Style({
-        image: new CircleStyle({
-          radius: 3,
-          fill: new Fill({ color: '#000' }),
-          stroke: new Stroke({ color: '#6A6A6A', width: 1 }),
-          zIndex: 0,
-        }),
-      });
-      let selectedSite = null;
-
-      // function resetSelectedSite() {
-      //   if (selectedSite) {
-      //     selectedSite.setStyle(siteStyle);
-      //   }
-      // }
-
       /* ======== SOURCE LAYERS ======== */
       //  Sites source layer
       sitesSourceLayer = new VectorLayer({
