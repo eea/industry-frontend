@@ -130,6 +130,7 @@ const OpenlayersMapView = (props) => {
   const [loader, setLoader] = useState(false);
   const [mapRendered, setMapRendered] = useState(false);
   const [firstFilteringUpdate, setFirstFilteringUpdate] = useState(false);
+  const regionsSourceWhere = useRef('');
   const firstFilteringDone = useRef(false);
   const ToggleSidebarControl = useRef(null);
   const ViewYourAreaControl = useRef(null);
@@ -270,6 +271,14 @@ const OpenlayersMapView = (props) => {
   useEffect(() => {
     if (mapRendered) {
       updateFilters();
+      const baseSql = `(CNTR_CODE LIKE '%:options%')`;
+      const countries = props.discodata_query.search.siteCountry || [];
+      regionsSourceWhere.current =
+        countries.length > 0
+          ? `(${countries
+              .map((country) => baseSql.replace('options', country))
+              .join(' OR ')})`
+          : '';
     }
     /* eslint-disable-next-line */
   }, [
@@ -313,7 +322,7 @@ const OpenlayersMapView = (props) => {
           sql: `(eea_activities LIKE '%:options%')`,
           type: 'multiple',
         },
-        // Country / Region / Town
+        // Country / Region / Provinces
         nuts_latest: {
           sql: `(nuts_regions LIKE '%:options%')`,
           type: 'multiple',
@@ -824,18 +833,29 @@ const OpenlayersMapView = (props) => {
                 extent[3] +
                 ',"spatialReference":{"wkid":102100}}',
             )}&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*&outSR=102100`;
-            jsonp(url, null, (error, response) => {
-              if (error) {
-                console.log(error.message);
-              } else {
-                var features = esrijsonFormat.readFeatures(response, {
-                  featureProjection: projection,
-                });
-                if (features.length > 0) {
-                  regionsSource.addFeatures(features);
+            jsonp(
+              url,
+              {
+                param:
+                  (regionsSourceWhere.current
+                    ? qs.stringify({
+                        where: regionsSourceWhere.current,
+                      })
+                    : '') + '&callback',
+              },
+              (error, response) => {
+                if (error) {
+                  console.log(error.message);
+                } else {
+                  var features = esrijsonFormat.readFeatures(response, {
+                    featureProjection: projection,
+                  });
+                  if (features.length > 0) {
+                    regionsSource.addFeatures(features);
+                  }
                 }
-              }
-            });
+              },
+            );
           },
           strategy: tile(
             createXYZ({
