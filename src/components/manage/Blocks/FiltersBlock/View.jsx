@@ -868,9 +868,9 @@ const View = ({ content, ...props }) => {
     let promises = [];
     const sqls = [
       {
-        query: `SELECT DISTINCT siteName FROM [IED].[latest].[SiteMap] WHERE [site] LIKE '%${data.value}%' ORDER BY [siteName]`,
+        query: `SELECT DISTINCT siteName FROM [IED].[latest].[SiteMap] WHERE [siteName] LIKE '%${data.value}%' ORDER BY [siteName]`,
         reqKey: 'results',
-        searchKey: 'site',
+        searchKey: 'siteName',
         updateState: setSitesResults,
       },
     ];

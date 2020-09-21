@@ -513,7 +513,7 @@ const OpenlayersMapView = (props) => {
       axios
         .get(
           encodeURI(
-            `${settings.providerUrl}?query=SELECT shape_wm.STX as x, shape_wm.STY as y from [IED].[latest].[SiteMap] WHERE siteName LIKE '%${stateRef.current.siteTerm}%' ORDER BY [Site_reporting_year] DESC`,
+            `${settings.providerUrl}?query=SELECT shape_wm.STX as x, shape_wm.STY as y, Site_reporting_year from [IED].[latest].[SiteMap] WHERE siteName LIKE '%${stateRef.current.siteTerm}%' ORDER BY [Site_reporting_year] DESC`,
           ),
         )
         .then((response) => {
