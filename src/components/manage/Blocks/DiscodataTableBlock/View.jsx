@@ -96,7 +96,7 @@ const components = {
     if (Array.isArray(item[itemMetadata])) return item[itemMetadata].join(', ');
     if (typeof item[itemMetadata] === 'object' && item[itemMetadata] !== null)
       return Object.keys(item[itemMetadata]).join(', ');
-    return item[itemMetadata];
+    return <p className="mb-0">{item[itemMetadata]}</p>;
   },
 };
 
@@ -172,8 +172,8 @@ const View = (props) => {
     props.discodata_resources.pendingRequests[collection_count];
 
   const additionalWhereStatements = [
-    `x_3857 >= ${extent[0]} AND x_3857 <= ${extent[2]}`,
-    `y_3857 >= ${extent[1]} AND y_3857 <= ${extent[3]}`,
+    `shape_wm.STX >= ${extent[0]} AND shape_wm.STX <= ${extent[2]}`,
+    `shape_wm.STY >= ${extent[1]} AND shape_wm.STY <= ${extent[3]}`,
   ];
 
   return (
@@ -275,13 +275,7 @@ const View = (props) => {
                           : 'hidden-row hide'
                       }
                     >
-                      <Table.Cell
-                        colSpan={
-                          props.data?.hiddenRowTypes?.value?.length
-                            ? props.data.hiddenRowTypes.value.length
-                            : 1
-                        }
-                      >
+                      <Table.Cell colSpan={state.tableHeaders + 1}>
                         <div className="hidden-row-container">
                           <div className="table-flex-container white">
                             {props.data?.hiddenRowTypes?.value

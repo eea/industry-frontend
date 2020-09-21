@@ -7,19 +7,21 @@
   "workspaces": [
     "src/develop/volto-grid-block",
     "src/develop/volto-addons",
-    "src/develop/volto-datablocks"
+    "src/develop/volto-datablocks",
+    "src/develop/volto-slate-metadata-mentions",
+    "src/develop/volto-slate"
   ],
   "addons": [
     "volto-slate:asDefault",
-    "@eeacms/volto-image-zoom-and-flip",
     "@eeacms/volto-widgets-view",
     "@eeacms/volto-slate-metadata-mentions",
     "@eeacms/volto-metadata-block",
     "@eeacms/volto-tabs-block",
     "@eeacms/volto-widget-toggle",
+    "@eeacms/volto-object-widget",
+    "@eeacms/volto-grid-block",
     "volto-addons",
-    "volto-datablocks",
-    "@eeacms/volto-grid-block"
+    "volto-datablocks"
   ],
   "scripts": {
     "start": "razzle start",
@@ -107,13 +109,11 @@
     "node": "^10 || ^12"
   },
   "dependencies": {
-    "@eeacms/volto-image-zoom-and-flip": "github:eea/volto-image-zoom-and-flip#0.1.0",
-    "@eeacms/volto-metadata-block": "github:eea/volto-metadata-block#0.2.0",
-    "@eeacms/volto-slate-metadata-mentions": "github:eea/volto-slate-metadata-mentions#0.2.0",
-    "@eeacms/volto-tabs-block": "github:eea/volto-tabs-block#0.2.2",
+    "@eeacms/volto-metadata-block": "github:eea/volto-metadata-block#1.0.1",
     "@eeacms/volto-widget-toggle": "github:eea/volto-widget-toggle#0.1.0",
-    "@eeacms/volto-widgets-view": "github:eea/volto-widgets-view#0.2.4",
-    "@plone/volto": "github:eea/volto#7.11.1-beta.1",
+    "@eeacms/volto-widgets-view": "github:eea/volto-widgets-view#1.0.1",
+    "@eeacms/volto-object-widget": "github:eea/volto-object-widget#0.1.2",
+    "@plone/volto": "github:eea/volto#8.0.0-beta.10",
     "@tinymce/tinymce-react": "^3.6.0",
     "axios": "^0.20.0",
     "jsonp": "^0.2.1",
@@ -128,8 +128,7 @@
     "react-loadable": "^5.5.0",
     "react-sizeme": "^2.6.12",
     "react-tooltip": "^4.2.9",
-    "react-visibility-sensor": "^5.1.1",
-    "volto-slate": "github:eea/volto-slate#0.6.0"
+    "react-visibility-sensor": "^5.1.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",

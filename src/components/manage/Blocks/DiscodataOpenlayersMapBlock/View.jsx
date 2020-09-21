@@ -106,6 +106,7 @@ const OpenlayersMapView = (props) => {
       sitesSourceQuery: { whereStatements: {}, where: '' },
       oldSitesSourceQuery: { whereStatements: {}, where: '' },
       sitesSourceLayer: null,
+      regionsSourceLayer: null,
     },
     popup: { element: null, properties: {} },
     popupDetails: { element: null, properties: {} },
@@ -119,6 +120,7 @@ const OpenlayersMapView = (props) => {
       sitesSourceQuery: { whereStatements: {}, where: '' },
       oldSitesSourceQuery: { whereStatements: {}, where: '' },
       sitesSourceLayer: null,
+      regionsSourceLayer: null,
     },
     popup: { element: null, properties: {} },
     popupDetails: { element: null, properties: {} },
@@ -262,6 +264,7 @@ const OpenlayersMapView = (props) => {
         }),
       );
     }
+    /* eslint-disable-next-line */
   }, [selectedSite]);
 
   useEffect(() => {
@@ -272,13 +275,23 @@ const OpenlayersMapView = (props) => {
     if (mapRendered) {
       updateFilters();
       const baseSql = `(CNTR_CODE LIKE '%:options%')`;
-      const countries = props.discodata_query.search.siteCountry || [];
-      regionsSourceWhere.current =
+      const countries =
+        props.discodata_query.search.siteCountry?.filter(
+          (country) => country,
+        ) || [];
+      const newRegionsSourceWhere =
         countries.length > 0
           ? `(${countries
-              .map((country) => baseSql.replace('options', country))
+              .map((country) => baseSql.replace(':options', country))
               .join(' OR ')})`
           : '';
+      if (
+        hasRegionsFeatures &&
+        newRegionsSourceWhere !== regionsSourceWhere.current
+      ) {
+        regionsSourceWhere.current = newRegionsSourceWhere;
+        state.map.regionsSourceLayer.getSource().refresh();
+      }
     }
     /* eslint-disable-next-line */
   }, [
@@ -1000,6 +1013,7 @@ const OpenlayersMapView = (props) => {
           ...stateRef.current.map,
           element: map,
           sitesSourceLayer,
+          regionsSourceLayer: hasRegionsFeatures ? regionsSourceLayer : null,
         },
         popup: {
           ...stateRef.current.popup,
