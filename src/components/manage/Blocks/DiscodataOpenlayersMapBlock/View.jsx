@@ -513,15 +513,15 @@ const OpenlayersMapView = (props) => {
       axios
         .get(
           encodeURI(
-            `${settings.providerUrl}?query=SELECT DISTINCT * FROM [IED].[latest].[Browse3_4_infotable] WHERE site LIKE '%${stateRef.current.siteTerm}%' ORDER BY [reportingYear] DESC`,
+            `${settings.providerUrl}?query=SELECT shape_wm.STX as x, shape_wm.STY as y from [IED].[latest].[SiteMap] WHERE siteName LIKE '%${stateRef.current.siteTerm}%' ORDER BY [Site_reporting_year] DESC`,
           ),
         )
         .then((response) => {
           const data = JSON.parse(response.request.response);
           const item = data.results?.[0];
           if (item) {
-            const x_3857 = item.x_3857;
-            const y_3857 = item.y_3857;
+            const x_3857 = item.x;
+            const y_3857 = item.y;
             stateRef.current.map.element.getView().animate({
               center: [x_3857, y_3857],
               duration: filterSource !== 'query_params' ? 1000 : 0,
