@@ -145,6 +145,7 @@ const OpenlayersMapView = (props) => {
     ? state.map.element.getView().getZoom()
     : null;
   let queryParams;
+
   if (filterSource === 'query_params') {
     try {
       queryParams = JSON.parse(props.data?.query?.value)?.properties;
@@ -394,6 +395,12 @@ const OpenlayersMapView = (props) => {
         } else if (locationTerm?.text) {
           updateMapPosition = 'byLocationTerm';
         }
+      } else if (
+        filterSource !== 'query_params' &&
+        sitesSourceQuery.where !== state.map.sitesSourceQuery.where &&
+        props.discodata_query.search.advancedFiltering
+      ) {
+        updateMapPosition = 'byAdvancedFilters';
       } else if (filterSource === 'query_params') {
         if (siteTerm) {
           updateMapPosition = 'bySiteTerm';
@@ -543,6 +550,11 @@ const OpenlayersMapView = (props) => {
     }
     if (stateRef.current.updateMapPosition === 'byLocationTerm') {
       getLocation(options);
+    }
+    if (stateRef.current.updateMapPosition === 'byAdvancedFilters') {
+      stateRef.current.map.element
+        .getView()
+        .fit(stateRef.current.map.sitesSourceLayer.getSource().getExtent());
     }
     //  UPDATE OLD FILTERS
     if (
@@ -707,6 +719,13 @@ const OpenlayersMapView = (props) => {
                 extent[3] +
                 ',"spatialReference":{"wkid":102100}}',
             )}&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*&outSR=102100`;
+
+            if (stateRef.current.map.sitesSourceQuery.where) {
+              url =
+                'https://services.arcgis.com/LcQjj2sL7Txk9Lag/arcgis/rest/services/SiteMap/FeatureServer/0/query/?f=json&' +
+                'returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*' +
+                '&outSR=102100';
+            }
             reqs++;
             jsonp(
               url,
@@ -729,9 +748,8 @@ const OpenlayersMapView = (props) => {
                   });
                   if (features.length > 0) {
                     sitesSource.addFeatures(features);
-                  } else {
-                    // setLoader(false);
                   }
+
                   sitesSource.dispatchEvent(
                     new VectorSourceEvent('updateFilters'),
                   );
