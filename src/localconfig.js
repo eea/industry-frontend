@@ -44,6 +44,9 @@ import DummyBlockEdit from '~/components/manage/Blocks/DummyBlock/Edit';
 import DummyBlockView from '~/components/manage/Blocks/DummyBlock/View';
 
 // Discodata components
+import DiscodataTableBlockEdit from '~/components/manage/Blocks/DiscodataTableBlock/Edit';
+import DiscodataTableBlockView from '~/components/manage/Blocks/DiscodataTableBlock/View';
+
 import DiscodataComponentsBlockEdit from '~/components/manage/Blocks/DiscodataComponentsBlock/Edit';
 import DiscodataComponentsBlockView from '~/components/manage/Blocks/DiscodataComponentsBlock/View';
 
@@ -223,6 +226,15 @@ export function applyConfig(voltoConfig) {
   };
 
   // DISCODATA COMPONENTS
+
+  config.blocks.blocksConfig.discodata_components_table_block = {
+    id: 'discodata_components_table_block',
+    title: 'Table block',
+    group: 'discodata_components',
+    view: DiscodataTableBlockView,
+    edit: DiscodataTableBlockEdit,
+    icon: packSVG,
+  };
 
   config.blocks.blocksConfig.discodata_components_text = {
     id: 'discodata_components_text',

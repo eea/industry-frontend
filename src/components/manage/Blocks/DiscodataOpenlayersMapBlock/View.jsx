@@ -942,6 +942,11 @@ const OpenlayersMapView = (props) => {
             }
             currentZoom = newZoom;
           }
+          props.setQueryParam({
+            queryParam: {
+              extent: map.getView().calculateExtent(map.getSize()),
+            },
+          });
         }
       });
       setState({

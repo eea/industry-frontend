@@ -9,7 +9,10 @@
 }
 
 .articles .article {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
 }
 
 .articles .articles-row.can-be-half:last-child  {
@@ -25,6 +28,9 @@
 
 .articles .article.hero img {
   border-radius: 2em;
+  max-height: 200px;
+  width: auto;
+  height: auto;
 }
 
 .articles .article-header,
