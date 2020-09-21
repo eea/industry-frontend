@@ -43,6 +43,7 @@ export const settings = {
   ...config.settings,
   navDepth: 5,
   providerUrl: 'https://discodata.eea.europa.eu/sql',
+  excludeFromNavigation: ['/industrial-site'],
 };
 
 export const views = {

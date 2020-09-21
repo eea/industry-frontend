@@ -166,29 +166,32 @@ class Navigation extends Component {
           }
           onClick={this.closeMobileMenu}
         >
-          {this.props.items.map((item) => (
-            <NavLink
-              to={item.url === '' ? '/' : item.url}
-              key={item.url}
-              className="item"
-              activeClassName="active"
-              onClick={() => {
-                if (
-                  !item.url.includes('/industrial-site') &&
-                  !item.url.includes('/analysis')
-                ) {
-                  this.props.resetQueryParam();
-                }
-              }}
-              exact={
-                settings.isMultilingual
-                  ? item.url === `/${lang}`
-                  : item.url === ''
-              }
-            >
-              {item.title}
-            </NavLink>
-          ))}
+          {this.props.items.map(
+            (item) =>
+              !settings.excludeFromNavigation.includes(item.url) && (
+                <NavLink
+                  to={item.url === '' ? '/' : item.url}
+                  key={item.url}
+                  className="item"
+                  activeClassName="active"
+                  onClick={() => {
+                    if (
+                      !item.url.includes('/industrial-site') &&
+                      !item.url.includes('/analysis')
+                    ) {
+                      this.props.resetQueryParam();
+                    }
+                  }}
+                  exact={
+                    settings.isMultilingual
+                      ? item.url === `/${lang}`
+                      : item.url === ''
+                  }
+                >
+                  {item.title}
+                </NavLink>
+              ),
+          )}
         </Menu>
       </nav>
     );
