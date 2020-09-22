@@ -24,42 +24,6 @@ import navigationSVG from '@plone/volto/icons/navigation.svg';
 import 'ol/ol.css';
 import './style.css';
 
-const pinSVG = (fill = '#000') => {
-  return `<svg height="16pt" width="16pt" viewBox="-119 -21 682 682.66669" xmlns="http://www.w3.org/2000/svg"><path fill="${fill}" d="m216.210938 0c-122.664063 0-222.460938 99.796875-222.460938 222.460938 0 154.175781 222.679688 417.539062 222.679688 417.539062s222.242187-270.945312 222.242187-417.539062c0-122.664063-99.792969-222.460938-222.460937-222.460938zm67.121093 287.597656c-18.507812 18.503906-42.8125 27.757813-67.121093 27.757813-24.304688 0-48.617188-9.253907-67.117188-27.757813-37.011719-37.007812-37.011719-97.226562 0-134.238281 17.921875-17.929687 41.761719-27.804687 67.117188-27.804687 25.355468 0 49.191406 9.878906 67.121093 27.804687 37.011719 37.011719 37.011719 97.230469 0 134.238281zm0 0"/></svg>`;
-};
-
-const factorySVG = () => {
-  return `<svg height="32pt" width="32pt" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg"><circle cx="75" cy="75" fill="#709584" r="64"/><path d="m59.11 50.02h-7.34l-1.04 24.71h9.42z" fill="#3a556a"/><path d="m75.38 50.02h-7.35l-1.04 24.71h9.43z" fill="#3a556a"/><path d="m42.63 71.48h64.74v32.72h-64.74z" fill="#e1e6e9"/><g fill="#3a556a"><path d="m47.11 77.17h3.62v3.62h-3.62z"/><path d="m53.63 77.17h3.62v3.62h-3.62z"/><path d="m60.15 77.17h3.62v3.62h-3.62z"/><path d="m66.67 77.17h3.62v3.62h-3.62z"/><path d="m73.19 77.17h3.62v3.62h-3.62z"/><path d="m79.71 77.17h3.62v3.62h-3.62z"/><path d="m86.23 77.17h3.62v3.62h-3.62z"/><path d="m92.75 77.17h3.62v3.62h-3.62z"/><path d="m99.28 77.17h3.62v3.62h-3.62z"/></g><path d="m39.52 70.38h70.95v3.09h-70.95z" fill="#d5d6db"/><path d="m69.86 44.24a4 4 0 0 0 -1.52-.69 9.51 9.51 0 0 0 -4.56-.09 8.66 8.66 0 0 1 -2.73.47c-1-.09-1.84-.65-2.81-.74a3 3 0 0 0 -2.65 1.18 5.72 5.72 0 0 0 -.59 2.63 1.79 1.79 0 0 0 .12.69.58.58 0 0 0 .54.37c.34 0 .52-.44.52-.78a2.83 2.83 0 0 1 .05-1 1.21 1.21 0 0 1 1.41-.54c.53.12 1 .44 1.52.6a12.79 12.79 0 0 0 3.16.11 14.09 14.09 0 0 1 3.35.85 5.75 5.75 0 0 0 3.4.23 2.13 2.13 0 0 0 1.59-1.86 2 2 0 0 0 -.8-1.43z" fill="#ebf0f3"/><path d="m83.29 45.62a3 3 0 0 0 -1.14-.53 7.19 7.19 0 0 0 -3.45-.09 6.35 6.35 0 0 1 -2 .35c-.73-.07-1.39-.49-2.12-.56a2.28 2.28 0 0 0 -2 .89 4.28 4.28 0 0 0 -.46 2 1.29 1.29 0 0 0 .08.52.47.47 0 0 0 .41.28c.26 0 .39-.33.39-.59a2.13 2.13 0 0 1 0-.76.91.91 0 0 1 1.06-.41c.4.09.76.33 1.15.45a9.94 9.94 0 0 0 2.38.09 10.22 10.22 0 0 1 2.53.64 4.25 4.25 0 0 0 2.56.17 1.59 1.59 0 0 0 1.2-1.4 1.44 1.44 0 0 0 -.59-1.05z" fill="#ebf0f3"/><path d="m60 104.18h-8.5v-7.7a4.25 4.25 0 1 1 8.5 0z" fill="#3a556a"/><path d="m79.1 104.18h-8.51v-7.7a4.26 4.26 0 1 1 8.51 0z" fill="#3a556a"/><path d="m98.19 104.18h-8.51v-7.7a4.26 4.26 0 1 1 8.51 0z" fill="#3a556a"/><path d="m39.52 103.74h70.95v3.09h-70.95z" fill="#d5d6db"/></svg>`;
-};
-
-const refinerieSVG = () => {
-  return `<svg height="32pt" width="32pt" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg"><circle cx="75" cy="75" fill="#334d5c" r="64"/><path d="m74.37 65.05v-6.65a4.1 4.1 0 0 0 -4.1-4.1h-15a4.11 4.11 0 0 0 -4.1 4.1v22.6h2v-22.6a2.11 2.11 0 0 1 2.1-2.1h15a2.1 2.1 0 0 1 2.1 2.1v6.65z" fill="#d5d6db"/><path d="m93.39 71.67h-8.67l1.63-25.3h5.4z" fill="#d5d6db"/><path d="m92.12 52.02-.17-2.61h-5.79l-.17 2.61z" fill="#e56353"/><path d="m69.36 61.11h8.02v10.57h-8.02z" fill="#d5d6db"/><path d="m46.44 101.49h11.73v7.85h-11.73z" fill="#f7be56"/><path d="m63.61 69.26h44.52v40.88h-44.52z" fill="#e1e6e9"/><path d="m71.76 75.46h5.62v8.5h-5.62z" fill="#3a556a"/><path d="m83.06 75.46h5.62v8.5h-5.62z" fill="#3a556a"/><path d="m94.35 75.46h5.62v8.5h-5.62z" fill="#3a556a"/><path d="m55 72.39v-3.13h-5.42v3.13a15.77 15.77 0 1 0 5.46 0z" fill="#fcd462"/><path d="m55.43 68.88h-6.24a.53.53 0 0 0 -.53.53.52.52 0 0 0 .53.52h6.24a.52.52 0 0 0 .53-.52.53.53 0 0 0 -.53-.53z" fill="#f7be56"/><path d="m67.83 87.1h-31.26a1.53 1.53 0 1 0 0 3.06h31.26a1.53 1.53 0 0 0 0-3.06z" fill="#f7be56"/><path d="m37.6 107.4h77.35v2.74h-77.35z" fill="#d5d6db"/><path d="m91.42 90.16h20.67v17.24h-20.67z" fill="#ebf0f3"/><g fill="#3a556a"><path d="m93.88 92.59h2.47v2.47h-2.47z"/><path d="m98.31 92.59h2.47v2.47h-2.47z"/><path d="m102.73 92.59h2.47v2.47h-2.47z"/><path d="m107.16 92.59h2.47v2.47h-2.47z"/></g><path d="m109.78 41.64a7.11 7.11 0 0 0 -4.47-1c-1.66.11-3.36.6-4.94.09a7.5 7.5 0 0 0 -2.66-.81c-1.15.08-2 1.16-3.1 1.48a6.81 6.81 0 0 1 -2.8-.1 2.87 2.87 0 0 0 -2.61.7c-.76.94-.45 2.08-.45 3.46l.81-1.74a2 2 0 0 1 .51-.75 1.52 1.52 0 0 1 1.41-.07 12.41 12.41 0 0 0 1.35.57c1.13.28 2.34-.36 3.46 0s1.71 1.16 2.71 1.41c1.28.33 2.59-.61 3.9-.47 2.23.25 3.21 3.32 5.41 3.76a3 3 0 0 0 3.35-2.51 4.22 4.22 0 0 0 -1.88-4.02z" fill="#ebf0f3"/></svg>`;
-};
-
-const nop = () => {
-  return null;
-};
-
-const SVG_COLLECTION = {
-  Chemicals: nop,
-  'Electricity and heat production': nop,
-  'Extractive industry': nop,
-  'Ferrous metal': nop,
-  'Food and drink': nop,
-  'Fuel processing': nop,
-  'Incineration with energy recovery': nop,
-  Landfill: nop,
-  Livestock: nop,
-  'Non-ferrous metal': nop,
-  'Non-metallic minerals': nop,
-  'Other manufacturing': nop,
-  'Other waste management': nop,
-  'Pulp, paper and wood': nop,
-  Refineries: refinerieSVG,
-  'Waste management': nop,
-  'Wastewater treatment': nop,
-};
-
 const splitBy = (arr, delimiter) => {
   if (Array.isArray(arr)) {
     return (
@@ -78,13 +42,11 @@ let Map,
   EsriJSON,
   VectorSource,
   VectorSourceEvent,
-  bboxStrategy,
   XYZ,
   fromLonLat,
   toLonLat,
   toStringHDMS,
   createXYZ,
-  Icon,
   CircleStyle,
   Fill,
   Stroke,
@@ -132,6 +94,7 @@ const OpenlayersMapView = (props) => {
   const [loader, setLoader] = useState(false);
   const [mapRendered, setMapRendered] = useState(false);
   const [firstFilteringUpdate, setFirstFilteringUpdate] = useState(false);
+  const selectedSiteCoordinates = useRef(null);
   const regionsSourceWhere = useRef('');
   const firstFilteringDone = useRef(false);
   const ToggleSidebarControl = useRef(null);
@@ -177,13 +140,11 @@ const OpenlayersMapView = (props) => {
         EsriJSON = require('ol/format/EsriJSON').default;
         VectorSource = require('ol/source/Vector').default;
         VectorSourceEvent = require('ol/source/Vector').VectorSourceEvent;
-        bboxStrategy = require('ol/loadingstrategy').bbox;
         XYZ = require('ol/source/XYZ').default;
         fromLonLat = require('ol/proj').fromLonLat;
         toLonLat = require('ol/proj').toLonLat;
         toStringHDMS = require('ol/coordinate').toStringHDMS;
         createXYZ = require('ol/tilegrid').createXYZ;
-        Icon = require('ol/style/Icon.js').default;
         CircleStyle = require('ol/style/Circle.js').default;
         Fill = require('ol/style/Fill.js').default;
         Stroke = require('ol/style/Stroke.js').default;
@@ -259,7 +220,7 @@ const OpenlayersMapView = (props) => {
             radius: 3,
             fill: new Fill({ color: '#00FF00' }),
             stroke: new Stroke({ color: '#6A6A6A', width: 1 }),
-            zIndex: 0,
+            zIndex: 1,
           }),
         }),
       );
@@ -274,24 +235,7 @@ const OpenlayersMapView = (props) => {
   useEffect(() => {
     if (mapRendered) {
       updateFilters();
-      const baseSql = `(CNTR_CODE LIKE '%:options%')`;
-      const countries =
-        props.discodata_query.search.siteCountry?.filter(
-          (country) => country,
-        ) || [];
-      const newRegionsSourceWhere =
-        countries.length > 0
-          ? `(${countries
-              .map((country) => baseSql.replace(':options', country))
-              .join(' OR ')})`
-          : '';
-      if (
-        hasRegionsFeatures &&
-        newRegionsSourceWhere !== regionsSourceWhere.current
-      ) {
-        regionsSourceWhere.current = newRegionsSourceWhere;
-        state.map.regionsSourceLayer.getSource().refresh();
-      }
+      updateRegionsFilters();
     }
     /* eslint-disable-next-line */
   }, [
@@ -307,14 +251,22 @@ const OpenlayersMapView = (props) => {
     if (mapRendered) {
       if (['byLocationTerm', 'bySiteTerm'].includes(state.updateMapPosition)) {
         onSourceChange();
-      } else if (
-        state.map.sitesSourceQuery.where !== state.map.oldSitesSourceQuery.where
-      ) {
+      } else if (['byAdvancedFilters'].includes(state.updateMapPosition)) {
+        onSourceChange();
+        if (!state.map.sitesSourceLayer.getVisible()) {
+          state.map.sitesSourceLayer.setVisible(true);
+        }
+        if (hasRegionsFeatures && !state.map.regionsSourceLayer.getVisible()) {
+          state.map.regionsSourceLayer.setVisible(false);
+        }
         state.map.sitesSourceLayer &&
           state.map.sitesSourceLayer.getSource().refresh();
       }
       if (!firstFilteringDone.current) {
         firstFilteringDone.current = true;
+      }
+      if (!state.updateMapPosition && !state.map.sitesSourceQuery.where) {
+        applyZoom();
       }
     }
     /* eslint-disable-next-line */
@@ -322,11 +274,33 @@ const OpenlayersMapView = (props) => {
 
   if (mapRendered && !firstFilteringUpdate) {
     updateFilters();
+    updateRegionsFilters();
     setFirstFilteringUpdate(true);
+  }
+
+  function updateRegionsFilters() {
+    const baseSql = `(CNTR_CODE LIKE '%:options%')`;
+    const countries =
+      props.discodata_query.search.siteCountry?.filter((country) => country) ||
+      [];
+    const newRegionsSourceWhere =
+      countries.length > 0
+        ? `(${countries
+            .map((country) => baseSql.replace(':options', country))
+            .join(' OR ')})`
+        : '';
+    if (
+      hasRegionsFeatures &&
+      newRegionsSourceWhere !== regionsSourceWhere.current
+    ) {
+      regionsSourceWhere.current = newRegionsSourceWhere;
+      state.map.regionsSourceLayer.getSource().refresh();
+    }
   }
 
   function updateFilters() {
     const sitesSourceQuery = { ...state.map.sitesSourceQuery };
+    let updateMapPosition = null;
     if (hasSidebar && filterSource === 'eprtr_filters') {
       sitesSourceQuery.whereStatements = {
         ...sitesSourceQuery.whereStatements,
@@ -417,50 +391,34 @@ const OpenlayersMapView = (props) => {
     sitesSourceQuery.where = Object.entries(sitesSourceQuery.whereStatements)
       .map(([id, where]) => where.sql)
       .join(' AND ');
-    if (
-      sitesSourceQuery.where !== state.map.sitesSourceQuery.where ||
-      locationTerm?.text ||
-      siteTerm
-    ) {
-      let updateMapPosition = null;
-      if (
-        filterSource !== 'query_params' &&
-        sitesSourceQuery.where === state.map.sitesSourceQuery.where &&
-        !props.discodata_query.search.advancedFiltering
-      ) {
-        if (siteTerm) {
+
+    if (filterSource !== 'query_params') {
+      if (props.discodata_query.search.advancedFiltering) {
+        updateMapPosition = 'byAdvancedFilters';
+      } else {
+        if (!siteTerm && !locationTerm?.text) {
+          updateMapPosition = 'byAdvancedFilters';
+        } else if (siteTerm) {
           updateMapPosition = 'bySiteTerm';
         } else if (locationTerm?.text) {
           updateMapPosition = 'byLocationTerm';
         }
-      } else if (
-        filterSource !== 'query_params' &&
-        sitesSourceQuery.where !== state.map.sitesSourceQuery.where &&
-        props.discodata_query.search.advancedFiltering
-      ) {
-        updateMapPosition = 'byAdvancedFilters';
-      } else if (filterSource === 'query_params') {
-        if (siteTerm) {
-          updateMapPosition = 'bySiteTerm';
-        }
       }
-      if (
-        sitesSourceQuery.where !== state.map.sitesSourceQuery.where ||
-        updateMapPosition !== stateRef.current.updateMapPosition
-      ) {
-        setState({
-          ...state,
-          map: {
-            ...state.map,
-            sitesSourceQuery,
-          },
-          updateMapPosition,
-          locationTerm,
-          siteTerm,
-        });
-      }
-    } else if (!firstFilteringDone.current) {
-      firstFilteringDone.current = true;
+    } else if (siteTerm) {
+      updateMapPosition = 'bySiteTerm';
+    }
+
+    if (updateMapPosition) {
+      setState({
+        ...state,
+        map: {
+          ...state.map,
+          sitesSourceQuery,
+        },
+        updateMapPosition,
+        locationTerm,
+        siteTerm,
+      });
     }
   }
 
@@ -511,6 +469,34 @@ const OpenlayersMapView = (props) => {
       });
     }
     return false;
+  }
+
+  function applyZoom() {
+    if (stateRef.current.map && stateRef.current.map.element) {
+      const newZoom = stateRef.current.map.element.getView().getZoom();
+      if (
+        newZoom > zoomSwitch ||
+        stateRef.current.map.sitesSourceQuery?.where
+      ) {
+        // if (!stateRef.current.map.sitesSourceLayer.getVisible()) {
+        //   stateRef.current.map.sitesSourceLayer.getSource().refresh();
+        // }
+        stateRef.current.map.sitesSourceLayer.setVisible(true);
+        hasRegionsFeatures &&
+          stateRef.current.map.regionsSourceLayer.setVisible(false);
+      } else if (newZoom > 2) {
+        stateRef.current.map.sitesSourceLayer.setVisible(false);
+        // if (!stateRef.current.map.regionsSourceLayer.getVisible()) {
+        //   stateRef.current.map.regionsSourceLayer.getSource().refresh();
+        // }
+        hasRegionsFeatures &&
+          stateRef.current.map.regionsSourceLayer.setVisible(true);
+      } else {
+        stateRef.current.map.sitesSourceLayer.setVisible(false);
+        hasRegionsFeatures &&
+          stateRef.current.map.regionsSourceLayer.setVisible(false);
+      }
+    }
   }
 
   function getLocation(options) {
@@ -564,17 +550,11 @@ const OpenlayersMapView = (props) => {
         .then((response) => {
           const data = JSON.parse(response.request.response);
           const item = data.results?.[0];
-          if (item) {
-            setTimeout(() => {
-              setSelectedSite(
-                stateRef.current.map.sitesSourceLayer
-                  .getSource()
-                  .getClosestFeatureToCoordinate([item.x, item.y]),
-              );
-            }, 3000);
-
+          selectedSiteCoordinates.current = [item.x, item.y];
+          if (item && item.x && item.y) {
+            stateRef.current.map.sitesSourceLayer.getSource().refresh();
             stateRef.current.map.element.getView().animate({
-              center: [item.x, item.y],
+              center: selectedSiteCoordinates.current,
               duration: filterSource !== 'query_params' ? 1000 : 0,
               zoom: 15,
             });
@@ -584,30 +564,58 @@ const OpenlayersMapView = (props) => {
     }
   }
 
+  function getLocationByAdvancedFilters(options) {
+    axios
+      .get(
+        encodeURI(
+          `${settings.providerUrl}?query=SELECT
+            MIN(shape_wm.STX) AS MIN_X,
+            MIN(shape_wm.STY) AS MIN_Y,
+            MAX(shape_wm.STX) AS MAX_X,
+            MAX(shape_wm.STY) AS MAX_Y
+        FROM [IED].[latest].[SiteMap]
+        ${
+          stateRef.current.map.sitesSourceQuery.where
+            ? 'WHERE ' + stateRef.current.map.sitesSourceQuery.where
+            : ''
+        }`,
+        ),
+      )
+      .then((response) => {
+        const data = JSON.parse(response.request.response);
+        const extent = data.results?.[0];
+        if (stateRef.current.map.sitesSourceQuery?.where) {
+          stateRef.current.map.element
+            .getView()
+            .fit([extent.MIN_X, extent.MIN_Y, extent.MAX_X, extent.MAX_Y], {
+              maxZoom: 15,
+            });
+        }
+      })
+      .catch((error) => {});
+  }
+
   function onSourceChange() {
     const options = {
       duration: 2000,
       maxZoom: 15,
     };
     if (stateRef.current.updateMapPosition === 'bySiteTerm') {
+      stateRef.current.map.element.getView().cancelAnimations();
       getSiteTermLocation(options);
     }
     if (stateRef.current.updateMapPosition === 'byLocationTerm') {
+      stateRef.current.map.element.getView().cancelAnimations();
       setSelectedSite(null);
       getLocation(options);
     }
     if (stateRef.current.updateMapPosition === 'byAdvancedFilters') {
+      stateRef.current.map.element.getView().cancelAnimations();
       setSelectedSite(null);
-      stateRef.current.map.element
-        .getView()
-        .fit(stateRef.current.map.sitesSourceLayer.getSource().getExtent());
+      getLocationByAdvancedFilters(options);
     }
     //  UPDATE OLD FILTERS
-    if (
-      stateRef.current.map.sitesSourceQuery.where !==
-        stateRef.current.map.oldSitesSourceQuery.where ||
-      stateRef.current.updateMapPosition !== null
-    ) {
+    if (stateRef.current.updateMapPosition !== null) {
       setState({
         ...stateRef.current,
         map: {
@@ -795,9 +803,8 @@ const OpenlayersMapView = (props) => {
                   if (features.length > 0) {
                     sitesSource.addFeatures(features);
                   }
-
                   sitesSource.dispatchEvent(
-                    new VectorSourceEvent('updateFilters'),
+                    new VectorSourceEvent('updateClosestFeature'),
                   );
                 }
               },
@@ -929,7 +936,11 @@ const OpenlayersMapView = (props) => {
         }),
       );
       //  Center by user location
-      if (navigator.geolocation && filterSource !== 'query_params') {
+      if (
+        navigator.geolocation &&
+        filterSource !== 'query_params' &&
+        !stateRef.current.updateMapPosition
+      ) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             return centerPosition(map, position, 12);
@@ -940,9 +951,16 @@ const OpenlayersMapView = (props) => {
         );
       }
       //  Events
-      sitesSource.on('updateFilters', function (e) {
+      sitesSource.on('updateClosestFeature', function (e) {
         if (!reqs && e.target.getState() === 'ready') {
-          onSourceChange();
+          if (selectedSiteCoordinates.current) {
+            const closestFeature = sitesSource.getClosestFeatureToCoordinate(
+              selectedSiteCoordinates.current,
+            );
+            closestFeature.setStyle();
+            setSelectedSite(closestFeature);
+            selectedSiteCoordinates.current = null;
+          }
         }
       });
       if (hasPopups) {
@@ -985,19 +1003,7 @@ const OpenlayersMapView = (props) => {
           }
           let newZoom = map.getView().getZoom();
           if (currentZoom !== newZoom) {
-            if (newZoom > zoomSwitch) {
-              if (!sitesSourceLayer.getVisible()) {
-                sitesSourceLayer.getSource().refresh();
-              }
-              sitesSourceLayer.setVisible(true);
-              hasRegionsFeatures && regionsSourceLayer.setVisible(false);
-            } else if (newZoom > 2) {
-              sitesSourceLayer.setVisible(false);
-              hasRegionsFeatures && regionsSourceLayer.setVisible(true);
-            } else {
-              sitesSourceLayer.setVisible(false);
-              hasRegionsFeatures && regionsSourceLayer.setVisible(false);
-            }
+            applyZoom();
             currentZoom = newZoom;
           }
           props.setQueryParam({
