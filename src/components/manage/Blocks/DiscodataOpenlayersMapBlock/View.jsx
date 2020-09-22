@@ -1063,15 +1063,19 @@ const OpenlayersMapView = (props) => {
         {state.popup.element && (
           <>
             <div className="popover-header">
-              {currentMapZoom && currentMapZoom > zoomSwitch ? (
+              {state.popup.properties.siteName ? (
                 <Header as="h3">{state.popup.properties.siteName}</Header>
-              ) : (
+              ) : state.popup.properties.NUTS_NAME &&
+                state.popup.properties.CNTR_CODE &&
+                state.popup.properties.COUNTRY ? (
                 <Header as="h3">{`${state.popup.properties.NUTS_NAME}, ${state.popup.properties.CNTR_CODE}, ${state.popup.properties.COUNTRY}`}</Header>
+              ) : (
+                ''
               )}
             </div>
             <div className="popover-body">
               <Grid.Column stretched>
-                {currentMapZoom && currentMapZoom > zoomSwitch ? (
+                {!state.popup.properties.num_sites ? (
                   ''
                 ) : (
                   <Grid.Row>
