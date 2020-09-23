@@ -57,7 +57,15 @@ const View = (props) => {
                 key={`sparql-row-${index}-${item.title}`}
               >
                 <div className="column-4 sm-12 article hero pa-1">
-                  <Image src={item.image || placeholderImage} />
+                  <Image
+                    src={
+                      item.image ||
+                      `${
+                        item.resource ? item.resource + '/image_large' : ''
+                      }` ||
+                      placeholderImage
+                    }
+                  />
                 </div>
                 <div className="column-8 sm-12 article pa-1">
                   <div className="article-header">
@@ -103,34 +111,6 @@ const View = (props) => {
       ) : (
         ''
       )}
-      {/* {items.length > 2 ? (
-        <div className="articles-slideshow">
-          {activeItem > 1 ? (
-            <Icon
-              onClick={() => {
-                setActiveItem(activeItem - 1);
-              }}
-              name={upSVG}
-              size="24px"
-            />
-          ) : (
-            ''
-          )}
-          {activeItem < items.length - 1 ? (
-            <Icon
-              onClick={() => {
-                setActiveItem(activeItem + 1);
-              }}
-              name={downSVG}
-              size="24px"
-            />
-          ) : (
-            ''
-          )}
-        </div>
-      ) : (
-        ''
-      )} */}
     </div>
   );
 };

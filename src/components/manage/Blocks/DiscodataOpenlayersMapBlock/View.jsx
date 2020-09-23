@@ -23,6 +23,7 @@ import navigationSVG from '@plone/volto/icons/navigation.svg';
 // STYLES
 import 'ol/ol.css';
 import './style.css';
+import ContentsPropertiesModal from '../../../../../omelette/src/components/manage/Contents/ContentsPropertiesModal';
 
 const splitBy = (arr, delimiter) => {
   if (Array.isArray(arr)) {
@@ -256,7 +257,7 @@ const OpenlayersMapView = (props) => {
         if (!state.map.sitesSourceLayer.getVisible()) {
           state.map.sitesSourceLayer.setVisible(true);
         }
-        if (hasRegionsFeatures && !state.map.regionsSourceLayer.getVisible()) {
+        if (hasRegionsFeatures && state.map.regionsSourceLayer.getVisible()) {
           state.map.regionsSourceLayer.setVisible(false);
         }
         state.map.sitesSourceLayer &&
@@ -304,6 +305,10 @@ const OpenlayersMapView = (props) => {
     if (hasSidebar && filterSource === 'eprtr_filters') {
       sitesSourceQuery.whereStatements = {
         ...sitesSourceQuery.whereStatements,
+        siteTerm: {
+          sql: `(siteName LIKE '%:options%')`,
+          type: 'string',
+        },
         // Industries
         EEAActivity: {
           sql: `(eea_activities LIKE '%:options%')`,
