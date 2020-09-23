@@ -397,7 +397,10 @@ const OpenlayersMapView = (props) => {
       .join(' AND ');
 
     if (filterSource !== 'query_params') {
-      if (props.discodata_query.search.advancedFiltering) {
+      if (
+        props.discodata_query.search.advancedFiltering &&
+        props.discodata_query.search.nuts_latest?.length > 0
+      ) {
         updateMapPosition = 'byAdvancedFilters';
       } else {
         if (!siteTerm && !locationTerm?.text) {
@@ -588,7 +591,10 @@ const OpenlayersMapView = (props) => {
       .then((response) => {
         const data = JSON.parse(response.request.response);
         const extent = data.results?.[0];
-        if (stateRef.current.map.sitesSourceQuery?.where) {
+        if (
+          stateRef.current.map.sitesSourceQuery?.where &&
+          stateRef.current.map.sitesSourceQuery?.where.includes('nuts_regions')
+        ) {
           stateRef.current.map.element
             .getView()
             .fit([extent.MIN_X, extent.MIN_Y, extent.MAX_X, extent.MAX_Y], {
@@ -778,7 +784,10 @@ const OpenlayersMapView = (props) => {
                 ',"spatialReference":{"wkid":102100}}',
             )}&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*&outSR=102100`;
 
-            if (stateRef.current.map.sitesSourceQuery.where) {
+            if (
+              stateRef.current.map.sitesSourceQuery?.where &&
+              stateRef.current.map.sitesSourceQuery?.where.includes('nuts_regions')
+            ) {
               url =
                 'https://services.arcgis.com/LcQjj2sL7Txk9Lag/arcgis/rest/services/SiteMap/FeatureServer/0/query/?f=json&' +
                 'returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*' +
