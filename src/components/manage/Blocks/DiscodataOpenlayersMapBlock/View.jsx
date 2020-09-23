@@ -23,7 +23,6 @@ import navigationSVG from '@plone/volto/icons/navigation.svg';
 // STYLES
 import 'ol/ol.css';
 import './style.css';
-import ContentsPropertiesModal from '../../../../../omelette/src/components/manage/Contents/ContentsPropertiesModal';
 
 const splitBy = (arr, delimiter) => {
   if (Array.isArray(arr)) {
