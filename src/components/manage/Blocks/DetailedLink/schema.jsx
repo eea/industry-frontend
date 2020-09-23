@@ -12,6 +12,7 @@ export const getSchema = (props) => {
         id: 'properties',
         title: 'Properties',
         fields: [
+          'backButton',
           'hideTitle',
           'hideDescription',
           'title',
@@ -32,6 +33,10 @@ export const getSchema = (props) => {
     ],
 
     properties: {
+      backButton: {
+        title: 'Back button',
+        type: 'boolean',
+      },
       hideTitle: {
         title: 'Hide title',
         type: 'boolean',

@@ -641,6 +641,7 @@ p {
 
 //  BROWSE TABLE
 .browse-table {
+  overflow-x: auto;
   .ui.grid {
     margin-top: 0 !important;
   }
