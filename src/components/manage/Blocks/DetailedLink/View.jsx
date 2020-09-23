@@ -34,7 +34,6 @@ const View = (props) => {
     descriptionClassname = '',
     buttonClassname = '',
   } = props.data;
-
   return (
     <div
       className={cx(
@@ -42,64 +41,61 @@ const View = (props) => {
         `text-align-${textAlign || 'left'}`,
       )}
     >
-      {detailedLink ||
-        (backButton && (
-          <>
-            {!hideTitle && (title || detailedLink?.title) ? (
-              <div className={cx('detailed-link-title', titleClassname || '')}>
-                {title || detailedLink?.title || ''}
-              </div>
-            ) : (
-              ''
-            )}
-            {!hideDescription && (description || detailedLink?.description) ? (
-              <p
-                className={cx(
-                  'detailed-link-description',
-                  descriptionClassname || '',
-                )}
-              >
-                {description || detailedLink?.description || ''}
-              </p>
-            ) : (
-              ''
-            )}
-            <div>
-              <Link
-                className={cx(
-                  'detailed-link-button display-inline-block',
-                  buttonClassname || '',
-                )}
-                onClick={(e) => {
-                  if (
-                    props.discodata_query.search.facilityInspireId ||
-                    props.discodata_query.search.installationInspireId ||
-                    props.discodata_query.search.lcpInspireId
-                  ) {
-                    props.deleteQueryParam({
-                      queryParam: [
-                        'facilityInspireId',
-                        'installationInspireId',
-                        'lcpInspireId',
-                      ],
-                    });
-                  }
-                  if (backButton) {
-                    history.goBack();
-                  }
-                  return e.preventDefault;
-                }}
-                to={!backButton && getPath(detailedLink?.path)}
-              >
-                <span>{buttonTitle || detailedLink?.title || 'Go'}</span>
-              </Link>
+      {((detailedLink || backButton) && (
+        <>
+          {!hideTitle && (title || detailedLink?.title) ? (
+            <div className={cx('detailed-link-title', titleClassname || '')}>
+              {title || detailedLink?.title || ''}
             </div>
-          </>
-        )) || (
-          <p className="detailed-link-placeholder">
-            Select a page from sidebar
-          </p>
-        )}
+          ) : (
+            ''
+          )}
+          {!hideDescription && (description || detailedLink?.description) ? (
+            <p
+              className={cx(
+                'detailed-link-description',
+                descriptionClassname || '',
+              )}
+            >
+              {description || detailedLink?.description || ''}
+            </p>
+          ) : (
+            ''
+          )}
+          <div>
+            <Link
+              className={cx(
+                'detailed-link-button display-inline-block',
+                buttonClassname || '',
+              )}
+              onClick={(e) => {
+                if (
+                  props.discodata_query.search.facilityInspireId ||
+                  props.discodata_query.search.installationInspireId ||
+                  props.discodata_query.search.lcpInspireId
+                ) {
+                  props.deleteQueryParam({
+                    queryParam: [
+                      'facilityInspireId',
+                      'installationInspireId',
+                      'lcpInspireId',
+                    ],
+                  });
+                }
+                if (backButton) {
+                  history.goBack();
+                }
+                return e.preventDefault;
+              }}
+              to={!backButton && getPath(detailedLink?.path)}
+            >
+              <span>{buttonTitle || detailedLink?.title || 'Go'}</span>
+            </Link>
+          </div>
+        </>
+      )) || (
+        <p className="detailed-link-placeholder">Select a page from sidebar</p>
+      )}
     </div>
   );
 };

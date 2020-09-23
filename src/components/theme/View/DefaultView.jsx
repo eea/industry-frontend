@@ -3,7 +3,9 @@
  * @module components/theme/View/DefaultView
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl } from 'react-intl';
 
@@ -32,29 +34,38 @@ const messages = defineMessages({
  * @param {Object} content Content object.
  * @returns {string} Markup of the component.
  */
-const DefaultView = ({ content, intl, location }) => {
+const DefaultView = ({ content, contentType, intl, location }) => {
   const blocksFieldname = getBlocksFieldname(content);
   const blocksLayoutFieldname = getBlocksLayoutFieldname(content);
-
+  const contentTypeBlocks =
+    contentType.data?.properties?.[blocksFieldname]?.default;
+  const contentTypeBlocksLayout =
+    contentType.data?.properties?.[blocksLayoutFieldname]?.default;
+  if (!contentType?.loaded) return '';
   return hasBlocksData(content) ? (
     <div id="page-document" className="ui container">
       {map(content[blocksLayoutFieldname].items, (block) => {
+        const contentBlock =
+          contentTypeBlocks?.[content[blocksFieldname]?.[block]?.['@layout']] &&
+          !content[blocksFieldname]?.[block]?.grid_overwrite_layout
+            ? contentTypeBlocks?.[
+                content[blocksFieldname]?.[block]?.['@layout']
+              ]
+            : content[blocksFieldname]?.[block];
         const Block =
-          blocks.blocksConfig[content[blocksFieldname]?.[block]?.['@type']]?.[
-            'view'
-          ] || null;
+          blocks.blocksConfig[contentBlock?.['@type']]?.['view'] || null;
         return Block !== null ? (
           <Block
             key={block}
             id={block}
             properties={content}
-            data={content[blocksFieldname][block]}
+            data={contentBlock}
             path={getBaseUrl(location?.pathname || '')}
           />
         ) : (
           <div key={block}>
             {intl.formatMessage(messages.unknownBlock, {
-              block: content[blocksFieldname]?.[block]?.['@type'],
+              block: contentBlock?.['@type'],
             })}
           </div>
         );
@@ -120,4 +131,11 @@ DefaultView.propTypes = {
   }).isRequired,
 };
 
-export default injectIntl(DefaultView);
+export default compose(
+  connect(
+    (state, props) => ({
+      contentType: state.contentType,
+    }),
+    {},
+  ),
+)(injectIntl(DefaultView));
