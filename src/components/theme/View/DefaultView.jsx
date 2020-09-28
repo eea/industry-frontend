@@ -39,9 +39,6 @@ const DefaultView = ({ content, contentType, intl, location }) => {
   const blocksLayoutFieldname = getBlocksLayoutFieldname(content);
   const contentTypeBlocks =
     contentType.data?.properties?.[blocksFieldname]?.default;
-  const contentTypeBlocksLayout =
-    contentType.data?.properties?.[blocksLayoutFieldname]?.default;
-  if (!contentType?.loaded) return '';
   return hasBlocksData(content) ? (
     <div id="page-document" className="ui container">
       {map(content[blocksLayoutFieldname].items, (block) => {

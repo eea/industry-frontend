@@ -45,7 +45,7 @@ export default function contentType(state = initialState, action = {}) {
         ...state,
         data: null,
         loading: false,
-        loaded: false,
+        loaded: true,
         error: action.error,
       };
     default:

@@ -989,6 +989,9 @@ const View = ({ content, ...props }) => {
         filtersCounter: props.discodata_query.search['filtersCounter']
           ? props.discodata_query.search['filtersCounter'] + 1
           : 1,
+        extent: nuts_latest.length
+          ? null
+          : props.discodata_query.search['extent'],
         advancedFiltering,
       },
     });

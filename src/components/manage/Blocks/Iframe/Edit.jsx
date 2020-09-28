@@ -33,6 +33,11 @@ const getSchema = (props) => {
       title: 'Overflow',
       type: 'boolean',
     },
+    preset: {
+      title: 'Preset',
+      type: 'array',
+      choices: [['site_tableau', 'Site tableau']],
+    },
     queryParameters: {
       title: 'Query parameters',
       type: 'schema',

@@ -10,7 +10,8 @@ const View = ({ content, ...props }) => {
   const [discodataQuery, setDiscodataQuery] = useState({});
   const { data } = props;
   const { url = '', title = '', width = '100%', height = 'auto' } = data;
-  const { hideToolbar = false, overflow = false } = data;
+  const { hideToolbar = false, overflow = false, preset = null } = data;
+  console.log(discodataQuery);
   useEffect(() => {
     if (props.data.queryParameters?.value) {
       try {
@@ -69,11 +70,24 @@ const View = ({ content, ...props }) => {
       return '';
     }
   };
+
+  const getPresetQueries = () => {
+    if (preset === 'site_tableau') {
+      return {
+        reportingYear: '2017,2018,2019',
+      };
+    }
+    return {};
+  };
+
   return (
     <div>
       <Iframe
         title={title}
-        url={applyQueryParameters(url, discodataQuery)}
+        url={applyQueryParameters(url, {
+          ...discodataQuery,
+          ...getPresetQueries(),
+        })}
         width={width}
         height={height}
         className="embeded-iframe"

@@ -593,7 +593,13 @@ const OpenlayersMapView = (props) => {
         const extent = data.results?.[0];
         if (
           stateRef.current.map.sitesSourceQuery?.where &&
-          stateRef.current.map.sitesSourceQuery?.where.includes('nuts_regions')
+          stateRef.current.map.sitesSourceQuery?.where.includes(
+            'nuts_regions',
+          ) &&
+          extent.MIN_X &&
+          extent.MIN_Y &&
+          extent.MAX_X &&
+          extent.MAX_Y
         ) {
           stateRef.current.map.element
             .getView()
@@ -786,7 +792,9 @@ const OpenlayersMapView = (props) => {
 
             if (
               stateRef.current.map.sitesSourceQuery?.where &&
-              stateRef.current.map.sitesSourceQuery?.where.includes('nuts_regions')
+              stateRef.current.map.sitesSourceQuery?.where.includes(
+                'nuts_regions',
+              )
             ) {
               url =
                 'https://services.arcgis.com/LcQjj2sL7Txk9Lag/arcgis/rest/services/SiteMap/FeatureServer/0/query/?f=json&' +
@@ -954,14 +962,19 @@ const OpenlayersMapView = (props) => {
         filterSource !== 'query_params' &&
         !stateRef.current.updateMapPosition
       ) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            return centerPosition(map, position, 12);
-          },
-          (error) => {
-            console.log(error);
-          },
-        );
+        const extent = props.discodata_query.search?.mapExtent;
+        if (!extent) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              return centerPosition(map, position, 12);
+            },
+            (error) => {
+              console.log(error);
+            },
+          );
+        } else {
+          map.getView().fit([extent[0], extent[1], extent[2], extent[3]]);
+        }
       }
       //  Events
       sitesSource.on('updateClosestFeature', function (e) {
@@ -1019,11 +1032,14 @@ const OpenlayersMapView = (props) => {
             applyZoom();
             currentZoom = newZoom;
           }
-          props.setQueryParam({
-            queryParam: {
-              extent: map.getView().calculateExtent(map.getSize()),
-            },
-          });
+          if (filterSource !== 'query_params') {
+            props.setQueryParam({
+              queryParam: {
+                extent: map.getView().calculateExtent(map.getSize()),
+                mapExtent: map.getView().calculateExtent(map.getSize()),
+              },
+            });
+          }
         }
       });
       setState({

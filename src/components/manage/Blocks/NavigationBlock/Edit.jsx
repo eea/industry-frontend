@@ -12,6 +12,11 @@ const getSchema = (props) => {
       title: 'Parent page',
       widget: 'object_by_path',
     },
+    preset: {
+      title: 'Preset',
+      type: 'array',
+      choices: [['site', 'Site']],
+    },
     className: {
       title: 'Classname',
       type: 'text',
