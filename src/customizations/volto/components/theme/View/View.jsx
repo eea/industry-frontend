@@ -15,7 +15,6 @@ import { views } from '~/config';
 
 import { Comments, Tags, Toolbar } from '@plone/volto/components';
 import { listActions, getContent } from '@plone/volto/actions';
-import { getContentType } from '~/actions';
 import {
   BodyClass,
   getBaseUrl,
@@ -121,11 +120,10 @@ class View extends Component {
    */
   UNSAFE_componentWillMount() {
     this.props.listActions(getBaseUrl(this.props.pathname));
-    this.props
-      .getContent(getBaseUrl(this.props.pathname), this.props.versionId)
-      .then((response) => {
-        this.props.getContentType(response['@type']);
-      });
+    this.props.getContent(
+      getBaseUrl(this.props.pathname),
+      this.props.versionId,
+    );
   }
 
   componentDidMount() {
@@ -153,11 +151,10 @@ class View extends Component {
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.pathname !== this.props.pathname) {
       this.props.listActions(getBaseUrl(nextProps.pathname));
-      this.props
-        .getContent(getBaseUrl(nextProps.pathname), this.props.versionId)
-        .then((response) => {
-          this.props.getContentType(response['@type']);
-        });
+      this.props.getContent(
+        getBaseUrl(nextProps.pathname),
+        this.props.versionId,
+      );
     }
 
     if (nextProps.actions.object_buttons) {
@@ -329,7 +326,6 @@ export default compose(
     {
       listActions,
       getContent,
-      getContentType,
     },
   ),
 )(View);

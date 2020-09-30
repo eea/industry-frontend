@@ -3,9 +3,7 @@
  * @module components/theme/View/DefaultView
  */
 
-import React, { useEffect } from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl } from 'react-intl';
 
@@ -34,11 +32,11 @@ const messages = defineMessages({
  * @param {Object} content Content object.
  * @returns {string} Markup of the component.
  */
-const DefaultView = ({ content, contentType, intl, location }) => {
+const DefaultView = ({ content, intl, location }) => {
   const blocksFieldname = getBlocksFieldname(content);
   const blocksLayoutFieldname = getBlocksLayoutFieldname(content);
-  const contentTypeBlocks =
-    contentType.data?.properties?.[blocksFieldname]?.default;
+  const contentTypeBlocks = content['@components']?.layout?.[blocksFieldname];
+  console.log(contentTypeBlocks);
   return hasBlocksData(content) ? (
     <div id="page-document" className="ui container">
       {map(content[blocksLayoutFieldname].items, (block) => {
@@ -128,11 +126,4 @@ DefaultView.propTypes = {
   }).isRequired,
 };
 
-export default compose(
-  connect(
-    (state, props) => ({
-      contentType: state.contentType,
-    }),
-    {},
-  ),
-)(injectIntl(DefaultView));
+export default injectIntl(DefaultView);

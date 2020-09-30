@@ -20,6 +20,7 @@ const View = ({ content, ...props }) => {
     activeItem: '',
   });
   const parent = data.parent?.value;
+  const preset = data.preset?.value;
   const history = useHistory();
   return props.navigation?.items?.length && parent ? (
     <div className="tabs-view-menu">

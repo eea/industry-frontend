@@ -9,4 +9,3 @@ export const GET_PARENT_FOLDER_DATA = 'GET_PARENT_FOLDER_DATA';
 export const GET_NAV_ITEMS = 'GET_NAV_ITEMS';
 export const GET_PAGE = 'GET_PAGE';
 export const GET_SPARQL_DATA = 'GET_SPARQL_DATA';
-export const GET_CONTENT_TYPE = 'GET_CONTENT_TYPE';

@@ -8,7 +8,6 @@ import section_tabs from './section_tabs';
 import parent_folder_data from './parent_folder_data';
 import pages from './pages';
 import sparql from './sparql';
-import contentType from './contentType';
 /**
  * Root reducer.
  * @function
@@ -21,7 +20,6 @@ const reducers = {
   parent_folder_data,
   pages,
   sparql,
-  contentType,
   ...defaultReducers,
   // Add your reducers here
 };
