@@ -422,7 +422,6 @@ a.small h1 {
 .link-list li:before {
   content: counter(link-list-counter)".";
   color: #EC776A;
-  font-size: 1.5rem;
 }
 
 .link-list li button {

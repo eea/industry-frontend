@@ -54,15 +54,13 @@ class Header extends Component {
               </div>
               <Navigation pathname={this.props.pathname} />
             </div>
-            <div className="tools-search-wrapper">
-              <div className="header-partner-section">
-                <img style={{ height: '66px' }} src={eclogo} alt="" />
-                <img
-                  style={{ height: '60px', marginLeft: '1rem' }}
-                  src={eealogo}
-                  alt=""
-                />
-              </div>
+            <div className="header-partner-section">
+              <img style={{ height: '66px' }} src={eclogo} alt="" />
+              <img
+                style={{ height: '60px', marginLeft: '1rem' }}
+                src={eealogo}
+                alt=""
+              />
             </div>
           </div>
         </div>

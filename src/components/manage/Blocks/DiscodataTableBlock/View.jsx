@@ -11,6 +11,9 @@ import { Icon } from '@plone/volto/components';
 import DiscodataSqlBuilderView from 'volto-datablocks/DiscodataSqlBuilder/View';
 import { setQueryParam } from 'volto-datablocks/actions';
 import { Dimmer, Loader } from 'semantic-ui-react';
+import LinearProgress from '@material/react-linear-progress';
+
+import '@material/react-linear-progress/dist/linear-progress.css';
 
 const components = {
   object_link_length: (schemaMetadata, itemMetadata, item) => {
@@ -187,7 +190,7 @@ const View = (props) => {
           <React.Fragment>
             <Table className="unstackable">
               {/* ==== TABLE HEADER ==== */}
-              <Table.Header>
+              <Table.Header id="discodata-table-header">
                 <Table.Row>
                   {state.metadata?.fieldsets?.[0]?.fields?.map(
                     (meta) =>
@@ -200,6 +203,13 @@ const View = (props) => {
                   )}
                   <Table.HeaderCell />
                 </Table.Row>
+                {loader && (
+                  <Table.Row>
+                    <Table.HeaderCell colSpan={state.tableHeaders + 1}>
+                      <LinearProgress indeterminate />
+                    </Table.HeaderCell>
+                  </Table.Row>
+                )}
               </Table.Header>
               {/* ==== TABLE BODY ==== */}
               <Table.Body>
@@ -414,7 +424,18 @@ const View = (props) => {
                   >
                     <Pagination
                       activePage={activePage}
-                      onPageChange={(event, pagination) => {
+                      onPageChange={function (event, pagination) {
+                        if (document.querySelector('.filters-container')) {
+                          document
+                            .querySelector('.filters-container')
+                            .scrollIntoView();
+                        } else if (
+                          document.getElementById('discodata-table-header')
+                        ) {
+                          document
+                            .getElementById('discodata-table-header')
+                            .scrollIntoView();
+                        }
                         setState({
                           ...state,
                           pagination: {
@@ -433,13 +454,30 @@ const View = (props) => {
               </Table.Footer>
             </Table>
           </React.Fragment>
+        ) : !loader ? (
+          <div style={{ width: '100%', height: '400px' }}>
+            <h4
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+              }}
+            >
+              No data
+            </h4>
+          </div>
         ) : (
           <div style={{ width: '100%', height: '400px' }} />
         )}
       </DiscodataSqlBuilderView>
-      <Dimmer active={loader} inverted>
-        <Loader inverted>European Environment Agency</Loader>
-      </Dimmer>
+      {!items?.length ? (
+        <Dimmer active={loader} inverted>
+          <Loader inverted>European Environment Agency</Loader>
+        </Dimmer>
+      ) : (
+        ''
+      )}
     </div>
   );
 };

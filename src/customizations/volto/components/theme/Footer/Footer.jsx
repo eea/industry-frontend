@@ -8,6 +8,7 @@ import { Container, Segment } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import eeaLogo from '../Header/eea.png';
+import eclogo from '../Header/ec.png';
 
 /**
  * Component to display the footer.
@@ -35,17 +36,17 @@ const Footer = ({ intl }) => (
               </li>
 
               <li>
-                <Link className="item" to="/data">
+                <Link className="item" to="/browse/industrial-emissions/map">
                   <FormattedMessage
                     id="data"
-                    defaultMessage="Explore the data"
+                    defaultMessage="Browse the data"
                   />
                 </Link>
               </li>
 
               <li>
-                <Link className="item" to="/datasets">
-                  <FormattedMessage id="datasets" defaultMessage="Datasets" />
+                <Link className="item" to="/raw-data">
+                  <FormattedMessage id="datasets" defaultMessage="Raw data" />
                 </Link>
               </li>
               <li>
@@ -62,9 +63,12 @@ const Footer = ({ intl }) => (
           </div>
 
           <div className="six wide column">
-            <div className="ui vertically divided grid">
-              <div className="two column row">
-                <div className="four wide column">
+            <div className="ui vertically divided grid" style={{ margin: 0 }}>
+              <div
+                className="two column row"
+                style={{ gap: '1rem', paddingTop: 0, paddingBottom: 0 }}
+              >
+                <div className="logo">
                   <a href="https://ec.europa.eu/" title="European Commission">
                     <img
                       className="footerLogo"
@@ -74,20 +78,25 @@ const Footer = ({ intl }) => (
                       title="EEA"
                     />
                   </a>
+                  <img
+                    className="footerLogo"
+                    style={{ height: '50px' }}
+                    src={eclogo}
+                    alt="EC"
+                    title="EC"
+                  />
                 </div>
-                <div className="eight wide column">
-                  <p>
-                    European Environment Agency (EEA)
-                    <br />
-                    Kongens Nytrov 6
-                    <br />
-                    1050 Copenhagen K
-                    <br />
-                    Denmark
-                    <br />
-                    Phone: +4533367100
-                  </p>
-                </div>
+                <p>
+                  European Environment Agency (EEA)
+                  <br />
+                  Kongens Nytrov 6
+                  <br />
+                  1050 Copenhagen K
+                  <br />
+                  Denmark
+                  <br />
+                  Phone: +4533367100
+                </p>
               </div>
             </div>
           </div>
@@ -97,12 +106,23 @@ const Footer = ({ intl }) => (
               The European Environment Agency (EEA) is an agency of the European
               Union.
             </p>
-            <Link className="item" to="/legal_notice">
-              <FormattedMessage
-                id="legal_notice"
-                defaultMessage="Legal notice"
-              />
-            </Link>
+            <div className="display-flex flex-flow-column">
+              <Link className="item" to="/legal_notice">
+                <FormattedMessage
+                  id="legal_notice"
+                  defaultMessage="Legal notice"
+                />
+              </Link>
+              <Link className="item" to="/privacy-statement">
+                <FormattedMessage
+                  id="privacy_statement"
+                  defaultMessage="Privacy statement"
+                />
+              </Link>
+              <a className="item" href="https://status.eea.europa.eu">
+                EEA systems status
+              </a>
+            </div>
           </div>
         </div>
       </div>

@@ -11,7 +11,7 @@ const View = ({ content, ...props }) => {
   const { data } = props;
   const { url = '', title = '', width = '100%', height = 'auto' } = data;
   const { hideToolbar = false, overflow = false, preset = null } = data;
-  console.log(discodataQuery);
+
   useEffect(() => {
     if (props.data.queryParameters?.value) {
       try {

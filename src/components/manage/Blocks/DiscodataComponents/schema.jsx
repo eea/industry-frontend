@@ -453,6 +453,8 @@ export const makeListSchema = (props) => {
       title: 'Limit',
       type: 'number',
       minimum: '0',
+      onBlur: () => null,
+      onClick: () => null,
     },
     className: {
       title: 'Class name',

@@ -6,14 +6,25 @@
   background-color: @primaryColor;
 }
 
-.ui.basic.segment .header {
+.ui.basic.segment.header-wrapper .header {
   display: flex;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
   justify-content: space-between;
+  flex-flow: row;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  .header-partner-section {
+    display: flex;
+    @media only screen and (min-width: @largestTabletScreen) { 
+      align-items: center;
+    }
+  }
 
   .logo-nav-wrapper {
     display: flex;
     flex-grow: 2;
+    align-items: center;
     @media only screen and (max-width: @largestTabletScreen) {
       align-items: initial;
       justify-content: start;
@@ -57,6 +68,18 @@
   @media only screen and (max-width: @largestTabletScreen) {
     //flex-direction: initial;
     align-items: initial;
+    flex-flow: row-reverse;
+  }
+
+  @media only screen and (max-width: 550px) {
+    flex-flow: column !important;
+    .logo-nav-wrapper {
+      flex-direction: row;
+      margin-bottom: 1rem;
+      .logo {
+        margin-left: 0 !important;
+      }
+    }
   }
 
   .tools-search-wrapper {

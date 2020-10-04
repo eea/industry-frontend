@@ -375,6 +375,7 @@ const renderComponents = {
     );
   },
   eprtrCountryGroupSelector: (props) => {
+    const initialQueryParameters = {};
     const items =
       props.item?.[props.component.value]
         ?.filter((item) => item.countryGroupId)
@@ -390,13 +391,29 @@ const renderComponents = {
         key: 'airPollutionPerCapita',
         value: 'airPollutionPerCapita',
         text: 'Air',
+        labelText: 'air pollution per capita',
       },
       {
         key: 'waterPollutionPerCapita',
         value: 'waterPollutionPerCapita',
         text: 'Water',
+        labelText: 'water pollution per capita',
       },
     ];
+    if (!props.globalQuery.countryGroupId && items?.[0]?.key) {
+      initialQueryParameters.countryGroupId = items[0].key;
+    }
+    if (!props.globalQuery.listFilter && items?.[0]?.key) {
+      initialQueryParameters.listFilter = 'airPollutionPerCapita';
+      initialQueryParameters.listFilterLabel = 'air pollution per capita';
+    }
+    if (Object.keys(initialQueryParameters).length > 0) {
+      props.setQueryParam({
+        queryParam: {
+          ...initialQueryParameters,
+        },
+      });
+    }
     return (
       <div className="custom-selector big red">
         <Header as="h1">Industrial pollution in</Header>
@@ -427,6 +444,9 @@ const renderComponents = {
                     listFilter: data.options.filter((opt) => {
                       return opt.value === data.value;
                     })[0]?.key,
+                    listFilterLabel: data.options.filter((opt) => {
+                      return opt.value === data.value;
+                    })[0]?.labelText,
                   },
                 });
               }}

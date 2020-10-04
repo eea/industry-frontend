@@ -38,6 +38,7 @@ const keyCodes = {
 };
 
 const View = ({ content, ...props }) => {
+  const history = useHistory();
   const providerUrl = settings.providerUrl;
   const [state, setState] = useState({
     id: _uniqueId('block_'),
@@ -74,6 +75,7 @@ const View = ({ content, ...props }) => {
   const [quickFactsListener, setQuickFactsListener] = useState(false);
   const [sidebar, setSidebar] = useState(false);
   const [mountState, setMountState] = useState(false);
+  const [clock, setClock] = useState(0);
   const alphaFeatureRef = useRef({});
   const searchContainerModal = useRef(null);
   const searchContainer = useRef(null);
@@ -95,6 +97,11 @@ const View = ({ content, ...props }) => {
   const updateFactsData = (initialization = false) => {
     const promises = [];
     let reqs;
+    const reportingYears =
+      props.discodata_query.search.reportingYear?.filter(
+        (reportingYear) => reportingYear,
+      ) || [];
+
     if (initialization) {
       reqs = [
         {
@@ -103,7 +110,7 @@ const View = ({ content, ...props }) => {
           FROM [IED].[latest].[ProductionSite_NoGeo]`,
           descriptionDiscodataKey: ['AllSites'],
           title: 'EU Quick facts',
-          description: [':descriptionDiscodataKey reporting sites'],
+          description: [':descriptionDiscodataKey reporting sites (all years)'],
           type: 'firstElement',
         },
       ];
@@ -112,7 +119,8 @@ const View = ({ content, ...props }) => {
         alphaFeature?.getProperties?.()?.countryCode
           ? {
               factId: 'Country_quick_facts',
-              sql: `SELECT DISTINCT
+              sql:
+                `SELECT DISTINCT
                   PS.countryCode,
                   LC.CountryName as countryName,
                   count(*) as sites
@@ -121,15 +129,43 @@ const View = ({ content, ...props }) => {
               ON PS.countryCode = LC.CountryCode
               WHERE PS.countryCode = '${
                 alphaFeature.getProperties().countryCode
-              }'
-              GROUP BY PS.countryCode, LC.CountryName`,
+              }'` +
+                (reportingYears?.length > 0
+                  ? ` AND reportingYear IN (${reportingYears.join(',')}) `
+                  : ' ') +
+                `GROUP BY PS.countryCode, LC.CountryName`,
               titleDiscodataKey: 'countryName',
               descriptionDiscodataKey: ['sites'],
               title: ':titleDiscodataKey quick facts',
-              description: [':descriptionDiscodataKey reporting sites'],
+              description: [
+                `:descriptionDiscodataKey reporting sites (${
+                  reportingYears?.length > 0
+                    ? reportingYears.join(', ')
+                    : 'all years'
+                })`,
+              ],
               type: 'firstElement',
             }
           : null,
+        {
+          factId: 'EU_quick_facts',
+          sql:
+            `SELECT count(id) AS AllSites
+            FROM [IED].[latest].[ProductionSite_NoGeo]` +
+            (reportingYears?.length > 0
+              ? `WHERE reportingYear IN (${reportingYears.join(',')})`
+              : ''),
+          descriptionDiscodataKey: ['AllSites'],
+          title: 'EU Quick facts',
+          description: [
+            `:descriptionDiscodataKey reporting sites (${
+              reportingYears?.length > 0
+                ? reportingYears.join(', ')
+                : 'all years'
+            })`,
+          ],
+          type: 'firstElement',
+        },
       ].filter((req) => req);
     }
     reqs.forEach((req) => {
@@ -148,15 +184,21 @@ const View = ({ content, ...props }) => {
                   results[0]?.[reqs[index].titleDiscodataKey],
                 )
               : reqs[index].title;
-            const description = reqs[index].description.map((descr, index) => {
-              return descr.includes(':descriptionDiscodataKey') &&
-                results[0]?.[reqs[index].descriptionDiscodataKey?.[index]]
-                ? descr.replace(
-                    ':descriptionDiscodataKey',
-                    results[0]?.[reqs[index].descriptionDiscodataKey?.[index]],
-                  )
-                : descr;
-            });
+            const description = reqs[index].description.map(
+              (descr, descrIndex) => {
+                return descr.includes(':descriptionDiscodataKey') &&
+                  results[0]?.[
+                    reqs[index].descriptionDiscodataKey?.[descrIndex]
+                  ]
+                  ? descr.replace(
+                      ':descriptionDiscodataKey',
+                      results[0]?.[
+                        reqs[index].descriptionDiscodataKey?.[descrIndex]
+                      ],
+                    )
+                  : descr;
+              },
+            );
             newFactsData[reqs[index].factId] = {
               title,
               description,
@@ -191,6 +233,9 @@ const View = ({ content, ...props }) => {
     mounted.current = true;
     setMountState(true);
     updateFactsData(true);
+    history.listen((location, action) => {
+      setQuickFactsListener(false);
+    });
     return () => {
       if (quickFactsListener && document.getElementById(`dynamic-filter`)) {
         document
@@ -209,7 +254,7 @@ const View = ({ content, ...props }) => {
       updateFactsData(false);
     }
     /* eslint-disable-next-line */
-  }, [alphaFeature])
+  }, [alphaFeature, JSON.stringify(props.discodata_query.search.reportingYear)])
 
   useEffect(() => {
     if (triggerSearch) {
@@ -1004,7 +1049,7 @@ const View = ({ content, ...props }) => {
         <Input
           className="search"
           icon="search"
-          placeholder="Try search for a site name, country, city, region or ZIP code"
+          placeholder="Search for country, region, city or a site name"
           value={searchTerm}
           onChange={(event, data) => {
             autoComplete(data);
@@ -1257,104 +1302,132 @@ const View = ({ content, ...props }) => {
           </button>
         </div>
       </Portal>
-      {mapSidebarExists ? (
-        <Portal node={document.getElementById('map-sidebar')}>
-          <div
-            id="dynamic-filter"
-            className={sidebar ? 'show filters-block' : 'filters-block'}
-          >
-            <div className="dynamic-filter-header">
-              <Header as="h2">Dynamic filter</Header>
-            </div>
-            <div className="dynamic-filter-body">
-              <Header as="h3">Reporting year</Header>
-              <div className="input-container">
-                <Select
-                  search
-                  onChange={(event, data) => {
-                    changeFilter(
-                      data,
-                      state.filtersMeta['reporting_years'],
-                      0,
-                      true,
-                    );
-                    props.setQueryParam({
-                      queryParam: {
-                        advancedFiltering: true,
-                        filtersCounter: props.discodata_query.search[
-                          'filtersCounter'
-                        ]
-                          ? props.discodata_query.search['filtersCounter'] + 1
-                          : 1,
-                      },
-                    });
-                  }}
-                  placeholder={
-                    state.filtersMeta['reporting_years']?.placeholder
-                  }
-                  options={state.filtersMeta['reporting_years']?.options || []}
-                  value={state.filters['reportingYear']?.[0]}
-                />
-              </div>
-              <Header as="h3">Industry</Header>
-              <div className="input-container">
-                <Select
-                  search
-                  onChange={(event, data) => {
-                    changeFilter(
-                      data,
-                      state.filtersMeta['industries'],
-                      0,
-                      true,
-                    );
-                    props.setQueryParam({
-                      queryParam: {
-                        advancedFiltering: true,
-                        filtersCounter: props.discodata_query.search[
-                          'filtersCounter'
-                        ]
-                          ? props.discodata_query.search['filtersCounter'] + 1
-                          : 1,
-                      },
-                    });
-                  }}
-                  placeholder={state.filtersMeta['industries']?.placeholder}
-                  options={state.filtersMeta['industries']?.options || []}
-                  value={state.filters['EEAActivity']?.[0]}
-                />
-              </div>
-            </div>
-            <div className="dynamic-filter-actions">
-              <button
-                className="outline red"
-                onClick={clearFilters}
-                style={{ margin: 0 }}
-              >
-                Clear Filters
-              </button>
-              <Header as="h3">Quick facts</Header>
-              {state.factsDataOrder &&
-                state.factsDataOrder.map((key) => {
-                  return factsData[key] ? (
-                    <React.Fragment key={key}>
-                      {factsData[key]?.title && (
-                        <Header as="h4">{factsData[key].title}</Header>
-                      )}
-                      {factsData[key]?.description &&
-                        factsData[key].description.map((description, index) => {
-                          return <p key={`${key}_${index}`}>{description}</p>;
-                        })}
-                    </React.Fragment>
-                  ) : (
-                    ''
-                  );
-                })}
-            </div>
-          </div>
-        </Portal>
-      ) : (
-        ''
-      )}
+      {mapSidebarExists
+        ? (function () {
+            // Trick to rerender the component after dynamic-filter applies
+            if (!clock) {
+              setClock(1);
+              setTimeout(() => {
+                if (clock < 2) {
+                  setClock(2);
+                }
+              }, 1000);
+            }
+            return (
+              <Portal node={document.getElementById('map-sidebar')}>
+                <div
+                  id="dynamic-filter"
+                  className={sidebar ? 'show filters-block' : 'filters-block'}
+                >
+                  <div className="dynamic-filter-header">
+                    <Header as="h2">Dynamic filter</Header>
+                  </div>
+                  <div className="dynamic-filter-body">
+                    <Header as="h3">Reporting year</Header>
+                    <div className="input-container">
+                      <Select
+                        search
+                        onChange={(event, data) => {
+                          changeFilter(
+                            data,
+                            state.filtersMeta['reporting_years'],
+                            0,
+                            true,
+                          );
+                          props.setQueryParam({
+                            queryParam: {
+                              advancedFiltering: true,
+                              filtersCounter: props.discodata_query.search[
+                                'filtersCounter'
+                              ]
+                                ? props.discodata_query.search[
+                                    'filtersCounter'
+                                  ] + 1
+                                : 1,
+                            },
+                          });
+                        }}
+                        placeholder={
+                          state.filtersMeta['reporting_years']?.placeholder
+                        }
+                        options={
+                          state.filtersMeta['reporting_years']?.options || []
+                        }
+                        value={state.filters['reportingYear']?.[0]}
+                      />
+                    </div>
+                    <Header as="h3">Industry</Header>
+                    <div className="input-container">
+                      <Select
+                        search
+                        onChange={(event, data) => {
+                          changeFilter(
+                            data,
+                            state.filtersMeta['industries'],
+                            0,
+                            true,
+                          );
+                          props.setQueryParam({
+                            queryParam: {
+                              advancedFiltering: true,
+                              filtersCounter: props.discodata_query.search[
+                                'filtersCounter'
+                              ]
+                                ? props.discodata_query.search[
+                                    'filtersCounter'
+                                  ] + 1
+                                : 1,
+                            },
+                          });
+                        }}
+                        placeholder={
+                          state.filtersMeta['industries']?.placeholder
+                        }
+                        options={state.filtersMeta['industries']?.options || []}
+                        value={state.filters['EEAActivity']?.[0]}
+                      />
+                    </div>
+                  </div>
+                  <div className="dynamic-filter-actions">
+                    <button
+                      className="outline red"
+                      onClick={clearFilters}
+                      style={{ margin: 0 }}
+                    >
+                      Clear Filters
+                    </button>
+                    <Header as="h3">Quick facts</Header>
+                    {state.factsDataOrder &&
+                      state.factsDataOrder.map((key) => {
+                        return factsData[key] ? (
+                          <React.Fragment key={key}>
+                            {factsData[key]?.title && (
+                              <Header as="h4">{factsData[key].title}</Header>
+                            )}
+                            {factsData[key]?.description &&
+                              factsData[key].description.map(
+                                (description, index) => {
+                                  return (
+                                    <p key={`${key}_${index}`}>{description}</p>
+                                  );
+                                },
+                              )}
+                          </React.Fragment>
+                        ) : (
+                          ''
+                        );
+                      })}
+                  </div>
+                </div>
+              </Portal>
+            );
+          })()
+        : (function () {
+            if (clock) {
+              setClock(0);
+            }
+            return '';
+          })()}
     </div>
   );
 };

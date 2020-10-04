@@ -12,6 +12,15 @@ import upSVG from '@plone/volto/icons/up.svg';
 import placeholderImage from './placeholder.png';
 import './style.css';
 
+const secureRequest = (url) => {
+  try {
+    new URL(url);
+    return url.replace('http', 'https');
+  } catch {
+    return url;
+  }
+};
+
 const View = (props) => {
   const [activeItem, setActiveItem] = useState(1);
   const { page = '/', redirectPage = null, preview = false } = props.data || {};
@@ -58,13 +67,13 @@ const View = (props) => {
               >
                 <div className="column-4 sm-12 article hero pa-1">
                   <Image
-                    src={
+                    src={secureRequest(
                       item.image ||
-                      `${
-                        item.resource ? item.resource + '/image_large' : ''
-                      }` ||
-                      placeholderImage
-                    }
+                        `${
+                          item.resource ? item.resource + '/image_large' : ''
+                        }` ||
+                        placeholderImage,
+                    )}
                   />
                 </div>
                 <div className="column-8 sm-12 article pa-1">

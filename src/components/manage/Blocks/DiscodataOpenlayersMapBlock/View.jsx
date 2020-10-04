@@ -94,6 +94,7 @@ const OpenlayersMapView = (props) => {
   const [loader, setLoader] = useState(false);
   const [mapRendered, setMapRendered] = useState(false);
   const [firstFilteringUpdate, setFirstFilteringUpdate] = useState(false);
+  const selectedSiteRef = useRef(null);
   const selectedSiteCoordinates = useRef(null);
   const regionsSourceWhere = useRef('');
   const firstFilteringDone = useRef(false);
@@ -214,6 +215,8 @@ const OpenlayersMapView = (props) => {
 
   useEffect(() => {
     if (selectedSite && mapRendered) {
+      selectedSiteRef.current = selectedSite;
+      console.log('SET STYLE FOR SELECTED SITE');
       selectedSite.setStyle(
         new Style({
           image: new CircleStyle({
@@ -559,6 +562,7 @@ const OpenlayersMapView = (props) => {
           const item = data.results?.[0];
           selectedSiteCoordinates.current = [item.x, item.y];
           if (item && item.x && item.y) {
+            console.log('REFRESH SOURCE');
             stateRef.current.map.sitesSourceLayer.getSource().refresh();
             stateRef.current.map.element.getView().animate({
               center: selectedSiteCoordinates.current,
@@ -983,11 +987,14 @@ const OpenlayersMapView = (props) => {
             const closestFeature = sitesSource.getClosestFeatureToCoordinate(
               selectedSiteCoordinates.current,
             );
-            closestFeature.setStyle();
+            console.log('SET SELECTED SITE');
             setSelectedSite(closestFeature);
             selectedSiteCoordinates.current = null;
           }
         }
+      });
+      sitesSource.on('changefeature', function (e) {
+        console.log('CHANGE');
       });
       if (hasPopups) {
         if (document && document.documentElement?.clientWidth > 500) {

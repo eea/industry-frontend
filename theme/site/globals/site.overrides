@@ -57,6 +57,13 @@
     font-weight: bold;
   }
 
+  .logo {
+    a {
+      display: block;
+      padding-right: 1rem;
+    }
+  }
+
   a {
     color: @white;
     text-decoration: underline;
@@ -82,6 +89,12 @@
 @media only screen and (max-width: 1071px) and (min-width: 992px) {
   .large.screen.widescreen.only.menu {
     display: none !important;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .hamburger-wrapper.mobile.tablet.only {
+    display: none;
   }
 }
 
@@ -1620,4 +1633,12 @@ b {
   a {
     text-decoration: underline !important;
   }
+}
+
+.firefox-icon {
+  height: 20px;
+}
+
+.mdc-linear-progress__bar-inner {
+  background-color: #4296B2 !important;
 }

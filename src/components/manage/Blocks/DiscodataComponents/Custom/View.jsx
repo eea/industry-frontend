@@ -42,12 +42,17 @@ const components = {
       >
         <div>
           <span className="floating-icon" data-tip={'Something'}>
-            <Icon name={infoSVG} size="20" color="#fff" />
+            <Icon
+              className="firefox-icon"
+              name={infoSVG}
+              size="20"
+              color="#fff"
+            />
           </span>
           <p className="lighter">Last report was submitted on:</p>
           <p className="bold">{getDate(packages[0])}</p>
         </div>
-        <div>
+        {/* <div>
           <p className="bold">Reporting year</p>
           <Dropdown
             selection
@@ -70,7 +75,7 @@ const components = {
             options={options}
             value={activeValue}
           />
-        </div>
+        </div> */}
         <div>
           <p className="bold">Publish date</p>
           <p className="lighter">{getDate(packages[1])}</p>
