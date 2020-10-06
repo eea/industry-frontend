@@ -7,9 +7,7 @@
   "workspaces": [
     "src/develop/volto-grid-block",
     "src/develop/volto-addons",
-    "src/develop/volto-datablocks",
-    "src/develop/volto-slate-metadata-mentions",
-    "src/develop/volto-slate"
+    "src/develop/volto-datablocks"
   ],
   "addons": [
     "volto-slate:asDefault",
@@ -115,8 +113,10 @@
     "@eeacms/volto-object-widget": "github:eea/volto-object-widget#0.2.1",
     "@eeacms/volto-widget-toggle": "github:eea/volto-widget-toggle#0.1.0",
     "@eeacms/volto-widgets-view": "github:eea/volto-widgets-view#1.0.1",
+    "@eeacms/volto-slate-metadata-mentions": "github:eea/volto-slate-metadata-mentions#0.4.1",
     "@material/react-linear-progress": "^0.15.0",
     "@plone/volto": "github:eea/volto#8.0.0-beta.11",
+    "volto-slate": "github:eea/volto-slate#0.8.1",
     "axios": "^0.20.0",
     "jsonp": "^0.2.1",
     "ol": "^6.4.3",

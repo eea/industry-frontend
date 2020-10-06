@@ -494,6 +494,15 @@ a.small h1 {
   background-color: transparent;
 }
 
+.custom-selector.blue h1.ui.header,
+.custom-selector.blue .ui.selection.dropdown,
+.custom-selector.blue .ui.selection.dropdown > .default.text,
+.custom-selector.blue .ui.selection.dropdown > .text,
+.custom-selector.blue .ui.selection.visible.dropdown > .text:not(.default) {
+  color: #4296B3;
+  background-color: transparent;
+}
+
 .custom-selector.white h1.ui.header,
 .custom-selector.white .ui.selection.dropdown,
 .custom-selector.white .ui.selection.dropdown > .default.text,

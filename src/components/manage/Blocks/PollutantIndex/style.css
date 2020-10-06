@@ -1,0 +1,66 @@
+.pollutant-index-container .ui.attached.tabular.menu {
+  flex-wrap: wrap;
+  border-bottom: 0;
+  margin-left: -0.5rem;
+}
+
+.pollutant-index-container .ui.attached.tabular.menu .item {
+  padding: 0;
+  padding-top: 1rem;
+  padding-bottom: 0.6rem;
+  margin: 0 0.5rem;
+}
+
+.pollutant-index-container .ui.attached.tabular.menu .item:hover {
+
+}
+
+.pollutant-index-container .ui.attached.tabular.menu .active.item {
+  background-color: transparent !important;
+  color: #4296B3 !important;
+  font-weight: bold !important;
+  border-bottom: 2px solid #4296B3 !important;
+  border-radius: 0;
+}
+
+.pollutant-index-container .ui.attached.tabular.menu .active.item:hover {
+  background: transparent !important;
+  color: #3b849e !important;
+}
+
+.pollutant-index-container .ui.bottom.attached.segment.active.tab {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.pollutant-index-container h3 {
+  font-size: 1.3em;
+}
+
+.pollutant-index-container h3.blue {
+  color: #4296B3;
+}
+
+.pollutant-index-container .ui.table thead th {
+  text-transform: unset;
+}
+
+.pollutant-index-container .ui.table.description-table thead tr th {
+  background-color: unset;
+}
+
+.pollutant-index-container .ui.table.description-table thead tr,
+.pollutant-index-container .ui.table.description-table:not(.headless) tbody tr:nth-child(even),
+.pollutant-index-container .ui.table.description-table.headless tbody tr:nth-child(odd) {
+  background-color: #FAF8F8;
+}
+
+.pollutant-index-container .ui.table.description-table thead tr:hover,
+.pollutant-index-container .ui.table.description-table tbody tr:hover {
+  background-color: #F4F4F4 !important;
+}
+
+.pollutant-index-container .ui.table.description-table tbody tr td:nth-child(1) {
+  color: #EC776A;
+  font-weight: bold;
+}
