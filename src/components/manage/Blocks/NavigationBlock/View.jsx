@@ -47,6 +47,30 @@ const View = ({ content, ...props }) => {
               activeItem: '',
             });
           }
+          if (
+            props.discodata_query.search.siteInspireId &&
+            props.flags.items.sites?.[
+              props.discodata_query.search.siteInspireId
+            ] &&
+            item.title === 'Regulatory information' &&
+            !props.flags.items.sites?.[
+              props.discodata_query.search.siteInspireId
+            ]?.has_installations
+          ) {
+            return '';
+          }
+          if (
+            props.discodata_query.search.siteInspireId &&
+            props.flags.items.sites?.[
+              props.discodata_query.search.siteInspireId
+            ] &&
+            item.title === 'Large-scale fuel combustion' &&
+            !props.flags.items.sites?.[
+              props.discodata_query.search.siteInspireId
+            ]?.has_lcps
+          ) {
+            return '';
+          }
           return (
             <Menu.Item
               className={cx(
@@ -95,6 +119,7 @@ export default compose(
         state.prefetch?.[state.router.location.pathname] || state.content.data,
       pathname: state.router.location.pathname,
       discodata_query: state.discodata_query,
+      flags: state.flags,
       navigation: getNavigationByParent(
         state.navigation.items,
         props.data?.parent?.value,

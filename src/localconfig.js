@@ -40,6 +40,9 @@ import QueryParamButtonView from '~/components/manage/Blocks/QueryParamButton/Vi
 import IframeEdit from '~/components/manage/Blocks/Iframe/Edit';
 import IframeView from '~/components/manage/Blocks/Iframe/View';
 
+import FlagsEdit from '~/components/manage/Blocks/Flags/Edit';
+import FlagsView from '~/components/manage/Blocks/Flags/View';
+
 import PollutantIndexEdit from '~/components/manage/Blocks/PollutantIndex/Edit';
 import PollutantIndexView from '~/components/manage/Blocks/PollutantIndex/View';
 
@@ -207,6 +210,15 @@ export function applyConfig(voltoConfig) {
     group: 'eprtr_blocks',
     view: IframeView,
     edit: IframeEdit,
+    icon: packSVG,
+  };
+
+  config.blocks.blocksConfig.eprtr_flags = {
+    id: 'eprtr_flags',
+    title: 'Eprtr flags',
+    group: 'eprtr_blocks',
+    view: FlagsView,
+    edit: FlagsEdit,
     icon: packSVG,
   };
 

@@ -35,6 +35,15 @@
 
 .pollutant-index-container h3 {
   font-size: 1.3em;
+  margin-bottom: 0.5em;
+}
+
+.pollutant-index-container p:not(:last-child) {
+  margin-bottom: 0.5em;
+}
+
+.pollutant-index-container p:last-child {
+  margin-bottom: 0;
 }
 
 .pollutant-index-container h3.blue {
@@ -60,7 +69,17 @@
   background-color: #F4F4F4 !important;
 }
 
-.pollutant-index-container .ui.table.description-table tbody tr td:nth-child(1) {
+/* .pollutant-index-container .ui.table.description-table tbody tr td:nth-child(1) {
   color: #EC776A;
   font-weight: bold;
+} */
+
+.pollutant-index-container .pollutants-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pollutant-index-container .pollutants-list li {
+  margin-bottom: 0.5em;
 }

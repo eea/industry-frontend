@@ -60,12 +60,12 @@ const View = (props) => {
             isVisible(index) ? (
               <div
                 className={cx(
-                  'row articles-row mb-1 sm-height-fit-content',
+                  'row articles-row mb-1 xs-height-fit-content sm-height-fit-content',
                   index !== activeItem && preview ? 'can-be-half' : '',
                 )}
                 key={`sparql-row-${index}-${item.title}`}
               >
-                <div className="column-4 sm-12 article hero pa-1">
+                <div className="column-4 xs-12 sm-12 article hero pa-1">
                   <Image
                     src={secureRequest(
                       item.image ||
@@ -76,7 +76,7 @@ const View = (props) => {
                     )}
                   />
                 </div>
-                <div className="column-8 sm-12 article pa-1">
+                <div className="column-8 xs-12 sm-12 article pa-1">
                   <div className="article-header">
                     <h3 className="mb-0">{item.title}</h3>
                   </div>

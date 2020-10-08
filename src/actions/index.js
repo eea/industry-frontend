@@ -15,6 +15,7 @@ import {
   GET_PARENT_FOLDER_DATA,
   GET_PAGE,
   GET_SPARQL_DATA,
+  SET_FLAGS,
 } from '~/constants/ActionTypes';
 
 export function setSectionTabs(payload) {
@@ -53,5 +54,14 @@ export function getSparqlData(path) {
       op: 'get',
       path: `${path}/@sparql-data`,
     },
+  };
+}
+
+export function setFlags(packageKey, id, flags) {
+  return {
+    type: SET_FLAGS,
+    packageKey,
+    id,
+    flags,
   };
 }

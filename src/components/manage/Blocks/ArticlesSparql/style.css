@@ -97,6 +97,12 @@
   }
 }
 
+@media (max-width: 500px) {
+  .xs-height-fit-content {
+    height: fit-content !important;
+  }
+}
+
 @media (max-width: 768px) {
   .articles .articles-row.can-be-half:last-child  {
     transform: translateY(-10%);

@@ -70,6 +70,7 @@ const makeNewNavigation = (
   search,
   history,
   dispatch,
+  flags,
 ) => {
   if (
     ['facilities', 'installations', 'lcps'].includes(preset) &&
@@ -110,37 +111,63 @@ const makeNewNavigation = (
               );
             },
             items: [
-              ...item.items?.map((child) => ({
-                ...child,
-                redirect: (pathname) => {
-                  // if (
-                  //   search.facilityInspireId !== facility.facilityInspireId &&
-                  //   pathname === child.url
-                  // ) {
-                  //   history.push(item.url);
-                  // }
+              ...[
+                {
+                  title: 'Pollutant Releases',
+                  url: `${item.items[0]?.url}#pollutant_releases_tableau`,
+                  flag: 'has_release_data',
                 },
-                active: (pathname) => {
-                  return (
-                    search.facilityInspireId === facility.facilityInspireId &&
-                    pathname.includes(child.url)
-                  );
+                {
+                  title: 'Pollutant Transfers',
+                  url: `${item.items[0]?.url}#pollutant_transfers_tableau`,
+                  flag: 'has_transfer_data',
                 },
-                onClick: (pathname) => {
-                  if (facility.facilityInspireId !== search.facilityInspireId) {
-                    dispatch(
-                      setQueryParam({
-                        queryParam: {
-                          facilityInspireId: facility.facilityInspireId,
-                        },
-                      }),
-                    );
-                  }
-                  if (pathname !== child.url) {
-                    history.push(child.url);
-                  }
+                {
+                  title: 'Waste Transfers',
+                  url: `${item.items[0]?.url}#pollutant_waste_tableau`,
+                  flag: 'has_waste_data',
                 },
-              })),
+              ]
+                .filter(
+                  (child) =>
+                    flags.items.facilities?.[facility.facilityInspireId]?.[
+                      child.flag
+                    ],
+                )
+                ?.map((child) => ({
+                  ...child,
+                  redirect: (pathname) => {
+                    // if (
+                    //   search.facilityInspireId !== facility.facilityInspireId &&
+                    //   pathname === child.url
+                    // ) {
+                    //   history.push(item.url);
+                    // }
+                  },
+                  active: (pathname) => {
+                    // return (
+                    //   search.facilityInspireId === facility.facilityInspireId &&
+                    //   pathname.includes(child.url)
+                    // );
+                  },
+                  onClick: (pathname) => {
+                    if (
+                      facility.facilityInspireId !== search.facilityInspireId
+                    ) {
+                      dispatch(
+                        setQueryParam({
+                          queryParam: {
+                            facilityInspireId: facility.facilityInspireId,
+                          },
+                        }),
+                      );
+                    }
+
+                    if (pathname !== child.url) {
+                      history.push(child.url);
+                    }
+                  },
+                })),
             ],
           }))
         : [],
@@ -474,6 +501,7 @@ const View = ({ content, ...props }) => {
           props.search,
           history,
           props.dispatch,
+          props.flags,
         ),
       );
     } else if (preset.key) {
@@ -541,6 +569,7 @@ export default compose(
     content:
       state.prefetch?.[state.router.location.pathname] || state.content.data,
     pathname: state.router.location.pathname,
+    flags: state.flags,
     search: state.discodata_query.search,
     discodata_resources: state.discodata_resources,
     navigation: getNavigationByParent(
