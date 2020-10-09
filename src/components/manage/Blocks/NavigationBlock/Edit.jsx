@@ -12,14 +12,37 @@ const getSchema = (props) => {
       title: 'Parent page',
       widget: 'object_by_path',
     },
-    preset: {
-      title: 'Preset',
-      type: 'array',
-      choices: [['site', 'Site']],
-    },
     className: {
       title: 'Classname',
       type: 'text',
+    },
+    pages: {
+      title: 'Specific pages',
+      type: 'schema',
+      fieldSetTitle: 'specific pages',
+      fieldSetId: 'specific-pages',
+      fieldSetSchema: {
+        fieldsets: [
+          {
+            id: 'default',
+            title: 'Default',
+            fields: ['title', 'url'],
+          },
+        ],
+        properties: {
+          title: {
+            title: 'Title',
+            type: 'text',
+          },
+          url: {
+            title: 'Url',
+            widget: 'text',
+          },
+        },
+        required: ['title', 'url'],
+      },
+      editFieldset: false,
+      deleteFieldset: false,
     },
   };
 };

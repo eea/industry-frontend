@@ -145,13 +145,9 @@ const panes = [
       if (!pollutants?.length) return '';
       return (
         <Tab.Pane>
-          {pollutant_group.name && !props.data.all_groups ? (
+          {pollutant_group.name ? (
             <div className="mb-1">
               <h3>{`Pollutant Group - ${pollutant_group.name}`}</h3>
-            </div>
-          ) : props.data.all_groups ? (
-            <div className="mb-1">
-              <h3>All groups</h3>
             </div>
           ) : (
             ''
@@ -331,8 +327,8 @@ const panes = [
         <Tab.Pane>
           <h3>Synonyms or other commercial names</h3>
           <ul className="pollutants-list">
-            {synonyms.map((synonym) => (
-              <li>{synonym}</li>
+            {synonyms.map((synonym, index) => (
+              <li key={`${index}_synonym`}>{synonym}</li>
             ))}
           </ul>
         </Tab.Pane>
@@ -600,30 +596,27 @@ const RenderTable = (props) => {
 
 const View = (props) => {
   const [activeTab, setActiveTab] = useState(0);
-  const [initialized, setInitialized] = useState({
-    groups: false,
-    pollutants: false,
-  });
+  const [initialized, setInitialized] = useState(false);
   const [currentPollutant, setCurrentPollutant] = useState(undefined);
-  const [currentPollutants, setCurrentPollutants] = useState([]);
   const [currentPollutantGroup, setCurrentPollutantGroup] = useState(undefined);
   const mounted = useRef(false);
   const indexPollutantId =
     props.discodata_query.search.index_pollutant_id || null;
   const indexPollutantGroupId =
-    props.discodata_query.search.index_pollutant_group_id?.join(',') || null;
+    props.discodata_query.search.index_pollutant_group_id || null;
   const indexPollutantGroups =
     props.discodata_resources.data.index_pollutant_groups || [];
   const indexPollutants = props.discodata_resources.data.index_pollutants || [];
   const indexPollutantIso =
     props.discodata_resources.data.index_pollutant_iso?.[indexPollutantId]
       ?.results || [];
-  const groupsIds =
-    indexPollutantGroups.map((group) => group.pollutantId) || [];
   const currentOtherProvisions =
     props.discodata_resources.data.index_pollutant_other_provisions?.[
       indexPollutantId
     ]?.results || [];
+  const currentPollutants = indexPollutants.filter(
+    (pollutant) => parseInt(pollutant.parentId) === indexPollutantGroupId,
+  );
 
   useEffect(() => {
     const newPollutant = indexPollutants.filter(
@@ -646,29 +639,39 @@ const View = (props) => {
   }, [indexPollutantId]);
 
   useEffect(() => {
+    const newPollutantGroup = indexPollutantGroups.filter(
+      (group) => parseInt(group.pollutantId) === indexPollutantGroupId,
+    )?.[0];
+
+    setCurrentPollutantGroup(
+      indexPollutantGroupId !== null && indexPollutantGroupId !== undefined
+        ? newPollutantGroup
+        : undefined,
+    );
+  }, [indexPollutantGroupId]);
+
+  useEffect(() => {
     if (
       mounted.current &&
-      !initialized.groups &&
+      !initialized &&
       !indexPollutantGroupId &&
       indexPollutantGroups.length > 0 &&
       indexPollutants.length > 0
     ) {
       props.setQueryParam({
         queryParam: {
-          index_pollutant_group_id: groupsIds,
-          index_pollutant_id: indexPollutants[0].pollutantId,
+          index_pollutant_group_id: parseInt(indexPollutants[0].parentId),
+          index_pollutant_id: parseInt(indexPollutants[0].pollutantId),
         },
       });
-      const newPollutants =
-        indexPollutants?.filter(
-          (pollutant) =>
-            pollutant.pollutantId && groupsIds.includes(pollutant.parentId),
-        ) || [];
-      setCurrentPollutants(newPollutants);
-      setInitialized({
-        ...initialized,
-        groups: true,
-      });
+      setCurrentPollutantGroup(
+        indexPollutantGroups.filter(
+          (group) =>
+            parseInt(group.pollutantId) ===
+            parseInt(indexPollutants[0].parentId),
+        )[0],
+      );
+      setInitialized(true);
     }
   }, [indexPollutantGroups?.length, indexPollutants?.length]);
 
@@ -681,77 +684,39 @@ const View = (props) => {
 
   return (
     <div className="pollutant-index-container">
-      {/* <DiscodataSqlBuilder
+      <DiscodataSqlBuilder
         data={{
           '@type': 'discodata_sql_builder',
           sql: {
             value:
-              '{"fieldsets":[{"id":"sql_metadata","title":"SQL","fields":["index_pollutant_groups","index_pollutants"]}],"properties":{"index_pollutant_groups":{"title":"Index pollutant groups","isCollection":true,"hasPagination":false,"urlQuery":false,"sql":"SELECT *\\nFROM [IED].[latest].[LOV_POLLUTANT]\\nWHERE [parentId] = \'NULL\'"},"index_pollutants":{"title":"Index pollutants","isCollection":false,"hasPagination":false,"urlQuery":false,"sql":"SELECT *\\nFROM [IED].[latest].[LOV_POLLUTANT]","packageName":"index_pollutant_group_id"}},"required":[]}',
+              '{"fieldsets":[{"id":"sql_metadata","title":"SQL","fields":["index_pollutant_groups","index_pollutants","index_pollutant_iso","index_pollutant_other_provisions"]}],"properties":{"index_pollutant_groups":{"title":"Index pollutant groups","isCollection":true,"hasPagination":false,"urlQuery":false,"sql":"SELECT POL.*, POL_GROUPS.sub, POL_GROUPS.description\\nFROM [IED].[latest].[LOV_POLLUTANT] as POL\\nLEFT JOIN [IED].[latest].[pollutants_groups_details_table]  as POL_GROUPS\\nON POL.pollutantId = POL_GROUPS.pollutant_group_id \\nWHERE [parentId] = \'NULL\'\\nORDER BY name"},"index_pollutant_iso":{"title":"Index pollutants iso","hasPagination":true,"urlQuery":false,"sql":"SELECT *\\nFROM [IED].[latest].[pollutants_iso_provisions_table]","packageName":"index_pollutant_id"},"index_pollutant_other_provisions":{"title":"index_pollutant_other_provisions","hasPagination":true,"urlQuery":false,"sql":"SELECT *\\nFROM [IED].[latest].[pollutants_other_provisions_table]","packageName":"index_pollutant_id"},"index_pollutants":{"title":"Index pollutants","isCollection":true,"hasPagination":false,"urlQuery":false,"sql":"SELECT POL.code,\\nPOL.name,\\nPOL.startYear,\\nPOL.endYear,\\nPOL.parentId,\\nPOL.cas,\\nPOL.eperPollutantId,\\nPOL.codeEPER,\\nPOL_DET.*\\nFROM [IED].[latest].[LOV_POLLUTANT] as POL\\nLEFT JOIN [IED].[latest].[pollutants_details_table] AS POL_DET\\nON POL.pollutantId = POL_DET.pollutantId\\nORDER BY name","packageName":"index_pollutant_group_id"}},"required":[]}',
           },
           where: {
             value:
-              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"index_pollutants","urlQuery":false,"key":"parentId","queryParam":"index_pollutant_group_id"}},"required":[]}',
+              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1","w2"]}],"properties":{"w1":{"title":"W1","sqlId":"index_pollutant_iso","urlQuery":false,"key":"pollutantId","queryParam":"index_pollutant_id"},"w2":{"title":"W2","sqlId":"index_pollutant_other_provisions","urlQuery":false,"key":"other_provision_id","queryParam":"index_pollutant_other_provisions","isExact":true}},"required":[]}',
           },
         }}
-      /> */}
+      />
       <div className="custom-selector big blue display-flex flex-flow-column">
         <Dropdown
+          search
           selection
           onChange={(event, data) => {
-            const groupId = data.options
-              .filter((opt) => {
-                return opt.value === data.value;
-              })[0]
-              ?.value?.split(',');
-
-            const newPollutants =
-              indexPollutants?.filter(
-                (pollutant) =>
-                  pollutant.pollutantId && groupId.includes(pollutant.parentId),
-              ) || [];
-            setCurrentPollutantGroup(
-              indexPollutantGroups.filter(
-                (pollutant) => pollutant.pollutantId === groupId.join(','),
-              )?.[0],
-            );
-            setCurrentPollutants(newPollutants);
+            const pollutantId = data.options.filter((opt) => {
+              return opt.value === data.value;
+            })[0]?.value;
+            const newPollutant = indexPollutants.filter(
+              (pollutant) => pollutant.pollutantId === pollutantId,
+            )?.[0];
             props.setQueryParam({
               queryParam: {
-                index_pollutant_group_id: groupId,
-                index_pollutant_id: newPollutants?.[0]?.pollutantId,
-              },
-            });
-          }}
-          placeholder={'Pollutant Group'}
-          options={[
-            {
-              key: 'all_groups',
-              value: groupsIds.join(','),
-              text: 'All groups',
-            },
-            ...indexPollutantGroups
-              .filter((pollutantGroup) => pollutantGroup.pollutantId)
-              .map((pollutantGroup) => ({
-                key: pollutantGroup.code,
-                value: pollutantGroup.pollutantId,
-                text: pollutantGroup.name,
-              })),
-          ]}
-          value={indexPollutantGroupId}
-        />
-        <Dropdown
-          selection
-          onChange={(event, data) => {
-            props.setQueryParam({
-              queryParam: {
-                index_pollutant_id: data.options.filter((opt) => {
-                  return opt.value === data.value;
-                })[0]?.value,
+                index_pollutant_group_id: parseInt(newPollutant.parentId),
+                index_pollutant_id: parseInt(pollutantId),
               },
             });
           }}
           placeholder={'Pollutant'}
-          options={currentPollutants
+          options={indexPollutants
             .filter((pollutant) => pollutant.pollutantId)
             .map((pollutant) => ({
               key: pollutant.code,
@@ -769,7 +734,6 @@ const View = (props) => {
         }}
         data={{
           pollutants: currentPollutants,
-          all_groups: groupsIds.join(',') === indexPollutantGroupId,
           pollutant: currentPollutant,
           pollutant_iso: indexPollutantIso,
           pollutant_group: currentPollutantGroup,

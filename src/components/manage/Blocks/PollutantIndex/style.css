@@ -83,3 +83,16 @@
 .pollutant-index-container .pollutants-list li {
   margin-bottom: 0.5em;
 }
+
+.pollutant-index-container .ui.search.dropdown input {
+  color: #4296B3;
+  font-weight: bold !important;
+  font-size: 30px !important;
+  line-height: 39px !important;
+  padding: 0 !important;
+  padding-right: 60px !important;
+}
+
+.pollutant-index-container .ui.search.dropdown.active .text {
+  min-width: 120px !important;
+}

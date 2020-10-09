@@ -1,16 +1,48 @@
 /* REACT */
-import React, { useState, useEffect } from 'react';
+import React, { useLayoutEffect, useState, useEffect } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import Iframe from 'react-iframe';
 import qs from 'query-string';
 import './style.css';
 
+const useWindowSize = () => {
+  const [size, setSize] = useState([0, 0]);
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+  return size;
+};
+
 const View = ({ content, ...props }) => {
   const [discodataQuery, setDiscodataQuery] = useState({});
+  const [flags, setFlags] = useState({});
+  const [windowWidth, windowHeight] = useWindowSize();
+  const breakPoints = {
+    desktop: [Infinity, 992],
+    tablet: [991, 768],
+    mobile: [767, 0],
+  };
   const { data } = props;
-  const { url = '', title = '', width = '100%', height = 'auto' } = data;
+  const {
+    desktopUrl = '',
+    tabletUrl = '',
+    mobileUrl = '',
+    title = '',
+    width = '100%',
+    height = 'auto',
+  } = data;
   const { hideToolbar = false, overflow = false, preset = null } = data;
+  const url = {
+    desktop: desktopUrl,
+    tablet: tabletUrl || desktopUrl,
+    mobile: mobileUrl || tabletUrl || desktopUrl,
+  };
 
   useEffect(() => {
     if (props.data.queryParameters?.value) {
@@ -38,23 +70,60 @@ const View = ({ content, ...props }) => {
   }, [props.data.queryParameters, props.search])
 
   useEffect(() => {
-    try {
-      new URL(url);
-      const newUrl = getUrl(url);
-      if (props.mode === 'edit' && url !== newUrl) {
-        props.onChangeBlock(props.block, {
-          ...props.data,
-          url: newUrl,
+    if (props.data.flags?.value) {
+      try {
+        const newFlags = {};
+        const properties = JSON.parse(props.data.flags?.value).properties || {};
+        Object.keys(properties).forEach((flag) => {
+          const id = props.search[flag];
+          if (
+            id &&
+            typeof props.flags.items[properties[flag].packageName]?.[id]?.[
+              properties[flag].flag
+            ] !== 'undefined'
+          ) {
+            newFlags[properties[flag].flag] =
+              props.flags.items[properties[flag].packageName][id][
+                properties[flag].flag
+              ];
+          }
         });
+        setFlags({ ...newFlags });
+      } catch {
+        setFlags({});
       }
-    } catch {}
+    }
+  }, [props.data.flags, props.flags, props.search]);
+
+  const flagsState =
+    Object.keys(flags).filter((flag) => !flags[flag]).length > 0;
+
+  useEffect(() => {
+    if (props.mode === 'edit') {
+      props.onChangeBlock(props.block, {
+        ...props.data,
+        desktopUrl: parseUrl(desktopUrl),
+        tabletUrl: parseUrl(tabletUrl),
+        mobileUrl: parseUrl(mobileUrl),
+      });
+    }
 
     /* eslint-disable-next-line */
-  }, [url])
+  }, [desktopUrl, tabletUrl, mobileUrl])
 
   const getUrl = (url) => {
     const newUrl = new URL(url);
     return newUrl.protocol + '//' + newUrl.host + newUrl.pathname;
+  };
+
+  const getUrlByWidth = () => {
+    return url[
+      Object.keys(breakPoints).filter(
+        (breakPoint) =>
+          breakPoints[breakPoint][0] >= windowWidth &&
+          breakPoints[breakPoint][1] <= windowWidth,
+      )[0]
+    ];
   };
 
   const applyQueryParameters = (url, query) => {
@@ -71,6 +140,19 @@ const View = ({ content, ...props }) => {
     }
   };
 
+  const parseUrl = (url) => {
+    try {
+      new URL(url);
+      const newUrl = getUrl(url);
+      if (url !== newUrl) {
+        return newUrl;
+      }
+      return url;
+    } catch {
+      return '';
+    }
+  };
+
   const getPresetQueries = () => {
     if (preset === 'site_tableau') {
       return {
@@ -82,20 +164,29 @@ const View = ({ content, ...props }) => {
 
   return (
     <div>
-      <Iframe
-        title={title}
-        url={applyQueryParameters(url, {
-          ...discodataQuery,
-          ...getPresetQueries(),
-        })}
-        width={width}
-        height={height}
-        className="embeded-iframe"
-        display="initial"
-        position="relative"
-        overflow={overflow ? 'visible' : 'hidden'}
-        scrolling={false}
-      />
+      {!flagsState ? (
+        <Iframe
+          title={title}
+          url={applyQueryParameters(getUrlByWidth(), {
+            ...discodataQuery,
+            ...getPresetQueries(),
+          })}
+          width={width}
+          height={height}
+          className="embeded-iframe"
+          display="initial"
+          position="relative"
+          overflow={overflow ? 'visible' : 'hidden'}
+          scrolling={false}
+        />
+      ) : (
+        ''
+      )}
+      {props.mode === 'edit' && flagsState ? (
+        <p className="mb-0-super">Tableau edit mode</p>
+      ) : (
+        ''
+      )}
     </div>
   );
 };
@@ -104,5 +195,6 @@ export default compose(
   connect((state, props) => ({
     query: state.router.location.search,
     search: state.discodata_query.search,
+    flags: state.flags,
   })),
 )(View);

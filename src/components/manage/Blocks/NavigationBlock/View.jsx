@@ -20,17 +20,27 @@ const View = ({ content, ...props }) => {
     activeItem: '',
   });
   const parent = data.parent?.value;
-  const preset = data.preset?.value;
   const history = useHistory();
-  return props.navigation?.items?.length && parent ? (
+  let pages = [];
+
+  try {
+    const pagesProperties = JSON.parse(data.pages?.value)?.properties || {};
+    Object.keys(pagesProperties).forEach((page) => {
+      pages.push(pagesProperties[page]);
+    });
+  } catch {}
+
+  const navigationItems = [...(props.navigation?.items || []), ...pages];
+
+  return (props.navigation?.items?.length && parent) || pages.length ? (
     <div className="tabs-view-menu">
       <Menu
-        widths={props.navigation.items.length}
+        widths={navigationItems.length}
         className={
           props.data.className?.value ? props.data.className.value : ''
         }
       >
-        {props.navigation.items.map((item, index) => {
+        {navigationItems.map((item, index) => {
           const url = getBasePath(item.url);
           const name = item.title;
           if (isActive(url, props.pathname) && url !== state.activeItem) {
@@ -75,9 +85,7 @@ const View = ({ content, ...props }) => {
             <Menu.Item
               className={cx(
                 index > 0 ? 'sibling-on-left' : '',
-                index < props.navigation.items.length - 1
-                  ? 'sibling-on-right'
-                  : '',
+                index < navigationItems.length - 1 ? 'sibling-on-right' : '',
               )}
               name={name}
               key={url}

@@ -46,6 +46,9 @@ import FlagsView from '~/components/manage/Blocks/Flags/View';
 import PollutantIndexEdit from '~/components/manage/Blocks/PollutantIndex/Edit';
 import PollutantIndexView from '~/components/manage/Blocks/PollutantIndex/View';
 
+import GlossarySearchBlockEdit from '~/components/manage/Blocks/GlossarySearchBlock/Edit';
+import GlossarySearchBlockView from '~/components/manage/Blocks/GlossarySearchBlock/View';
+
 import DummyBlockEdit from '~/components/manage/Blocks/DummyBlock/Edit';
 import DummyBlockView from '~/components/manage/Blocks/DummyBlock/View';
 
@@ -228,6 +231,15 @@ export function applyConfig(voltoConfig) {
     group: 'eprtr_blocks',
     view: PollutantIndexView,
     edit: PollutantIndexEdit,
+    icon: packSVG,
+  };
+
+  config.blocks.blocksConfig.eprtr_glossary_search_block = {
+    id: 'eprtr_glossary_search_block',
+    title: 'Eprtr glossary search block',
+    group: 'eprtr_blocks',
+    view: GlossarySearchBlockView,
+    edit: GlossarySearchBlockEdit,
     icon: packSVG,
   };
 

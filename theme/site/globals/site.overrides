@@ -1257,11 +1257,12 @@ body.has-sidebar {
             font-weight: bold !important;
             color: #D63D27 !important;
             background-color: transparent !important;
-            padding: 10px 40px !important;
+            padding: 10px 30px !important;
             border-radius: 22px;
             border: 1px solid #D63D27;
             margin-right: 0 !important;
             margin-left: 0 !important;
+            flex: 1;
             &:before {
               width: 0;
               background-color: transparent !important;

@@ -9,8 +9,16 @@ import './style.css';
 
 const getSchema = (props) => {
   return {
-    url: {
-      title: 'Url',
+    desktopUrl: {
+      title: 'Desktop url',
+      type: 'text',
+    },
+    tabletUrl: {
+      title: 'Tablet url',
+      type: 'text',
+    },
+    mobileUrl: {
+      title: 'Mobile url',
       type: 'text',
     },
     title: {
@@ -71,6 +79,42 @@ const getSchema = (props) => {
       editFieldset: false,
       deleteFieldset: false,
     },
+    flags: {
+      title: 'Flags',
+      type: 'schema',
+      fieldSetTitle: 'Flags',
+      fieldSetId: 'flags_parameters',
+      fieldSetSchema: {
+        fieldsets: [
+          {
+            id: 'default',
+            title: 'title',
+            fields: ['title', 'id', 'packageName', 'flag'],
+          },
+        ],
+        properties: {
+          title: {
+            title: 'Title',
+            type: 'text',
+          },
+          id: {
+            title: 'Id',
+            type: 'text',
+          },
+          packageName: {
+            title: 'Package name',
+            type: 'text',
+          },
+          flag: {
+            title: 'Flag name',
+            type: 'text',
+          },
+        },
+        required: ['id', 'title', 'packageName', 'flag'],
+      },
+      editFieldset: false,
+      deleteFieldset: false,
+    },
   };
 };
 
@@ -79,6 +123,9 @@ const Edit = (props) => {
     schema: getSchema({ ...props, providerUrl: settings.providerUrl }),
     id: _uniqueId('block_'),
   });
+  // useEffect(() => {
+
+  // }, [discodata_query, flags]);
   return (
     <div>
       <RenderFields
@@ -95,5 +142,7 @@ const Edit = (props) => {
 export default compose(
   connect((state, props) => ({
     pathname: state.router.location.pathname,
+    flags: state.flags,
+    discodata_query: state.discodata_query,
   })),
 )(Edit);

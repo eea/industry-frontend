@@ -1185,23 +1185,6 @@ const OpenlayersMapView = (props) => {
                       <Link
                         as="a"
                         className={
-                          !state.popupDetails.properties.nLCP
-                            ? 'disabled-link'
-                            : ''
-                        }
-                        onClick={setSiteQueryParams}
-                        to={'/industrial-site/large-scale-fuel-combustion'}
-                      >
-                        {state.popupDetails.properties.nLCP || 0} Large
-                        combustion plants
-                      </Link>
-                    </p>
-                  </div>
-                  <div className="column  column-12">
-                    <p>
-                      <Link
-                        as="a"
-                        className={
                           !state.popupDetails.properties.nInstallations
                             ? 'disabled-link'
                             : ''
@@ -1213,6 +1196,23 @@ const OpenlayersMapView = (props) => {
                       >
                         {state.popupDetails.properties.nInstallations || 0}{' '}
                         Installations
+                      </Link>
+                    </p>
+                  </div>
+                  <div className="column  column-12">
+                    <p>
+                      <Link
+                        as="a"
+                        className={
+                          !state.popupDetails.properties.nLCP
+                            ? 'disabled-link'
+                            : ''
+                        }
+                        onClick={setSiteQueryParams}
+                        to={'/industrial-site/large-scale-fuel-combustion'}
+                      >
+                        {state.popupDetails.properties.nLCP || 0} Large
+                        combustion plants
                       </Link>
                     </p>
                   </div>
