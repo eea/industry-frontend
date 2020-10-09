@@ -238,46 +238,7 @@ const makeNewNavigation = (
                     pathname.includes(item.url)
                   );
                 },
-                items: [
-                  ...item.items.map((child) => ({
-                    ...child,
-                    redirect: (pathname) => {
-                      // if (
-                      //   search.facilityInspireId !== facility.facilityInspireId &&
-                      //   pathname === child.url
-                      // ) {
-                      //   history.push(item.url);
-                      // }
-                    },
-                    active: (pathname) => {
-                      return (
-                        search.facilityInspireId ===
-                          facility.facilityInspireId &&
-                        search.installationInspireId === installation &&
-                        pathname.includes(child.url)
-                      );
-                    },
-                    onClick: (pathname) => {
-                      if (
-                        facility.facilityInspireId !==
-                          search.facilityInspireId ||
-                        installation !== search.installationInspireId
-                      ) {
-                        dispatch(
-                          setQueryParam({
-                            queryParam: {
-                              facilityInspireId: facility.facilityInspireId,
-                              installationInspireId: installation,
-                            },
-                          }),
-                        );
-                      }
-                      if (pathname !== child.url) {
-                        history.push(child.url);
-                      }
-                    },
-                  })),
-                ],
+                items: [],
               })) || []),
             ],
           }))

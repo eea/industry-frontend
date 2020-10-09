@@ -13,29 +13,36 @@ import {
   getBasePath,
 } from 'volto-tabsview/helpers';
 import { deleteQueryParam } from 'volto-datablocks/actions';
+import { useEffect } from 'react';
 
 const View = ({ content, ...props }) => {
   const { data } = props;
   const [state, setState] = useState({
     activeItem: '',
   });
+  const [navigationItems, setNavigationItems] = useState([]);
+  const [pages, setPages] = useState([]);
   const parent = data.parent?.value;
   const history = useHistory();
-  let pages = [];
 
-  try {
-    const pagesProperties = JSON.parse(data.pages?.value)?.properties || {};
-    Object.keys(pagesProperties).forEach((page) => {
-      pages.push(pagesProperties[page]);
-    });
-  } catch {}
-
-  const navigationItems = [...(props.navigation?.items || []), ...pages];
+  useEffect(() => {
+    const pagesProperties = data.pages?.value
+      ? JSON.parse(data.pages?.value)?.properties || {}
+      : {};
+    const newPages =
+      Object.keys(pagesProperties).map((page) => pagesProperties[page]) || [];
+    setPages(newPages);
+    setNavigationItems([...(props.navigation?.items || []), ...newPages]);
+  }, [data.pages?.value]);
 
   return (props.navigation?.items?.length && parent) || pages.length ? (
     <div className="tabs-view-menu">
       <Menu
-        widths={navigationItems.length}
+        widths={
+          navigationItems.length ||
+          props.navigation?.items?.length ||
+          pages.length
+        }
         className={
           props.data.className?.value ? props.data.className.value : ''
         }
@@ -43,19 +50,25 @@ const View = ({ content, ...props }) => {
         {navigationItems.map((item, index) => {
           const url = getBasePath(item.url);
           const name = item.title;
-          if (isActive(url, props.pathname) && url !== state.activeItem) {
-            setState({
-              ...state,
-              activeItem: url,
-            });
-          } else if (
-            !isActive(url, props.pathname) &&
-            url === state.activeItem
+          if (
+            props.navigation.items.filter(
+              (navItem) => navItem.title === item.title,
+            ).length
           ) {
-            setState({
-              ...state,
-              activeItem: '',
-            });
+            if (isActive(url, props.pathname) && url !== state.activeItem) {
+              setState({
+                ...state,
+                activeItem: url,
+              });
+            } else if (
+              !isActive(url, props.pathname) &&
+              url === state.activeItem
+            ) {
+              setState({
+                ...state,
+                activeItem: '',
+              });
+            }
           }
           if (
             props.discodata_query.search.siteInspireId &&
@@ -81,6 +94,7 @@ const View = ({ content, ...props }) => {
           ) {
             return '';
           }
+
           return (
             <Menu.Item
               className={cx(
@@ -89,7 +103,13 @@ const View = ({ content, ...props }) => {
               )}
               name={name}
               key={url}
-              active={state.activeItem === url}
+              active={
+                state.activeItem
+                  ? state.activeItem === url
+                  : !url
+                  ? isActive(url, props.pathname)
+                  : false
+              }
               onClick={() => {
                 history.push(`${url}${props.query}`);
                 if (

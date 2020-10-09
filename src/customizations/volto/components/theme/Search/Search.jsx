@@ -19,7 +19,8 @@ import { Helmet } from '@plone/volto/helpers';
 import { searchContent } from '@plone/volto/actions';
 import { Toolbar, Icon } from '@plone/volto/components';
 import Highlighter from 'react-highlight-words';
-
+import DiscodataSqlBuilder from 'volto-datablocks/DiscodataSqlBuilder/View';
+import { setQueryParam } from 'volto-datablocks/actions';
 import paginationLeftSVG from '@plone/volto/icons/left-key.svg';
 import paginationRightSVG from '@plone/volto/icons/right-key.svg';
 
@@ -237,8 +238,24 @@ class Search extends Component {
    * @returns {string} Markup for the component.
    */
   render() {
+    const pollutants =
+      this.props.discodata_resources.data.index_pollutants || [];
+
     return (
       <Container id="page-search">
+        <DiscodataSqlBuilder
+          data={{
+            '@type': 'discodata_sql_builder',
+            sql: {
+              value:
+                '{"fieldsets":[{"id":"sql_metadata","title":"SQL","fields":["index_pollutants"]}],"properties":{"index_pollutants":{"title":"Index pollutants","isCollection":true,"hasPagination":false,"urlQuery":false,"sql":"SELECT POL.code,\\nPOL.name,\\nPOL.startYear,\\nPOL.endYear,\\nPOL.parentId,\\nPOL.cas,\\nPOL.eperPollutantId,\\nPOL.codeEPER,\\nPOL_DET.*\\nFROM [IED].[latest].[LOV_POLLUTANT] as POL\\nLEFT JOIN [IED].[latest].[pollutants_details_table] AS POL_DET\\nON POL.pollutantId = POL_DET.pollutantId\\nORDER BY name","packageName":"index_pollutant_group_id"}},"required":[]}',
+            },
+            where: {
+              value:
+                '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1","w2"]}],"properties":{"w1":{"title":"W1","sqlId":"index_pollutant_iso","urlQuery":false,"key":"pollutantId","queryParam":"index_pollutant_id"},"w2":{"title":"W2","sqlId":"index_pollutant_other_provisions","urlQuery":false,"key":"other_provision_id","queryParam":"index_pollutant_other_provisions","isExact":true}},"required":[]}',
+            },
+          }}
+        />
         <Helmet title="Search" />
         <div className="container">
           <article id="content">
@@ -360,6 +377,43 @@ class Search extends Component {
                 </article>
               ))}
 
+              <div className="discodata-list mb-3">
+                <h2 style={{ margin: '5px' }}>Pollutants</h2>
+                {pollutants
+                  .filter(
+                    (pollutant) =>
+                      pollutant.pollutantId &&
+                      pollutant.name.includes(this.props.searchableText),
+                  )
+                  .map((pollutant) => (
+                    <Link
+                      key={`item-${pollutant.pollutantId}`}
+                      className="outline dark-blue"
+                      as="a"
+                      to="/glossary/pollutants/pollutant-index"
+                      onClick={() => {
+                        setQueryParam({
+                          queryParam: {
+                            index_pollutant_group_id: parseInt(
+                              pollutant.parentId,
+                            ),
+                            index_pollutant_id: parseInt(pollutant.pollutantId),
+                          },
+                        });
+                      }}
+                    >
+                      <Highlighter
+                        highlightClassName="highlight"
+                        searchWords={
+                          this.props.searchableText?.split(' ') || []
+                        }
+                        autoEscape={true}
+                        textToHighlight={pollutant.name}
+                      />
+                    </Link>
+                  ))}
+              </div>
+
               {this.props.search?.batching && (
                 <div className="search-footer">
                   <Pagination
@@ -434,8 +488,9 @@ export default compose(
       title: qs.parse(props.location.search).title,
       description: qs.parse(props.location.search).description,
       pathname: props.location.pathname,
+      discodata_resources: state.discodata_resources,
     }),
-    { searchContent },
+    { searchContent, setQueryParam },
   ),
   asyncConnect([
     {
