@@ -76,10 +76,10 @@ const components = {
             value={activeValue}
           />
         </div> */}
-        <div>
+        {/* <div>
           <p className="bold">Publish date</p>
           <p className="lighter">{getDate(packages[1])}</p>
-        </div>
+        </div> */}
       </div>
     );
   },
