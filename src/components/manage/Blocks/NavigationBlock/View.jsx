@@ -51,7 +51,7 @@ const View = ({ content, ...props }) => {
           const url = getBasePath(item.url);
           const name = item.title;
           if (
-            props.navigation.items.filter(
+            props.navigation?.items?.filter(
               (navItem) => navItem.title === item.title,
             ).length
           ) {
