@@ -401,7 +401,7 @@ class Search extends Component {
                       key={`item-${pollutant.pollutantId}`}
                       className="outline dark-blue"
                       as="a"
-                      to="/test"
+                      to="/glossary/pollutants/pollutant-index"
                       onClick={() => {
                         this.props.setQueryParam({
                           queryParam: {

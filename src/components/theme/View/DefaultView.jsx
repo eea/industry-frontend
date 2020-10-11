@@ -3,7 +3,9 @@
  * @module components/theme/View/DefaultView
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl } from 'react-intl';
 
@@ -32,30 +34,45 @@ const messages = defineMessages({
  * @param {Object} content Content object.
  * @returns {string} Markup of the component.
  */
-const DefaultView = ({ content, intl, location }) => {
+const DefaultView = ({ content, intl, location, discodata_query }) => {
+  const history = useHistory();
   const blocksFieldname = getBlocksFieldname(content);
   const blocksLayoutFieldname = getBlocksLayoutFieldname(content);
   const contentTypeBlocks = content['@components']?.layout?.[blocksFieldname];
+  const hash = location.hash.replace('#', '');
+  const timer = useRef(null);
+  const clock = useRef(0);
 
   useEffect(() => {
-    if (content['@type' === 'site_template']) {
-      const hashElement = document.getElementById(
-        location.hash.replace('#', ''),
-      );
-      if (hashElement) {
-        hashElement.scrollIntoView();
-      }
+    if (
+      content['@type'] === 'site_template' &&
+      !discodata_query.search.siteInspireId
+    ) {
+      history.push('/browse/explore-data-map/map');
     }
   }, []);
 
   useEffect(() => {
-    if (content['@type' === 'site_template']) {
-      const hashElement = document.getElementById(
-        location.hash.replace('#', ''),
-      );
-      if (hashElement) {
-        hashElement.scrollIntoView();
-      }
+    if (
+      content['@type'] === 'site_template' &&
+      discodata_query.search.siteInspireId &&
+      !timer.current
+    ) {
+      timer.current = setInterval(() => {
+        const hashElement = document.getElementById(hash);
+        clock.current += 1000;
+        if (hashElement) {
+          hashElement.scrollIntoView();
+          clock.current = 0;
+          clearInterval(timer.current);
+          timer.current = null;
+        }
+        if (clock.current === 10000) {
+          clock.current = 0;
+          clearInterval(timer.current);
+          timer.current = null;
+        }
+      }, 1000);
     }
   }, [location.hash]);
 
@@ -148,4 +165,6 @@ DefaultView.propTypes = {
   }).isRequired,
 };
 
-export default injectIntl(DefaultView);
+export default connect((state, props) => ({
+  discodata_query: state.discodata_query,
+}))(injectIntl(DefaultView));
