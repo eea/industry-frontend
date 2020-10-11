@@ -175,6 +175,7 @@ class View extends Component {
         index_pollutant_id: parseInt(pollutant.pollutantId),
       },
     });
+    this.setState({ active: false, text: pollutant.name });
     this.props.history.push('/glossary/pollutants/pollutant-index');
   }
 

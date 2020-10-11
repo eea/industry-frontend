@@ -20,7 +20,9 @@ const useWindowSize = () => {
 };
 
 const View = ({ content, ...props }) => {
+  let showIframe = true;
   const [discodataQuery, setDiscodataQuery] = useState({});
+  const [requiredQueries, setRequiredQueries] = useState([]);
   const [flags, setFlags] = useState({});
   const [windowWidth, windowHeight] = useWindowSize();
   const breakPoints = {
@@ -56,7 +58,12 @@ const View = ({ content, ...props }) => {
               newDiscodataQuery[key] = props.search[value.queryParam] || '';
             }
           });
-
+        if (
+          JSON.stringify(Object.keys(properties)) !==
+          JSON.stringify(requiredQueries)
+        ) {
+          setRequiredQueries(Object.keys(properties));
+        }
         if (
           JSON.stringify(newDiscodataQuery) !== JSON.stringify(discodataQuery)
         ) {
@@ -164,7 +171,9 @@ const View = ({ content, ...props }) => {
 
   return (
     <div>
-      {!flagsState ? (
+      {!flagsState &&
+      requiredQueries.length ===
+        requiredQueries.filter((query) => discodataQuery[query]).length ? (
         <Iframe
           title={title}
           url={applyQueryParameters(getUrlByWidth(), {

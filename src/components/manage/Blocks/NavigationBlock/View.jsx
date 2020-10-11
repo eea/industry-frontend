@@ -33,7 +33,7 @@ const View = ({ content, ...props }) => {
       Object.keys(pagesProperties).map((page) => pagesProperties[page]) || [];
     setPages(newPages);
     setNavigationItems([...(props.navigation?.items || []), ...newPages]);
-  }, [data.pages?.value]);
+  }, [props.navigation, data.pages?.value]);
 
   return (props.navigation?.items?.length && parent) || pages.length ? (
     <div className="tabs-view-menu">
@@ -147,6 +147,7 @@ export default compose(
         state.prefetch?.[state.router.location.pathname] || state.content.data,
       pathname: state.router.location.pathname,
       discodata_query: state.discodata_query,
+      navItems: state.navigation.items,
       flags: state.flags,
       navigation: getNavigationByParent(
         state.navigation.items,

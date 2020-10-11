@@ -1320,9 +1320,9 @@ body.has-sidebar {
             width: 0;
             background-color: transparent !important;
           }
-          &:first-child {
-            margin-left: 0 !important;
-          }
+          // &:first-child {
+          //   margin-left: 0 !important;
+          // }
         }
         .active.item {
           background-color: transparent !important;
