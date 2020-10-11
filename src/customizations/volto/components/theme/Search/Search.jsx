@@ -97,7 +97,9 @@ const getSummary = (item, searchableText) => {
   item.blocks &&
     Object.entries(item.blocks).forEach(([key, block], index) => {
       const text = getText(block);
-      summary.fullSummary.push(paragraph(text, searchableText));
+      if (text && text.length > 0) {
+        summary.fullSummary.push(paragraph(text, searchableText));
+      }
       if (text && text.length > 0 && summary.firstParagraph.length === 0) {
         summary.firstParagraph.push(paragraph(smallText(text), searchableText));
       }
@@ -110,6 +112,7 @@ const getSummary = (item, searchableText) => {
         );
       }
     });
+
   return summary;
 };
 
@@ -317,7 +320,7 @@ class Search extends Component {
                   id={`article_${item['@id']}`}
                 >
                   <Link to={item['@id']}>
-                    <h2 className="tileHeadline mb-1">
+                    <h3 className="tileHeadline mb-1">
                       <Highlighter
                         highlightClassName="highlight"
                         searchWords={
@@ -326,7 +329,7 @@ class Search extends Component {
                         autoEscape={true}
                         textToHighlight={item.title}
                       />
-                    </h2>
+                    </h3>
                   </Link>
                   <div className="tileBody">
                     <div className="description">
@@ -346,39 +349,45 @@ class Search extends Component {
                         ? item.summary.firstParagraph[0]
                         : item.description}
                     </div>
-                    <button
-                      className="outline dark-blue expendButton"
-                      onClick={() => {
-                        if (this.state.expendedItemIndex === index) {
-                          this.setState({ expendedItemIndex: -1 }, () => {
-                            window.scrollTo(
-                              0,
-                              document.getElementById(`article_${item['@id']}`)
-                                .offsetTop,
-                            );
-                          });
-                        } else {
-                          this.setState({ expendedItemIndex: index }, () => {
-                            window.scrollTo(
-                              0,
-                              document.getElementById(`article_${item['@id']}`)
-                                .offsetTop,
-                            );
-                          });
-                        }
-                      }}
-                    >
-                      {this.state.expendedItemIndex === index
-                        ? 'Collapse'
-                        : 'Read more'}
-                    </button>
+                    {item.summary.fullSummary.length ? (
+                      <button
+                        className="outline dark-blue expendButton"
+                        onClick={() => {
+                          if (this.state.expendedItemIndex === index) {
+                            this.setState({ expendedItemIndex: -1 }, () => {
+                              window.scrollTo(
+                                0,
+                                document.getElementById(
+                                  `article_${item['@id']}`,
+                                ).offsetTop,
+                              );
+                            });
+                          } else {
+                            this.setState({ expendedItemIndex: index }, () => {
+                              window.scrollTo(
+                                0,
+                                document.getElementById(
+                                  `article_${item['@id']}`,
+                                ).offsetTop,
+                              );
+                            });
+                          }
+                        }}
+                      >
+                        {this.state.expendedItemIndex === index
+                          ? 'Collapse'
+                          : 'Read more'}
+                      </button>
+                    ) : (
+                      ''
+                    )}
                   </div>
                   <div className="visualClear" />
                 </article>
               ))}
 
               <div className="discodata-list mb-3">
-                <h2 style={{ margin: '5px' }}>Pollutants</h2>
+                <h3 style={{ margin: '5px' }}>Pollutants</h3>
                 {pollutants
                   .filter(
                     (pollutant) =>
