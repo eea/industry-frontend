@@ -41,13 +41,20 @@ const View = ({ content, ...props }) => {
     description = '',
     descriptionClassName = '',
     width = '100%',
-    height = 'auto',
+    desktopHeight = '',
+    tabletHeight = '',
+    mobileHeight = '',
   } = data;
   const { hideToolbar = false, overflow = false, preset = null } = data;
   const url = {
     desktop: desktopUrl,
     tablet: tabletUrl || desktopUrl,
     mobile: mobileUrl || tabletUrl || desktopUrl,
+  };
+  const height = {
+    desktop: desktopHeight || data.height,
+    tablet: tabletHeight || desktopHeight || data.height,
+    mobile: mobileHeight || tabletHeight || desktopHeight || data.height,
   };
 
   useEffect(() => {
@@ -137,6 +144,16 @@ const View = ({ content, ...props }) => {
     ];
   };
 
+  const getHeightByWidth = () => {
+    return height[
+      Object.keys(breakPoints).filter(
+        (breakPoint) =>
+          breakPoints[breakPoint][0] >= windowWidth &&
+          breakPoints[breakPoint][1] <= windowWidth,
+      )[0]
+    ];
+  };
+
   const applyQueryParameters = (url, query) => {
     try {
       new URL(url);
@@ -192,7 +209,7 @@ const View = ({ content, ...props }) => {
               ...getPresetQueries(),
             })}
             width={width}
-            height={height}
+            height={getHeightByWidth()}
             className="embeded-iframe"
             display="initial"
             position="relative"

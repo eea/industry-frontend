@@ -45,8 +45,16 @@ const getSchema = (props) => {
       title: 'Width',
       type: 'text',
     },
-    height: {
-      title: 'Height',
+    desktopHeight: {
+      title: 'Desktop height',
+      type: 'text',
+    },
+    tabletHeight: {
+      title: 'Tablet height',
+      type: 'text',
+    },
+    mobileHeight: {
+      title: 'Mobile height',
       type: 'text',
     },
     hideToolbar: {

@@ -1275,28 +1275,32 @@ const OpenlayersMapView = (props) => {
       <Dimmer id="map-loader" active={loader}>
         <Loader />
       </Dimmer>
-      <Portal node={document.getElementById('map-view-your-area-button')}>
-        <div id="view-your-area" className="ol-unselectable ol-control">
-          <button
-            className="toggle-button"
-            onClick={() => {
-              if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                  (position) => {
-                    return centerPosition(state.map.element, position, 12);
-                  },
-                  (error) => {
-                    console.log(error);
-                  },
-                  { timeout: 10000 },
-                );
-              }
-            }}
-          >
-            <VoltoIcon name={navigationSVG} size="1em" fill="white" />
-          </button>
-        </div>
-      </Portal>
+      {document.getElementById('map-view-your-area-button') ? (
+        <Portal node={document.getElementById('map-view-your-area-button')}>
+          <div id="view-your-area" className="ol-unselectable ol-control">
+            <button
+              className="toggle-button"
+              onClick={() => {
+                if (navigator.geolocation) {
+                  navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                      return centerPosition(state.map.element, position, 12);
+                    },
+                    (error) => {
+                      console.log(error);
+                    },
+                    { timeout: 10000 },
+                  );
+                }
+              }}
+            >
+              <VoltoIcon name={navigationSVG} size="1em" fill="white" />
+            </button>
+          </div>
+        </Portal>
+      ) : (
+        ''
+      )}
     </div>
   );
 };

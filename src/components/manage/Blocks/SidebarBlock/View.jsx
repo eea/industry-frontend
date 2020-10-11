@@ -114,18 +114,21 @@ const makeNewNavigation = (
               ...[
                 {
                   title: 'Pollutant Releases',
-                  url: `${item.items[0]?.url}#pollutant_releases_tableau`,
+                  url: item.items[0]?.url,
                   flag: 'has_release_data',
+                  id: 'pollutant_releases_tableau',
                 },
                 {
                   title: 'Pollutant Transfers',
-                  url: `${item.items[0]?.url}#pollutant_transfers_tableau`,
+                  url: item.items[0]?.url,
                   flag: 'has_transfer_data',
+                  id: 'pollutant_transfers_tableau',
                 },
                 {
                   title: 'Waste Transfers',
-                  url: `${item.items[0]?.url}#pollutant_waste_tableau`,
+                  url: item.items[0]?.url,
                   flag: 'has_waste_data',
+                  id: 'pollutant_waste_tableau',
                 },
               ]
                 .filter(
@@ -150,7 +153,7 @@ const makeNewNavigation = (
                     //   pathname.includes(child.url)
                     // );
                   },
-                  onClick: (pathname) => {
+                  onClick: (pathname, location) => {
                     if (
                       facility.facilityInspireId !== search.facilityInspireId
                     ) {
@@ -162,9 +165,13 @@ const makeNewNavigation = (
                         }),
                       );
                     }
-
                     if (pathname !== child.url) {
-                      history.push(child.url);
+                      history.push(`${child.url}#${child.id}`);
+                    } else {
+                      const hashElement = document.getElementById(child.id);
+                      if (hashElement) {
+                        hashElement.scrollIntoView();
+                      }
                     }
                   },
                 })),

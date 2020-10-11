@@ -3,7 +3,7 @@
  * @module components/theme/View/DefaultView
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl } from 'react-intl';
 
@@ -36,6 +36,17 @@ const DefaultView = ({ content, intl, location }) => {
   const blocksFieldname = getBlocksFieldname(content);
   const blocksLayoutFieldname = getBlocksLayoutFieldname(content);
   const contentTypeBlocks = content['@components']?.layout?.[blocksFieldname];
+
+  useEffect(() => {
+    if (content['@type' === 'site_template']) {
+      const hashElement = document.getElementById(
+        location.hash.replace('#', ''),
+      );
+      if (hashElement) {
+        hashElement.scrollIntoView();
+      }
+    }
+  }, [location.hash]);
 
   return hasBlocksData(content) ? (
     <div id="page-document" className="ui container">
