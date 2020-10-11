@@ -392,16 +392,18 @@ class Search extends Component {
                   .filter(
                     (pollutant) =>
                       pollutant.pollutantId &&
-                      pollutant.name.includes(this.props.searchableText),
+                      pollutant.name
+                        .toLowerCase()
+                        .includes(this.props.searchableText.toLowerCase()),
                   )
                   .map((pollutant) => (
                     <Link
                       key={`item-${pollutant.pollutantId}`}
                       className="outline dark-blue"
                       as="a"
-                      to="/glossary/pollutants/pollutant-index"
+                      to="/test"
                       onClick={() => {
-                        setQueryParam({
+                        this.props.setQueryParam({
                           queryParam: {
                             index_pollutant_group_id: parseInt(
                               pollutant.parentId,

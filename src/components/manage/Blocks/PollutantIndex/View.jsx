@@ -636,7 +636,7 @@ const View = (props) => {
         },
       });
     }
-  }, [indexPollutantId]);
+  }, [indexPollutantId, JSON.stringify(indexPollutants)]);
 
   useEffect(() => {
     const newPollutantGroup = indexPollutantGroups.filter(
@@ -648,32 +648,32 @@ const View = (props) => {
         ? newPollutantGroup
         : undefined,
     );
-  }, [indexPollutantGroupId]);
+  }, [indexPollutantGroupId, JSON.stringify(indexPollutantGroups)]);
 
-  useEffect(() => {
-    if (
-      mounted.current &&
-      !initialized &&
-      !indexPollutantGroupId &&
-      indexPollutantGroups.length > 0 &&
-      indexPollutants.length > 0
-    ) {
-      props.setQueryParam({
-        queryParam: {
-          index_pollutant_group_id: parseInt(indexPollutants[0].parentId),
-          index_pollutant_id: parseInt(indexPollutants[0].pollutantId),
-        },
-      });
-      setCurrentPollutantGroup(
-        indexPollutantGroups.filter(
-          (group) =>
-            parseInt(group.pollutantId) ===
-            parseInt(indexPollutants[0].parentId),
-        )[0],
-      );
-      setInitialized(true);
-    }
-  }, [indexPollutantGroups?.length, indexPollutants?.length]);
+  // useEffect(() => {
+  //   if (
+  //     mounted.current &&
+  //     !initialized &&
+  //     !indexPollutantGroupId &&
+  //     indexPollutantGroups.length > 0 &&
+  //     indexPollutants.length > 0
+  //   ) {
+  //     props.setQueryParam({
+  //       queryParam: {
+  //         index_pollutant_group_id: parseInt(indexPollutants[0].parentId),
+  //         index_pollutant_id: parseInt(indexPollutants[0].pollutantId),
+  //       },
+  //     });
+  //     setCurrentPollutantGroup(
+  //       indexPollutantGroups.filter(
+  //         (group) =>
+  //           parseInt(group.pollutantId) ===
+  //           parseInt(indexPollutants[0].parentId),
+  //       )[0],
+  //     );
+  //     setInitialized(true);
+  //   }
+  // }, [indexPollutantGroups?.length, indexPollutants?.length]);
 
   useEffect(() => {
     mounted.current = true;

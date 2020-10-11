@@ -68,8 +68,8 @@ const renderComponents = {
   },
   header: (props) => {
     let value = props.item?.[props.component?.value];
-    if (value && !isNaN(Date.parse(value)) && value.length >= 10) {
-      value = moment(props.item[value]).format('DD MMM YYYY');
+    if (value && value && moment(value, 'DD-MM-YYYY', true).isValid()) {
+      value = moment(value).format('DD MMM YYYY');
     }
     const text = props.component?.static
       ? props.component?.staticValue

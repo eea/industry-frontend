@@ -46,6 +46,17 @@ const DefaultView = ({ content, intl, location }) => {
         hashElement.scrollIntoView();
       }
     }
+  }, []);
+
+  useEffect(() => {
+    if (content['@type' === 'site_template']) {
+      const hashElement = document.getElementById(
+        location.hash.replace('#', ''),
+      );
+      if (hashElement) {
+        hashElement.scrollIntoView();
+      }
+    }
   }, [location.hash]);
 
   return hasBlocksData(content) ? (
