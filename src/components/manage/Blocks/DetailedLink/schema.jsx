@@ -6,7 +6,7 @@ export const getSchema = (props) => {
       {
         id: 'default',
         title: 'Default',
-        fields: ['page'],
+        fields: ['outsideLink', 'page'],
       },
       {
         id: 'properties',
@@ -45,9 +45,13 @@ export const getSchema = (props) => {
         title: 'Hide description',
         type: 'boolean',
       },
+      outsideLink: {
+        title: 'Outside link',
+        type: 'boolean',
+      },
       page: {
         title: 'Page',
-        widget: 'object_by_path',
+        widget: props.data.outsideLink ? 'text' : 'object_by_path',
       },
       title: {
         title: 'Title',

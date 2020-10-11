@@ -64,7 +64,7 @@ const Edit = (props) => {
   return (
     <div>
       <RenderFields schema={state.schema} {...props} title="Navigation block" />
-      <View {...props} id={state.id} />
+      <View {...props} id={state.id} mode="edit" />
     </div>
   );
 };

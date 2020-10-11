@@ -17,21 +17,38 @@ const Edit = (props) => {
     schema: getSchema(props),
   });
   const pageLink = props.data.page;
+  const outsideLink = props.data.outsideLink;
 
   useEffect(() => {
-    if (props.pages && props.pages?.[pageLink]) {
+    if (props.pages && props.pages?.[pageLink] && !outsideLink) {
       handleChangeBlock('detailedLink', {
         ...props.data.detailedLink,
         title: props.pages[pageLink].title,
         description: props.pages[pageLink].description,
         path: pageLink,
       });
+    } else if (outsideLink) {
+      try {
+        new URL(pageLink);
+        handleChangeBlock('detailedLink', {
+          ...props.data.detailedLink,
+          title: '',
+          description: '',
+          path: pageLink,
+        });
+      } catch {
+        handleChangeBlock('detailedLink', null);
+      }
     }
     /* eslint-disable-next-line */
-  }, [props.pages])
+  }, [props.pages, pageLink, outsideLink])
 
   useEffect(() => {
-    if (pageLink) {
+    setState({ schema: getSchema(props) });
+  }, [outsideLink]);
+
+  useEffect(() => {
+    if (!outsideLink && pageLink) {
       props.dispatch(getPage(pageLink));
     }
     /* eslint-disable-next-line */

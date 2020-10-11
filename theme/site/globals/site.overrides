@@ -1343,6 +1343,7 @@ body.has-sidebar {
         margin-left: auto !important;
         margin-right: auto !important;
         font-size: 18px;
+        align-items: center;
         &:before {
           display: none;
         }
@@ -1358,8 +1359,10 @@ body.has-sidebar {
         }
         .item {
           width: fit-content !important;
-          margin-right: 1em !important;
-          margin-left: 1em !important;
+          margin-right: 1rem !important;
+          margin-left: 1rem !important;
+          padding-top: 0.5rem;
+          padding-bottom: 0.5rem;
         }
       }
       .active.item {

@@ -63,34 +63,49 @@ const View = (props) => {
             ''
           )}
           <div>
-            <Link
-              className={cx(
-                'detailed-link-button display-inline-block',
-                buttonClassname || '',
-              )}
-              onClick={(e) => {
-                if (
-                  props.discodata_query.search.facilityInspireId ||
-                  props.discodata_query.search.installationInspireId ||
-                  props.discodata_query.search.lcpInspireId
-                ) {
-                  props.deleteQueryParam({
-                    queryParam: [
-                      'facilityInspireId',
-                      'installationInspireId',
-                      'lcpInspireId',
-                    ],
-                  });
-                }
-                if (backButton) {
-                  history.goBack();
-                }
-                return e.preventDefault;
-              }}
-              to={!backButton && getPath(detailedLink?.path)}
-            >
-              <span>{buttonTitle || detailedLink?.title || 'Go'}</span>
-            </Link>
+            {!props.data.outsideLink ? (
+              <Link
+                className={cx(
+                  'detailed-link-button display-inline-block',
+                  buttonClassname || '',
+                )}
+                onClick={(e) => {
+                  if (
+                    props.discodata_query.search.facilityInspireId ||
+                    props.discodata_query.search.installationInspireId ||
+                    props.discodata_query.search.lcpInspireId
+                  ) {
+                    props.deleteQueryParam({
+                      queryParam: [
+                        'facilityInspireId',
+                        'installationInspireId',
+                        'lcpInspireId',
+                      ],
+                    });
+                  }
+                  if (backButton) {
+                    history.goBack();
+                  }
+                  return e.preventDefault;
+                }}
+                to={!backButton && getPath(detailedLink?.path)}
+              >
+                <span>{buttonTitle || detailedLink?.title || 'Go'}</span>
+              </Link>
+            ) : detailedLink?.path ? (
+              <a
+                target="_blank"
+                href={detailedLink.path}
+                className={cx(
+                  'detailed-link-button display-inline-block',
+                  buttonClassname || '',
+                )}
+              >
+                <span>{buttonTitle || detailedLink?.title || 'Go'}</span>
+              </a>
+            ) : (
+              ''
+            )}
           </div>
         </>
       )) || (
