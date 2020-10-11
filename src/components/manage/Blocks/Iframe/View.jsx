@@ -4,6 +4,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import Iframe from 'react-iframe';
 import qs from 'query-string';
+import cx from 'classnames';
 import './style.css';
 
 const useWindowSize = () => {
@@ -20,7 +21,6 @@ const useWindowSize = () => {
 };
 
 const View = ({ content, ...props }) => {
-  let showIframe = true;
   const [discodataQuery, setDiscodataQuery] = useState({});
   const [requiredQueries, setRequiredQueries] = useState([]);
   const [flags, setFlags] = useState({});
@@ -35,7 +35,11 @@ const View = ({ content, ...props }) => {
     desktopUrl = '',
     tabletUrl = '',
     mobileUrl = '',
+    iframeId = null,
     title = '',
+    titleClassName = '',
+    description = '',
+    descriptionClassName = '',
     width = '100%',
     height = 'auto',
   } = data;
@@ -174,20 +178,28 @@ const View = ({ content, ...props }) => {
       {!flagsState &&
       requiredQueries.length ===
         requiredQueries.filter((query) => discodataQuery[query]).length ? (
-        <Iframe
-          title={title}
-          url={applyQueryParameters(getUrlByWidth(), {
-            ...discodataQuery,
-            ...getPresetQueries(),
-          })}
-          width={width}
-          height={height}
-          className="embeded-iframe"
-          display="initial"
-          position="relative"
-          overflow={overflow ? 'visible' : 'hidden'}
-          scrolling={false}
-        />
+        <div id={iframeId}>
+          {title ? <h2 className={cx(titleClassName)}>{title}</h2> : ''}
+          {description ? (
+            <p className={cx(descriptionClassName)}>{description}</p>
+          ) : (
+            ''
+          )}
+          <Iframe
+            title={title}
+            url={applyQueryParameters(getUrlByWidth(), {
+              ...discodataQuery,
+              ...getPresetQueries(),
+            })}
+            width={width}
+            height={height}
+            className="embeded-iframe"
+            display="initial"
+            position="relative"
+            overflow={overflow ? 'visible' : 'hidden'}
+            scrolling={false}
+          />
+        </div>
       ) : (
         ''
       )}

@@ -21,8 +21,24 @@ const getSchema = (props) => {
       title: 'Mobile url',
       type: 'text',
     },
+    iframeId: {
+      title: 'Id',
+      type: 'text',
+    },
     title: {
       title: 'Title',
+      type: 'text',
+    },
+    titleClassName: {
+      title: 'Title classname',
+      type: 'text',
+    },
+    description: {
+      title: 'Description',
+      widget: 'textarea',
+    },
+    descriptionClassName: {
+      title: 'Description classname',
       type: 'text',
     },
     width: {

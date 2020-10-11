@@ -1158,8 +1158,8 @@ a {
     z-index: 3;
     color: white;
     font-size: 14px;
-    background: #1172c4;
-    border-color: #1172c4;
+    background: #4296B2;
+    border-color: #4296B2;
     border-style: solid;
     border-width: 2px;
     border-radius: 22px;
@@ -1171,7 +1171,7 @@ a {
     &:hover {
       color: white;
       opacity: 0.9;
-      background: #1172c4;
+      background: #4296B2;
       border-color: white;
       transition: all 0.2s linear;
     }
@@ -1314,6 +1314,9 @@ body.has-sidebar {
       }
       &.grey-menu {
         background-color: #EDEDED !important;
+        // &.item {
+        //   align-items: stretch !important;
+        // }
         .item {
           color: #000 !important;
           &:before {
@@ -1343,7 +1346,7 @@ body.has-sidebar {
         margin-left: auto !important;
         margin-right: auto !important;
         font-size: 18px;
-        align-items: center;
+        align-items: flex-end;
         &:before {
           display: none;
         }
