@@ -1034,13 +1034,62 @@ const View = ({ content, ...props }) => {
         filtersCounter: props.discodata_query.search['filtersCounter']
           ? props.discodata_query.search['filtersCounter'] + 1
           : 1,
-        extent: nuts_latest.length
-          ? null
-          : props.discodata_query.search['extent'],
+        extent:
+          (nuts_latest.length ||
+            (searchTermType === 'siteTerm' && searchTerm.length)) &&
+          searchTermType !== 'locationTerm'
+            ? null
+            : props.discodata_query.search['extent'],
         advancedFiltering,
       },
     });
     setState({ ...state, open: false });
+  };
+
+  const getNewExtent = (searchTerm) => {
+    const searchTermType =
+      sitesResults.indexOf(searchTerm) > -1
+        ? 'siteTerm'
+        : locationResultsTexts.indexOf(searchTerm) > -1
+        ? 'locationTerm'
+        : sitesResults.length >= locationResults.length
+        ? 'siteTerm'
+        : 'locationTerm';
+    const locationTerm =
+      locationResults[locationResultsTexts.indexOf(searchTerm)];
+    if (
+      searchTermType === 'locationTerm' &&
+      locationTerm?.text &&
+      locationTerm?.magicKey
+    ) {
+      axios
+        .get(
+          encodeURI(
+            'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=' +
+              locationTerm.text +
+              '&f=json&outSR={"wkid":102100,"latestWkid":3857}&outFields=Match_addr,Addr_type,StAddr,City&magicKey=' +
+              locationTerm.magicKey +
+              '&maxLocations=6',
+          ),
+        )
+        .then((response) => {
+          const data = JSON.parse(response.request.response) || {};
+          if (data.error) {
+          } else if (data.candidates?.length > 0) {
+            props.setQueryParam({
+              queryParam: {
+                extent: [
+                  data.candidates[0].extent.xmin,
+                  data.candidates[0].extent.ymin,
+                  data.candidates[0].extent.xmax,
+                  data.candidates[0].extent.ymax,
+                ],
+              },
+            });
+          }
+        })
+        .catch((error) => {});
+    }
   };
 
   const searchView = (ref, modal = true) => (
@@ -1058,6 +1107,7 @@ const View = ({ content, ...props }) => {
             if (event.keyCode === keyCodes.ENTER) {
               setSearchResultsActive(false);
               setSearchTerm(searchResults[searchResultsIndex]);
+              getNewExtent(searchResults[searchResultsIndex]);
               setTriggerSearch(!modal);
             } else if (event.keyCode === keyCodes.ARROW_DOWN) {
               const index =
@@ -1066,6 +1116,7 @@ const View = ({ content, ...props }) => {
                   : 0;
               setSearchResultsIndex(index);
               setSearchTerm(searchResults[index]);
+              getNewExtent(searchResults[index]);
               setTriggerSearch(!modal);
             } else if (event.keyCode === keyCodes.ARROW_UP) {
               const index =
@@ -1074,6 +1125,7 @@ const View = ({ content, ...props }) => {
                   : searchResults.length - 1;
               setSearchResultsIndex(index);
               setSearchTerm(searchResults[index]);
+              getNewExtent(searchResults[index]);
               setTriggerSearch(!modal);
             } else {
               setSearchResultsActive(true);
@@ -1092,6 +1144,7 @@ const View = ({ content, ...props }) => {
                       setSearchResultsIndex(index);
                       setSearchResultsActive(false);
                       setSearchTerm(result);
+                      getNewExtent(result);
                       setTriggerSearch(!modal);
                     }}
                   >
