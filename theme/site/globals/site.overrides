@@ -1346,7 +1346,7 @@ body.has-sidebar {
         margin-left: auto !important;
         margin-right: auto !important;
         font-size: 18px;
-        align-items: flex-end;
+        align-items: stretch;
         &:before {
           display: none;
         }
