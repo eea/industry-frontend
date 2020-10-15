@@ -220,8 +220,8 @@ class View extends Component {
       const sql = `SELECT POL.name,
       POL_DET.pollutantId,
       POL.parentId
-      FROM [IED].[latest].[LOV_POLLUTANT] as POL
-      LEFT JOIN [IED].[latest].[pollutants_details_table] AS POL_DET
+      FROM [IED].[latest].[Glo_Pollutants] as POL
+      LEFT JOIN [IED].[latest].[Glo_PollutantsDetails] AS POL_DET
       ON POL.pollutantId = POL_DET.pollutantId
       WHERE name LIKE '%${name}%'
       ORDER BY name`;

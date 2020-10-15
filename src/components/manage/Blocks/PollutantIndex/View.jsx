@@ -460,7 +460,21 @@ const panes = [
   {
     menuItem: 'Hazards and other technical characteristics',
     render: (props) => {
-      const { pollutant = {} } = props.data;
+      const { pollutant = {}, phrases = [] } = props.data;
+      const phrasesTypes = {
+        clp_phrase: 'clp_phrase',
+        ghs_phrase: 'ghs_phrase',
+        r_phrase: 'r_s_phrase',
+        s_phrase: 'r_s_phrase',
+      };
+      const phrasesByType = {};
+      phrases.forEach((phrase) => {
+        if (!phrasesByType[phrasesTypes[phrase.phrase_type]]) {
+          phrasesByType[phrasesTypes[phrase.phrase_type]] = [phrase];
+        } else {
+          phrasesByType[phrasesTypes[phrase.phrase_type]].push(phrase);
+        }
+      });
 
       return (
         <Tab.Pane>
@@ -474,16 +488,12 @@ const panes = [
             celled={false}
             headless={true}
             headers={[
-              { key: 'label', value: 'Label' },
-              { key: 'value', value: 'Value' },
+              { key: 'phrase_id', value: 'Id' },
+              { key: 'phrase_text', value: 'Text' },
             ]}
-            rows={[
-              {
-                label: 'R23/25',
-                value: pollutant.pollutantId || '-',
-              },
-            ]}
+            rows={phrasesByType.r_s_phrase || [{ phrase_id: 'No data' }]}
           />
+
           <h3>Classification & Labelling</h3>
           <p>
             The Regulation (EC) No 1272/2008 establishes a standard
@@ -494,7 +504,27 @@ const panes = [
             Regulation (EC) No 1272/2008, OJ L 353
           </a>
           <h3>Hazard Class</h3>
+          <RenderTable
+            className="description-table"
+            celled={false}
+            headless={true}
+            headers={[
+              { key: 'phrase_id', value: 'Id' },
+              { key: 'phrase_text', value: 'Text' },
+            ]}
+            rows={phrasesByType.clp_phrase || [{ phrase_id: 'No data' }]}
+          />
           <h3>Hazard Statements</h3>
+          <RenderTable
+            className="description-table"
+            celled={false}
+            headless={true}
+            headers={[
+              { key: 'phrase_id', value: 'Id' },
+              { key: 'phrase_text', value: 'Text' },
+            ]}
+            rows={phrasesByType.ghs_phrase || [{ phrase_id: 'No data' }]}
+          />
           <h3>Physical Properties</h3>
           <RenderTable
             className="description-table"
@@ -507,25 +537,58 @@ const panes = [
             rows={[
               {
                 label: 'State @ 20 °C & 101.3kPA',
-                value: pollutant.state || '-',
+                value: pollutant.state,
               },
               {
                 label: 'Melting / freezing point °C',
-                value: pollutant.melt_freeze_point || '-',
+                value: pollutant.melt_freeze_point,
               },
               {
                 label: 'Boiling Point °C',
-                value: pollutant.boiling_point || '-',
+                value: pollutant.boiling_point,
+              },
+
+              {
+                label: 'Vapour pressure mm Hg @ 20/25 °C',
+                value: pollutant.vapour_pressure,
               },
               {
                 label: 'Water solubility, mg/l @ 25 °C',
-                value: pollutant.water_solubility || '-',
+                value: pollutant.water_solubility,
+              },
+              {
+                label: 'Partition coefficient: n-octanol / water (log value)',
+                value: pollutant.partition_coeff,
+              },
+              {
+                label: 'Dissociation constant',
+                value: pollutant.dissocation_const,
+              },
+              {
+                label: 'pH',
+                value: pollutant.ph,
+              },
+              {
+                label: 'Flammable limits',
+                value: pollutant.flammable_limits,
+              },
+              {
+                label: 'Flash point °C',
+                value: pollutant.flash_point,
+              },
+              {
+                label: 'Autoignition temperature °C',
+                value: pollutant.autoignition_temp,
               },
               {
                 label: 'Density g/cm³',
-                value: pollutant.density || '-',
+                value: pollutant.density,
               },
-            ]}
+              {
+                label: 'Vapour Density Air=1',
+                value: pollutant.vapour_density,
+              },
+            ].filter((row) => row.value)}
           />
           <h3>Human Health & Environmental Hazard Assessment</h3>
           <RenderTable
@@ -538,14 +601,51 @@ const panes = [
             ]}
             rows={[
               {
+                label: 'Aquatic Toxicity EC50',
+                value: pollutant.aquatic_tox_ec50,
+              },
+              {
                 label: 'Aquatic Toxicity LC50',
-                value: pollutant.aquatic_tox_lc50 || '-',
+                value: pollutant.aquatic_tox_lc50,
+              },
+              {
+                label: 'Aquatic Toxicity LCLOD',
+                value: pollutant.aquatic_tox_lclod,
+              },
+
+              {
+                label: 'Bioaccumulation log POW',
+                value: pollutant.bioaccumulation,
+              },
+              {
+                label: 'Biological ox demand',
+                value: pollutant.biological_ox_demand,
+              },
+              {
+                label: 'Carcinogenicity / IARC Group',
+                value: pollutant.carcinogenicity,
+              },
+              {
+                label: 'Marine Toxicity',
+                value: pollutant.marine_tox,
+              },
+              {
+                label: 'Mutagenicity',
+                value: pollutant.mutagenicity,
+              },
+              {
+                label: 'Persistence',
+                value: pollutant.persistence,
               },
               {
                 label: 'Toxicity LD50 / LC50 mg/kg, ppm (gases)',
-                value: pollutant.toxicity || '-',
+                value: pollutant.toxicity,
               },
-            ]}
+              {
+                label: 'WEL/OEL',
+                value: pollutant.WEL_OEL,
+              },
+            ].filter((row) => row.value)}
           />
         </Tab.Pane>
       );
@@ -614,6 +714,9 @@ const View = (props) => {
     props.discodata_resources.data.index_pollutant_other_provisions?.[
       indexPollutantId
     ]?.results || [];
+  const currentPhrases =
+    props.discodata_resources.data.index_pollutant_phrases?.[indexPollutantId]
+      ?.results || [];
   const currentPollutants = indexPollutants.filter(
     (pollutant) => parseInt(pollutant.parentId) === indexPollutantGroupId,
   );
@@ -622,17 +725,43 @@ const View = (props) => {
     const newPollutant = indexPollutants.filter(
       (pollutant) => pollutant.pollutantId === indexPollutantId,
     )?.[0];
+    const newQueries = {};
+    const phrasesKeys = newPollutant
+      ? ['clp_phrases', 'ghs_phrases', 'r_phrases', 's_phrases']
+      : [];
+    const phrases = newPollutant
+      ? phrasesKeys
+          .filter(
+            (phrase) =>
+              newPollutant[phrase] && newPollutant[phrase] !== 'NoData',
+          )
+          .map((phrase) =>
+            newPollutant[phrase]
+              .split('|')
+              .map((item) => item.replace(/['"]+/g, '')),
+          )
+      : [];
+
     setCurrentPollutant(
       indexPollutantId !== null && indexPollutantId !== undefined
         ? newPollutant
         : undefined,
     );
+
     if (newPollutant && newPollutant.other_provisions) {
+      newQueries.index_pollutant_other_provisions = newPollutant.other_provisions
+        .split('|')
+        .map((item) => item.replace(/['"]+/g, ''));
+    }
+
+    if (newPollutant && phrases.length > 0) {
+      newQueries.index_pollutant_phrases = phrases.join().split(',');
+    }
+
+    if (Object.keys(newQueries).length) {
       props.setQueryParam({
         queryParam: {
-          index_pollutant_other_provisions: newPollutant.other_provisions
-            .split('|')
-            .map((item) => item.replace(/['"]+/g, '')),
+          ...newQueries,
         },
       });
     }
@@ -650,31 +779,6 @@ const View = (props) => {
     );
   }, [indexPollutantGroupId, JSON.stringify(indexPollutantGroups)]);
 
-  // useEffect(() => {
-  //   if (
-  //     mounted.current &&
-  //     !initialized &&
-  //     !indexPollutantGroupId &&
-  //     indexPollutantGroups.length > 0 &&
-  //     indexPollutants.length > 0
-  //   ) {
-  //     props.setQueryParam({
-  //       queryParam: {
-  //         index_pollutant_group_id: parseInt(indexPollutants[0].parentId),
-  //         index_pollutant_id: parseInt(indexPollutants[0].pollutantId),
-  //       },
-  //     });
-  //     setCurrentPollutantGroup(
-  //       indexPollutantGroups.filter(
-  //         (group) =>
-  //           parseInt(group.pollutantId) ===
-  //           parseInt(indexPollutants[0].parentId),
-  //       )[0],
-  //     );
-  //     setInitialized(true);
-  //   }
-  // }, [indexPollutantGroups?.length, indexPollutants?.length]);
-
   useEffect(() => {
     mounted.current = true;
     return () => {
@@ -689,11 +793,11 @@ const View = (props) => {
           '@type': 'discodata_sql_builder',
           sql: {
             value:
-              '{"fieldsets":[{"id":"sql_metadata","title":"SQL","fields":["index_pollutant_groups","index_pollutants","index_pollutant_iso","index_pollutant_other_provisions"]}],"properties":{"index_pollutant_groups":{"title":"Index pollutant groups","isCollection":true,"hasPagination":false,"urlQuery":false,"sql":"SELECT POL.*, POL_GROUPS.sub, POL_GROUPS.description\\nFROM [IED].[latest].[LOV_POLLUTANT] as POL\\nLEFT JOIN [IED].[latest].[pollutants_groups_details_table]  as POL_GROUPS\\nON POL.pollutantId = POL_GROUPS.pollutant_group_id \\nWHERE [parentId] = \'NULL\'\\nORDER BY name"},"index_pollutant_iso":{"title":"Index pollutants iso","hasPagination":true,"urlQuery":false,"sql":"SELECT *\\nFROM [IED].[latest].[pollutants_iso_provisions_table]","packageName":"index_pollutant_id"},"index_pollutant_other_provisions":{"title":"index_pollutant_other_provisions","hasPagination":true,"urlQuery":false,"sql":"SELECT *\\nFROM [IED].[latest].[pollutants_other_provisions_table]","packageName":"index_pollutant_id"},"index_pollutants":{"title":"Index pollutants","isCollection":true,"hasPagination":false,"urlQuery":false,"sql":"SELECT POL.code,\\nPOL.name,\\nPOL.startYear,\\nPOL.endYear,\\nPOL.parentId,\\nPOL.cas,\\nPOL.eperPollutantId,\\nPOL.codeEPER,\\nPOL_DET.*\\nFROM [IED].[latest].[LOV_POLLUTANT] as POL\\nLEFT JOIN [IED].[latest].[pollutants_details_table] AS POL_DET\\nON POL.pollutantId = POL_DET.pollutantId\\nORDER BY name","packageName":"index_pollutant_group_id"}},"required":[]}',
+              '{"fieldsets":[{"id":"sql_metadata","title":"SQL","fields":["index_pollutant_groups","index_pollutants","index_pollutant_iso","index_pollutant_other_provisions","index_pollutant_phrases"]}],"properties":{"index_pollutant_groups":{"title":"Index pollutant groups","isCollection":true,"hasPagination":false,"urlQuery":false,"sql":"SELECT POL.*, POL_GROUPS.sub, POL_GROUPS.description\\nFROM [IED].[latest].[Glo_Pollutants] as POL\\nLEFT JOIN [IED].[latest].[Glo_PollutantsGroupsDetails]  as POL_GROUPS\\nON POL.pollutantId = POL_GROUPS.pollutant_group_id \\nWHERE [parentId] = \'NULL\'\\nORDER BY name"},"index_pollutants":{"title":"Index pollutants","isCollection":true,"hasPagination":false,"urlQuery":false,"sql":"SELECT POL.code,\\nPOL.name,\\nPOL.startYear,\\nPOL.endYear,\\nPOL.parentId,\\nPOL.cas,\\nPOL.eperPollutantId,\\nPOL.codeEPER,\\nPOL_DET.*\\nFROM [IED].[latest].[Glo_Pollutants] as POL\\nLEFT JOIN [IED].[latest].[Glo_PollutantsDetails] AS POL_DET\\nON POL.pollutantId = POL_DET.pollutantId\\nORDER BY name","packageName":"index_pollutant_group_id"},"index_pollutant_iso":{"title":"Index pollutants iso","hasPagination":true,"urlQuery":false,"sql":"SELECT *\\nFROM [IED].[latest].[Glo_PollutantsIsoProvision]","packageName":"index_pollutant_id"},"index_pollutant_other_provisions":{"title":"index_pollutant_other_provisions","hasPagination":true,"urlQuery":false,"sql":"SELECT *\\nFROM [IED].[latest].[Glo_PollutantsOtherProvisions]","packageName":"index_pollutant_id"},"index_pollutant_phrases":{"title":"index_pollutant_phrases","hasPagination":true,"urlQuery":false,"sql":"SELECT *\\nFROM [IED].[latest].[Glo_PollutantsPrase]","packageName":"index_pollutant_id"}},"required":[]}',
           },
           where: {
             value:
-              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1","w2"]}],"properties":{"w1":{"title":"W1","sqlId":"index_pollutant_iso","urlQuery":false,"key":"pollutantId","queryParam":"index_pollutant_id"},"w2":{"title":"W2","sqlId":"index_pollutant_other_provisions","urlQuery":false,"key":"other_provision_id","queryParam":"index_pollutant_other_provisions","isExact":true}},"required":[]}',
+              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1","w2","w3"]}],"properties":{"w1":{"title":"W1","sqlId":"index_pollutant_iso","urlQuery":false,"key":"pollutantId","queryParam":"index_pollutant_id"},"w2":{"title":"W2","sqlId":"index_pollutant_other_provisions","urlQuery":false,"key":"other_provision_id","queryParam":"index_pollutant_other_provisions","isExact":true},"w3":{"title":"W3","sqlId":"index_pollutant_phrases","urlQuery":false,"key":"phrase_id","queryParam":"index_pollutant_phrases"}},"required":[]}',
           },
         }}
       />
@@ -738,6 +842,7 @@ const View = (props) => {
           pollutant_iso: indexPollutantIso,
           pollutant_group: currentPollutantGroup,
           other_provisions: currentOtherProvisions,
+          phrases: currentPhrases,
         }}
       />
     </div>
