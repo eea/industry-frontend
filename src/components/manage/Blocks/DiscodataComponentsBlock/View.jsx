@@ -542,7 +542,7 @@ const renderComponents = {
         </div>
         <div className="eprtrBatConclusions bat-container">
           {Object.entries(batConclusions)
-            .filter((key) => key)
+            .filter((key) => key && key !== 'null' && key !== 'NULL')
             .map(([key, conclusion]) => (
               <div key={key} className="bat-conclusion">
                 <div className="bat-title mb-2">

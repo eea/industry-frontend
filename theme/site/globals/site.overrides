@@ -1607,7 +1607,7 @@ b {
   background-color: #4296B3;
   border-radius: 10px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   grid-gap: 10px;
   > div {
     position: relative;
@@ -1648,4 +1648,19 @@ b {
 
 .mdc-linear-progress__bar-inner {
   background-color: #4296B2 !important;
+}
+
+@media only screen and (max-width: 982px) {
+  body.has-toolbar:not(.has-sidebar):not(.has-sidebar-collapsed) .ui.container.grid-layout {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .ui.container.grid-layout {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 }

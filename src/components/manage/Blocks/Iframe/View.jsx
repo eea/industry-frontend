@@ -26,8 +26,8 @@ const View = ({ content, ...props }) => {
   const [flags, setFlags] = useState({});
   const [windowWidth, windowHeight] = useWindowSize();
   const breakPoints = {
-    desktop: [Infinity, 992],
-    tablet: [991, 768],
+    desktop: [Infinity, 982],
+    tablet: [981, 768],
     mobile: [767, 0],
   };
   const { data } = props;
