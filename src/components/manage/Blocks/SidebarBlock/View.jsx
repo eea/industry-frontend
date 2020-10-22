@@ -252,152 +252,167 @@ const makeNewNavigation = (
         : [],
     }));
   } else if (preset === 'lcps') {
-    return collection.length
-      ? collection?.map((facility) => ({
-          title: facility.facilityInspireId,
-          url: facility.facilityInspireId,
-          presetItem: true,
-          onClick: (pathname) => {
-            if (facility.facilityInspireId !== search.facilityInspireId) {
-              dispatch(
-                setQueryParam({
-                  queryParam: {
-                    facilityInspireId: facility.facilityInspireId,
-                    installationInspireId:
-                      facility.installations[0].installationInspireId,
-                    lcpInspireId: facility.installations[0].lcps[0],
-                  },
-                }),
-              );
-            }
-            if (pathname !== items[0].url) {
-              history.push(items[0].url);
-            }
-          },
-          active: (pathname) => {
-            return (
-              search.facilityInspireId === facility.facilityInspireId
-              // && pathname.includes(item.url)
-            );
-          },
-          items: [
-            ...(facility.installations?.map((installation) => ({
-              title: installation.installationInspireId,
-              url: installation.installationInspireId,
-              presetItem: true,
-              onClick: (pathname) => {
-                if (
-                  installation.installationInspireId !==
-                    search.installationInspireId ||
-                  facility.facilityInspireId !== search.facilityInspireId
-                ) {
-                  dispatch(
-                    setQueryParam({
-                      queryParam: {
-                        facilityInspireId: facility.facilityInspireId,
-                        installationInspireId:
-                          installation.installationInspireId,
-                        lcpInspireId: installation.lcps[0],
-                      },
-                    }),
-                  );
-                }
-                if (pathname !== items[0].url) {
-                  history.push(items[0].url);
-                }
-              },
-              active: (pathname) => {
-                return (
-                  search.installationInspireId ===
-                  installation.installationInspireId
-                  // && pathname.includes(item.url)
+    return items?.map((item) => ({
+      ...item,
+      onClick: () => {
+        dispatch(
+          deleteQueryParam({
+            queryParam: [
+              'facilityInspireId',
+              'installationInspireId',
+              'lcpInspireId',
+            ],
+          }),
+        );
+        history.push(item.url);
+      },
+      items: collection.length
+        ? collection?.map((facility) => ({
+            title: facility.facilityInspireId,
+            url: facility.facilityInspireId,
+            presetItem: true,
+            onClick: (pathname) => {
+              if (facility.facilityInspireId !== search.facilityInspireId) {
+                dispatch(
+                  setQueryParam({
+                    queryParam: {
+                      facilityInspireId: facility.facilityInspireId,
+                      installationInspireId:
+                        facility.installations[0].installationInspireId,
+                      lcpInspireId: facility.installations[0].lcps[0],
+                    },
+                  }),
                 );
-              },
-              items: [
-                ...(installation.lcps?.map((lcp) => ({
-                  title: lcp,
-                  url: lcp,
-                  presetItem: true,
-                  onClick: (pathname) => {
-                    if (
-                      lcp !== search.lcpInspireId ||
-                      installation.installationInspireId !==
-                        search.installationInspireId ||
-                      facility.facilityInspireId !== search.facilityInspireId
-                    ) {
-                      dispatch(
-                        setQueryParam({
-                          queryParam: {
-                            facilityInspireId: facility.facilityInspireId,
-                            installationInspireId:
-                              installation.installationInspireId,
-                            lcpInspireId: lcp,
-                          },
-                        }),
-                      );
-                    }
-                    if (pathname !== items[0].url) {
-                      history.push(items[0].url);
-                    }
-                  },
-                  active: (pathname) => {
-                    return (
-                      search.lcpInspireId === lcp
-                      // && pathname.includes(item.url)
+              }
+              if (pathname !== item.items[0].url) {
+                history.push(item.items[0].url);
+              }
+            },
+            active: (pathname) => {
+              return (
+                search.facilityInspireId === facility.facilityInspireId &&
+                pathname === item.items?.[0]?.url
+              );
+            },
+            items: [
+              ...(facility.installations?.map((installation) => ({
+                title: installation.installationInspireId,
+                url: installation.installationInspireId,
+                presetItem: true,
+                onClick: (pathname) => {
+                  if (
+                    installation.installationInspireId !==
+                      search.installationInspireId ||
+                    facility.facilityInspireId !== search.facilityInspireId
+                  ) {
+                    dispatch(
+                      setQueryParam({
+                        queryParam: {
+                          facilityInspireId: facility.facilityInspireId,
+                          installationInspireId:
+                            installation.installationInspireId,
+                          lcpInspireId: installation.lcps[0],
+                        },
+                      }),
                     );
-                  },
-                  items: [
-                    ...items.map((child) => ({
-                      ...child,
-                      redirect: (pathname) => {
-                        // if (
-                        //   search.facilityInspireId !== facility.facilityInspireId &&
-                        //   pathname === child.url
-                        // ) {
-                        //   history.push(item.url);
-                        // }
-                      },
-                      active: (pathname) => {
-                        return (
-                          search.facilityInspireId ===
-                            facility.facilityInspireId &&
-                          search.installationInspireId ===
-                            installation.installationInspireId &&
-                          search.lcpInspireId === lcp &&
-                          pathname.includes(child.url)
+                  }
+                  if (pathname !== item.items?.[0]?.url) {
+                    history.push(item.items[0].url);
+                  }
+                },
+                active: (pathname) => {
+                  return (
+                    search.installationInspireId ===
+                      installation.installationInspireId &&
+                    pathname === item.items?.[0]?.url
+                  );
+                },
+                items: [
+                  ...(installation.lcps?.map((lcp) => ({
+                    title: lcp,
+                    url: lcp,
+                    presetItem: true,
+                    onClick: (pathname) => {
+                      if (
+                        lcp !== search.lcpInspireId ||
+                        installation.installationInspireId !==
+                          search.installationInspireId ||
+                        facility.facilityInspireId !== search.facilityInspireId
+                      ) {
+                        dispatch(
+                          setQueryParam({
+                            queryParam: {
+                              facilityInspireId: facility.facilityInspireId,
+                              installationInspireId:
+                                installation.installationInspireId,
+                              lcpInspireId: lcp,
+                            },
+                          }),
                         );
-                      },
-                      onClick: (pathname) => {
-                        if (
-                          lcp !== search.lcpInspireId ||
-                          installation.installationInspireId !==
-                            search.installationInspireId ||
-                          facility.facilityInspireId !==
-                            search.facilityInspireId
-                        ) {
-                          dispatch(
-                            setQueryParam({
-                              queryParam: {
-                                facilityInspireId: facility.facilityInspireId,
-                                installationInspireId:
-                                  installation.installationInspireId,
-                                lcpInspireId: lcp,
-                              },
-                            }),
-                          );
-                        }
-                        if (pathname !== child.url) {
-                          history.push(child.url);
-                        }
-                      },
-                    })),
-                  ],
-                })) || []),
-              ],
-            })) || []),
-          ],
-        }))
-      : [];
+                      }
+                      if (pathname !== item.items?.[0]?.url) {
+                        history.push(item.items[0].url);
+                      }
+                    },
+                    active: (pathname) => {
+                      return (
+                        search.lcpInspireId === lcp &&
+                        pathname === item.items?.[0]?.url
+                      );
+                    },
+                    items: [
+                      // ...(item.items || []).map((child) => ({
+                      //   ...child,
+                      //   redirect: (pathname) => {
+                      //     // if (
+                      //     //   search.facilityInspireId !== facility.facilityInspireId &&
+                      //     //   pathname === child.url
+                      //     // ) {
+                      //     //   history.push(item.url);
+                      //     // }
+                      //   },
+                      //   active: (pathname) => {
+                      //     return (
+                      //       search.facilityInspireId ===
+                      //         facility.facilityInspireId &&
+                      //       search.installationInspireId ===
+                      //         installation.installationInspireId &&
+                      //       search.lcpInspireId === lcp &&
+                      //       pathname.includes(child.url)
+                      //     );
+                      //   },
+                      //   onClick: (pathname) => {
+                      //     if (
+                      //       lcp !== search.lcpInspireId ||
+                      //       installation.installationInspireId !==
+                      //         search.installationInspireId ||
+                      //       facility.facilityInspireId !==
+                      //         search.facilityInspireId
+                      //     ) {
+                      //       dispatch(
+                      //         setQueryParam({
+                      //           queryParam: {
+                      //             facilityInspireId: facility.facilityInspireId,
+                      //             installationInspireId:
+                      //               installation.installationInspireId,
+                      //             lcpInspireId: lcp,
+                      //           },
+                      //         }),
+                      //       );
+                      //     }
+                      //     if (pathname !== child.url) {
+                      //       history.push(child.url);
+                      //     }
+                      //   },
+                      // })),
+                    ],
+                  })) || []),
+                ],
+              })) || []),
+            ],
+          }))
+        : [],
+    }));
   }
 };
 
