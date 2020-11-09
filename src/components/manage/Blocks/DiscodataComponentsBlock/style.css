@@ -61,7 +61,6 @@ div.space-between {
 div.banner {
   background: #989898;
   color: #000;
-  padding: 0 1rem;
   border-radius: 10px;
 }
 
@@ -465,6 +464,10 @@ a.small h1 {
   font-size: 1.7em!important;
 }
 
+.custom-selector .ui.active.selection.dropdown {
+  border-bottom: 0;
+}
+
 .custom-selector.big h1.ui.header {
   font-weight: bold;
   font-size: 36px;
@@ -492,6 +495,35 @@ a.small h1 {
 .custom-selector.red .ui.selection.visible.dropdown > .text:not(.default) {
   color: #EC776A;
   background-color: transparent;
+}
+
+.custom-selector.grey h1.ui.header,
+.custom-selector.grey .ui.selection.dropdown,
+.custom-selector.grey .ui.selection.dropdown > .default.text,
+.custom-selector.grey .ui.selection.dropdown > .text,
+.custom-selector.grey .ui.selection.visible.dropdown > .text:not(.default) {
+  color: #989898;
+  background-color: transparent;
+  border-bottom: none;
+}
+
+.custom-selector.grey .ui.selection.dropdown .menu {
+  min-width: 100% !important;
+  width: 100% !important;
+}
+
+.custom-selector.grey .ui.selection.dropdown {
+  padding: 0 1rem;
+  margin-left: -1rem;
+}
+
+.custom-selector.grey .ui.selection.dropdown .menu > .item {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+.custom-selector.grey .ui.selection.dropdown > .dropdown.icon {
+  font-size: 1.3em!important;
 }
 
 .custom-selector.blue h1.ui.header,

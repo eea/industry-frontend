@@ -1,0 +1,38 @@
+.lcp-details h3.blue {
+  color: #4296B2;
+}
+
+.lcp-details .header-tooltip {
+  display: flex;
+  align-items: center;
+}
+
+.lcp-details .floating-icon {
+  display: flex;
+}
+
+.lcp-details .header-tooltip h3 {
+  margin-bottom: 0;
+  margin-right: 0.3rem;
+}
+
+.lcp-details .list {
+  color: #EC776A;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  grid-gap: 20px;
+}
+
+.lcp-details .list li button {
+  background: transparent;
+  border: none;
+  color: #EC776A;
+  padding: 0;
+}
+
+.lcp-details .list li button:focus {
+  outline: none;
+}

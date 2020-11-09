@@ -1,0 +1,19 @@
+.site-header h3.title {
+  color: #4296B2;
+  margin-bottom: 1rem !important;
+}
+
+.site-header .row {
+  justify-content: space-between;
+  margin-left: -0.5rem;
+}
+
+.site-header .row .detail {
+  margin-bottom: 1rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.site-header .info {
+  word-break: break-all;
+}

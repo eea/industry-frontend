@@ -403,7 +403,8 @@ export const makeCustomSchema = (props) => {
       type: 'array',
       choices: [
         ['eprtrReportingYears', 'EPRTR reporting years'],
-        ['eprtrBatConclusions', 'EPRTR bat conclusions'],
+        ['eprtrCountryGroupSelector', 'EPRTR country group selector'],
+        ['eprtrCountrySelector', 'EPRTR country selector'],
       ],
     },
   };

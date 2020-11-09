@@ -43,14 +43,14 @@ const DefaultView = ({ content, intl, location, discodata_query }) => {
   const timer = useRef(null);
   const clock = useRef(0);
 
-  useEffect(() => {
-    if (
-      content['@type'] === 'site_template' &&
-      !discodata_query.search.siteInspireId
-    ) {
-      history.push('/browse/explore-data-map/map');
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (
+  //     content['@type'] === 'site_template' &&
+  //     !discodata_query.search.siteInspireId
+  //   ) {
+  //     history.push('/browse/explore-data-map/map');
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (

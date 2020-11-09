@@ -22,7 +22,7 @@
   },
   "volto-embed": {
     "url": "https://github.com/eea/volto-embed.git",
-    "branch": "master",
+    "branch": "generic_protection_wrapper",
     "path": "src"
   },
   "volto-tabs-block": {

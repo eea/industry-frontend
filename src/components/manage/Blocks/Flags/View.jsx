@@ -8,11 +8,13 @@ import './style.css';
 const View = (props) => {
   const flags = props.flags;
   const siteInspireId = props.discodata_query.search.siteInspireId;
-  const site = props.discodata_resources.data.sites_6?.[siteInspireId];
-  const facilities = site?.results;
+  const site = props.discodata_resources.data.site_header?.[siteInspireId];
+  const facilities =
+    props.discodata_resources.data.site_details_1?.[siteInspireId]
+      ?.facilities || {};
+
   useEffect(() => {
     if (site && siteInspireId && !flags.items.sites?.[siteInspireId]) {
-      const facilitiesFlags = {};
       props.setFlags('sites', siteInspireId, {
         has_facilities: site.has_facilities,
         has_fuel_data: site.has_fuel_data,
@@ -23,26 +25,37 @@ const View = (props) => {
         has_transfer_data: site.has_transfer_data,
         has_waste_data: site.has_waste_data,
       });
-      facilities.forEach((facility) => {
+    }
+
+    if (
+      Object.keys(facilities).length &&
+      (!flags.items.facilities ||
+        (flags.items.facilities &&
+          Object.keys(flags.items.facilities).filter((facility) =>
+            Object.keys(facilities).includes(facility),
+          ).length !== Object.keys(facilities).length))
+    ) {
+      const facilitiesFlags = {};
+      Object.entries(facilities).forEach(([id, facility]) => {
         if (
-          facility &&
-          !flags.items.facilities?.[facility.facilityInspireId] &&
-          !facilitiesFlags[facility.facilityInspireId]
+          facility[0] &&
+          !flags.items.facilities?.[facility[0].facilityInspireId] &&
+          !facilitiesFlags[facility[0].facilityInspireId]
         ) {
-          facilitiesFlags[facility.facilityInspireId] = {
-            has_fuel_data: facility.facility_has_fuel_data,
-            has_installations: facility.facility_has_installations,
-            has_lcps: facility.facility_has_lcps,
-            has_ophours_data: facility.facility_has_ophours_data,
-            has_release_data: facility.facility_has_release_data,
-            has_transfer_data: facility.facility_has_transfer_data,
-            has_waste_data: facility.facility_has_waste_data,
+          facilitiesFlags[facility[0].facilityInspireId] = {
+            has_fuel_data: facility[0].has_fuel_data,
+            has_installations: facility[0].has_installations,
+            has_lcps: facility[0].has_lcps,
+            has_ophours_data: facility[0].has_ophours_data,
+            has_release_data: facility[0].has_release_data,
+            has_transfer_data: facility[0].has_transfer_data,
+            has_waste_data: facility[0].has_waste_data,
           };
         }
       });
       props.setFlags('facilities', null, facilitiesFlags);
     }
-  }, [siteInspireId, JSON.stringify(site)]);
+  }, [siteInspireId, JSON.stringify(site), JSON.stringify(facilities)]);
 
   return <div>{props.mode === 'edit' ? <p>Flags</p> : ''}</div>;
 };

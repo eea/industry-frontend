@@ -33,6 +33,10 @@ const getSchema = (props) => {
       title: 'Title classname',
       type: 'text',
     },
+    titleTooltip: {
+      title: 'Title tooltip',
+      type: 'text',
+    },
     description: {
       title: 'Description',
       widget: 'textarea',

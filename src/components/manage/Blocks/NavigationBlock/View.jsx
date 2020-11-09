@@ -12,7 +12,7 @@ import {
   getNavigationByParent,
   getBasePath,
 } from 'volto-tabsview/helpers';
-import { deleteQueryParam } from 'volto-datablocks/actions';
+import { deleteQueryParam, setQueryParam } from 'volto-datablocks/actions';
 import { useEffect } from 'react';
 
 const View = ({ content, ...props }) => {
@@ -125,6 +125,24 @@ const View = ({ content, ...props }) => {
                     ],
                   });
                 }
+                if (item.title === 'Large-scale fuel combustion') {
+                  const lcp =
+                    props.discodata_resources.data.site_details_4?.[
+                      props.discodata_query.search.siteInspireId
+                    ] || {};
+                  if (Object.keys(lcp).length) {
+                    history.push(
+                      `/industrial-site/large-scale-fuel-combustion/site-overview/lcp-overview`,
+                    );
+                    props.setQueryParam({
+                      queryParam: {
+                        facilityInspireId: lcp.facilityInspireId,
+                        installationInspireId: lcp.installationInspireId,
+                        lcpInspireId: lcp.lcpInspireId,
+                      },
+                    });
+                  }
+                }
               }}
             />
           );
@@ -149,6 +167,7 @@ export default compose(
         state.prefetch?.[state.router.location.pathname] || state.content.data,
       pathname: state.router.location.pathname,
       discodata_query: state.discodata_query,
+      discodata_resources: state.discodata_resources,
       navItems: state.navigation.items,
       flags: state.flags,
       navigation: getNavigationByParent(
@@ -156,6 +175,6 @@ export default compose(
         props.data?.parent?.value,
       ),
     }),
-    { deleteQueryParam },
+    { deleteQueryParam, setQueryParam },
   ),
 )(View);

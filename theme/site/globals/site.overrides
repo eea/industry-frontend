@@ -1630,6 +1630,25 @@ b {
   }
 }
 
+.eprtrBanner.blue {
+  color: #fff;
+  background-color: #4296B3;
+  border-radius: 10px;
+  p {
+    color: #fff;
+    margin-bottom: 0.5em !important;
+  }
+  .floating-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: -26px
+  }
+  .ui.selection.dropdown {
+    margin-bottom: 0.5em !important;
+  }
+}
+
 .disabled-link {
   pointer-events: none;
   color: #333;

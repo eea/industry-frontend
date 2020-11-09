@@ -52,6 +52,24 @@ import GlossarySearchBlockView from '~/components/manage/Blocks/GlossarySearchBl
 import DummyBlockEdit from '~/components/manage/Blocks/DummyBlock/Edit';
 import DummyBlockView from '~/components/manage/Blocks/DummyBlock/View';
 
+import SiteHeaderEdit from '~/components/manage/Blocks/SiteBlocks/Header/Edit';
+import SiteHeaderView from '~/components/manage/Blocks/SiteBlocks/Header/View';
+
+import PollutantsSiteDetailsEdit from '~/components/manage/Blocks/SiteBlocks/PollutantsSiteDetails/Edit';
+import PollutantsSiteDetailsView from '~/components/manage/Blocks/SiteBlocks/PollutantsSiteDetails/View';
+
+import PollutantsFacilityDetailsEdit from '~/components/manage/Blocks/SiteBlocks/PollutantsFacilityDetails/Edit';
+import PollutantsFacilityDetailsView from '~/components/manage/Blocks/SiteBlocks/PollutantsFacilityDetails/View';
+
+import RegulatorySiteDetailsEdit from '~/components/manage/Blocks/SiteBlocks/RegulatorySiteDetails/Edit';
+import RegulatorySiteDetailsView from '~/components/manage/Blocks/SiteBlocks/RegulatorySiteDetails/View';
+
+import RegulatoryFacilityDetailsEdit from '~/components/manage/Blocks/SiteBlocks/RegulatoryFacilityDetails/Edit';
+import RegulatoryFacilityDetailsView from '~/components/manage/Blocks/SiteBlocks/RegulatoryFacilityDetails/View';
+
+import LcpDetailsEdit from '~/components/manage/Blocks/SiteBlocks/LcpDetails/Edit';
+import LcpDetailsView from '~/components/manage/Blocks/SiteBlocks/LcpDetails/View';
+
 // Discodata components
 import DiscodataTableBlockEdit from '~/components/manage/Blocks/DiscodataTableBlock/Edit';
 import DiscodataTableBlockView from '~/components/manage/Blocks/DiscodataTableBlock/View';
@@ -249,6 +267,60 @@ export function applyConfig(voltoConfig) {
     group: 'eprtr_blocks',
     view: DummyBlockView,
     edit: DummyBlockEdit,
+    icon: packSVG,
+  };
+
+  config.blocks.blocksConfig.eprtr_site_header = {
+    id: 'eprtr_site_header',
+    title: 'Eprtr site header',
+    group: 'eprtr_blocks',
+    view: SiteHeaderView,
+    edit: SiteHeaderEdit,
+    icon: packSVG,
+  };
+
+  config.blocks.blocksConfig.eprtr_pollutants_site_details = {
+    id: 'eprtr_pollutants_site_details',
+    title: 'Eprtr Pollutants site details',
+    group: 'eprtr_blocks',
+    view: PollutantsSiteDetailsView,
+    edit: PollutantsSiteDetailsEdit,
+    icon: packSVG,
+  };
+
+  config.blocks.blocksConfig.eprtr_pollutants_facility_details = {
+    id: 'eprtr_pollutants_facility_details',
+    title: 'Eprtr Pollutants facility details',
+    group: 'eprtr_blocks',
+    view: PollutantsFacilityDetailsView,
+    edit: PollutantsFacilityDetailsEdit,
+    icon: packSVG,
+  };
+
+  config.blocks.blocksConfig.eprtr_regulatory_site_details = {
+    id: 'eprtr_regulatory_site_details',
+    title: 'Eprtr Regulatory site details',
+    group: 'eprtr_blocks',
+    view: RegulatorySiteDetailsView,
+    edit: RegulatorySiteDetailsEdit,
+    icon: packSVG,
+  };
+
+  config.blocks.blocksConfig.eprtr_regulatory_facility_details = {
+    id: 'eprtr_regulatory_facility_details',
+    title: 'Eprtr Regulatory facility details',
+    group: 'eprtr_blocks',
+    view: RegulatoryFacilityDetailsView,
+    edit: RegulatoryFacilityDetailsEdit,
+    icon: packSVG,
+  };
+
+  config.blocks.blocksConfig.eprtr_lcp_details = {
+    id: 'eprtr_lcp_details',
+    title: 'Eprtr lcp details',
+    group: 'eprtr_blocks',
+    view: LcpDetailsView,
+    edit: LcpDetailsEdit,
     icon: packSVG,
   };
 

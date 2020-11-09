@@ -3,13 +3,116 @@ import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { isArray, isDate } from 'lodash';
-import { Dropdown } from 'semantic-ui-react';
+import { Dropdown, Header } from 'semantic-ui-react';
 import { setQueryParam } from 'volto-datablocks/actions';
+import DiscodataSqlBuilder from 'volto-datablocks/DiscodataSqlBuilder/View';
 import ReactTooltip from 'react-tooltip';
 import Icon from '@plone/volto/components/theme/Icon/Icon';
 import moment from 'moment';
 import infoSVG from '@plone/volto/icons/info.svg';
 import cx from 'classnames';
+
+// STATIC DATA
+// ==============
+const countryGroups = [
+  {
+    key: 'EEA32',
+    value: 'EEA32',
+    text: 'EEA32',
+  },
+  {
+    key: 'EEA33',
+    value: 'EEA33',
+    text: 'EEA33',
+  },
+  {
+    key: 'EU27',
+    value: 'EU27',
+    text: 'EU27',
+  },
+  {
+    key: 'EU28',
+    value: 'EU28',
+    text: 'EU28',
+  },
+];
+const pollutionType = [
+  {
+    key: 'Air',
+    value: 'Air',
+    text: 'Air',
+  },
+  {
+    key: 'Water',
+    value: 'Water',
+    text: 'Water',
+  },
+  {
+    key: 'Air,Water',
+    value: 'Air,Water',
+    text: 'Air & Water',
+  },
+];
+const airPollutants = [
+  {
+    key: 'Carbon dioxide (CO2)',
+    value: 'Carbon dioxide (CO2)',
+    text: 'Carbon dioxide (CO2)',
+  },
+  {
+    key: 'Heavy metals (Cd, Hg, Pb)',
+    value: 'Heavy metals (Cd, Hg, Pb)',
+    text: 'Heavy metals (Cd, Hg, Pb)',
+  },
+  {
+    key: 'Nitrogen oxides (NOX)',
+    value: 'Nitrogen oxides (NOX)',
+    text: 'Nitrogen oxides (NOX)',
+  },
+  {
+    key: 'Particulate matter (PM10)',
+    value: 'Particulate matter (PM10)',
+    text: 'Particulate matter (PM10)',
+  },
+  {
+    key: 'Sulphur oxides (SOX)',
+    value: 'Sulphur oxides (SOX)',
+    text: 'Sulphur oxides (SOX)',
+  },
+];
+const waterPollutants = [
+  {
+    key: 'Heavy metals (Cd, Hg, Ni, Pb)',
+    value: 'Heavy metals (Cd, Hg, Ni, Pb)',
+    text: 'Heavy metals (Cd, Hg, Ni, Pb)',
+  },
+  {
+    key: 'Total nitrogen',
+    value: 'Total nitrogen',
+    text: 'Total nitrogen',
+  },
+  {
+    key: 'Total organic carbon(as total C or COD/3) (TOC)',
+    value: 'Total organic carbon(as total C or COD/3) (TOC)',
+    text: 'Total organic carbon(as total C or COD/3) (TOC)',
+  },
+  {
+    key: 'Total phosphorus',
+    value: 'Total phosphorus',
+    text: 'Total phosphorus',
+  },
+];
+
+const pollutants = {
+  Air: airPollutants,
+  Water: waterPollutants,
+  'Air,Water': [...airPollutants, ...waterPollutants],
+};
+// ==============
+
+const optionExists = (value, options) => {
+  return options.filter((option) => option.value === value).length > 0;
+};
 
 const getDate = (field) => {
   if (!field) return '-';
@@ -80,6 +183,203 @@ const components = {
           <p className="bold">Publish date</p>
           <p className="lighter">{getDate(packages[1])}</p>
         </div> */}
+      </div>
+    );
+  },
+  eprtrCountryGroupSelector: (
+    options,
+    queryParameters,
+    packages,
+    search,
+    setQueryParam,
+    placeholder,
+    className,
+    mode,
+  ) => {
+    const initialQueryParameters = {};
+
+    if (!search.analysisCountryGroupId && countryGroups?.[0]?.key) {
+      initialQueryParameters.analysisCountryGroupId = countryGroups[0].key;
+    }
+    if (!search.analysisPollutantType && countryGroups?.[0]?.key) {
+      initialQueryParameters.analysisPollutantType = 'Air';
+    }
+    if (Object.keys(initialQueryParameters).length > 0) {
+      setQueryParam({
+        queryParam: {
+          ...initialQueryParameters,
+        },
+      });
+    }
+    return (
+      <div className="custom-selector big red">
+        <Header as="h1">Industrial pollution in</Header>
+        <div className="selector-container display-flex flex-flow-row">
+          {countryGroups?.length && (
+            <Dropdown
+              selection
+              onChange={(event, data) => {
+                setQueryParam({
+                  queryParam: {
+                    analysisCountryGroupId: data.options.filter((opt) => {
+                      return opt.value === data.value;
+                    })[0]?.key,
+                  },
+                });
+              }}
+              placeholder={'Country group'}
+              options={countryGroups}
+              value={search.analysisCountryGroupId}
+            />
+          )}
+          {pollutionType && (
+            <Dropdown
+              selection
+              onChange={(event, data) => {
+                setQueryParam({
+                  queryParam: {
+                    analysisPollutantType: data.options.filter((opt) => {
+                      return opt.value === data.value;
+                    })[0]?.key,
+                  },
+                });
+              }}
+              placeholder={'Pollution by'}
+              options={pollutionType}
+              value={search.analysisPollutantType}
+            />
+          )}
+          {search.analysisPollutantType && (
+            <Dropdown
+              selection
+              onChange={(event, data) => {
+                setQueryParam({
+                  queryParam: {
+                    analysisPollutant: data.options.filter((opt) => {
+                      return opt.value === data.value;
+                    })[0]?.key,
+                  },
+                });
+              }}
+              placeholder={'Select pollutant'}
+              options={pollutants[search.analysisPollutantType]}
+              value={
+                optionExists(
+                  search.analysisPollutant,
+                  pollutants[search.analysisPollutantType],
+                )
+                  ? search.analysisPollutant
+                  : null
+              }
+            />
+          )}
+        </div>
+      </div>
+    );
+  },
+  eprtrCountrySelector: (
+    options,
+    queryParameters,
+    packages,
+    search,
+    setQueryParam,
+    placeholder,
+    className,
+    mode,
+    discodata_resources,
+  ) => {
+    const countries = discodata_resources.analysis_countries;
+    const initialQueryParameters = {};
+
+    if (!search.analysisCountryCode && countries?.[0]?.key) {
+      initialQueryParameters.analysisCountryCode = countries[0].key;
+      initialQueryParameters.analysisCountryName = countries[0].value;
+    }
+    if (!search.analysisPollutantType && countries?.[0]?.key) {
+      initialQueryParameters.analysisPollutantType = 'Air';
+    }
+    if (Object.keys(initialQueryParameters).length > 0) {
+      setQueryParam({
+        queryParam: {
+          ...initialQueryParameters,
+        },
+      });
+    }
+    return (
+      <div className="custom-selector big red">
+        <DiscodataSqlBuilder
+          data={{
+            '@type': 'discodata_sql_builder',
+            sql: {
+              value:
+                '{"fieldsets":[{"id":"sql_metadata","title":"SQL","fields":["analysis_countries"]}],"properties":{"analysis_countries":{"title":"Analysis countries","isCollection":true,"hasPagination":true,"urlQuery":true,"sql":"SELECT DISTINCT PQPC.CountryCode as [key], LC.[CountryName] as [value], LC.[CountryName] as [text]\\nFROM [IED].[latest].[PollutantQuantityPerCapita] as PQPC\\nLEFT JOIN [IED].[latest].[LOV_Countries] as LC\\nON PQPC.[CountryCode] = LC.[CountryCode]\\nWHERE reportingYear IN (\'2018\')"}},"required":[]}',
+            },
+          }}
+        />
+        <Header as="h1">Industrial pollution in</Header>
+        <div className="selector-container display-flex flex-flow-row">
+          {countryGroups?.length && (
+            <Dropdown
+              selection
+              onChange={(event, data) => {
+                setQueryParam({
+                  queryParam: {
+                    analysisCountryCode: data.options.filter((opt) => {
+                      return opt.value === data.value;
+                    })[0]?.key,
+                    analysisCountryName: data.options.filter((opt) => {
+                      return opt.value === data.value;
+                    })[0]?.value,
+                  },
+                });
+              }}
+              placeholder={'Country'}
+              options={countries}
+              value={search.analysisCountryName}
+            />
+          )}
+          {pollutionType && (
+            <Dropdown
+              selection
+              onChange={(event, data) => {
+                setQueryParam({
+                  queryParam: {
+                    analysisPollutantType: data.options.filter((opt) => {
+                      return opt.value === data.value;
+                    })[0]?.key,
+                  },
+                });
+              }}
+              placeholder={'Pollution by'}
+              options={pollutionType}
+              value={search.analysisPollutantType}
+            />
+          )}
+          {search.analysisPollutantType && (
+            <Dropdown
+              selection
+              onChange={(event, data) => {
+                setQueryParam({
+                  queryParam: {
+                    analysisPollutant: data.options.filter((opt) => {
+                      return opt.value === data.value;
+                    })[0]?.key,
+                  },
+                });
+              }}
+              placeholder={'Select pollutant'}
+              options={pollutants[search.analysisPollutantType]}
+              value={
+                optionExists(
+                  search.analysisPollutant,
+                  pollutants[search.analysisPollutantType],
+                )
+                  ? search.analysisPollutant
+                  : null
+              }
+            />
+          )}
+        </div>
       </div>
     );
   },
@@ -204,6 +504,7 @@ const View = ({ content, ...props }) => {
           placeholder,
           className,
           props.mode,
+          props.discodata_resources,
         )
       ) : props.mode === 'edit' ? (
         <p>Component not selected</p>

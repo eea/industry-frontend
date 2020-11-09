@@ -1,0 +1,38 @@
+.site-details h3.blue {
+  color: #4296B2;
+}
+
+.site-details .header-tooltip {
+  display: flex;
+  align-items: center;
+}
+
+.site-details .floating-icon {
+  display: flex;
+}
+
+.site-details .header-tooltip h3 {
+  margin-bottom: 0;
+  margin-right: 0.3rem;
+}
+
+.site-details .list {
+  color: #EC776A;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  grid-gap: 20px;
+}
+
+.site-details .list li button {
+  background: transparent;
+  border: none;
+  color: #EC776A;
+  padding: 0;
+}
+
+.site-details .list li button:focus {
+  outline: none;
+}

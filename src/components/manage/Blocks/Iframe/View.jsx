@@ -5,6 +5,9 @@ import { connect } from 'react-redux';
 import Iframe from 'react-iframe';
 import qs from 'query-string';
 import cx from 'classnames';
+import Icon from '@plone/volto/components/theme/Icon/Icon';
+import ReactTooltip from 'react-tooltip';
+import infoSVG from '@plone/volto/icons/info.svg';
 import './style.css';
 
 const useWindowSize = () => {
@@ -38,6 +41,7 @@ const View = ({ content, ...props }) => {
     iframeId = null,
     title = '',
     titleClassName = '',
+    titleTooltip = '',
     description = '',
     descriptionClassName = '',
     width = '100%',
@@ -191,12 +195,29 @@ const View = ({ content, ...props }) => {
   };
 
   return (
-    <div>
+    <div className="eprtr-iframe">
       {!flagsState &&
       requiredQueries.length ===
         requiredQueries.filter((query) => discodataQuery[query]).length ? (
         <div id={iframeId}>
-          {title ? <h2 className={cx(titleClassName)}>{title}</h2> : ''}
+          {titleTooltip && title ? (
+            <div className="header-tooltip">
+              <h3 className={cx('blue', titleClassName)}>{title}</h3>
+              <span className="floating-icon" data-tip={'This is a tooltip'}>
+                <Icon
+                  className="firefox-icon"
+                  name={infoSVG}
+                  size="20"
+                  color="#D63D27"
+                />
+              </span>
+            </div>
+          ) : title ? (
+            <h3 className={cx('blue', titleClassName)}>{title}</h3>
+          ) : (
+            ''
+          )}
+
           {description ? (
             <p className={cx(descriptionClassName)}>{description}</p>
           ) : (
@@ -225,6 +246,7 @@ const View = ({ content, ...props }) => {
       ) : (
         ''
       )}
+      <ReactTooltip />
     </div>
   );
 };
