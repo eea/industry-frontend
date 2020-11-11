@@ -262,3 +262,44 @@ p.mb-1,
 p.mb-1:first-child {
   margin-bottom: 1rem;
 }
+
+.privacy-protection {
+  padding: 0;
+  background: transparent;
+}
+
+.privacy-protection .overlay {
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, .35);
+}
+
+.privacy-protection .background {
+  opacity: 0.8;
+}
+
+.privacy-protection .wrapped {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  width: 400px;
+  border-radius: 10px;
+}
+
+.privacy-protection .wrapped .ui.message {
+  background: #ffffff;
+  border-radius: 10px;
+}
+
+.privacy-protection .wrapped p.discreet {
+  padding: 1.5em 1.5em;
+}
+
+.privacy-protection .privacy-button {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
+}

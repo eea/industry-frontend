@@ -28,6 +28,14 @@ const getSchema = (props) => {
       title: 'Has regions features',
       defaultValue: false,
     },
+    privacy: {
+      type: 'array',
+      title: 'Privacy',
+      choices: [
+        ['small', 'Small'],
+        ['big', 'Big'],
+      ],
+    },
     filterSource: {
       type: 'array',
       title: 'Filter source',
