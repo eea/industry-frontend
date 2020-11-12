@@ -1,4 +1,3 @@
-/* eslint-disable */
 /* REACT */
 import React, { useState, useRef, useEffect } from 'react';
 import cookie from 'react-cookie';
@@ -129,7 +128,7 @@ const OpenlayersMapView = (props) => {
       'This map is hosted by a third party [Environmental Systems Research Institute, INC: "ESRI"]. By showing th external content you accept the terms and conditions of www.esri.com. This includes their cookie policies, which e have no control over.',
     privacy_cookie_key: 'map',
     placeholder_image: mapPlaceholder,
-    type: props.data.privacy?.value || 'big'
+    type: props.data.privacy?.value || 'big',
   };
 
   let queryParams;
@@ -300,27 +299,11 @@ const OpenlayersMapView = (props) => {
   }, [state.map.sitesSourceQuery?.where, state.updateMapPosition])
 
   useEffect(() => {
-    if (
-      (mounted.current &&
-        !mapRendered &&
-        prepareMapRender &&
-        document.getElementById('map')) ||
-      (mounted.current &&
-        !mapRendered &&
-        !prepareMapRender &&
-        document.getElementById('map') &&
-        canShow(dataprotection.privacy_cookie_key))
-    ) {
+    if (!mapRendered && prepareMapRender && document.getElementById('map')) {
       renderMap();
       setMapRendered(true);
     }
-  }, [
-    mounted,
-    mapRendered,
-    prepareMapRender,
-    document.getElementById('map'),
-    canShow(dataprotection.privacy_cookie_key),
-  ]);
+  }, [prepareMapRender]);
 
   if (mapRendered && !firstFilteringUpdate) {
     updateFilters();
@@ -1134,232 +1117,239 @@ const OpenlayersMapView = (props) => {
       .catch((error) => {});
   };
   if (!__CLIENT__) return '';
-  return (
-    <div className="openlayer-map-container">
-      {props.mode === 'edit' ? <p>Openlayer map</p> : ''}
-      <PrivacyProtection
-        onShow={() => {
-          setPrepareMapRender(true);
-        }}
-        data={{ dataprotection }}
-        style={{ backgroundImage: `url(${mapPlaceholder})` }}
-      >
-        <>
-          <div id="map" className="map" />
-          <div id="popup" className="popup">
-            {state.popup.element && (
-              <>
-                <div className="popover-header">
-                  {state.popup.properties.siteName ? (
-                    <Header as="h3">{state.popup.properties.siteName}</Header>
-                  ) : state.popup.properties.NUTS_NAME &&
-                    state.popup.properties.CNTR_CODE &&
-                    state.popup.properties.COUNTRY ? (
-                    <Header as="h3">{`${state.popup.properties.NUTS_NAME}, ${state.popup.properties.CNTR_CODE}, ${state.popup.properties.COUNTRY}`}</Header>
+
+  const view = (
+    <>
+      <div id="map" className="map" />
+      <div id="popup" className="popup">
+        {state.popup.element && (
+          <>
+            <div className="popover-header">
+              {state.popup.properties.siteName ? (
+                <Header as="h3">{state.popup.properties.siteName}</Header>
+              ) : state.popup.properties.NUTS_NAME &&
+                state.popup.properties.CNTR_CODE &&
+                state.popup.properties.COUNTRY ? (
+                <Header as="h3">{`${state.popup.properties.NUTS_NAME}, ${state.popup.properties.CNTR_CODE}, ${state.popup.properties.COUNTRY}`}</Header>
+              ) : (
+                ''
+              )}
+            </div>
+            <div className="popover-body">
+              <Grid.Column stretched>
+                {!state.popup.properties.num_sites ? (
+                  ''
+                ) : (
+                  <Grid.Row>
+                    <p>
+                      Number of sites:{' '}
+                      <code>{state.popup.properties.num_sites}</code>
+                    </p>
+                  </Grid.Row>
+                )}
+                {/* HDMS */}
+                <Grid.Row>
+                  {state.popup.properties.hdms ? (
+                    <>
+                      <p className="mb-1">The location you are viewing is:</p>
+                      <code>{state.popup.properties.hdms}</code>
+                    </>
                   ) : (
                     ''
                   )}
-                </div>
-                <div className="popover-body">
-                  <Grid.Column stretched>
-                    {!state.popup.properties.num_sites ? (
-                      ''
-                    ) : (
-                      <Grid.Row>
-                        <p>
-                          Number of sites:{' '}
-                          <code>{state.popup.properties.num_sites}</code>
-                        </p>
-                      </Grid.Row>
-                    )}
-                    {/* HDMS */}
-                    <Grid.Row>
-                      {state.popup.properties.hdms ? (
-                        <>
-                          <p className="mb-1">
-                            The location you are viewing is:
-                          </p>
-                          <code>{state.popup.properties.hdms}</code>
-                        </>
-                      ) : (
-                        ''
-                      )}
-                    </Grid.Row>
-                  </Grid.Column>
-                </div>
-              </>
-            )}
-          </div>
-          <div id="popup-details" className="popup">
-            {state.popupDetails.element && (
-              <>
-                <div className="popover-header">
-                  <Header as="h2">
-                    {state.popupDetails.properties.siteName
-                      ? state.popupDetails.properties.siteName
-                      : ''}
-                  </Header>
-                  <VoltoIcon
-                    onClick={() =>
-                      state.popupDetails.element.setPosition(undefined)
-                    }
-                    name={clearSVG}
-                    size="2em"
-                  />
-                </div>
-                <div className="popover-body">
-                  <div className="grid-layout">
-                    {/* SITE CONTENTS */}
-                    <div className="row mb-1-super mt-0-super">
-                      <div className="column column-12">
-                        <Header as="h3">Site contents</Header>
-                      </div>
-                      <div className="column  column-12">
-                        <p>
-                          <Link
-                            as="a"
-                            className={
-                              !state.popupDetails.properties.nFacilities
-                                ? 'disabled-link'
-                                : ''
-                            }
-                            onClick={setSiteQueryParams}
-                            to={
-                              '/industrial-site/pollutant-releases-and-transfers/site-overview'
-                            }
-                          >
-                            {state.popupDetails.properties.nFacilities || 0}{' '}
-                            Facilities
-                          </Link>
-                        </p>
-                      </div>
-                      <div className="column  column-12">
-                        <p>
-                          <Link
-                            as="a"
-                            className={
-                              !state.popupDetails.properties.nInstallations
-                                ? 'disabled-link'
-                                : ''
-                            }
-                            onClick={setSiteQueryParams}
-                            to={
-                              '/industrial-site/regulatory-information/site-overview'
-                            }
-                          >
-                            {state.popupDetails.properties.nInstallations || 0}{' '}
-                            Installations
-                          </Link>
-                        </p>
-                      </div>
-                      <div className="column  column-12">
-                        <p>
-                          <Link
-                            as="a"
-                            className={
-                              !state.popupDetails.properties.nLCP
-                                ? 'disabled-link'
-                                : ''
-                            }
-                            onClick={setSiteQueryParams}
-                            to={'/industrial-site/large-scale-fuel-combustion'}
-                          >
-                            {state.popupDetails.properties.nLCP || 0} Large
-                            combustion plants
-                          </Link>
-                        </p>
-                      </div>
-                    </div>
-                    {/* SITE POLLUTANT EMISSIONS */}
-                    <div className="row mb-1-super mt-0-super">
-                      <div className="column  column-12">
-                        <Header as="h3">Pollutant emissions</Header>
-                      </div>
-                      <div className="column  column-12 description">
-                        {state.popupDetails.properties.pollutants ? (
-                          <p>
-                            {state.popupDetails.properties.pollutants}
-                            {/* {state.popupDetails.properties.pollutants.substring(
-                          0,
-                          256,
-                        )}
-                        {state.popupDetails.properties.pollutants.length > 256
-                          ? '...'
-                          : ''} */}
-                          </p>
-                        ) : (
-                          <p>There are no data regarding the pollutants</p>
-                        )}
-                      </div>
-                    </div>
-                    {/* REGULATORY INFORMATION */}
-                    <div className="row mb-1-super mt-0-super">
-                      <div className="column  column-12">
-                        <Header as="h3">Regulatory information</Header>
-                      </div>
-                      <div className="column  column-12">
-                        {state.popupDetails.properties.Site_reporting_year ? (
-                          <p>
-                            Inspections in{' '}
-                            {state.popupDetails.properties.Site_reporting_year}:{' '}
-                            {state.popupDetails.properties.numInspections || 0}
-                          </p>
-                        ) : (
-                          ''
-                        )}
-                      </div>
-                    </div>
+                </Grid.Row>
+              </Grid.Column>
+            </div>
+          </>
+        )}
+      </div>
+      <div id="popup-details" className="popup">
+        {state.popupDetails.element && (
+          <>
+            <div className="popover-header">
+              <Header as="h2">
+                {state.popupDetails.properties.siteName
+                  ? state.popupDetails.properties.siteName
+                  : ''}
+              </Header>
+              <VoltoIcon
+                onClick={() =>
+                  state.popupDetails.element.setPosition(undefined)
+                }
+                name={clearSVG}
+                size="2em"
+              />
+            </div>
+            <div className="popover-body">
+              <div className="grid-layout">
+                {/* SITE CONTENTS */}
+                <div className="row mb-1-super mt-0-super">
+                  <div className="column column-12">
+                    <Header as="h3">Site contents</Header>
+                  </div>
+                  <div className="column  column-12">
+                    <p>
+                      <Link
+                        as="a"
+                        className={
+                          !state.popupDetails.properties.nFacilities
+                            ? 'disabled-link'
+                            : ''
+                        }
+                        onClick={setSiteQueryParams}
+                        to={
+                          '/industrial-site/pollutant-releases-and-transfers/site-overview'
+                        }
+                      >
+                        {state.popupDetails.properties.nFacilities || 0}{' '}
+                        Facilities
+                      </Link>
+                    </p>
+                  </div>
+                  <div className="column  column-12">
+                    <p>
+                      <Link
+                        as="a"
+                        className={
+                          !state.popupDetails.properties.nInstallations
+                            ? 'disabled-link'
+                            : ''
+                        }
+                        onClick={setSiteQueryParams}
+                        to={
+                          '/industrial-site/regulatory-information/site-overview'
+                        }
+                      >
+                        {state.popupDetails.properties.nInstallations || 0}{' '}
+                        Installations
+                      </Link>
+                    </p>
+                  </div>
+                  <div className="column  column-12">
+                    <p>
+                      <Link
+                        as="a"
+                        className={
+                          !state.popupDetails.properties.nLCP
+                            ? 'disabled-link'
+                            : ''
+                        }
+                        onClick={setSiteQueryParams}
+                        to={'/industrial-site/large-scale-fuel-combustion'}
+                      >
+                        {state.popupDetails.properties.nLCP || 0} Large
+                        combustion plants
+                      </Link>
+                    </p>
                   </div>
                 </div>
-                <div className="popover-actions">
-                  <button
-                    onClick={() => {
-                      setSiteQueryParams();
-                      history.push('/industrial-site');
-                    }}
-                    className="solid dark-blue"
-                  >
-                    Site Details
-                  </button>
+                {/* SITE POLLUTANT EMISSIONS */}
+                <div className="row mb-1-super mt-0-super">
+                  <div className="column  column-12">
+                    <Header as="h3">Pollutant emissions</Header>
+                  </div>
+                  <div className="column  column-12 description">
+                    {state.popupDetails.properties.pollutants ? (
+                      <p>
+                        {state.popupDetails.properties.pollutants}
+                        {/* {state.popupDetails.properties.pollutants.substring(
+                    0,
+                    256,
+                  )}
+                  {state.popupDetails.properties.pollutants.length > 256
+                    ? '...'
+                    : ''} */}
+                      </p>
+                    ) : (
+                      <p>There are no data regarding the pollutants</p>
+                    )}
+                  </div>
                 </div>
-              </>
-            )}
-          </div>
-          <Dimmer id="map-loader" active={loader}>
-            <Loader />
-          </Dimmer>
-          {document.getElementById('map-view-your-area-button') ? (
-            <Portal node={document.getElementById('map-view-your-area-button')}>
-              <div id="view-your-area" className="ol-unselectable ol-control">
-                <button
-                  className="toggle-button"
-                  onClick={() => {
-                    if (navigator.geolocation) {
-                      navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                          return centerPosition(
-                            state.map.element,
-                            position,
-                            12,
-                          );
-                        },
-                        (error) => {
-                          console.log(error);
-                        },
-                        { timeout: 10000 },
-                      );
-                    }
-                  }}
-                >
-                  <VoltoIcon name={navigationSVG} size="1em" fill="white" />
-                </button>
+                {/* REGULATORY INFORMATION */}
+                <div className="row mb-1-super mt-0-super">
+                  <div className="column  column-12">
+                    <Header as="h3">Regulatory information</Header>
+                  </div>
+                  <div className="column  column-12">
+                    {state.popupDetails.properties.Site_reporting_year ? (
+                      <p>
+                        Inspections in{' '}
+                        {state.popupDetails.properties.Site_reporting_year}:{' '}
+                        {state.popupDetails.properties.numInspections || 0}
+                      </p>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                </div>
               </div>
-            </Portal>
-          ) : (
-            ''
-          )}
-        </>
-      </PrivacyProtection>
+            </div>
+            <div className="popover-actions">
+              <button
+                onClick={() => {
+                  setSiteQueryParams();
+                  history.push('/industrial-site');
+                }}
+                className="solid dark-blue"
+              >
+                Site Details
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+      <Dimmer id="map-loader" active={loader}>
+        <Loader />
+      </Dimmer>
+      {document.getElementById('map-view-your-area-button') ? (
+        <Portal node={document.getElementById('map-view-your-area-button')}>
+          <div id="view-your-area" className="ol-unselectable ol-control">
+            <button
+              className="toggle-button"
+              onClick={() => {
+                if (navigator.geolocation) {
+                  navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                      return centerPosition(state.map.element, position, 12);
+                    },
+                    (error) => {
+                      console.log(error);
+                    },
+                    { timeout: 10000 },
+                  );
+                }
+              }}
+            >
+              <VoltoIcon name={navigationSVG} size="1em" fill="white" />
+            </button>
+          </div>
+        </Portal>
+      ) : (
+        ''
+      )}
+    </>
+  );
+
+  return (
+    <div className="openlayer-map-container">
+      {props.mode === 'edit' ? <p>Openlayer map</p> : ''}
+      {canShow(dataprotection.privacy_cookie_key) ? (
+        view
+      ) : (
+        <PrivacyProtection
+          onShow={() => {
+            setPrepareMapRender(true);
+          }}
+          data={{ dataprotection }}
+          style={{
+            backgroundImage: `url(${mapPlaceholder})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+          }}
+        >
+          {view}
+        </PrivacyProtection>
+      )}
     </div>
   );
 };
