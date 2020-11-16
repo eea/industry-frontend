@@ -103,10 +103,36 @@ const waterPollutants = [
   },
 ];
 
+const allAirPollutants = airPollutants.map((pol) => pol.key);
+const allWaterPollutants = waterPollutants.map((pol) => pol.key);
+const allPollutants = [...allAirPollutants, ...allWaterPollutants];
+
 const pollutants = {
-  Air: airPollutants,
-  Water: waterPollutants,
-  'Air,Water': [...airPollutants, ...waterPollutants],
+  Air: [
+    {
+      key: allAirPollutants.join(','),
+      value: allAirPollutants.join(','),
+      text: 'All pollutants',
+    },
+    ...airPollutants,
+  ],
+  Water: [
+    {
+      key: allWaterPollutants.join(','),
+      value: allWaterPollutants.join(','),
+      text: 'All pollutants',
+    },
+    ...waterPollutants,
+  ],
+  'Air,Water': [
+    {
+      key: allPollutants.join(','),
+      value: allPollutants.join(','),
+      text: 'All pollutants',
+    },
+    ...airPollutants,
+    ...waterPollutants,
+  ],
 };
 // ==============
 
@@ -204,6 +230,9 @@ const components = {
     if (!search.analysisPollutantType && countryGroups?.[0]?.key) {
       initialQueryParameters.analysisPollutantType = 'Air';
     }
+    if (!search.analysisPollutant && countryGroups?.[0]?.key) {
+      initialQueryParameters.analysisPollutant = allAirPollutants.join(',');
+    }
     if (Object.keys(initialQueryParameters).length > 0) {
       setQueryParam({
         queryParam: {
@@ -297,6 +326,9 @@ const components = {
     }
     if (!search.analysisPollutantType && countries?.[0]?.key) {
       initialQueryParameters.analysisPollutantType = 'Air';
+    }
+    if (!search.analysisPollutant && countries?.[0]?.key) {
+      initialQueryParameters.analysisPollutant = allAirPollutants.join(',');
     }
     if (Object.keys(initialQueryParameters).length > 0) {
       setQueryParam({

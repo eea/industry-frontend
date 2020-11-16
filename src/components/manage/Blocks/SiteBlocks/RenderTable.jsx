@@ -32,7 +32,7 @@ const RenderTable = (props) => {
                 <Table.Cell key={`${headerIndex}_cell`}>
                   <p
                     dangerouslySetInnerHTML={{
-                      __html: row[header.key],
+                      __html: row[header.key] || '-',
                     }}
                   />
                 </Table.Cell>

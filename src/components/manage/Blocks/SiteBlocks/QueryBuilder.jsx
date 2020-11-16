@@ -70,6 +70,90 @@ const QueryBuilder = (props) => {
         }}
       />
       {/**
+        SITE DETAILS 3
+        DB: Browse8Header
+      */}
+      <DiscodataSqlBuilder
+        data={{
+          '@type': 'discodata_sql_builder',
+          sql: {
+            value:
+              '{"fieldsets":[{"id":"sql_metadata","title":"SQL","fields":["site_details_3"]}],"properties":{"site_details_3":{"title":"site_details_3","hasPagination":true,"urlQuery":false,"sql":"SELECT\\n    siteInspireId,\\n    facilityInspireId,\\n    installationInspireId,\\n    euregReportingYear,\\n    regulatedActivities,\\n    entityStatus,\\n    seveso\\nFROM [IED].[latest].[Browse8Header]\\nWHERE :where\\nGROUP BY\\n    siteInspireId,\\n    facilityInspireId,\\n    installationInspireId,\\n    euregReportingYear,\\n    regulatedActivities,\\n    entityStatus,\\n    seveso","packageName":"siteInspireId"}},"required":[]}',
+          },
+          where: {
+            value:
+              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"site_details_3","urlQuery":false,"key":"siteInspireId","queryParam":"siteInspireId"}}}',
+          },
+          groupBy: {
+            value:
+              '{"fieldsets":[{"id":"group_by_statements_metadata","title":"Group by statements","fields":["g1"]}],"properties":{"g1":{"title":"G1","sqlId":"site_details_3","discodataKey":"euregReportingYear","key":"euregReportingYears"}}}',
+          },
+        }}
+      />
+      {/**
+        Permits
+        DB: Browse9Header_Permit
+      */}
+      <DiscodataSqlBuilder
+        data={{
+          '@type': 'discodata_sql_builder',
+          sql: {
+            value:
+              '{"fieldsets":[{"id":"sql_metadata","title":"SQL","fields":["permits"]}],"properties":{"permits":{"title":"permits","hasPagination":true,"urlQuery":false,"sql":"SELECT *\\nFROM [IED].[latest].[Browse9Header_Permit]","packageName":"siteInspireId"}},"required":[]}',
+          },
+          where: {
+            value:
+              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"permits","urlQuery":false,"key":"siteInspireId","queryParam":"siteInspireId"}}}',
+          },
+          groupBy: {
+            value:
+              '{"fieldsets":[{"id":"group_by_statements_metadata","title":"Group by statements","fields":["g1"]}],"properties":{"g1":{"title":"G1","sqlId":"permits","discodataKey":"EUregReportingYear","key":"euregReportingYears"}}}',
+          },
+        }}
+      />
+      {/**
+        BAT Conclusions
+        DB: Browse9Header_BATConclusion
+      */}
+      <DiscodataSqlBuilder
+        data={{
+          '@type': 'discodata_sql_builder',
+          sql: {
+            value:
+              '{"fieldsets":[{"id":"sql_metadata","title":"SQL","fields":["bat_conclusions"]}],"properties":{"bat_conclusions":{"title":"bat_conclusions","hasPagination":true,"urlQuery":false,"sql":"SELECT *\\nFROM [IED].[latest].[Browse9Header_BATConclusion]","packageName":"siteInspireId"}},"required":[]}',
+          },
+          where: {
+            value:
+              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"bat_conclusions","urlQuery":false,"key":"siteInspireId","queryParam":"siteInspireId"}}}',
+          },
+          groupBy: {
+            value:
+              '{"fieldsets":[{"id":"group_by_statements_metadata","title":"Group by statements","fields":["g1"]}],"properties":{"g1":{"title":"G1","sqlId":"bat_conclusions","discodataKey":"EUregReportingYear","key":"euregReportingYears"}}}',
+          },
+        }}
+      />
+      {/**
+        BAT Derogations
+        DB: Browse9Header_BATDerogation
+      */}
+      <DiscodataSqlBuilder
+        data={{
+          '@type': 'discodata_sql_builder',
+          sql: {
+            value:
+              '{"fieldsets":[{"id":"sql_metadata","title":"SQL","fields":["bat_derogations"]}],"properties":{"bat_derogations":{"title":"bat_derogations","hasPagination":true,"urlQuery":false,"sql":"SELECT *\\nFROM [IED].[latest].[Browse9Header_BATDerogation]","packageName":"siteInspireId"}},"required":[]}',
+          },
+          where: {
+            value:
+              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"bat_derogations","urlQuery":false,"key":"siteInspireId","queryParam":"siteInspireId"}}}',
+          },
+          groupBy: {
+            value:
+              '{"fieldsets":[{"id":"group_by_statements_metadata","title":"Group by statements","fields":["g1"]}],"properties":{"g1":{"title":"G1","sqlId":"bat_derogations","discodataKey":"EUregReportingYear","key":"euregReportingYears"}}}',
+          },
+        }}
+      />
+      {/**
         LCP DETAILS
         DB: Browse10_Header
       */}

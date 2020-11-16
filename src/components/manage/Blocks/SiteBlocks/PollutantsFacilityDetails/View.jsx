@@ -32,7 +32,7 @@ const View = (props) => {
       ? facility
           .filter(
             (report) =>
-              report.eprtrReportingYear === siteReportingYear &&
+              report.euregReportingYears === siteReportingYear &&
               report.facilityOrganizationName,
           )
           .map((report) => ({

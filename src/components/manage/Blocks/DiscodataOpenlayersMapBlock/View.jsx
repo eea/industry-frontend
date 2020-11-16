@@ -26,8 +26,6 @@ import mapPlaceholder from '~/components/manage/Blocks/DiscodataOpenlayersMapBlo
 // STYLES
 import 'ol/ol.css';
 import './style.css';
-import { containsExtent } from 'ol/extent';
-import { VOID } from 'ol/functions';
 
 const splitBy = (arr, delimiter) => {
   if (Array.isArray(arr)) {
@@ -69,6 +67,8 @@ let Map,
   Control,
   defaultsControls,
   defaultsInteractions,
+  containsExtent,
+  VOID,
   DragRotateAndZoom;
 let OL_LOADED = false;
 
@@ -178,6 +178,8 @@ const OpenlayersMapView = (props) => {
         Control = require('ol/control/Control.js').default;
         defaultsControls = require('ol/control.js').defaults;
         defaultsInteractions = require('ol/interaction.js').defaults;
+        containsExtent = require('ol/extent.js').containsExtent;
+        VOID = require('ol/functions').VOID;
         DragRotateAndZoom = require('ol/interaction.js').DragRotateAndZoom;
         OL_LOADED = true;
       }
@@ -807,7 +809,7 @@ const OpenlayersMapView = (props) => {
       sitesSource = new VectorSource({
         loader: function (extent, resolution, projection) {
           if (mounted.current && firstFilteringDone.current) {
-            var url = `https://services.arcgis.com/LcQjj2sL7Txk9Lag/arcgis/rest/services/SiteMap/FeatureServer/0/query/?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=${encodeURIComponent(
+            let url = `https://services.arcgis.com/LcQjj2sL7Txk9Lag/arcgis/rest/services/SiteMap/FeatureServer/0/query/?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=${encodeURIComponent(
               '{"xmin":' +
                 extent[0] +
                 ',"ymin":' +
@@ -846,7 +848,7 @@ const OpenlayersMapView = (props) => {
                 if (error) {
                   console.log(error.message);
                 } else {
-                  var features = esrijsonFormat.readFeatures(response, {
+                  let features = esrijsonFormat.readFeatures(response, {
                     featureProjection: projection,
                   });
                   if (features.length > 0) {
@@ -866,16 +868,16 @@ const OpenlayersMapView = (props) => {
             maxZoom: zoomSwitch,
           });
 
-          if(this.resolution && this.resolution != resolution){
+          if (this.resolution && this.resolution !== resolution) {
             this.loadedExtentsRtree_.clear();
           }
 
-          var z = tileGrid.getZForResolution(resolution);
-          var tileRange = tileGrid.getTileRangeForExtentAndZ(extent, z);
+          let z = tileGrid.getZForResolution(resolution);
+          let tileRange = tileGrid.getTileRangeForExtentAndZ(extent, z);
           /** @type {Array<import("./extent.js").Extent>} */
-          var extents = [];
+          let extents = [];
           /** @type {import("./tilecoord.js").TileCoord} */
-          var tileCoord = [z, 0, 0];
+          let tileCoord = [z, 0, 0];
           for (
             tileCoord[1] = tileRange.minX;
             tileCoord[1] <= tileRange.maxX;
@@ -894,12 +896,12 @@ const OpenlayersMapView = (props) => {
       });
 
       sitesSource.loadFeatures = function (extent, resolution, projection) {
-        var loadedExtentsRtree = this.loadedExtentsRtree_;
-        var extentsToLoad = this.strategy_(extent, resolution);
+        let loadedExtentsRtree = this.loadedExtentsRtree_;
+        let extentsToLoad = this.strategy_(extent, resolution);
         this.loading = false;
-        var _loop_1 = function (i, ii) {
-          var extentToLoad = extentsToLoad[i];
-          var alreadyLoaded = loadedExtentsRtree.forEachInExtent(
+        let _loop_1 = function (i, ii) {
+          let extentToLoad = extentsToLoad[i];
+          let alreadyLoaded = loadedExtentsRtree.forEachInExtent(
             extentToLoad,
             /**
              * @param {{extent: import("../extent.js").Extent}} object Object.
@@ -918,8 +920,8 @@ const OpenlayersMapView = (props) => {
             this_1.loading = this_1.loader_ !== VOID;
           }
         };
-        var this_1 = this;
-        for (var i = 0, ii = extentsToLoad.length; i < ii; ++i) {
+        let this_1 = this;
+        for (let i = 0, ii = extentsToLoad.length; i < ii; ++i) {
           _loop_1(i, ii);
         }
         this.resolution = resolution;
@@ -929,7 +931,7 @@ const OpenlayersMapView = (props) => {
       if (hasRegionsFeatures) {
         regionsSource = new VectorSource({
           loader: function (extent, resolution, projection) {
-            var url = `https://services.arcgis.com/LcQjj2sL7Txk9Lag/ArcGIS/rest/services/ly_IED_SiteClusters_WM/FeatureServer/0/query/?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=${encodeURIComponent(
+            let url = `https://services.arcgis.com/LcQjj2sL7Txk9Lag/ArcGIS/rest/services/ly_IED_SiteClusters_WM/FeatureServer/0/query/?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=${encodeURIComponent(
               '{"xmin":' +
                 extent[0] +
                 ',"ymin":' +
@@ -954,7 +956,7 @@ const OpenlayersMapView = (props) => {
                 if (error) {
                   console.log(error.message);
                 } else {
-                  var features = esrijsonFormat.readFeatures(response, {
+                  let features = esrijsonFormat.readFeatures(response, {
                     featureProjection: projection,
                   });
                   if (features.length > 0) {

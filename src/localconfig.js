@@ -64,8 +64,8 @@ import PollutantsFacilityDetailsView from '~/components/manage/Blocks/SiteBlocks
 import RegulatorySiteDetailsEdit from '~/components/manage/Blocks/SiteBlocks/RegulatorySiteDetails/Edit';
 import RegulatorySiteDetailsView from '~/components/manage/Blocks/SiteBlocks/RegulatorySiteDetails/View';
 
-import RegulatoryFacilityDetailsEdit from '~/components/manage/Blocks/SiteBlocks/RegulatoryFacilityDetails/Edit';
-import RegulatoryFacilityDetailsView from '~/components/manage/Blocks/SiteBlocks/RegulatoryFacilityDetails/View';
+import RegulatoryInstallationDetailsEdit from '~/components/manage/Blocks/SiteBlocks/RegulatoryInstallationDetails/Edit';
+import RegulatoryInstallationDetailsView from '~/components/manage/Blocks/SiteBlocks/RegulatoryInstallationDetails/View';
 
 import LcpDetailsEdit from '~/components/manage/Blocks/SiteBlocks/LcpDetails/Edit';
 import LcpDetailsView from '~/components/manage/Blocks/SiteBlocks/LcpDetails/View';
@@ -306,12 +306,12 @@ export function applyConfig(voltoConfig) {
     icon: packSVG,
   };
 
-  config.blocks.blocksConfig.eprtr_regulatory_facility_details = {
-    id: 'eprtr_regulatory_facility_details',
-    title: 'Eprtr Regulatory facility details',
+  config.blocks.blocksConfig.eprtr_regulatory_installation_details = {
+    id: 'eprtr_regulatory_installation_details',
+    title: 'Eprtr Regulatory installation details',
     group: 'eprtr_blocks',
-    view: RegulatoryFacilityDetailsView,
-    edit: RegulatoryFacilityDetailsEdit,
+    view: RegulatoryInstallationDetailsView,
+    edit: RegulatoryInstallationDetailsEdit,
     icon: packSVG,
   };
 

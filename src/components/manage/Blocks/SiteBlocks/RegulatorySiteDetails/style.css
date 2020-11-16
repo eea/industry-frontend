@@ -2,6 +2,10 @@
   color: #4296B2;
 }
 
+.site-details h3.dark {
+  color: #000;
+}
+
 .site-details .header-tooltip {
   display: flex;
   align-items: center;
@@ -35,4 +39,11 @@
 
 .site-details .list li button:focus {
   outline: none;
+}
+
+.site-details .detail p {
+  word-break: break-all;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: -1rem;
 }
