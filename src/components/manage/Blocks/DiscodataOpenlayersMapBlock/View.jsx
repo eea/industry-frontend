@@ -26,6 +26,8 @@ import mapPlaceholder from '~/components/manage/Blocks/DiscodataOpenlayersMapBlo
 // STYLES
 import 'ol/ol.css';
 import './style.css';
+import { containsExtent } from 'ol/extent';
+import { VOID } from 'ol/functions';
 
 const splitBy = (arr, delimiter) => {
   if (Array.isArray(arr)) {
@@ -518,17 +520,11 @@ const OpenlayersMapView = (props) => {
         newZoom > zoomSwitch ||
         stateRef.current.map.sitesSourceQuery?.where
       ) {
-        // if (!stateRef.current.map.sitesSourceLayer.getVisible()) {
-        //   stateRef.current.map.sitesSourceLayer.getSource().refresh();
-        // }
         stateRef.current.map.sitesSourceLayer.setVisible(true);
         hasRegionsFeatures &&
           stateRef.current.map.regionsSourceLayer.setVisible(false);
       } else if (newZoom > 2) {
         stateRef.current.map.sitesSourceLayer.setVisible(false);
-        // if (!stateRef.current.map.regionsSourceLayer.getVisible()) {
-        //   stateRef.current.map.regionsSourceLayer.getSource().refresh();
-        // }
         hasRegionsFeatures &&
           stateRef.current.map.regionsSourceLayer.setVisible(true);
       } else {
@@ -848,7 +844,6 @@ const OpenlayersMapView = (props) => {
               (error, response) => {
                 reqs--;
                 if (error) {
-                  // setLoader(false);
                   console.log(error.message);
                 } else {
                   var features = esrijsonFormat.readFeatures(response, {
@@ -870,6 +865,11 @@ const OpenlayersMapView = (props) => {
             tileSize: 512,
             maxZoom: zoomSwitch,
           });
+
+          if(this.resolution && this.resolution != resolution){
+            this.loadedExtentsRtree_.clear();
+          }
+
           var z = tileGrid.getZForResolution(resolution);
           var tileRange = tileGrid.getTileRangeForExtentAndZ(extent, z);
           /** @type {Array<import("./extent.js").Extent>} */
@@ -892,6 +892,39 @@ const OpenlayersMapView = (props) => {
           return extents;
         },
       });
+
+      sitesSource.loadFeatures = function (extent, resolution, projection) {
+        var loadedExtentsRtree = this.loadedExtentsRtree_;
+        var extentsToLoad = this.strategy_(extent, resolution);
+        this.loading = false;
+        var _loop_1 = function (i, ii) {
+          var extentToLoad = extentsToLoad[i];
+          var alreadyLoaded = loadedExtentsRtree.forEachInExtent(
+            extentToLoad,
+            /**
+             * @param {{extent: import("../extent.js").Extent}} object Object.
+             * @return {boolean} Contains.
+             */
+            function (object) {
+              return containsExtent(object.extent, extentToLoad);
+            },
+          );
+
+          if (!alreadyLoaded) {
+            this_1.loader_.call(this_1, extentToLoad, resolution, projection);
+            loadedExtentsRtree.insert(extentToLoad, {
+              extent: extentToLoad.slice(),
+            });
+            this_1.loading = this_1.loader_ !== VOID;
+          }
+        };
+        var this_1 = this;
+        for (var i = 0, ii = extentsToLoad.length; i < ii; ++i) {
+          _loop_1(i, ii);
+        }
+        this.resolution = resolution;
+      };
+
       //  Make regions source layer
       if (hasRegionsFeatures) {
         regionsSource = new VectorSource({
