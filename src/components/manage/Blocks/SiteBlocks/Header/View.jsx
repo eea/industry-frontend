@@ -74,17 +74,26 @@ const View = (props) => {
                 ''
               )}
               {site.count_plantType_LCP ? (
-                <p className="info mb-0">{site.count_plantType_LCP} LCPs</p>
+                <p className="info mb-0">
+                  {site.count_plantType_LCP} Large combustion plant
+                  {site.count_plantType_LCP > 1 ? 's' : ''}
+                </p>
               ) : (
                 ''
               )}
               {site.count_plantType_WI ? (
-                <p className="info mb-0">{site.count_plantType_WI} Wis</p>
+                <p className="info mb-0">
+                  {site.count_plantType_WI} Waste incinerator
+                  {site.count_plantType_WI > 1 ? 's' : ''}
+                </p>
               ) : (
                 ''
               )}
               {site.count_plantType_coWI ? (
-                <p className="info mb-0">{site.count_plantType_coWI} CoWis</p>
+                <p className="info mb-0">
+                  {site.count_plantType_coWI} Co-waste incinerator
+                  {site.count_plantType_WI > 1 ? 's' : ''}
+                </p>
               ) : (
                 ''
               )}
