@@ -67,6 +67,7 @@ const View = (props) => {
               >
                 <div className="column-4 xs-12 sm-12 article hero pa-1">
                   <Image
+                    alt={item.title}
                     src={secureRequest(
                       item.image ||
                         `${
@@ -108,7 +109,7 @@ const View = (props) => {
       ) : (
         ''
       )}
-      {preview && redirectPage && items.length ? (
+      {preview && redirectPage && items.length > 2 ? (
         <Link
           className="solid dark-blue articles-redirect"
           as="a"
@@ -117,6 +118,17 @@ const View = (props) => {
         >
           READ MORE
         </Link>
+      ) : items.length ? (
+        <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+          <Link
+            className="solid dark-blue articles-redirect relative"
+            as="a"
+            to={redirectPage}
+            title="READ MORE"
+          >
+            READ MORE
+          </Link>
+        </div>
       ) : (
         ''
       )}

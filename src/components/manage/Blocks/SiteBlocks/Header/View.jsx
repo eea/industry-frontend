@@ -109,6 +109,7 @@ const View = (props) => {
                 placeholder={'Select'}
                 options={options}
                 value={siteReportingYear}
+                aria-label="Reporting year selector"
               />
             </div>
           </div>

@@ -4,6 +4,7 @@
  */
 
 import React, { useEffect, useRef } from 'react';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -11,6 +12,8 @@ import { defineMessages, injectIntl } from 'react-intl';
 
 import { Container, Image } from 'semantic-ui-react';
 import { map } from 'lodash';
+import qs from 'query-string';
+import { setQueryParam } from 'volto-datablocks/actions';
 
 import { blocks } from '~/config';
 
@@ -34,7 +37,14 @@ const messages = defineMessages({
  * @param {Object} content Content object.
  * @returns {string} Markup of the component.
  */
-const DefaultView = ({ content, intl, location, discodata_query }) => {
+const DefaultView = ({
+  content,
+  intl,
+  location,
+  discodata_query,
+  query,
+  setQueryParam,
+}) => {
   const history = useHistory();
   const blocksFieldname = getBlocksFieldname(content);
   const blocksLayoutFieldname = getBlocksLayoutFieldname(content);
@@ -42,15 +52,71 @@ const DefaultView = ({ content, intl, location, discodata_query }) => {
   const hash = location.hash.replace('#', '');
   const timer = useRef(null);
   const clock = useRef(0);
+  const siteTemplateQuery = [
+    'siteInspireId',
+    'siteName',
+    'siteReportingYear',
+    'facilityInspireId',
+    'installationInspireId',
+    'lcpInspireId',
+  ];
 
-  // useEffect(() => {
-  //   if (
-  //     content['@type'] === 'site_template' &&
-  //     !discodata_query.search.siteInspireId
-  //   ) {
-  //     history.push('/browse/explore-data-map/map');
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (
+      content['layout'] === 'default_view' &&
+      content['@type'] === 'site_template' &&
+      !discodata_query.search.siteInspireId &&
+      !query.siteInspireId
+    ) {
+      history.push('/browse/explore-data-map/map');
+      return;
+    }
+    if (
+      content['layout'] === 'default_view' &&
+      content['@type'] === 'site_template'
+    ) {
+      const queryParams = { ...query };
+      const missingQueryParams = {};
+
+      Object.keys(discodata_query.search)
+        .filter((key) => siteTemplateQuery.includes(key))
+        .forEach((key) => {
+          queryParams[key] = discodata_query.search[key];
+        });
+
+      Object.keys(query)
+        .filter(
+          (key) =>
+            siteTemplateQuery.includes(key) && !discodata_query.search[key],
+        )
+        .forEach((key) => {
+          if (key === 'siteReportingYear') {
+            missingQueryParams[key] = parseInt(query[key]);
+          } else {
+            missingQueryParams[key] = query[key];
+          }
+        });
+
+      if (Object.keys(missingQueryParams).length) {
+        setQueryParam({
+          queryParam: { ...missingQueryParams },
+        });
+      }
+
+      if (
+        Object.keys(queryParams).filter(
+          (key) =>
+            JSON.stringify(queryParams[key]) !== JSON.stringify(query[key]),
+        ).length
+      ) {
+        history.push(
+          `${location.pathname.replace(/\/$/, '')}?${qs.stringify(
+            queryParams,
+          )}`,
+        );
+      }
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     if (
@@ -165,6 +231,12 @@ DefaultView.propTypes = {
   }).isRequired,
 };
 
-export default connect((state, props) => ({
-  discodata_query: state.discodata_query,
-}))(injectIntl(DefaultView));
+export default compose(
+  connect(
+    (state, props) => ({
+      discodata_query: state.discodata_query,
+      query: qs.parse(state.router.location.search),
+    }),
+    { setQueryParam },
+  ),
+)(injectIntl(DefaultView));

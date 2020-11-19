@@ -57,7 +57,7 @@ class Header extends Component {
             <div className="header-partner-section">
               <img style={{ height: '66px' }} src={eclogo} alt="" />
               <img
-                style={{ height: '60px', marginLeft: '1rem' }}
+                style={{ height: '66px', marginLeft: '1rem' }}
                 src={eealogo}
                 alt=""
               />

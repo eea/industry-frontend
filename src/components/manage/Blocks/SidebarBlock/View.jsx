@@ -81,16 +81,16 @@ const makeNewNavigation = (
   if (preset === 'facilities') {
     return items?.map((item) => ({
       ...item,
-      onClick: () => {
+      onClick: (pathname, query) => {
         dispatch(deleteQueryParam({ queryParam: ['facilityInspireId'] }));
-        history.push(item.url);
+        history.push(`${item.url}${query}`);
       },
       items: item.items
         ? collection.map((facility) => ({
             title: facility.facilityInspireId,
             url: facility.facilityInspireId,
             presetItem: true,
-            onClick: (pathname) => {
+            onClick: (pathname, query) => {
               if (facility.facilityInspireId !== search.facilityInspireId) {
                 dispatch(
                   setQueryParam({
@@ -101,80 +101,81 @@ const makeNewNavigation = (
                 );
               }
               if (pathname !== item.items[0].url) {
-                history.push(item.items[0].url);
+                history.push(`${item.items[0].url}${query}`);
               }
             },
             active: (pathname) => {
               return (
                 search.facilityInspireId === facility.facilityInspireId &&
-                pathname.includes(item.url)
+                pathname === item.items[0].url
+                // pathname.includes(item.url)
               );
             },
             items: [
-              ...[
-                {
-                  title: 'Pollutant Releases',
-                  url: item.items[0]?.url,
-                  flag: 'has_release_data',
-                  id: 'pollutant_releases_tableau',
-                },
-                {
-                  title: 'Pollutant Transfers',
-                  url: item.items[0]?.url,
-                  flag: 'has_transfer_data',
-                  id: 'pollutant_transfers_tableau',
-                },
-                {
-                  title: 'Waste Transfers',
-                  url: item.items[0]?.url,
-                  flag: 'has_waste_data',
-                  id: 'pollutant_waste_tableau',
-                },
-              ]
-                .filter(
-                  (child) =>
-                    flags.items.facilities?.[facility.facilityInspireId]?.[
-                      child.flag
-                    ],
-                )
-                ?.map((child) => ({
-                  ...child,
-                  redirect: (pathname) => {
-                    // if (
-                    //   search.facilityInspireId !== facility.facilityInspireId &&
-                    //   pathname === child.url
-                    // ) {
-                    //   history.push(item.url);
-                    // }
-                  },
-                  active: (pathname) => {
-                    // return (
-                    //   search.facilityInspireId === facility.facilityInspireId &&
-                    //   pathname.includes(child.url)
-                    // );
-                  },
-                  onClick: (pathname, location) => {
-                    if (
-                      facility.facilityInspireId !== search.facilityInspireId
-                    ) {
-                      dispatch(
-                        setQueryParam({
-                          queryParam: {
-                            facilityInspireId: facility.facilityInspireId,
-                          },
-                        }),
-                      );
-                    }
-                    if (pathname !== child.url) {
-                      history.push(`${child.url}#${child.id}`);
-                    } else {
-                      const hashElement = document.getElementById(child.id);
-                      if (hashElement) {
-                        hashElement.scrollIntoView();
-                      }
-                    }
-                  },
-                })),
+              // ...[
+              //   {
+              //     title: 'Pollutant Releases',
+              //     url: item.items[0]?.url,
+              //     flag: 'has_release_data',
+              //     id: 'pollutant_releases_tableau',
+              //   },
+              //   {
+              //     title: 'Pollutant Transfers',
+              //     url: item.items[0]?.url,
+              //     flag: 'has_transfer_data',
+              //     id: 'pollutant_transfers_tableau',
+              //   },
+              //   {
+              //     title: 'Waste Transfers',
+              //     url: item.items[0]?.url,
+              //     flag: 'has_waste_data',
+              //     id: 'pollutant_waste_tableau',
+              //   },
+              // ]
+              //   .filter(
+              //     (child) =>
+              //       flags.items.facilities?.[facility.facilityInspireId]?.[
+              //         child.flag
+              //       ],
+              //   )
+              //   ?.map((child) => ({
+              //     ...child,
+              //     redirect: (pathname) => {
+              //       // if (
+              //       //   search.facilityInspireId !== facility.facilityInspireId &&
+              //       //   pathname === child.url
+              //       // ) {
+              //       //   history.push(item.url);
+              //       // }
+              //     },
+              //     active: (pathname) => {
+              //       // return (
+              //       //   search.facilityInspireId === facility.facilityInspireId &&
+              //       //   pathname.includes(child.url)
+              //       // );
+              //     },
+              //     onClick: (pathname, query) => {
+              //       if (
+              //         facility.facilityInspireId !== search.facilityInspireId
+              //       ) {
+              //         dispatch(
+              //           setQueryParam({
+              //             queryParam: {
+              //               facilityInspireId: facility.facilityInspireId,
+              //             },
+              //           }),
+              //         );
+              //       }
+              //       if (pathname !== child.url) {
+              //         history.push(`${child.url}${query}#${child.id}`);
+              //       } else {
+              //         const hashElement = document.getElementById(child.id);
+              //         if (hashElement) {
+              //           hashElement.scrollIntoView();
+              //         }
+              //       }
+              //     },
+              //   })),
             ],
           }))
         : [],
@@ -182,20 +183,20 @@ const makeNewNavigation = (
   } else if (preset === 'installations') {
     return items?.map((item) => ({
       ...item,
-      onClick: () => {
+      onClick: (pathname, query) => {
         dispatch(
           deleteQueryParam({
             queryParam: ['facilityInspireId', 'installationInspireId'],
           }),
         );
-        history.push(item.url);
+        history.push(`${item.url}${query}`);
       },
       items: item.items
         ? collection.map((facility) => ({
             title: facility.facilityInspireId,
             url: facility.facilityInspireId,
             presetItem: true,
-            onClick: (pathname) => {
+            onClick: (pathname, query) => {
               if (facility.facilityInspireId !== search.facilityInspireId) {
                 dispatch(
                   setQueryParam({
@@ -207,13 +208,14 @@ const makeNewNavigation = (
                 );
               }
               if (pathname !== item.items[0].url) {
-                history.push(item.items[0].url);
+                history.push(`${item.items[0].url}${query}`);
               }
             },
             active: (pathname) => {
               return (
                 search.facilityInspireId === facility.facilityInspireId &&
-                pathname.includes(item.url)
+                pathname === item.items[0].url
+                // pathname.includes(item.url)
               );
             },
             items: [
@@ -221,7 +223,7 @@ const makeNewNavigation = (
                 title: installation,
                 url: installation,
                 presetItem: true,
-                onClick: (pathname) => {
+                onClick: (pathname, query) => {
                   if (
                     installation !== search.installationInspireId ||
                     facility.facilityInspireId !== search.facilityInspireId
@@ -236,13 +238,14 @@ const makeNewNavigation = (
                     );
                   }
                   if (pathname !== item.items[0].url) {
-                    history.push(item.items[0].url);
+                    history.push(`${item.items[0].url}${query}`);
                   }
                 },
                 active: (pathname) => {
                   return (
                     search.installationInspireId === installation &&
-                    pathname.includes(item.url)
+                    pathname === item.items[0].url
+                    // pathname.includes(item.url)
                   );
                 },
                 items: [],
@@ -254,7 +257,7 @@ const makeNewNavigation = (
   } else if (preset === 'lcps') {
     return items?.map((item) => ({
       ...item,
-      onClick: () => {
+      onClick: (pathname, query) => {
         dispatch(
           deleteQueryParam({
             queryParam: [
@@ -264,14 +267,14 @@ const makeNewNavigation = (
             ],
           }),
         );
-        history.push(item.url);
+        history.push(`${item.url}${query}`);
       },
       items: collection.length
         ? collection?.map((facility) => ({
             title: facility.facilityInspireId,
             url: facility.facilityInspireId,
             presetItem: true,
-            onClick: (pathname) => {
+            onClick: (pathname, query) => {
               if (facility.facilityInspireId !== search.facilityInspireId) {
                 dispatch(
                   setQueryParam({
@@ -285,7 +288,7 @@ const makeNewNavigation = (
                 );
               }
               if (pathname !== item.items[0].url) {
-                history.push(item.items[0].url);
+                history.push(`${item.items[0].url}${query}`);
               }
             },
             active: (pathname) => {
@@ -299,7 +302,7 @@ const makeNewNavigation = (
                 title: installation.installationInspireId,
                 url: installation.installationInspireId,
                 presetItem: true,
-                onClick: (pathname) => {
+                onClick: (pathname, query) => {
                   if (
                     installation.installationInspireId !==
                       search.installationInspireId ||
@@ -317,7 +320,7 @@ const makeNewNavigation = (
                     );
                   }
                   if (pathname !== item.items?.[0]?.url) {
-                    history.push(item.items[0].url);
+                    history.push(`${item.items[0].url}${query}`);
                   }
                 },
                 active: (pathname) => {
@@ -332,7 +335,7 @@ const makeNewNavigation = (
                     title: lcp,
                     url: lcp,
                     presetItem: true,
-                    onClick: (pathname) => {
+                    onClick: (pathname, query) => {
                       if (
                         lcp !== search.lcpInspireId ||
                         installation.installationInspireId !==
@@ -351,7 +354,7 @@ const makeNewNavigation = (
                         );
                       }
                       if (pathname !== item.items?.[0]?.url) {
-                        history.push(item.items[0].url);
+                        history.push(`${item.items[0].url}${query}`);
                       }
                     },
                     active: (pathname) => {
@@ -529,7 +532,9 @@ const View = ({ content, ...props }) => {
               key={item.presetItem ? `${name}` : `${index}-${url}`}
               active={item.active ? item.active(pathname) : active}
               onClick={() => {
-                item.onClick ? item.onClick(pathname) : history.push(url);
+                item.onClick
+                  ? item.onClick(pathname, props.query)
+                  : history.push(`${url}${props.query}`);
               }}
             />
           );

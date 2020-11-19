@@ -85,10 +85,18 @@
 }
 
 .articles-redirect {
-  position: absolute !important;
+  position: absolute;
   bottom: 7em;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.articles-redirect.relative {
+  display: inline-block;
+  position: reltive !important;
+  left: unset;
+  bottom: unset;
+  transform: unset;
 }
 
 @media (min-width: 500px) and (max-width: 768px) {

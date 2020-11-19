@@ -1096,6 +1096,7 @@ const View = ({ content, ...props }) => {
     <div className="search-input-container">
       <div className="ref" ref={ref}>
         <Input
+          aria-label="Site search"
           className="search"
           icon="search"
           placeholder="Search for country, region, city or a site name"
@@ -1188,7 +1189,10 @@ const View = ({ content, ...props }) => {
           onOpen={() => setState({ ...state, open: true })}
           open={state.open}
           trigger={
-            <button className="outline red ml-0-super mr-0-super">
+            <button
+              aria-label="Show modal button"
+              className="outline red ml-0-super mr-0-super"
+            >
               {modalButtonTitle ? modalButtonTitle : 'Show modal'}
             </button>
           }
@@ -1329,10 +1333,15 @@ const View = ({ content, ...props }) => {
               })}
           </Modal.Content>
           <Modal.Actions>
-            <button className="outline red ma-1" onClick={clearFilters}>
+            <button
+              aria-label="Clear button"
+              className="outline red ma-1"
+              onClick={clearFilters}
+            >
               Clear Filters
             </button>
             <button
+              aria-label="Search and filter button"
               className="outline dark-blue ma-1"
               onClick={() => {
                 submit(true);
@@ -1346,6 +1355,7 @@ const View = ({ content, ...props }) => {
       <Portal node={document.getElementById('map-sidebar-button')}>
         <div id="dynamic-filter-toggle" className="ol-unselectable ol-control">
           <button
+            aria-label="Toggle button"
             className="toggle-button"
             onClick={() => {
               setSidebar(!sidebar);
@@ -1443,6 +1453,7 @@ const View = ({ content, ...props }) => {
                   </div>
                   <div className="dynamic-filter-actions">
                     <button
+                      aria-label="Clear filters button"
                       className="outline red"
                       onClick={clearFilters}
                       style={{ margin: 0 }}

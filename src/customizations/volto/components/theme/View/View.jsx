@@ -11,7 +11,7 @@ import { Portal } from 'react-portal';
 import { injectIntl } from 'react-intl';
 import { Helmet } from '@plone/volto/helpers';
 import qs from 'query-string';
-import { views } from '~/config';
+import { settings, views } from '~/config';
 
 import { Comments, Tags, Toolbar } from '@plone/volto/components';
 import { listActions, getContent } from '@plone/volto/actions';
@@ -261,7 +261,10 @@ class View extends Component {
             <html lang={this.props.content.language.token} />
           )}
           <title>{this.props.content.title}</title>
-          <meta name="description" content={this.props.content.description} />
+          <meta
+            name="description"
+            content={this.props.content.description || settings.metaDescription}
+          />
         </Helmet>
         {/* Body class if displayName in component is set */}
         <BodyClass

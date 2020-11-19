@@ -60,8 +60,8 @@ const airPollutants = [
     text: 'Carbon dioxide (CO2)',
   },
   {
-    key: 'Heavy metals (Cd, Hg, Pb)',
-    value: 'Heavy metals (Cd, Hg, Pb)',
+    key: 'Heavy metals (Cd; Hg; Pb)',
+    value: 'Heavy metals (Cd; Hg; Pb)',
     text: 'Heavy metals (Cd, Hg, Pb)',
   },
   {
@@ -82,8 +82,8 @@ const airPollutants = [
 ];
 const waterPollutants = [
   {
-    key: 'Heavy metals (Cd, Hg, Ni, Pb)',
-    value: 'Heavy metals (Cd, Hg, Ni, Pb)',
+    key: 'Heavy metals (Cd; Hg; Ni; Pb)',
+    value: 'Heavy metals (Cd; Hg; Ni; Pb)',
     text: 'Heavy metals (Cd, Hg, Ni, Pb)',
   },
   {

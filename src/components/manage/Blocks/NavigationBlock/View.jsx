@@ -111,7 +111,6 @@ const View = ({ content, ...props }) => {
                   : false
               }
               onClick={() => {
-                history.push(`${url}${props.query}`);
                 if (
                   props.discodata_query.search.facilityInspireId ||
                   props.discodata_query.search.installationInspireId ||
@@ -132,7 +131,7 @@ const View = ({ content, ...props }) => {
                     ] || {};
                   if (Object.keys(lcp).length) {
                     history.push(
-                      `/industrial-site/large-scale-fuel-combustion/site-overview/lcp-overview`,
+                      `/industrial-site/large-scale-fuel-combustion/site-overview/lcp-overview/${props.query}`,
                     );
                     props.setQueryParam({
                       queryParam: {
@@ -141,7 +140,11 @@ const View = ({ content, ...props }) => {
                         lcpInspireId: lcp.lcpInspireId,
                       },
                     });
+                  } else {
+                    history.push(`${url}${props.query}`);
                   }
+                } else {
+                  history.push(`${url}${props.query}`);
                 }
               }}
             />

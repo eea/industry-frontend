@@ -44,6 +44,7 @@ export const settings = {
   navDepth: 5,
   providerUrl: 'https://discodata.eea.europa.eu/sql',
   excludeFromNavigation: ['/industrial-site'],
+  metaDescription: 'European Environment Agency',
 };
 
 export const views = {

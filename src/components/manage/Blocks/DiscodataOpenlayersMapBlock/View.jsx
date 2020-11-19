@@ -1321,6 +1321,7 @@ const OpenlayersMapView = (props) => {
             </div>
             <div className="popover-actions">
               <button
+                aria-label="Site details button"
                 onClick={() => {
                   setSiteQueryParams();
                   history.push('/industrial-site');
@@ -1340,6 +1341,7 @@ const OpenlayersMapView = (props) => {
         <Portal node={document.getElementById('map-view-your-area-button')}>
           <div id="view-your-area" className="ol-unselectable ol-control">
             <button
+              aria-label="Toggle button"
               className="toggle-button"
               onClick={() => {
                 if (navigator.geolocation) {

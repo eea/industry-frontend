@@ -1687,3 +1687,7 @@ b {
 .__react_component_tooltip {
   max-width: 300px;
 }
+
+// a.item {
+//   min-height: 48px;
+// }
