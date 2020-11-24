@@ -41,6 +41,11 @@
     "url": "https://github.com/eea/volto-slate.git",
     "branch": "develop",
     "path": "src"
+  },
+  "volto-matomo": {
+    "url": "https://github.com/eea/volto-matomo.git",
+    "branch": "master",
+    "path": "src"
   }
 }
   

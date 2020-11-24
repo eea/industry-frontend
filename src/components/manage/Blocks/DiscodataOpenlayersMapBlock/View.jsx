@@ -1257,9 +1257,7 @@ const OpenlayersMapView = (props) => {
                             : ''
                         }
                         onClick={setSiteQueryParams}
-                        to={
-                          '/industrial-site/pollutant-releases-and-transfers/site-overview'
-                        }
+                        to={`/industrial-site/pollutant-releases-and-transfers/site-overview/?siteInspireId=${state.popupDetails.properties.InspireSiteId}&siteName=${state.popupDetails.properties.siteName}&siteReportingYear=${state.popupDetails.properties.Site_reporting_year}`}
                       >
                         {state.popupDetails.properties.nFacilities || 0}{' '}
                         Facilities
@@ -1276,9 +1274,7 @@ const OpenlayersMapView = (props) => {
                             : ''
                         }
                         onClick={setSiteQueryParams}
-                        to={
-                          '/industrial-site/regulatory-information/site-overview'
-                        }
+                        to={`/industrial-site/regulatory-information/site-overview/?siteInspireId=${state.popupDetails.properties.InspireSiteId}&siteName=${state.popupDetails.properties.siteName}&siteReportingYear=${state.popupDetails.properties.Site_reporting_year}`}
                       >
                         {state.popupDetails.properties.nInstallations || 0}{' '}
                         Installations
@@ -1286,21 +1282,7 @@ const OpenlayersMapView = (props) => {
                     </p>
                   </div>
                   <div className="column  column-12">
-                    <p>
-                      <Link
-                        as="a"
-                        className={
-                          !state.popupDetails.properties.nLCP
-                            ? 'disabled-link'
-                            : ''
-                        }
-                        onClick={setSiteQueryParams}
-                        to={'/industrial-site/large-scale-fuel-combustion'}
-                      >
-                        {state.popupDetails.properties.nLCP || 0} Large
-                        combustion plants
-                      </Link>
-                    </p>
+                    <p>Large combustion plants</p>
                   </div>
                 </div>
                 {/* SITE POLLUTANT EMISSIONS */}
@@ -1399,7 +1381,6 @@ const OpenlayersMapView = (props) => {
 
   return (
     <div className="openlayer-map-container">
-      {props.mode === 'edit' ? <p>Openlayer map</p> : ''}
       {canShow(dataprotection.privacy_cookie_key) ? (
         view
       ) : (

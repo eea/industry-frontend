@@ -8,7 +8,8 @@
     "src/develop/volto-grid-block",
     "src/develop/volto-addons",
     "src/develop/volto-datablocks",
-    "src/develop/volto-embed"
+    "src/develop/volto-embed",
+    "src/develop/volto-matomo"
   ],
   "addons": [
     "volto-slate:asDefault",
@@ -20,6 +21,7 @@
     "@eeacms/volto-blocks-form",
     "@eeacms/volto-object-widget",
     "@eeacms/volto-grid-block",
+    "@eeacms/volto-matomo",
     "volto-addons",
     "volto-datablocks",
     "volto-embed"

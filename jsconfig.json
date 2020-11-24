@@ -24,6 +24,9 @@
             ],
             "volto-slate": [
                 "develop/volto-slate/src"
+            ],
+            "volto-matomo": [
+                "develop/volto-matomo/src"
             ]
         },
         "baseUrl": "src"

@@ -36,7 +36,7 @@ export default ({ children, data = {}, block, onShow, ...rest }) => {
   const [visible, setVisibility] = useState(false);
   const defaultShow = canShow(dataprotection.privacy_cookie_key);
   const [show, setShow] = useState(defaultShow);
-  const [remember, setRemember] = useState(defaultShow);
+  const [remember, setRemember] = useState(true);
 
   return (
     <VisibilitySensor
