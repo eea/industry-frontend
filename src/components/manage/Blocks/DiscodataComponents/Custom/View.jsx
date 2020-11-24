@@ -147,83 +147,37 @@ const getDate = (field) => {
   }
 };
 
-const components = {
-  eprtrReportingYears: (
-    options,
-    queryParameters,
-    packages,
-    search,
-    setQueryParam,
-    placeholder,
-    className,
-    mode,
-  ) => {
-    let activeValue = '';
-    if (queryParameters[0]?.queryParameterToSet) {
-      activeValue = search[queryParameters[0].queryParameterToSet] || '';
-    }
-    return (
-      <div
-        className={cx(
-          'eprtrReportingYears custom-selector white pa-1 pl-3-super pr-3-super',
-          className,
-        )}
-      >
-        <div>
-          <span className="floating-icon" data-tip={'Something'}>
-            <Icon
-              className="firefox-icon"
-              name={infoSVG}
-              size="20"
-              color="#fff"
-            />
-          </span>
-          <p className="lighter">Last report was submitted on:</p>
-          <p className="bold">{getDate(packages[0])}</p>
-        </div>
-        {/* <div>
-          <p className="bold">Reporting year</p>
-          <Dropdown
-            selection
-            onChange={(event, data) => {
-              const queryParametersToSet = {};
-              queryParameters.forEach((queryParam) => {
-                queryParametersToSet[
-                  queryParam.queryParameterToSet
-                ] = data.options.filter((opt) => {
-                  return opt.value === data.value;
-                })[0]?.[queryParam.selectorOptionKey];
-              });
-              setQueryParam({
-                queryParam: {
-                  ...(queryParametersToSet || {}),
-                },
-              });
-            }}
-            placeholder={placeholder}
-            options={options}
-            value={activeValue}
-          />
-        </div> */}
-        {/* <div>
-          <p className="bold">Publish date</p>
-          <p className="lighter">{getDate(packages[1])}</p>
-        </div> */}
-      </div>
-    );
-  },
-  eprtrCountryGroupSelector: (
-    options,
-    queryParameters,
-    packages,
-    search,
-    setQueryParam,
-    placeholder,
-    className,
-    mode,
-  ) => {
-    const initialQueryParameters = {};
+const ReportingYears = (props) => {
+  const { packages = [], className = '' } = props;
 
+  return (
+    <div
+      className={cx(
+        'eprtrReportingYears custom-selector white pa-1 pl-3-super pr-3-super',
+        className,
+      )}
+    >
+      <div>
+        <span className="floating-icon" data-tip={'Something'}>
+          <Icon
+            className="firefox-icon"
+            name={infoSVG}
+            size="20"
+            color="#fff"
+          />
+        </span>
+        <p className="lighter">Last report was submitted on:</p>
+        <p className="bold">{getDate(packages[0])}</p>
+      </div>
+    </div>
+  );
+};
+
+const CountryGroupSelector = (props) => {
+  const { search = {}, setQueryParam = () => {} } = props;
+
+  useEffect(() => {
+    const initialQueryParameters = {};
     if (!search.analysisCountryGroupId && countryGroups?.[0]?.key) {
       initialQueryParameters.analysisCountryGroupId = countryGroups[0].key;
     }
@@ -240,84 +194,84 @@ const components = {
         },
       });
     }
-    return (
-      <div className="custom-selector big red">
-        <Header as="h1">Industrial pollution in</Header>
-        <div className="selector-container display-flex flex-flow-row">
-          {countryGroups?.length && (
-            <Dropdown
-              selection
-              onChange={(event, data) => {
-                setQueryParam({
-                  queryParam: {
-                    analysisCountryGroupId: data.options.filter((opt) => {
-                      return opt.value === data.value;
-                    })[0]?.key,
-                  },
-                });
-              }}
-              placeholder={'Country group'}
-              options={countryGroups}
-              value={search.analysisCountryGroupId}
-            />
-          )}
-          {pollutionType && (
-            <Dropdown
-              selection
-              onChange={(event, data) => {
-                setQueryParam({
-                  queryParam: {
-                    analysisPollutantType: data.options.filter((opt) => {
-                      return opt.value === data.value;
-                    })[0]?.key,
-                  },
-                });
-              }}
-              placeholder={'Pollution by'}
-              options={pollutionType}
-              value={search.analysisPollutantType}
-            />
-          )}
-          {search.analysisPollutantType && (
-            <Dropdown
-              selection
-              onChange={(event, data) => {
-                setQueryParam({
-                  queryParam: {
-                    analysisPollutant: data.options.filter((opt) => {
-                      return opt.value === data.value;
-                    })[0]?.key,
-                  },
-                });
-              }}
-              placeholder={'Select pollutant'}
-              options={pollutants[search.analysisPollutantType]}
-              value={
-                optionExists(
-                  search.analysisPollutant,
-                  pollutants[search.analysisPollutantType],
-                )
-                  ? search.analysisPollutant
-                  : null
-              }
-            />
-          )}
-        </div>
+  }, []);
+
+  return (
+    <div className="custom-selector big red">
+      <Header as="h1">Industrial pollution in</Header>
+      <div className="selector-container display-flex flex-flow-row">
+        {countryGroups?.length && (
+          <Dropdown
+            selection
+            onChange={(event, data) => {
+              setQueryParam({
+                queryParam: {
+                  analysisCountryGroupId: data.options.filter((opt) => {
+                    return opt.value === data.value;
+                  })[0]?.key,
+                },
+              });
+            }}
+            placeholder={'Country group'}
+            options={countryGroups}
+            value={search.analysisCountryGroupId}
+          />
+        )}
+        {pollutionType && (
+          <Dropdown
+            selection
+            onChange={(event, data) => {
+              setQueryParam({
+                queryParam: {
+                  analysisPollutantType: data.options.filter((opt) => {
+                    return opt.value === data.value;
+                  })[0]?.key,
+                },
+              });
+            }}
+            placeholder={'Pollution by'}
+            options={pollutionType}
+            value={search.analysisPollutantType}
+          />
+        )}
+        {search.analysisPollutantType && (
+          <Dropdown
+            selection
+            onChange={(event, data) => {
+              setQueryParam({
+                queryParam: {
+                  analysisPollutant: data.options.filter((opt) => {
+                    return opt.value === data.value;
+                  })[0]?.key,
+                },
+              });
+            }}
+            placeholder={'Select pollutant'}
+            options={pollutants[search.analysisPollutantType]}
+            value={
+              optionExists(
+                search.analysisPollutant,
+                pollutants[search.analysisPollutantType],
+              )
+                ? search.analysisPollutant
+                : null
+            }
+          />
+        )}
       </div>
-    );
-  },
-  eprtrCountrySelector: (
-    options,
-    queryParameters,
-    packages,
-    search,
-    setQueryParam,
-    placeholder,
-    className,
-    mode,
-    discodata_resources,
-  ) => {
-    const countries = discodata_resources.analysis_countries;
+    </div>
+  );
+};
+
+const CountrySelector = (props) => {
+  const {
+    discodata_resources = {},
+    search = {},
+    setQueryParam = () => {},
+  } = props;
+  const countries = discodata_resources.analysis_countries || [];
+
+  useEffect(() => {
     const initialQueryParameters = {};
 
     if (!search.analysisCountryCode && countries?.[0]?.key) {
@@ -337,84 +291,91 @@ const components = {
         },
       });
     }
-    return (
-      <div className="custom-selector big red">
-        <DiscodataSqlBuilder
-          data={{
-            '@type': 'discodata_sql_builder',
-            sql: {
-              value:
-                '{"fieldsets":[{"id":"sql_metadata","title":"SQL","fields":["analysis_countries"]}],"properties":{"analysis_countries":{"title":"Analysis countries","isCollection":true,"hasPagination":true,"urlQuery":true,"sql":"SELECT DISTINCT PQPC.CountryCode as [key], LC.[CountryName] as [value], LC.[CountryName] as [text]\\nFROM [IED].[latest].[PollutantQuantityPerCapita] as PQPC\\nLEFT JOIN [IED].[latest].[LOV_Countries] as LC\\nON PQPC.[CountryCode] = LC.[CountryCode]\\nWHERE reportingYear IN (\'2018\')"}},"required":[]}',
-            },
-          }}
-        />
-        <Header as="h1">Industrial pollution in</Header>
-        <div className="selector-container display-flex flex-flow-row">
-          {countryGroups?.length && (
-            <Dropdown
-              selection
-              onChange={(event, data) => {
-                setQueryParam({
-                  queryParam: {
-                    analysisCountryCode: data.options.filter((opt) => {
-                      return opt.value === data.value;
-                    })[0]?.key,
-                    analysisCountryName: data.options.filter((opt) => {
-                      return opt.value === data.value;
-                    })[0]?.value,
-                  },
-                });
-              }}
-              placeholder={'Country'}
-              options={countries}
-              value={search.analysisCountryName}
-            />
-          )}
-          {pollutionType && (
-            <Dropdown
-              selection
-              onChange={(event, data) => {
-                setQueryParam({
-                  queryParam: {
-                    analysisPollutantType: data.options.filter((opt) => {
-                      return opt.value === data.value;
-                    })[0]?.key,
-                  },
-                });
-              }}
-              placeholder={'Pollution by'}
-              options={pollutionType}
-              value={search.analysisPollutantType}
-            />
-          )}
-          {search.analysisPollutantType && (
-            <Dropdown
-              selection
-              onChange={(event, data) => {
-                setQueryParam({
-                  queryParam: {
-                    analysisPollutant: data.options.filter((opt) => {
-                      return opt.value === data.value;
-                    })[0]?.key,
-                  },
-                });
-              }}
-              placeholder={'Select pollutant'}
-              options={pollutants[search.analysisPollutantType]}
-              value={
-                optionExists(
-                  search.analysisPollutant,
-                  pollutants[search.analysisPollutantType],
-                )
-                  ? search.analysisPollutant
-                  : null
-              }
-            />
-          )}
-        </div>
-      </div>
-    );
-  },
+  }, [countries]);
+
+  return (
+    <div className="custom-selector big red">
+      <DiscodataSqlBuilder
+        data={{
+          '@type': 'discodata_sql_builder',
+          sql: {
+            value:
+              '{"fieldsets":[{"id":"sql_metadata","title":"SQL","fields":["analysis_countries"]}],"properties":{"analysis_countries":{"title":"Analysis countries","isCollection":true,"hasPagination":true,"urlQuery":true,"sql":"SELECT DISTINCT PQPC.CountryCode as [key], LC.[CountryName] as [value], LC.[CountryName] as [text]\\nFROM [IED].[latest].[PollutantQuantityPerCapita] as PQPC\\nLEFT JOIN [IED].[latest].[LOV_Countries] as LC\\nON PQPC.[CountryCode] = LC.[CountryCode]\\nWHERE reportingYear IN (\'2018\')"}},"required":[]}',
+          },
+        }}
+      />
+      <Header as="h1">Industrial pollution in</Header>
+      {countries.length > 0 ? (
+        <>
+          <div className="selector-container display-flex flex-flow-row">
+            {countryGroups?.length && (
+              <Dropdown
+                selection
+                onChange={(event, data) => {
+                  setQueryParam({
+                    queryParam: {
+                      analysisCountryCode: data.options.filter((opt) => {
+                        return opt.value === data.value;
+                      })[0]?.key,
+                      analysisCountryName: data.options.filter((opt) => {
+                        return opt.value === data.value;
+                      })[0]?.value,
+                    },
+                  });
+                }}
+                placeholder={'Country'}
+                options={countries}
+                value={search.analysisCountryName}
+              />
+            )}
+            {pollutionType && (
+              <Dropdown
+                selection
+                onChange={(event, data) => {
+                  setQueryParam({
+                    queryParam: {
+                      analysisPollutantType: data.options.filter((opt) => {
+                        return opt.value === data.value;
+                      })[0]?.key,
+                    },
+                  });
+                }}
+                placeholder={'Pollution by'}
+                options={pollutionType}
+                value={search.analysisPollutantType}
+              />
+            )}
+            {search.analysisPollutantType && (
+              <Dropdown
+                selection
+                onChange={(event, data) => {
+                  setQueryParam({
+                    queryParam: {
+                      analysisPollutant: data.options.filter((opt) => {
+                        return opt.value === data.value;
+                      })[0]?.key,
+                    },
+                  });
+                }}
+                placeholder={'Select pollutant'}
+                options={pollutants[search.analysisPollutantType]}
+                value={
+                  optionExists(
+                    search.analysisPollutant,
+                    pollutants[search.analysisPollutantType],
+                  )
+                    ? search.analysisPollutant
+                    : null
+                }
+              />
+            )}
+          </div>
+        </>
+      ) : (
+        ''
+      )}
+    </div>
+  );
 };
 
 const View = ({ content, ...props }) => {
@@ -526,18 +487,12 @@ const View = ({ content, ...props }) => {
 
   return (
     <>
-      {components[props.data.component] ? (
-        components[props.data.component](
-          options,
-          queryParametersToSet,
-          packages,
-          props.search,
-          props.setQueryParam,
-          placeholder,
-          className,
-          props.mode,
-          props.discodata_resources,
-        )
+      {props.data.component === 'ReportingYears' && mounted ? (
+        <ReportingYears {...props} />
+      ) : props.data.component === 'CountryGroupSelector' && mounted ? (
+        <CountryGroupSelector {...props} />
+      ) : props.data.component === 'CountrySelector' && mounted ? (
+        <CountrySelector {...props} />
       ) : props.mode === 'edit' ? (
         <p>Component not selected</p>
       ) : (

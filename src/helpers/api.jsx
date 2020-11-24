@@ -16,7 +16,7 @@ export const parseResponse = (response) => {
 export const getFacilities = (dispatch, siteInspireId) => {
   const sql = encodeURI(`SELECT DISTINCT facilityInspireId
   FROM [IED].[latest].[Browse6Header] as R
-  WHERE R.[siteInspireId] = '${siteInspireId}'
+  WHERE R.[siteInspireId] COLLATE Latin1_General_CI_AI LIKE '${siteInspireId}'
   GROUP BY R.[facilityInspireId]`);
   const url = `${settings.providerUrl}?query=${sql}`;
   return new Promise((resolve, reject) => {
@@ -47,7 +47,7 @@ export const getInstallations = (dispatch, siteInspireId) => {
     facilityInspireId,
     string_agg(concat(installationInspireId, ''), ',') as installations
   FROM [IED].[latest].[Browse8Header] as Results
-  WHERE siteInspireId = '${siteInspireId}'
+  WHERE siteInspireId COLLATE Latin1_General_CI_AI LIKE '${siteInspireId}'
   GROUP BY facilityInspireId`);
   const url = `${settings.providerUrl}?query=${sql}`;
   return new Promise((resolve, reject) => {
@@ -82,7 +82,7 @@ export const getLcps = (dispatch, siteInspireId) => {
     installationInspireId,
     string_agg(concat(lcpInspireId, ''), ',') as lcps
   FROM [IED].[latest].[Browse10_Header] as Results
-  WHERE siteInspireId = '${siteInspireId}'
+  WHERE siteInspireId COLLATE Latin1_General_CI_AI LIKE '${siteInspireId}'
   GROUP BY facilityInspireId, installationInspireId`);
   const url = `${settings.providerUrl}?query=${sql}`;
   return new Promise((resolve, reject) => {

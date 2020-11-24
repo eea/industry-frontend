@@ -3,7 +3,7 @@
  * @module components/theme/View/DefaultView
  */
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -45,6 +45,7 @@ const DefaultView = ({
   query,
   setQueryParam,
 }) => {
+  const [mounted, setMounted] = useState(false);
   const history = useHistory();
   const blocksFieldname = getBlocksFieldname(content);
   const blocksLayoutFieldname = getBlocksLayoutFieldname(content);
@@ -62,6 +63,13 @@ const DefaultView = ({
   ];
 
   useEffect(() => {
+    setMounted(true);
+    return () => {
+      setMounted(false);
+    };
+  }, []);
+
+  useEffect(() => {
     if (
       content['layout'] === 'default_view' &&
       content['@type'] === 'site_template' &&
@@ -73,7 +81,8 @@ const DefaultView = ({
     }
     if (
       content['layout'] === 'default_view' &&
-      content['@type'] === 'site_template'
+      content['@type'] === 'site_template' &&
+      mounted
     ) {
       const queryParams = { ...query };
       const missingQueryParams = {};
@@ -116,31 +125,7 @@ const DefaultView = ({
         );
       }
     }
-  }, [location.pathname]);
-
-  useEffect(() => {
-    if (
-      content['@type'] === 'site_template' &&
-      discodata_query.search.siteInspireId &&
-      !timer.current
-    ) {
-      timer.current = setInterval(() => {
-        const hashElement = document.getElementById(hash);
-        clock.current += 1000;
-        if (hashElement) {
-          hashElement.scrollIntoView();
-          clock.current = 0;
-          clearInterval(timer.current);
-          timer.current = null;
-        }
-        if (clock.current === 10000) {
-          clock.current = 0;
-          clearInterval(timer.current);
-          timer.current = null;
-        }
-      }, 1000);
-    }
-  }, [location.hash]);
+  }, [mounted, content?.['@id']]);
 
   return hasBlocksData(content) ? (
     <div id="page-document" className="ui container">

@@ -461,6 +461,7 @@ const View = ({ content, ...props }) => {
     if (preset.get && preset.key) {
       const key = `${preset.key}-${props.search.siteInspireId}`;
       if (
+        props.search.siteInspireId &&
         !props.discodata_resources.data[preset.key]?.[
           props.search.siteInspireId
         ] &&

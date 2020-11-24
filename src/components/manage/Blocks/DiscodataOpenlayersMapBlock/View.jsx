@@ -278,7 +278,7 @@ const OpenlayersMapView = (props) => {
   }, [state])
 
   useEffect(() => {
-    if (mapRendered && stateRef.current.map.element) {
+    if (mapRendered && mounted.current && stateRef.current.map.element) {
       if (['byLocationTerm', 'bySiteTerm'].includes(state.updateMapPosition)) {
         onSourceChange();
       } else if (['byAdvancedFilters'].includes(state.updateMapPosition)) {
@@ -303,13 +303,18 @@ const OpenlayersMapView = (props) => {
   }, [state.map.sitesSourceQuery?.where, state.updateMapPosition])
 
   useEffect(() => {
-    if (!mapRendered && prepareMapRender && document.getElementById('map')) {
+    if (
+      !mapRendered &&
+      mounted.current &&
+      prepareMapRender &&
+      document.getElementById('map')
+    ) {
       renderMap();
       setMapRendered(true);
     }
   }, [prepareMapRender]);
 
-  if (mapRendered && !firstFilteringUpdate) {
+  if (mapRendered && mounted.current && !firstFilteringUpdate) {
     updateFilters();
     updateRegionsFilters();
     setFirstFilteringUpdate(true);
@@ -452,7 +457,7 @@ const OpenlayersMapView = (props) => {
       updateMapPosition = 'bySiteTerm';
     }
 
-    if (updateMapPosition) {
+    if (updateMapPosition && mounted.current) {
       setState({
         ...state,
         map: {
@@ -516,7 +521,11 @@ const OpenlayersMapView = (props) => {
   }
 
   function applyZoom() {
-    if (stateRef.current.map && stateRef.current.map.element) {
+    if (
+      stateRef.current.map &&
+      stateRef.current.map.element &&
+      mounted.current
+    ) {
       const newZoom = stateRef.current.map.element.getView().getZoom();
       if (
         newZoom > zoomSwitch ||
@@ -582,7 +591,7 @@ const OpenlayersMapView = (props) => {
       axios
         .get(
           encodeURI(
-            `${settings.providerUrl}?query=SELECT shape_wm.STX as x, shape_wm.STY as y, Site_reporting_year from [IED].[latest].[SiteMap] WHERE siteName LIKE '%${stateRef.current.siteTerm}%' ORDER BY [Site_reporting_year] DESC`,
+            `${settings.providerUrl}?query=SELECT shape_wm.STX as x, shape_wm.STY as y, Site_reporting_year from [IED].[latest].[SiteMap] WHERE siteName COLLATE Latin1_General_CI_AI LIKE '%${stateRef.current.siteTerm}%' ORDER BY [Site_reporting_year] DESC`,
           ),
         )
         .then((response) => {
@@ -647,22 +656,31 @@ const OpenlayersMapView = (props) => {
       duration: 2000,
       maxZoom: 15,
     };
-    if (stateRef.current.updateMapPosition === 'bySiteTerm') {
+    if (
+      stateRef.current.updateMapPosition === 'bySiteTerm' &&
+      mounted.current
+    ) {
       stateRef.current.map.element.getView().cancelAnimations();
       getSiteTermLocation(options);
     }
-    if (stateRef.current.updateMapPosition === 'byLocationTerm') {
+    if (
+      stateRef.current.updateMapPosition === 'byLocationTerm' &&
+      mounted.current
+    ) {
       stateRef.current.map.element.getView().cancelAnimations();
       setSelectedSite(null);
       getLocation(options);
     }
-    if (stateRef.current.updateMapPosition === 'byAdvancedFilters') {
+    if (
+      stateRef.current.updateMapPosition === 'byAdvancedFilters' &&
+      mounted.current
+    ) {
       stateRef.current.map.element.getView().cancelAnimations();
       setSelectedSite(null);
       getLocationByAdvancedFilters(options);
     }
     //  UPDATE OLD FILTERS
-    if (stateRef.current.updateMapPosition !== null) {
+    if (stateRef.current.updateMapPosition !== null && mounted.current) {
       setState({
         ...stateRef.current,
         map: {
@@ -695,6 +713,7 @@ const OpenlayersMapView = (props) => {
       );
       const featuresProperties = features[0].getProperties();
       if (
+        mounted.current &&
         detailed &&
         JSON.stringify(stateRef.current.popupDetails.properties) !==
           JSON.stringify(featuresProperties)
@@ -711,6 +730,7 @@ const OpenlayersMapView = (props) => {
           },
         });
       } else if (
+        mounted.current &&
         !detailed &&
         JSON.stringify(stateRef.current.popup.properties) !==
           JSON.stringify(featuresProperties)
@@ -1046,7 +1066,7 @@ const OpenlayersMapView = (props) => {
       }
       //  Events
       sitesSource.on('updateClosestFeature', function (e) {
-        if (!reqs && e.target.getState() === 'ready') {
+        if (!reqs && e.target.getState() === 'ready' && mounted.current) {
           if (selectedSiteCoordinates.current) {
             const closestFeature = sitesSource.getClosestFeatureToCoordinate(
               selectedSiteCoordinates.current,
@@ -1131,25 +1151,30 @@ const OpenlayersMapView = (props) => {
   }
 
   const setSiteQueryParams = () => {
-    axios
-      .get(
-        encodeURI(
-          `${settings.providerUrl}?query=SELECT DISTINCT siteId, siteInspireId FROM [IED].[latest].[FacilitiesPerSite] WHERE siteId = '${state.popupDetails.properties.id}'`,
-        ),
-      )
-      .then((response) => {
-        const data = JSON.parse(response.request.response);
-        props.setQueryParam({
-          queryParam: {
-            siteInspireId: data.results[0].siteInspireId,
-            siteId: state.popupDetails.properties.id,
-            siteName: state.popupDetails.properties.siteName,
-            siteReportingYear:
-              state.popupDetails.properties.Site_reporting_year,
-          },
+    return new Promise((resolve, reject) => {
+      axios
+        .get(
+          encodeURI(
+            `${settings.providerUrl}?query=SELECT DISTINCT siteId, siteInspireId FROM [IED].[latest].[FacilitiesPerSite] WHERE siteId LIKE '${state.popupDetails.properties.id}'`,
+          ),
+        )
+        .then((response) => {
+          const data = JSON.parse(response.request.response);
+          props.setQueryParam({
+            queryParam: {
+              siteInspireId: data.results[0].siteInspireId,
+              siteId: state.popupDetails.properties.id,
+              siteName: state.popupDetails.properties.siteName,
+              siteReportingYear:
+                state.popupDetails.properties.Site_reporting_year,
+            },
+          });
+          resolve(true);
+        })
+        .catch((error) => {
+          reject(false);
         });
-      })
-      .catch((error) => {});
+    });
   };
   if (!__CLIENT__) return '';
 
@@ -1323,8 +1348,13 @@ const OpenlayersMapView = (props) => {
               <button
                 aria-label="Site details button"
                 onClick={() => {
-                  setSiteQueryParams();
-                  history.push('/industrial-site');
+                  setSiteQueryParams()
+                    .then((response) => {
+                      history.push('/industrial-site');
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
                 }}
                 className="solid dark-blue"
               >

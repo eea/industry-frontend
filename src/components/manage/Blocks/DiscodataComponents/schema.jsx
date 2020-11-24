@@ -402,9 +402,9 @@ export const makeCustomSchema = (props) => {
       title: 'Component',
       type: 'array',
       choices: [
-        ['eprtrReportingYears', 'EPRTR reporting years'],
-        ['eprtrCountryGroupSelector', 'EPRTR country group selector'],
-        ['eprtrCountrySelector', 'EPRTR country selector'],
+        ['ReportingYears', 'EPRTR reporting years'],
+        ['CountryGroupSelector', 'EPRTR country group selector'],
+        ['CountrySelector', 'EPRTR country selector'],
       ],
     },
   };

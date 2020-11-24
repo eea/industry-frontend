@@ -19,7 +19,7 @@ const QueryBuilder = (props) => {
           },
           where: {
             value:
-              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"site_header","urlQuery":false,"key":"B5H.siteInspireId","queryParam":"siteInspireId"}}}',
+              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"site_header","urlQuery":false,"key":"B5H.siteInspireId","queryParam":"siteInspireId", "collation":"latin_ci_ai"}}}',
           },
           groupBy: {
             value:
@@ -44,7 +44,7 @@ const QueryBuilder = (props) => {
           },
           where: {
             value:
-              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"site_details_1","urlQuery":false,"key":"siteInspireId","queryParam":"siteInspireId"}},"required":[]}',
+              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"site_details_1","urlQuery":false,"key":"siteInspireId","queryParam":"siteInspireId", "collation":"latin_ci_ai"}},"required":[]}',
           },
         }}
       />
@@ -65,7 +65,7 @@ const QueryBuilder = (props) => {
           },
           where: {
             value:
-              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"site_details_2","urlQuery":false,"key":"siteInspireId","queryParam":"siteInspireId"}},"required":[]}',
+              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"site_details_2","urlQuery":false,"key":"siteInspireId","queryParam":"siteInspireId", "collation":"latin_ci_ai"}},"required":[]}',
           },
         }}
       />
@@ -82,7 +82,7 @@ const QueryBuilder = (props) => {
           },
           where: {
             value:
-              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"site_details_3","urlQuery":false,"key":"siteInspireId","queryParam":"siteInspireId"}}}',
+              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"site_details_3","urlQuery":false,"key":"siteInspireId","queryParam":"siteInspireId", "collation":"latin_ci_ai"}}}',
           },
           groupBy: {
             value:
@@ -103,7 +103,7 @@ const QueryBuilder = (props) => {
           },
           where: {
             value:
-              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"permits","urlQuery":false,"key":"siteInspireId","queryParam":"siteInspireId"}}}',
+              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"permits","urlQuery":false,"key":"siteInspireId","queryParam":"siteInspireId", "collation":"latin_ci_ai"}}}',
           },
           groupBy: {
             value:
@@ -124,7 +124,7 @@ const QueryBuilder = (props) => {
           },
           where: {
             value:
-              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"bat_conclusions","urlQuery":false,"key":"siteInspireId","queryParam":"siteInspireId"}}}',
+              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"bat_conclusions","urlQuery":false,"key":"siteInspireId","queryParam":"siteInspireId", "collation":"latin_ci_ai"}}}',
           },
           groupBy: {
             value:
@@ -145,7 +145,7 @@ const QueryBuilder = (props) => {
           },
           where: {
             value:
-              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"bat_derogations","urlQuery":false,"key":"siteInspireId","queryParam":"siteInspireId"}}}',
+              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"bat_derogations","urlQuery":false,"key":"siteInspireId","queryParam":"siteInspireId", "collation":"latin_ci_ai"}}}',
           },
           groupBy: {
             value:
@@ -166,7 +166,7 @@ const QueryBuilder = (props) => {
           },
           where: {
             value:
-              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"site_details_4","urlQuery":false,"key":"siteInspireId","queryParam":"siteInspireId"}}}',
+              '{"fieldsets":[{"id":"where_statements_metadata","title":"Where statements","fields":["w1"]}],"properties":{"w1":{"title":"W1","sqlId":"site_details_4","urlQuery":false,"key":"siteInspireId","queryParam":"siteInspireId", "collation":"latin_ci_ai"}}}',
           },
           groupBy: {
             value:

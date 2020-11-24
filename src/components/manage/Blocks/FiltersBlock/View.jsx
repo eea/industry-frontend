@@ -215,26 +215,22 @@ const View = ({ content, ...props }) => {
 
   const onFeaturechange = (e) => {
     if (
+      mounted.current &&
       e.detail.feature?.getProperties?.()?.countryCode !==
-      alphaFeatureRef.current?.getProperties?.()?.countryCode
+        alphaFeatureRef.current?.getProperties?.()?.countryCode
     ) {
       setAlphaFeature(e.detail.feature);
     }
   };
 
-  if (!quickFactsListener && document.getElementById('dynamic-filter')) {
-    setQuickFactsListener(true);
-    document
-      .getElementById(`dynamic-filter`)
-      .addEventListener('featurechange', onFeaturechange);
-  }
-
   useEffect(function () {
     mounted.current = true;
     setMountState(true);
     updateFactsData(true);
-    history.listen((location, action) => {
-      setQuickFactsListener(false);
+    const unlisten = history.listen((location, action) => {
+      if (mounted.current) {
+        setQuickFactsListener(false);
+      }
     });
     return () => {
       if (quickFactsListener && document.getElementById(`dynamic-filter`)) {
@@ -243,21 +239,33 @@ const View = ({ content, ...props }) => {
           .removeEventListener('featurechange', onFeaturechange);
       }
       mounted.current = false;
+      unlisten();
       setMountState(false);
     };
     /* eslint-disable-next-line */
   }, []);
 
+  if (
+    mounted.current &&
+    !quickFactsListener &&
+    document.getElementById('dynamic-filter')
+  ) {
+    setQuickFactsListener(true);
+    document
+      .getElementById(`dynamic-filter`)
+      .addEventListener('featurechange', onFeaturechange);
+  }
+
   useEffect(() => {
-    alphaFeatureRef.current = alphaFeature;
-    if (mountState) {
+    if (mounted.current) {
+      alphaFeatureRef.current = alphaFeature;
       updateFactsData(false);
     }
     /* eslint-disable-next-line */
   }, [alphaFeature, JSON.stringify(props.discodata_query.search.reportingYear)])
 
   useEffect(() => {
-    if (triggerSearch) {
+    if (mounted.current && triggerSearch) {
       submit();
       setTriggerSearch(false);
     }
@@ -265,7 +273,7 @@ const View = ({ content, ...props }) => {
   }, [searchTerm, triggerSearch])
 
   useEffect(() => {
-    if (state.open && searchResultsActive) {
+    if (mounted.current && state.open && searchResultsActive) {
       setSearchResultsActive(false);
     }
     /* eslint-disable-next-line */
@@ -273,7 +281,9 @@ const View = ({ content, ...props }) => {
 
   useEffect(() => {
     // register eventListener on each state update
-    document.addEventListener('mousedown', handleClickOutside, false);
+    if (mounted.current) {
+      document.addEventListener('mousedown', handleClickOutside, false);
+    }
     return () => {
       // unregister eventListener
       document.removeEventListener('mousedown', handleClickOutside, false);
@@ -282,7 +292,7 @@ const View = ({ content, ...props }) => {
   }, [state]);
 
   useEffect(() => {
-    if (mountState) {
+    if (mounted.current) {
       updateFilters();
       if (Object.keys(state.filtersMeta).length && !filtersMetaReady) {
         setFiltersMetaReady(true);
@@ -293,6 +303,7 @@ const View = ({ content, ...props }) => {
 
   useEffect(() => {
     if (
+      mounted.current &&
       typeof initialization === 'function' &&
       filtersMetaReady &&
       state.filtersMeta
@@ -303,7 +314,7 @@ const View = ({ content, ...props }) => {
   }, [filtersMetaReady])
 
   useEffect(() => {
-    if (mountState && __CLIENT__) {
+    if (mounted.current && __CLIENT__) {
       let promises = [];
       let metadata = [];
       const siteCountryFilters =
@@ -717,31 +728,33 @@ const View = ({ content, ...props }) => {
     position = 0,
     triggerQueryUpdate = false,
   ) => {
-    const newFilters = { ...state.filters };
-    if (!newFilters[filter.queryToSet]) newFilters[filter.queryToSet] = [];
-    if (newFilters[filter.queryToSet]?.length >= position) {
-      newFilters[filter.queryToSet][position] = data.value;
-    } else if (newFilters[filter.queryToSet]?.length < position) {
-      for (let i = 0; i < newFilters[filter.queryToSet].length; i++) {
-        if (typeof newFilters[filter.queryToSet][i] === 'undefined')
-          newFilters[filter.queryToSet][i] = null;
+    if (mounted.current) {
+      const newFilters = { ...state.filters };
+      if (!newFilters[filter.queryToSet]) newFilters[filter.queryToSet] = [];
+      if (newFilters[filter.queryToSet]?.length >= position) {
+        newFilters[filter.queryToSet][position] = data.value;
+      } else if (newFilters[filter.queryToSet]?.length < position) {
+        for (let i = 0; i < newFilters[filter.queryToSet].length; i++) {
+          if (typeof newFilters[filter.queryToSet][i] === 'undefined')
+            newFilters[filter.queryToSet][i] = null;
+        }
       }
-    }
-    setState({
-      ...state,
-      filters: newFilters,
-    });
-    if (triggerQueryUpdate) {
-      props.setQueryParam({
-        queryParam: {
-          [filter.queryToSet]: newFilters[filter.queryToSet],
-        },
+      setState({
+        ...state,
+        filters: newFilters,
       });
+      if (triggerQueryUpdate) {
+        props.setQueryParam({
+          queryParam: {
+            [filter.queryToSet]: newFilters[filter.queryToSet],
+          },
+        });
+      }
     }
   };
 
   const updateFilters = () => {
-    if (state.filters && state.filtersMeta) {
+    if (mounted.current && state.filters && state.filtersMeta) {
       const newFilters = { ...state.filters };
       const newFiltersKeys = Object.keys(newFilters);
       const filtersMetaEntries = Object.entries(state.filtersMeta);
@@ -913,7 +926,7 @@ const View = ({ content, ...props }) => {
     let promises = [];
     const sqls = [
       {
-        query: `SELECT DISTINCT siteName FROM [IED].[latest].[SiteMap] WHERE [siteName] LIKE '%${data.value}%' ORDER BY [siteName]`,
+        query: `SELECT DISTINCT siteName FROM [IED].[latest].[SiteMap] WHERE [siteName] COLLATE Latin1_General_CI_AI LIKE '%${data.value}%' ORDER BY [siteName]`,
         reqKey: 'results',
         searchKey: 'siteName',
         updateState: setSitesResults,

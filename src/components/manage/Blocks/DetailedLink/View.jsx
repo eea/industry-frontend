@@ -88,7 +88,13 @@ const View = (props) => {
                   }
                   return e.preventDefault;
                 }}
-                to={!backButton && getPath(detailedLink?.path)}
+                to={
+                  !backButton && {
+                    pathname: getPath(detailedLink?.path),
+                    search: '',
+                    hash: '',
+                  }
+                }
               >
                 <span>{buttonTitle || detailedLink?.title || 'Go'}</span>
               </Link>

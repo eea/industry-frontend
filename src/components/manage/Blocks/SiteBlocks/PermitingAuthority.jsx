@@ -28,7 +28,7 @@ const PermitingAuthority = (props) => {
         ''
       )}
       {permitingAuthority.length > 1 ? (
-        <div className="industrial-site">
+        <div className="industrial-site mb-1">
           <RenderTable
             className="description-table"
             celled={false}
