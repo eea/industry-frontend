@@ -1282,7 +1282,12 @@ const OpenlayersMapView = (props) => {
                     </p>
                   </div>
                   <div className="column  column-12">
-                    <p>Large combustion plants</p>
+                    <p>
+                     {state.popupDetails.properties.nLCP   
+                      ? ' Large combustion plants'
+                      : '' } 
+                    </p>
+
                   </div>
                 </div>
                 {/* SITE POLLUTANT EMISSIONS */}
