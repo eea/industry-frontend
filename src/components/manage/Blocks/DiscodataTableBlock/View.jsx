@@ -86,8 +86,14 @@ const components = {
             if (updatedSearch) props.setQueryParam({ queryParam: newSearch });
           }}
           to={
-            schemaMetadata.urlFieldId + ''
-            // (newSearch ? `?${qs.stringify(newSearch)}` : '')
+            schemaMetadata.urlFieldId +
+            (newSearch
+              ? `?${qs.stringify({
+                  siteInspireId: newSearch.siteInspireId,
+                  siteName: newSearch.siteName,
+                  siteReportingYear: newSearch.siteReportingYear,
+                })}`
+              : '')
           }
         >
           {schemaMetadata.title}

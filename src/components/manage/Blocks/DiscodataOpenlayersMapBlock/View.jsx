@@ -1327,21 +1327,14 @@ const OpenlayersMapView = (props) => {
               </div>
             </div>
             <div className="popover-actions">
-              <button
-                aria-label="Site details button"
-                onClick={() => {
-                  setSiteQueryParams()
-                    .then((response) => {
-                      history.push('/industrial-site');
-                    })
-                    .catch((error) => {
-                      console.log(error);
-                    });
-                }}
-                className="solid dark-blue"
+              <Link
+                as="a"
+                className="solid dark-blue display-inline-block"
+                onClick={setSiteQueryParams}
+                to={`/industrial-site/introduction/understanding-the-data/?siteInspireId=${state.popupDetails.properties.InspireSiteId}&siteName=${state.popupDetails.properties.siteName}&siteReportingYear=${state.popupDetails.properties.Site_reporting_year}`}
               >
                 Site Details
-              </button>
+              </Link>
             </div>
           </>
         )}
