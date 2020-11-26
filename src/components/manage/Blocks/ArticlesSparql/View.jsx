@@ -118,7 +118,7 @@ const View = (props) => {
         >
           READ MORE
         </Link>
-      ) : items.length ? (
+      ) : preview && items.length ? (
         <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
           <Link
             className="solid dark-blue articles-redirect relative"
