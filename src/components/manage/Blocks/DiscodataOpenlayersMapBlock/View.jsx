@@ -1243,48 +1243,77 @@ const OpenlayersMapView = (props) => {
             <div className="popover-body">
               <div className="grid-layout">
                 {/* SITE CONTENTS */}
-                <div className="row mb-1-super mt-0-super">
-                  <div className="column column-12">
-                    <Header as="h3">Site contents</Header>
+                {state.popupDetails.properties.nFacilities ||
+                state.popupDetails.properties.nInstallations ||
+                state.popupDetails.properties.nLCP ? (
+                  <div className="row mb-1-super mt-0-super">
+                    <div className="column column-12">
+                      <Header as="h3">Site contents</Header>
+                    </div>
+                    {state.popupDetails.properties.nFacilities ? (
+                      <div className="column  column-12">
+                        <p>
+                          <Link
+                            as="a"
+                            className={
+                              !state.popupDetails.properties.nFacilities
+                                ? 'disabled-link'
+                                : ''
+                            }
+                            onClick={setSiteQueryParams}
+                            to={`/industrial-site/pollutant-releases-and-transfers/site-overview/?siteInspireId=${state.popupDetails.properties.InspireSiteId}&siteName=${state.popupDetails.properties.siteName}&siteReportingYear=${state.popupDetails.properties.Site_reporting_year}`}
+                          >
+                            {state.popupDetails.properties.nFacilities}
+                            Facilit
+                            {state.popupDetails.properties.nFacilities > 1
+                              ? 'ies'
+                              : 'y'}
+                          </Link>
+                        </p>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                    {state.popupDetails.properties.nInstallations ? (
+                      <div className="column  column-12">
+                        <p>
+                          <Link
+                            as="a"
+                            className={
+                              !state.popupDetails.properties.nInstallations
+                                ? 'disabled-link'
+                                : ''
+                            }
+                            onClick={setSiteQueryParams}
+                            to={`/industrial-site/regulatory-information/site-overview/?siteInspireId=${state.popupDetails.properties.InspireSiteId}&siteName=${state.popupDetails.properties.siteName}&siteReportingYear=${state.popupDetails.properties.Site_reporting_year}`}
+                          >
+                            {state.popupDetails.properties.nInstallations}
+                            Installation
+                            {state.popupDetails.properties.nInstallations > 1
+                              ? 's'
+                              : ''}
+                          </Link>
+                        </p>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                    {state.popupDetails.properties.nLCP ? (
+                      <div className="column  column-12">
+                        <p>
+                          {state.popupDetails.properties.nLCP}
+                          Large combustion plant
+                          {state.popupDetails.properties.nLCP > 1 ? 's' : ''}
+                        </p>
+                      </div>
+                    ) : (
+                      ''
+                    )}
                   </div>
-                  <div className="column  column-12">
-                    <p>
-                      <Link
-                        as="a"
-                        className={
-                          !state.popupDetails.properties.nFacilities
-                            ? 'disabled-link'
-                            : ''
-                        }
-                        onClick={setSiteQueryParams}
-                        to={`/industrial-site/pollutant-releases-and-transfers/site-overview/?siteInspireId=${state.popupDetails.properties.InspireSiteId}&siteName=${state.popupDetails.properties.siteName}&siteReportingYear=${state.popupDetails.properties.Site_reporting_year}`}
-                      >
-                        {state.popupDetails.properties.nFacilities || 0}{' '}
-                        Facilities
-                      </Link>
-                    </p>
-                  </div>
-                  <div className="column  column-12">
-                    <p>
-                      <Link
-                        as="a"
-                        className={
-                          !state.popupDetails.properties.nInstallations
-                            ? 'disabled-link'
-                            : ''
-                        }
-                        onClick={setSiteQueryParams}
-                        to={`/industrial-site/regulatory-information/site-overview/?siteInspireId=${state.popupDetails.properties.InspireSiteId}&siteName=${state.popupDetails.properties.siteName}&siteReportingYear=${state.popupDetails.properties.Site_reporting_year}`}
-                      >
-                        {state.popupDetails.properties.nInstallations || 0}{' '}
-                        Installations
-                      </Link>
-                    </p>
-                  </div>
-                  <div className="column  column-12">
-                    <p>Large combustion plants</p>
-                  </div>
-                </div>
+                ) : (
+                  ''
+                )}
+
                 {/* SITE POLLUTANT EMISSIONS */}
                 <div className="row mb-1-super mt-0-super">
                   <div className="column  column-12">
@@ -1292,16 +1321,7 @@ const OpenlayersMapView = (props) => {
                   </div>
                   <div className="column  column-12 description">
                     {state.popupDetails.properties.pollutants ? (
-                      <p>
-                        {state.popupDetails.properties.pollutants}
-                        {/* {state.popupDetails.properties.pollutants.substring(
-                    0,
-                    256,
-                  )}
-                  {state.popupDetails.properties.pollutants.length > 256
-                    ? '...'
-                    : ''} */}
-                      </p>
+                      <p>{state.popupDetails.properties.pollutants}</p>
                     ) : (
                       <p>There are no data regarding the pollutants</p>
                     )}
