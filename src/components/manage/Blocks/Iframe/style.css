@@ -20,3 +20,7 @@
   margin-bottom: 0;
   margin-right: 0.3rem;
 }
+
+.eprtr-iframe iframe {
+  width: 100%;
+}
