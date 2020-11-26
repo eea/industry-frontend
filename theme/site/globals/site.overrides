@@ -1691,3 +1691,15 @@ b {
 // a.item {
 //   min-height: 48px;
 // }
+
+.ui.menu {
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.ui.menu .item:before {
+  display: none !important;
+  width: 0 !important;
+  border: none !important;
+  background: none !important;
+}
