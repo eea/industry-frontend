@@ -64,7 +64,9 @@ const DefaultView = ({
 
   useEffect(() => {
     setMounted(true);
+    console.log('MOUNTED');
     return () => {
+      console.log('UNMOUNTED');
       setMounted(false);
     };
   }, []);
