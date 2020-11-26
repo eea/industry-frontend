@@ -45,7 +45,7 @@ export const settings = {
   providerUrl: 'https://discodata.eea.europa.eu/sql',
   excludeFromNavigation: ['/industrial-site'],
   metaDescription: 'European Environment Agency',
-  matomoSiteId: 100,
+  matomoSiteId: 48,
 };
 
 export const views = {
