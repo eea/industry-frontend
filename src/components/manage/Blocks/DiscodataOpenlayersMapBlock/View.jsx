@@ -1263,7 +1263,7 @@ const OpenlayersMapView = (props) => {
                             onClick={setSiteQueryParams}
                             to={`/industrial-site/pollutant-releases-and-transfers/site-overview/?siteInspireId=${state.popupDetails.properties.InspireSiteId}&siteName=${state.popupDetails.properties.siteName}&siteReportingYear=${state.popupDetails.properties.Site_reporting_year}`}
                           >
-                            {state.popupDetails.properties.nFacilities}
+                            {state.popupDetails.properties.nFacilities + ' '}
                             Facilit
                             {state.popupDetails.properties.nFacilities > 1
                               ? 'ies'
@@ -1287,7 +1287,7 @@ const OpenlayersMapView = (props) => {
                             onClick={setSiteQueryParams}
                             to={`/industrial-site/regulatory-information/site-overview/?siteInspireId=${state.popupDetails.properties.InspireSiteId}&siteName=${state.popupDetails.properties.siteName}&siteReportingYear=${state.popupDetails.properties.Site_reporting_year}`}
                           >
-                            {state.popupDetails.properties.nInstallations}
+                            {state.popupDetails.properties.nInstallations + ' '}
                             Installation
                             {state.popupDetails.properties.nInstallations > 1
                               ? 's'
@@ -1301,7 +1301,7 @@ const OpenlayersMapView = (props) => {
                     {state.popupDetails.properties.nLCP ? (
                       <div className="column  column-12">
                         <p>
-                          {state.popupDetails.properties.nLCP}
+                          {state.popupDetails.properties.nLCP + ' '}
                           Large combustion plant
                           {state.popupDetails.properties.nLCP > 1 ? 's' : ''}
                         </p>
