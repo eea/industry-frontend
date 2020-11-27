@@ -85,10 +85,10 @@
 }
 
 .articles-redirect {
-  position: absolute;
-  bottom: 7em;
-  left: 50%;
-  transform: translateX(-50%);
+  position: absolute !important;
+  bottom: 7em !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
 }
 
 .articles-redirect.relative {
