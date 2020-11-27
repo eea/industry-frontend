@@ -1253,22 +1253,11 @@ const OpenlayersMapView = (props) => {
                     {state.popupDetails.properties.nFacilities ? (
                       <div className="column  column-12">
                         <p>
-                          <Link
-                            as="a"
-                            className={
-                              !state.popupDetails.properties.nFacilities
-                                ? 'disabled-link'
-                                : ''
-                            }
-                            onClick={setSiteQueryParams}
-                            to={`/industrial-site/pollutant-releases-and-transfers/site-overview/?siteInspireId=${state.popupDetails.properties.InspireSiteId}&siteName=${state.popupDetails.properties.siteName}&siteReportingYear=${state.popupDetails.properties.Site_reporting_year}`}
-                          >
-                            {state.popupDetails.properties.nFacilities + ' '}
-                            Facilit
-                            {state.popupDetails.properties.nFacilities > 1
-                              ? 'ies'
-                              : 'y'}
-                          </Link>
+                          {state.popupDetails.properties.nFacilities + ' '}
+                          Facilit
+                          {state.popupDetails.properties.nFacilities > 1
+                            ? 'ies'
+                            : 'y'}
                         </p>
                       </div>
                     ) : (
@@ -1277,22 +1266,11 @@ const OpenlayersMapView = (props) => {
                     {state.popupDetails.properties.nInstallations ? (
                       <div className="column  column-12">
                         <p>
-                          <Link
-                            as="a"
-                            className={
-                              !state.popupDetails.properties.nInstallations
-                                ? 'disabled-link'
-                                : ''
-                            }
-                            onClick={setSiteQueryParams}
-                            to={`/industrial-site/regulatory-information/site-overview/?siteInspireId=${state.popupDetails.properties.InspireSiteId}&siteName=${state.popupDetails.properties.siteName}&siteReportingYear=${state.popupDetails.properties.Site_reporting_year}`}
-                          >
-                            {state.popupDetails.properties.nInstallations + ' '}
-                            Installation
-                            {state.popupDetails.properties.nInstallations > 1
-                              ? 's'
-                              : ''}
-                          </Link>
+                          {state.popupDetails.properties.nInstallations + ' '}
+                          Installation
+                          {state.popupDetails.properties.nInstallations > 1
+                            ? 's'
+                            : ''}
                         </p>
                       </div>
                     ) : (
