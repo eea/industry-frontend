@@ -1,7 +1,7 @@
-# IMS: Volto Frontend
+# EPRTR: Volto Frontend
 
-[![Pipeline](https://ci.eionet.europa.eu/buildStatus/icon?job=volto%2Fims-frontend%2Fmaster&subject=pipeline)](https://ci.eionet.europa.eu/view/Github/job/volto/job/ims-frontend/job/master/display/redirect)
-[![Release](https://img.shields.io/github/v/release/eea/ims-frontend?sort=semver)](https://github.com/eea/ims-frontend/releases)
+[![Pipeline](https://ci.eionet.europa.eu/buildStatus/icon?job=volto%2Feprtr_frontend%2Fmaster&subject=pipeline)](https://ci.eionet.europa.eu/view/Github/job/volto/job/eprtr_frontend/job/master/display/redirect)
+[![Release](https://img.shields.io/github/v/release/eea/eprtr_frontend?sort=semver)](https://github.com/eea/eprtr_frontend/releases)
 
 ## Documentation
 
@@ -12,8 +12,8 @@ A training on how to create your own website using Volto is available as part of
 
 1. Clone:
 
-        $ git clone https://github.com/eea/ims-frontend.git
-        $ cd ims-frontend
+        $ git clone https://github.com/eea/eprtr_frontend.git
+        $ cd eprtr_frontend
 
 1. Install `nvm`
 
@@ -59,8 +59,8 @@ A training on how to create your own website using Volto is available as part of
 1. Install [Docker Compose](https://docs.docker.com/compose/install/)
 1. Start:
 
-        $ git clone https://github.com/eea/ims-frontend.git
-        $ cd ims-frontend
+        $ git clone https://github.com/eea/eprtr_frontend.git
+        $ cd eprtr_frontend
 
         $ docker-compose pull
         $ docker-compose up -d
@@ -82,13 +82,13 @@ We use [Docker](https://www.docker.com/), [Rancher](https://rancher.com/) and [J
 
 ### Deploy
 
-* Within `Rancher > Catalog > EEA` deploy [Volto - IMS](https://github.com/eea/eea.rancher.catalog/tree/master/templates/volto-ims)
+* Within `Rancher > Catalog > EEA` deploy [Volto - EPRTR](https://github.com/eea/eea.rancher.catalog/tree/master/templates/volto-eprtr)
 
 ### Release
 
-* Create a new release of this code via `git tag` command or [Draft new release](https://github.com/eea/ims-frontend/releases/new) on Github.
-  * A new Docker image is built and released automatically on [DockerHub](https://hub.docker.com/r/eeacms/ims-frontend) based on this tag.
-  * A new entry is automatically added to [Volto - IMS](https://github.com/eea/eea.rancher.catalog/tree/master/templates/volto-ims) `EEA Rancher Catalog`
+* Create a new release of this code via `git tag` command or [Draft new release](https://github.com/eea/eprtr_frontend/releases/new) on Github.
+  * A new Docker image is built and released automatically on [DockerHub](https://hub.docker.com/r/eeacms/eprtr_frontend) based on this tag.
+  * A new entry is automatically added to [Volto - EPRTR](https://github.com/eea/eea.rancher.catalog/tree/master/templates/volto-eprtr) `EEA Rancher Catalog`
 
 ### Upgrade
 
