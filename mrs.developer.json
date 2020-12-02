@@ -6,7 +6,7 @@
   },
   "volto-grid-block": {
     "url": "https://github.com/eea/volto-grid-block.git",
-    "branch": "master",
+    "branch": "centurion",
     "path": "src",
     "package": "@eeacms/volto-grid-block"
   },
@@ -29,6 +29,12 @@
     "url": "https://github.com/eea/volto-matomo.git",
     "branch": "master",
     "path": "src"
+  },
+  "volto-sentry-rancher-config": {
+    "url": "https://github.com/eea/volto-sentry-rancher-config.git",
+    "branch": "master",
+    "path": "src",
+    "package": "@eeacms/volto-sentry-rancher-config"
   }
 }
   

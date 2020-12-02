@@ -18,6 +18,9 @@
             ],
             "volto-matomo": [
                 "develop/volto-matomo/src"
+            ],
+            "volto-sentry-rancher-config": [
+                "develop/volto-sentry-rancher-config/src"
             ]
         },
         "baseUrl": "src"

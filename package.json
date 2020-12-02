@@ -9,7 +9,8 @@
     "src/develop/volto-addons",
     "src/develop/volto-datablocks",
     "src/develop/volto-embed",
-    "src/develop/volto-matomo"
+    "src/develop/volto-matomo",
+    "src/develop/volto-sentry-rancher-config"
   ],
   "addons": [
     "volto-slate:asDefault",
@@ -21,6 +22,7 @@
     "@eeacms/volto-object-widget",
     "@eeacms/volto-grid-block",
     "@eeacms/volto-matomo",
+    "@eeacms/volto-sentry-rancher-config",
     "volto-addons",
     "volto-datablocks",
     "volto-embed"
