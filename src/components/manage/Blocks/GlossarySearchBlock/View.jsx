@@ -268,10 +268,7 @@ class View extends Component {
                 className={cx(this.props.data.className?.value)}
                 ref={this.linkInput}
                 aria-label="Glossary search"
-                placeholder={
-                  this.props.data?.placeholder?.value ||
-                  this.props.intl.formatMessage(messages.searchSite)
-                }
+                placeholder={this.props.data?.placeholder?.value || ''}
                 title={this.props.intl.formatMessage(messages.search)}
                 onChange={this.onChange}
                 value={this.state.text}
