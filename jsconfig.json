@@ -19,7 +19,7 @@
             "volto-matomo": [
                 "develop/volto-matomo/src"
             ],
-            "volto-sentry-rancher-config": [
+            "@eeacms/volto-sentry-rancher-config": [
                 "develop/volto-sentry-rancher-config/src"
             ]
         },

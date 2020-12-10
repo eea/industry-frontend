@@ -1,18 +1,8 @@
 /* REACT */
 import React, { useState, useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import {
-  Button,
-  Header,
-  Image,
-  Modal,
-  Select,
-  Input,
-  Radio,
-  List,
-} from 'semantic-ui-react';
+import { Header, Modal, Select, Input, List } from 'semantic-ui-react';
 import { Portal } from 'react-portal';
 import { Icon } from '@plone/volto/components';
 import { setQueryParam } from 'volto-datablocks/actions';
@@ -38,7 +28,6 @@ const keyCodes = {
 };
 
 const View = ({ content, ...props }) => {
-  const history = useHistory();
   const providerUrl = settings.providerUrl;
   const [state, setState] = useState({
     id: _uniqueId('block_'),
@@ -64,19 +53,15 @@ const View = ({ content, ...props }) => {
   });
   const [filtersMetaReady, setFiltersMetaReady] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
-  const [factsData, setFactsData] = useState({});
-  const [alphaFeature, setAlphaFeature] = useState({});
   const [sitesResults, setSitesResults] = useState([]);
   const [searchResultsIndex, setSearchResultsIndex] = useState(0);
   const [searchResultsActive, setSearchResultsActive] = useState(false);
   const [locationResults, setLocationResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [triggerSearch, setTriggerSearch] = useState(false);
-  const [quickFactsListener, setQuickFactsListener] = useState(false);
   const [sidebar, setSidebar] = useState(false);
   const [mountState, setMountState] = useState(false);
   const [clock, setClock] = useState(0);
-  const alphaFeatureRef = useRef({});
   const searchContainerModal = useRef(null);
   const searchContainer = useRef(null);
   const mounted = useRef(false);
@@ -94,175 +79,15 @@ const View = ({ content, ...props }) => {
       .slice(0, sitesResults.length < 3 ? 6 - sitesResults.length : 3),
   ];
 
-  const updateFactsData = (initialization = false) => {
-    const promises = [];
-    let reqs;
-    const reportingYears =
-      props.discodata_query.search.reportingYear?.filter(
-        (reportingYear) => reportingYear,
-      ) || [];
-
-    if (initialization) {
-      reqs = [
-        {
-          factId: 'EU_quick_facts',
-          sql: `SELECT count(id) AS AllSites
-          FROM [IED].[latest].[ProductionSite_NoGeo]`,
-          descriptionDiscodataKey: ['AllSites'],
-          title: 'EU Quick facts',
-          description: [':descriptionDiscodataKey reporting sites (all years)'],
-          type: 'firstElement',
-        },
-      ];
-    } else {
-      reqs = [
-        alphaFeature?.getProperties?.()?.countryCode
-          ? {
-              factId: 'Country_quick_facts',
-              sql:
-                `SELECT DISTINCT
-                  PS.countryCode,
-                  LC.CountryName as countryName,
-                  count(*) as sites
-              FROM [IED].[latest].[ProductionSite_NoGeo] as PS
-              LEFT JOIN [IED].[latest].[LOV_Countries] as LC
-              ON PS.countryCode = LC.CountryCode
-              WHERE PS.countryCode = '${
-                alphaFeature.getProperties().countryCode
-              }'` +
-                (reportingYears?.length > 0
-                  ? ` AND reportingYear IN (${reportingYears.join(',')}) `
-                  : ' ') +
-                `GROUP BY PS.countryCode, LC.CountryName`,
-              titleDiscodataKey: 'countryName',
-              descriptionDiscodataKey: ['sites'],
-              title: ':titleDiscodataKey quick facts',
-              description: [
-                `:descriptionDiscodataKey reporting sites (${
-                  reportingYears?.length > 0
-                    ? reportingYears.join(', ')
-                    : 'all years'
-                })`,
-              ],
-              type: 'firstElement',
-            }
-          : null,
-        {
-          factId: 'EU_quick_facts',
-          sql:
-            `SELECT count(id) AS AllSites
-            FROM [IED].[latest].[ProductionSite_NoGeo]` +
-            (reportingYears?.length > 0
-              ? `WHERE reportingYear IN (${reportingYears.join(',')})`
-              : ''),
-          descriptionDiscodataKey: ['AllSites'],
-          title: 'EU Quick facts',
-          description: [
-            `:descriptionDiscodataKey reporting sites (${
-              reportingYears?.length > 0
-                ? reportingYears.join(', ')
-                : 'all years'
-            })`,
-          ],
-          type: 'firstElement',
-        },
-      ].filter((req) => req);
-    }
-    reqs.forEach((req) => {
-      promises.push(axios.get(makeUrl(providerUrl, req.sql)));
-    });
-
-    Promise.all(promises)
-      .then((response) => {
-        const newFactsData = { ...factsData };
-        response.forEach((res, index) => {
-          const results = JSON.parse(res.request.response).results;
-          if (reqs[index].type === 'firstElement') {
-            const title = reqs[index].title.includes(':titleDiscodataKey')
-              ? reqs[index].title.replace(
-                  ':titleDiscodataKey',
-                  results[0]?.[reqs[index].titleDiscodataKey],
-                )
-              : reqs[index].title;
-            const description = reqs[index].description.map(
-              (descr, descrIndex) => {
-                return descr.includes(':descriptionDiscodataKey') &&
-                  results[0]?.[
-                    reqs[index].descriptionDiscodataKey?.[descrIndex]
-                  ]
-                  ? descr.replace(
-                      ':descriptionDiscodataKey',
-                      results[0]?.[
-                        reqs[index].descriptionDiscodataKey?.[descrIndex]
-                      ],
-                    )
-                  : descr;
-              },
-            );
-            newFactsData[reqs[index].factId] = {
-              title,
-              description,
-            };
-          }
-        });
-        setFactsData({
-          ...factsData,
-          ...newFactsData,
-        });
-      })
-      .catch((error) => {});
-  };
-
-  const onFeaturechange = (e) => {
-    if (
-      mounted.current &&
-      e.detail.feature?.getProperties?.()?.countryCode !==
-        alphaFeatureRef.current?.getProperties?.()?.countryCode
-    ) {
-      setAlphaFeature(e.detail.feature);
-    }
-  };
-
   useEffect(function () {
     mounted.current = true;
     setMountState(true);
-    updateFactsData(true);
-    const unlisten = history.listen((location, action) => {
-      if (mounted.current) {
-        setQuickFactsListener(false);
-      }
-    });
     return () => {
-      if (quickFactsListener && document.getElementById(`dynamic-filter`)) {
-        document
-          .getElementById(`dynamic-filter`)
-          .removeEventListener('featurechange', onFeaturechange);
-      }
       mounted.current = false;
-      unlisten();
       setMountState(false);
     };
     /* eslint-disable-next-line */
   }, []);
-
-  if (
-    mounted.current &&
-    !quickFactsListener &&
-    document.getElementById('dynamic-filter')
-  ) {
-    setQuickFactsListener(true);
-    document
-      .getElementById(`dynamic-filter`)
-      .addEventListener('featurechange', onFeaturechange);
-  }
-
-  useEffect(() => {
-    if (mounted.current) {
-      alphaFeatureRef.current = alphaFeature;
-      updateFactsData(false);
-    }
-    /* eslint-disable-next-line */
-  }, [alphaFeature, JSON.stringify(props.discodata_query.search.reportingYear)])
 
   useEffect(() => {
     if (mounted.current && triggerSearch) {
@@ -1432,6 +1257,37 @@ const View = ({ content, ...props }) => {
                         value={state.filters['reportingYear']?.[0]}
                       />
                     </div>
+                    <Header as="h3">Country</Header>
+                    <div className="input-container">
+                      <Select
+                        search
+                        onChange={(event, data) => {
+                          changeFilter(
+                            data,
+                            state.filtersMeta['countries'],
+                            0,
+                            true,
+                          );
+                          props.setQueryParam({
+                            queryParam: {
+                              advancedFiltering: true,
+                              filtersCounter: props.discodata_query.search[
+                                'filtersCounter'
+                              ]
+                                ? props.discodata_query.search[
+                                    'filtersCounter'
+                                  ] + 1
+                                : 1,
+                            },
+                          });
+                        }}
+                        placeholder={
+                          state.filtersMeta['countries']?.placeholder
+                        }
+                        options={state.filtersMeta['countries']?.options || []}
+                        value={state.filters['siteCountry']?.[0]}
+                      />
+                    </div>
                     <Header as="h3">Industry</Header>
                     <div className="input-container">
                       <Select
@@ -1463,37 +1319,6 @@ const View = ({ content, ...props }) => {
                         value={state.filters['EEAActivity']?.[0]}
                       />
                     </div>
-                  </div>
-                  <div className="dynamic-filter-actions">
-                    <button
-                      aria-label="Clear filters button"
-                      className="outline red"
-                      onClick={clearFilters}
-                      style={{ margin: 0 }}
-                    >
-                      Clear Filters
-                    </button>
-                    <Header as="h3">Quick facts</Header>
-                    {state.factsDataOrder &&
-                      state.factsDataOrder.map((key) => {
-                        return factsData[key] ? (
-                          <React.Fragment key={key}>
-                            {factsData[key]?.title && (
-                              <Header as="h4">{factsData[key].title}</Header>
-                            )}
-                            {factsData[key]?.description &&
-                              factsData[key].description.map(
-                                (description, index) => {
-                                  return (
-                                    <p key={`${key}_${index}`}>{description}</p>
-                                  );
-                                },
-                              )}
-                          </React.Fragment>
-                        ) : (
-                          ''
-                        );
-                      })}
                   </div>
                 </div>
               </Portal>

@@ -1,7 +1,6 @@
 /* REACT */
 import React, { useState, useRef, useEffect } from 'react';
 import cookie from 'react-cookie';
-import { useHistory } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -11,14 +10,14 @@ import qs from 'query-string';
 import axios from 'axios';
 import jsonp from 'jsonp';
 import { settings } from '~/config';
-import { isArray, isObject } from 'lodash';
+import { isArray } from 'lodash';
 // VOLTO
 import { Icon as VoltoIcon } from '@plone/volto/components';
 import PrivacyProtection from './PrivacyProtection';
 // VOLTO-DATABLOCKS
 import { setQueryParam } from 'volto-datablocks/actions';
 // SEMANTIC REACT UI
-import { Grid, Header, Loader, Dimmer, Image } from 'semantic-ui-react';
+import { Grid, Header, Loader, Dimmer } from 'semantic-ui-react';
 // SVGs
 import clearSVG from '@plone/volto/icons/clear.svg';
 import navigationSVG from '@plone/volto/icons/navigation.svg';
@@ -114,16 +113,12 @@ const OpenlayersMapView = (props) => {
   const ViewYourAreaControl = useRef(null);
   const siteTermRef = useRef(null);
   const mounted = useRef(false);
-  const history = useHistory();
   const draggable = !!props.data?.draggable?.value;
   const hasPopups = !!props.data?.hasPopups?.value;
   const hasSidebar = !!props.data?.hasSidebar?.value;
   const hasRegionsFeatures = !!props.data?.hasRegionsFeatures?.value;
   const filterSource = props.data?.filterSource?.value || 'query_params';
   const zoomSwitch = 6;
-  const currentMapZoom = state.map?.element
-    ? state.map.element?.getView().getZoom()
-    : null;
   const dataprotection = {
     enabled: true,
     privacy_statement:

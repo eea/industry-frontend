@@ -1703,3 +1703,7 @@ b {
   border: none !important;
   background: none !important;
 }
+
+strong {
+  font-weight: bold !important;
+}
