@@ -16,9 +16,9 @@ import cx from 'classnames';
 // ==============
 const countryGroups = [
   {
-    key: 'EEA32',
-    value: 'EEA32',
-    text: 'EEA32',
+    key: 'All E-PRTR',
+    value: 'All E-PRTR',
+    text: 'All E-PRTR',
   },
   {
     key: 'EEA33',

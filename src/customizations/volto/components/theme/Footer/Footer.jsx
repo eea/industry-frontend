@@ -95,7 +95,12 @@ const Footer = ({ intl }) => (
                   <br />
                   Denmark
                   <br />
-                  Phone: +4533367100
+                  <a
+                    href="mailto:industry.helpdesk@eea.europa.eu"
+                    target="_blank"
+                  >
+                    industry.helpdesk@eea.europa.eu
+                  </a>
                 </p>
               </div>
             </div>
