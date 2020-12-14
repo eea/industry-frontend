@@ -566,7 +566,7 @@ const View = ({ content, ...props }) => {
       }
       setState({
         ...state,
-        filters: newFilters,
+        filters: { ...(newFilters || {}) },
       });
       if (triggerQueryUpdate) {
         props.setQueryParam({
@@ -830,6 +830,7 @@ const View = ({ content, ...props }) => {
     const provinces = state.filters.province;
     let nuts = [];
     let nuts_latest = [];
+    console.log(state.filters);
     siteCountries &&
       siteCountries.forEach((country) => {
         const filteredRegions = regions
@@ -1319,6 +1320,16 @@ const View = ({ content, ...props }) => {
                         value={state.filters['EEAActivity']?.[0]}
                       />
                     </div>
+                  </div>
+                  <div className="dynamic-filter-actions">
+                    <button
+                      aria-label="Clear filters button"
+                      className="outline red"
+                      onClick={clearFilters}
+                      style={{ margin: 0 }}
+                    >
+                      Clear Filters
+                    </button>
                   </div>
                 </div>
               </Portal>

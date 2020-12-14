@@ -17,7 +17,7 @@ import PrivacyProtection from './PrivacyProtection';
 // VOLTO-DATABLOCKS
 import { setQueryParam } from 'volto-datablocks/actions';
 // SEMANTIC REACT UI
-import { Grid, Header, Loader, Dimmer } from 'semantic-ui-react';
+import { Grid, Header } from 'semantic-ui-react';
 // SVGs
 import clearSVG from '@plone/volto/icons/clear.svg';
 import navigationSVG from '@plone/volto/icons/navigation.svg';
@@ -101,7 +101,6 @@ const OpenlayersMapView = (props) => {
     updateMapPosition: null,
   });
   const [selectedSite, setSelectedSite] = useState(null);
-  const [loader, setLoader] = useState(false);
   const [mapRendered, setMapRendered] = useState(false);
   const [firstFilteringUpdate, setFirstFilteringUpdate] = useState(false);
   const [prepareMapRender, setPrepareMapRender] = useState(false);
@@ -348,6 +347,11 @@ const OpenlayersMapView = (props) => {
         // Industries
         EEAActivity: {
           sql: `(eea_activities LIKE '%:options%')`,
+          type: 'multiple',
+        },
+        // Country
+        siteCountry: {
+          sql: `(countryCode LIKE '%:options%')`,
           type: 'multiple',
         },
         // Country / Region / Provinces
@@ -628,13 +632,12 @@ const OpenlayersMapView = (props) => {
         const extent = data.results?.[0];
         if (
           stateRef.current.map.sitesSourceQuery?.where &&
-          stateRef.current.map.sitesSourceQuery?.where.includes(
+          (stateRef.current.map.sitesSourceQuery?.where.includes(
             'nuts_regions',
-          ) &&
-          extent.MIN_X &&
-          extent.MIN_Y &&
-          extent.MAX_X &&
-          extent.MAX_Y
+          ) ||
+            stateRef.current.map.sitesSourceQuery?.where.includes(
+              'countryCode',
+            ))
         ) {
           stateRef.current.map.element
             .getView()
@@ -835,18 +838,6 @@ const OpenlayersMapView = (props) => {
                 extent[3] +
                 ',"spatialReference":{"wkid":102100}}',
             )}&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*&outSR=102100`;
-
-            if (
-              stateRef.current.map.sitesSourceQuery?.where &&
-              stateRef.current.map.sitesSourceQuery?.where.includes(
-                'nuts_regions',
-              )
-            ) {
-              url =
-                'https://services.arcgis.com/LcQjj2sL7Txk9Lag/arcgis/rest/services/SiteMap/FeatureServer/0/query/?f=json&' +
-                'returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometryType=esriGeometryEnvelope&inSR=102100&outFields=*' +
-                '&outSR=102100';
-            }
             reqs++;
             jsonp(
               url,
@@ -1332,9 +1323,6 @@ const OpenlayersMapView = (props) => {
           </>
         )}
       </div>
-      <Dimmer id="map-loader" active={loader}>
-        <Loader />
-      </Dimmer>
       {document.getElementById('map-view-your-area-button') ? (
         <Portal node={document.getElementById('map-view-your-area-button')}>
           <div id="view-your-area" className="ol-unselectable ol-control">
