@@ -16,7 +16,6 @@ import {
 } from 'volto-addons/actions';
 import Highlighter from 'react-highlight-words';
 import cx from 'classnames';
-import axios from 'axios';
 import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
 import './style.css';
 
@@ -45,7 +44,6 @@ class View extends Component {
       apiRoot: new URL(settings.apiPath).pathname,
       active: false,
       query: {},
-      pollutants: [],
       loading: false,
     };
     this.linkFormContainer = React.createRef();
@@ -56,8 +54,6 @@ class View extends Component {
     this.onClose = this.onClose.bind(this);
     this.onChange = this.onChange.bind(this);
     this.makeQuery = this.makeQuery.bind(this);
-    this.getPollutants = this.getPollutants.bind(this);
-    this.onSelectPollutant = this.onSelectPollutant.bind(this);
   }
 
   componentDidMount() {
@@ -160,23 +156,11 @@ class View extends Component {
     } else {
       this.props.quickResetSearchContent();
     }
-    this.getPollutants(value);
     this.setState({ text: value });
   }
 
   onSelectItem(item) {
     item?.['@id'] && this.props.history.push(item['@id']);
-  }
-
-  onSelectPollutant(pollutant) {
-    this.props.setQueryParam({
-      queryParam: {
-        index_pollutant_group_id: parseInt(pollutant.parentId),
-        index_pollutant_id: parseInt(pollutant.pollutantId),
-      },
-    });
-    this.setState({ active: false, text: pollutant.name });
-    this.props.history.push('/glossary/pollutants/pollutant-index');
   }
 
   onClose() {
@@ -213,30 +197,6 @@ class View extends Component {
         }
       });
     return queryObj;
-  }
-
-  getPollutants(name) {
-    if (name) {
-      const sql = `SELECT POL.name,
-      POL_DET.pollutantId,
-      POL.parentId
-      FROM [IED].[latest].[Glo_Pollutants] as POL
-      LEFT JOIN [IED].[latest].[Glo_PollutantsDetails] AS POL_DET
-      ON POL.pollutantId = POL_DET.pollutantId
-      WHERE name LIKE '%${name}%'
-      ORDER BY name`;
-      this.setState({ loading: true });
-      axios
-        .get(this.state.providerUrl + `?query=${encodeURI(sql)}`)
-        .then((response) => {
-          this.setState({ pollutants: response.data.results, loading: false });
-        })
-        .catch((error) => {
-          this.setState({ pollutants: [], loading: false });
-        });
-    } else {
-      this.setState({ pollutants: [], loading: false });
-    }
   }
 
   render() {
@@ -293,7 +253,7 @@ class View extends Component {
               {this.state.active &&
               this.props.search &&
               !this.state.loading &&
-              (this.props.search.length || this.state.pollutants.length) ? (
+              this.props.search.length ? (
                 <ul className="floating_search_results">
                   {this.props.search.map((item, index) => {
                     return (
@@ -311,24 +271,6 @@ class View extends Component {
                       </li>
                     );
                   })}
-                  {this.state.pollutants
-                    .filter((pollutant) => pollutant.pollutantId)
-                    .map((pollutant, index) => {
-                      return (
-                        <li
-                          key={`${index}_${pollutant.pollutantId}`}
-                          onClick={() => this.onSelectPollutant(pollutant)}
-                          role="presentation"
-                        >
-                          <Highlighter
-                            highlightClassName="highlight"
-                            searchWords={this.state.text?.split(' ') || []}
-                            autoEscape={true}
-                            textToHighlight={pollutant.name}
-                          />
-                        </li>
-                      );
-                    })}
                 </ul>
               ) : (
                 ''

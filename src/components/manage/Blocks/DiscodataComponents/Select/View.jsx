@@ -8,46 +8,59 @@ import { setQueryParam } from 'volto-datablocks/actions';
 
 import cx from 'classnames';
 
-const components = {
-  select: (
-    options,
-    queryParameters,
-    search,
-    setQueryParam,
-    placeholder,
-    className,
-    mode,
-  ) => {
-    let activeValue = '';
-    if (queryParameters[0]?.queryParameterToSet) {
-      activeValue = search[queryParameters[0].queryParameterToSet] || '';
-    }
-    return (
-      <div className={cx(className, mode === 'edit' ? 'pa-1' : '')}>
-        <Dropdown
-          selection
-          onChange={(event, data) => {
-            const queryParametersToSet = {};
-            queryParameters.forEach((queryParam) => {
-              queryParametersToSet[
-                queryParam.queryParameterToSet
-              ] = data.options.filter((opt) => {
-                return opt.value === data.value;
-              })[0]?.[queryParam.selectorOptionKey];
-            });
-            setQueryParam({
-              queryParam: {
-                ...(queryParametersToSet || {}),
-              },
-            });
-          }}
-          placeholder={placeholder}
-          options={options}
-          value={activeValue}
-        />
-      </div>
-    );
-  },
+const Select = (props) => {
+  const {
+    options = [],
+    queryParameters = [],
+    search = {},
+    setQueryParam = () => {},
+    placeholder = '',
+    className = '',
+    mode = '',
+  } = props;
+  const [dataReady, setDataReady] = useState(false);
+
+  if (
+    !dataReady &&
+    queryParameters[0]?.queryParameterToSet &&
+    queryParameters[0]?.selectorOptionKey &&
+    !search[queryParameters[0]?.queryParameterToSet] &&
+    options.length
+  ) {
+    setQueryParam({
+      queryParam: {
+        [queryParameters[0].queryParameterToSet]:
+          options[0]?.[queryParameters[0]?.selectorOptionKey],
+      },
+    });
+    setDataReady(true);
+  }
+
+  return (
+    <div className={cx(className, mode === 'edit' ? 'pa-1' : '')}>
+      <Dropdown
+        selection
+        onChange={(event, data) => {
+          const queryParametersToSet = {};
+          queryParameters.forEach((queryParam) => {
+            queryParametersToSet[
+              queryParam.queryParameterToSet
+            ] = data.options.filter((opt) => {
+              return opt.value === data.value;
+            })[0]?.[queryParam.selectorOptionKey];
+          });
+          setQueryParam({
+            queryParam: {
+              ...(queryParametersToSet || {}),
+            },
+          });
+        }}
+        placeholder={placeholder}
+        options={options}
+        value={search[queryParameters[0]?.queryParameterToSet] || ''}
+      />
+    </div>
+  );
 };
 
 const View = ({ content, ...props }) => {
@@ -127,19 +140,16 @@ const View = ({ content, ...props }) => {
     /* eslint-disable-next-line */
   }, [props.search, props.discodata_resources, props.discodataValues])
 
-
   return (
-    <>
-      {components.select(
-        options,
-        queryParametersToSet,
-        props.search,
-        props.setQueryParam,
-        placeholder,
-        className,
-        props.mode,
-      )}
-    </>
+    <Select
+      options={options}
+      queryParameters={queryParametersToSet}
+      search={props.search}
+      setQueryParam={props.setQueryParam}
+      placeholder={placeholder}
+      className={className}
+      mode={props.mode || 'view'}
+    />
   );
 };
 

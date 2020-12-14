@@ -696,9 +696,9 @@ const RenderTable = (props) => {
 
 const View = (props) => {
   const [activeTab, setActiveTab] = useState(0);
-  const [initialized, setInitialized] = useState(false);
   const [currentPollutant, setCurrentPollutant] = useState(undefined);
   const [currentPollutantGroup, setCurrentPollutantGroup] = useState(undefined);
+  const [dataReady, setDataReady] = useState(false);
   const mounted = useRef(false);
   const indexPollutantId =
     props.discodata_query.search.index_pollutant_id || null;
@@ -720,6 +720,18 @@ const View = (props) => {
   const currentPollutants = indexPollutants.filter(
     (pollutant) => parseInt(pollutant.parentId) === indexPollutantGroupId,
   );
+
+  useEffect(() => {
+    if (indexPollutants.length && indexPollutantGroups.length && !dataReady) {
+      props.setQueryParam({
+        queryParam: {
+          index_pollutant_group_id: indexPollutants[0].parrentId,
+          index_pollutant_id: indexPollutants[0].pollutantId,
+        },
+      });
+      setDataReady(true);
+    }
+  }, [indexPollutants, indexPollutantGroups]);
 
   useEffect(() => {
     const newPollutant = indexPollutants.filter(
@@ -819,7 +831,7 @@ const View = (props) => {
               },
             });
           }}
-          placeholder={'Pollutant'}
+          placeholder={'Select pollutant'}
           options={indexPollutants
             .filter((pollutant) => pollutant.pollutantId)
             .map((pollutant) => ({
