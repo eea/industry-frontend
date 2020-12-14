@@ -4,7 +4,7 @@
  */
 
 import React, { Component } from 'react';
-import { Segment } from 'semantic-ui-react';
+import { Segment, Image } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -55,12 +55,14 @@ class Header extends Component {
               <Navigation pathname={this.props.pathname} />
             </div>
             <div className="header-partner-section">
-              <img style={{ height: '66px' }} src={eclogo} alt="" />
-              <img
-                style={{ height: '66px', marginLeft: '1rem' }}
-                src={eealogo}
+              <Image
+                src={eclogo}
                 alt=""
+                title=""
+                height={60}
+                style={{ marginRight: '10px' }}
               />
+              <Image src={eealogo} alt="" title="" height={60} />
             </div>
           </div>
         </div>
