@@ -57,12 +57,12 @@ class Header extends Component {
             <div className="header-partner-section">
               <Image
                 src={eclogo}
-                alt=""
-                title=""
-                height={60}
+                alt="European Comission"
+                title="European Comission"
+                height={55}
                 style={{ marginRight: '10px' }}
               />
-              <Image src={eealogo} alt="" title="" height={60} />
+              <Image src={eealogo} alt="EEA" title="EEA" height={50} />
             </div>
           </div>
         </div>

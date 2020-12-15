@@ -5,6 +5,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Portal } from 'react-portal';
+import { toast } from 'react-toastify';
 // HELPERS
 import qs from 'query-string';
 import axios from 'axios';
@@ -12,7 +13,7 @@ import jsonp from 'jsonp';
 import { settings } from '~/config';
 import { isArray } from 'lodash';
 // VOLTO
-import { Icon as VoltoIcon } from '@plone/volto/components';
+import { Icon as VoltoIcon, Toast } from '@plone/volto/components';
 import PrivacyProtection from './PrivacyProtection';
 // VOLTO-DATABLOCKS
 import { setQueryParam } from 'volto-datablocks/actions';
@@ -630,6 +631,20 @@ const OpenlayersMapView = (props) => {
       .then((response) => {
         const data = JSON.parse(response.request.response);
         const extent = data.results?.[0];
+        if (
+          extent.MIN_X === null ||
+          extent.MIN_Y === null ||
+          extent.MAX_X === null ||
+          extent.MAX_Y === null
+        ) {
+          return toast.warn(
+            <Toast
+              warn
+              title=""
+              content="No results for selected filters. Please change or clear the filters."
+            />,
+          );
+        }
         if (
           stateRef.current.map.sitesSourceQuery?.where &&
           (stateRef.current.map.sitesSourceQuery?.where.includes(

@@ -96,10 +96,11 @@ const Footer = ({ intl }) => (
                   Denmark
                   <br />
                   <a
-                    href="mailto:industry.helpdesk@eea.europa.eu"
+                    rel="noreferrer"
+                    href="mailto:info@eea.europa.eu"
                     target="_blank"
                   >
-                    industry.helpdesk@eea.europa.eu
+                    Contact us
                   </a>
                 </p>
               </div>

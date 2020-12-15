@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Header, Modal, Select, Input, List } from 'semantic-ui-react';
 import { Portal } from 'react-portal';
 import { Icon } from '@plone/volto/components';
-import { setQueryParam } from 'volto-datablocks/actions';
+import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
 import { settings } from '~/config';
 import _uniqueId from 'lodash/uniqueId';
 import axios from 'axios';
@@ -578,6 +578,37 @@ const View = ({ content, ...props }) => {
     }
   };
 
+  const changeFilterSidebar = (
+    data,
+    filter,
+    filtersToDelete = [],
+    triggerQueryUpdate = false,
+  ) => {
+    if (mounted.current) {
+      const newFilters = { ...state.filters };
+      newFilters[filter.queryToSet] = [data.value];
+
+      filtersToDelete.forEach((filter) => {
+        newFilters[filter] = [];
+      });
+
+      setState({
+        ...state,
+        filters: { ...(newFilters || {}) },
+      });
+      if (triggerQueryUpdate) {
+        props.setQueryParam({
+          queryParam: {
+            [filter.queryToSet]: newFilters[filter.queryToSet],
+          },
+        });
+        props.deleteQueryParam({
+          queryParam: [...filtersToDelete],
+        });
+      }
+    }
+  };
+
   const updateFilters = () => {
     if (mounted.current && state.filters && state.filtersMeta) {
       const newFilters = { ...state.filters };
@@ -830,7 +861,6 @@ const View = ({ content, ...props }) => {
     const provinces = state.filters.province;
     let nuts = [];
     let nuts_latest = [];
-    console.log(state.filters);
     siteCountries &&
       siteCountries.forEach((country) => {
         const filteredRegions = regions
@@ -855,9 +885,6 @@ const View = ({ content, ...props }) => {
               nuts_latest.push(region);
             }
           });
-        } else {
-          nuts.push(country);
-          nuts_latest.push(country);
         }
       });
     props.setQueryParam({
@@ -1227,98 +1254,116 @@ const View = ({ content, ...props }) => {
                   <div className="dynamic-filter-body">
                     <Header as="h3">Reporting year</Header>
                     <div className="input-container">
-                      <Select
-                        search
-                        onChange={(event, data) => {
-                          changeFilter(
-                            data,
-                            state.filtersMeta['reporting_years'],
-                            0,
-                            true,
-                          );
-                          props.setQueryParam({
-                            queryParam: {
-                              advancedFiltering: true,
-                              filtersCounter: props.discodata_query.search[
-                                'filtersCounter'
-                              ]
-                                ? props.discodata_query.search[
-                                    'filtersCounter'
-                                  ] + 1
-                                : 1,
-                            },
-                          });
-                        }}
-                        placeholder={
-                          state.filtersMeta['reporting_years']?.placeholder
-                        }
-                        options={
-                          state.filtersMeta['reporting_years']?.options || []
-                        }
-                        value={state.filters['reportingYear']?.[0]}
-                      />
+                      <form autoComplete="reporting-year">
+                        <Select
+                          search
+                          onChange={(event, data) => {
+                            changeFilterSidebar(
+                              data,
+                              state.filtersMeta['reporting_years'],
+                              [],
+                              true,
+                            );
+                            props.setQueryParam({
+                              queryParam: {
+                                advancedFiltering: true,
+                                filtersCounter: props.discodata_query.search[
+                                  'filtersCounter'
+                                ]
+                                  ? props.discodata_query.search[
+                                      'filtersCounter'
+                                    ] + 1
+                                  : 1,
+                              },
+                            });
+                          }}
+                          placeholder={
+                            state.filtersMeta['reporting_years']?.placeholder
+                          }
+                          options={
+                            state.filtersMeta['reporting_years']?.options || []
+                          }
+                          value={state.filters['reportingYear']?.[0]}
+                        />
+                      </form>
                     </div>
                     <Header as="h3">Country</Header>
                     <div className="input-container">
-                      <Select
-                        search
-                        onChange={(event, data) => {
-                          changeFilter(
-                            data,
-                            state.filtersMeta['countries'],
-                            0,
-                            true,
-                          );
-                          props.setQueryParam({
-                            queryParam: {
-                              advancedFiltering: true,
-                              filtersCounter: props.discodata_query.search[
-                                'filtersCounter'
-                              ]
-                                ? props.discodata_query.search[
-                                    'filtersCounter'
-                                  ] + 1
-                                : 1,
-                            },
-                          });
-                        }}
-                        placeholder={
-                          state.filtersMeta['countries']?.placeholder
-                        }
-                        options={state.filtersMeta['countries']?.options || []}
-                        value={state.filters['siteCountry']?.[0]}
-                      />
+                      <form autoComplete="country">
+                        <Select
+                          search
+                          selection
+                          onChange={(event, data) => {
+                            changeFilterSidebar(
+                              data,
+                              state.filtersMeta['countries'],
+                              [
+                                'nuts_latest',
+                                'nuts_regions',
+                                'province',
+                                'region',
+                                'riverBasin',
+                              ],
+                              true,
+                            );
+                            props.setQueryParam({
+                              queryParam: {
+                                advancedFiltering: true,
+                                filtersCounter: props.discodata_query.search[
+                                  'filtersCounter'
+                                ]
+                                  ? props.discodata_query.search[
+                                      'filtersCounter'
+                                    ] + 1
+                                  : 1,
+                              },
+                            });
+                          }}
+                          placeholder={
+                            state.filtersMeta['countries']?.placeholder
+                          }
+                          options={
+                            state.filtersMeta['countries']?.options || []
+                          }
+                          value={state.filters['siteCountry']?.[0]}
+                          autoComplete="country-name"
+                        />
+                      </form>
                     </div>
                     <Header as="h3">Industry</Header>
                     <div className="input-container">
-                      <Select
-                        search
-                        onChange={(event, data) => {
-                          changeFilter(
-                            data,
-                            state.filtersMeta['industries'],
-                            0,
-                            true,
-                          );
-                          props.setQueryParam({
-                            queryParam: {
-                              advancedFiltering: true,
-                              filtersCounter: props.discodata_query.search[
-                                'filtersCounter'
-                              ]
-                                ? props.discodata_query.search[
-                                    'filtersCounter'
-                                  ] + 1
-                                : 1,
-                            },
-                          });
-                        }}
-                        placeholder={
-                          state.filtersMeta['industries']?.placeholder
-                        }
-                        options={state.filtersMeta['industries']?.options || []}
-                        value={state.filters['EEAActivity']?.[0]}
-                      />
+                      <form autoComplete="industry">
+                        <Select
+                          search
+                          onChange={(event, data) => {
+                            changeFilterSidebar(
+                              data,
+                              state.filtersMeta['industries'],
+                              [],
+                              true,
+                            );
+                            props.setQueryParam({
+                              queryParam: {
+                                advancedFiltering: true,
+                                filtersCounter: props.discodata_query.search[
+                                  'filtersCounter'
+                                ]
+                                  ? props.discodata_query.search[
+                                      'filtersCounter'
+                                    ] + 1
+                                  : 1,
+                              },
+                            });
+                          }}
+                          placeholder={
+                            state.filtersMeta['industries']?.placeholder
+                          }
+                          options={
+                            state.filtersMeta['industries']?.options || []
+                          }
+                          value={state.filters['EEAActivity']?.[0]}
+                        />
+                      </form>
                     </div>
                   </div>
                   <div className="dynamic-filter-actions">
@@ -1355,6 +1400,7 @@ export default compose(
     }),
     {
       setQueryParam,
+      deleteQueryParam,
     },
   ),
 )(View);

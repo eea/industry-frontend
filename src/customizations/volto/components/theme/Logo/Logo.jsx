@@ -21,6 +21,10 @@ const messages = defineMessages({
     id: 'Plone Site',
     defaultMessage: 'Plone Site',
   },
+  industrialEmissions: {
+    id: 'Industrial Emissions',
+    defaultMessage: 'Industrial Emissions Portal'
+  }
 });
 
 /**
@@ -40,9 +44,9 @@ const Logo = () => {
     >
       <Image
         src={LogoImage}
-        alt={intl.formatMessage(messages.plonesite)}
-        title={intl.formatMessage(messages.plonesite)}
-        height={66}
+        alt={intl.formatMessage(messages.industrialEmissions)}
+        title={intl.formatMessage(messages.industrialEmissions)}
+        height={70}
       />
     </Link>
   );
