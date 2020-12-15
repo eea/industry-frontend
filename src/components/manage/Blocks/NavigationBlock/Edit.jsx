@@ -60,7 +60,7 @@ const Edit = (props) => {
       }),
     });
     /* eslint-disable-next-line */
-  }, [state.item, props.data.components])
+  }, [state.item, props.data.components]);
   return (
     <div>
       <RenderFields schema={state.schema} {...props} title="Navigation block" />

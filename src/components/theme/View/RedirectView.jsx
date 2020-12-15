@@ -15,7 +15,7 @@ const RedirectView = (props) => {
   useEffect(() => {
     setMounted(true);
     /* eslint-disable-next-line */
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (redirect) {

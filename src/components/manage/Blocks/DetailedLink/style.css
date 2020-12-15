@@ -3,19 +3,19 @@
 }
 
 .detailed-link-container .detailed-link-title {
-  color: #4296B3;
-  font-weight: 600;
-  font-size: 1.3em;
-  line-height: 23px;
   margin-bottom: 1em;
+  color: #4296b3;
+  font-size: 1.3em;
+  font-weight: 600;
+  line-height: 23px;
 }
 
 .detailed-link-container .detailed-link-description {
-  color: #333;
-  font-weight: 300;
-  font-size: 14px;
-  line-height: 18px;
   margin-bottom: 1em;
+  color: #333;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 18px;
 }
 
 .detailed-link-container .detailed-link-button {
@@ -23,5 +23,4 @@
 }
 
 .detailed-link-container .detailed-link-placeholder {
-    
 }

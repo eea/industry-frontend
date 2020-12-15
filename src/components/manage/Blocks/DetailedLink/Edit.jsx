@@ -41,7 +41,7 @@ const Edit = (props) => {
       }
     }
     /* eslint-disable-next-line */
-  }, [props.pages, pageLink, outsideLink])
+  }, [props.pages, pageLink, outsideLink]);
 
   useEffect(() => {
     setState({ schema: getSchema(props) });
@@ -52,7 +52,7 @@ const Edit = (props) => {
       props.dispatch(getPage(pageLink));
     }
     /* eslint-disable-next-line */
-  }, [pageLink])
+  }, [pageLink]);
 
   const handleChangeBlock = (id, value) => {
     const { data } = props;

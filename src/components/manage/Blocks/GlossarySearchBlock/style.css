@@ -4,31 +4,31 @@
 }
 
 .searchbox div.input:not(.glossary) {
+  height: 30px;
   padding: 0 3rem;
   border: 1px solid #606060;
-  height: 30px;
-  font-weight: 300;
-  font-size: 18px;
-  color: rgb(0, 0, 0);
   background: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  font-size: 18px;
+  font-weight: 300;
 }
-  
+
 .searchbox .icon {
-  fill: #606060;
   position: absolute;
   z-index: 1;
-  left: 1rem;
   top: 50%;
+  left: 1rem;
+  fill: #606060;
   transform: translateY(-50%);
 }
-  
+
 .searchbox .searchIcon {
   cursor: pointer;
 }
 
 .searchbox .clearIcon {
-  left: unset;
   right: 1rem;
+  left: unset;
   cursor: pointer;
 }
 
@@ -42,33 +42,34 @@
   fill: #000;
 }
 
-
 .searchbox .floating_search_results {
   position: absolute;
   z-index: 98;
   top: 100%;
-  width: 100%;
-  margin: 0;
-  list-style-type: none;
-  max-height: 264px;
   overflow: auto;
-  margin: 0;
+  width: 100%;
+  max-height: 264px;
   padding: 1rem;
   padding-left: 3rem;
+  border: 1px solid #ededed;
+  margin: 0;
+  margin: 0;
   background: white;
-  color: #000;
-  border: 1px solid #EDEDED;
   border-radius: 5px;
   -webkit-box-shadow: 0px 2px 4px -3px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0px 2px 4px -3px rgba(0, 0, 0, 0.75);
   box-shadow: 0px 2px 4px -3px rgba(0, 0, 0.75);
+  color: #000;
+  list-style-type: none;
 }
+
 .searchbox li {
+  margin-bottom: 0.5rem;
   cursor: pointer;
-  font-size: .8rem;
+  font-size: 0.8rem;
   line-height: 1.9;
-  margin-bottom: .5rem;
 }
+
 .searchbox li:hover {
   font-weight: bold;
 }

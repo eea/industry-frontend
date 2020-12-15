@@ -41,7 +41,7 @@ export const SchemaWidgetFieldsetComponent = ({
         {onShowEditFieldset && (
           <button
             className="item ui noborder button"
-            onClick={event => {
+            onClick={(event) => {
               event.stopPropagation();
               event.preventDefault();
               onShowEditFieldset(order);
@@ -53,7 +53,7 @@ export const SchemaWidgetFieldsetComponent = ({
         {onShowDeleteFieldset && (
           <button
             className="item ui noborder button"
-            onClick={event => {
+            onClick={(event) => {
               event.stopPropagation();
               event.preventDefault();
               onShowDeleteFieldset(order);
@@ -97,7 +97,7 @@ export default DropTarget(
       monitor.getItem().order = hoverOrder;
     },
   },
-  connect => ({
+  (connect) => ({
     connectDropTarget: connect.dropTarget(),
   }),
 )(

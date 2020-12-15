@@ -648,7 +648,7 @@ const View = (props) => {
       setCanRender(true);
     }
     /* eslint-disable-next-line */
-  }, [props.discodata_query.search])
+  }, [props.discodata_query.search]);
   useEffect(() => {
     const selectedResource =
       resourcePackageKey && !key
@@ -695,7 +695,7 @@ const View = (props) => {
         : selectedResource,
     });
     /* eslint-disable-next-line */
-  }, [props.data, props.discodata_resources, props.discodata_query.search])
+  }, [props.data, props.discodata_resources, props.discodata_query.search]);
   //  Render components
   const componentsSchema =
     props.data?.components?.value && JSON.parse(props.data?.components?.value);

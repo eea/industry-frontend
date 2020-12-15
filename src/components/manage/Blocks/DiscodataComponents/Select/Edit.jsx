@@ -94,9 +94,7 @@ const Edit = (props) => {
       schema,
     });
     /* eslint-disable-next-line */
-  }, [
-    JSON.stringify(discodataValues)
-  ]);
+  }, [JSON.stringify(discodataValues)]);
 
   return (
     <div>

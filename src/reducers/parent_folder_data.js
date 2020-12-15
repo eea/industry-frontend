@@ -23,8 +23,6 @@ const initialState = {
  * @returns {Object} New state.
  */
 export default function parent_folder_data(state = initialState, action = {}) {
-
-
   switch (action.type) {
     case `${GET_PARENT_FOLDER_DATA}_PENDING`:
       return {
@@ -34,13 +32,13 @@ export default function parent_folder_data(state = initialState, action = {}) {
         loading: true,
       };
     case `${GET_PARENT_FOLDER_DATA}_SUCCESS`:
-      const parent = action.result.id
-      const routedLinks = action.result.items.map(item => {
+      const parent = action.result.id;
+      const routedLinks = action.result.items.map((item) => {
         return {
           ...item,
-          url: `${parent}/${item.id}`
-        }
-      })
+          url: `${parent}/${item.id}`,
+        };
+      });
       return {
         ...state,
         error: null,

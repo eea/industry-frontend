@@ -1,23 +1,23 @@
 .query-parameters-list-widget > p {
-  margin-bottom: 6px !important;
   padding: 0 1em;
+  margin-bottom: 6px !important;
 }
 
 ul.query-parameters-list {
-  padding: 0;
   display: flex;
+  padding: 0;
   padding: 0 1em;
 }
 
 ul.query-parameters-list li {
-  text-decoration: underline;
   padding: 4px;
-  color: #007EB1;
+  color: #007eb1;
+  text-decoration: underline;
 }
 
 ul.query-parameters-list li button {
-  cursor: pointer;
-  background: transparent;
   border: none;
-  color: #007EB1;
+  background: transparent;
+  color: #007eb1;
+  cursor: pointer;
 }

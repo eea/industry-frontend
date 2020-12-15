@@ -3,7 +3,7 @@
 }
 
 .eprtr-iframe h3.blue {
-  color: #4296B2;
+  color: #4296b2;
 }
 
 .eprtr-iframe .header-tooltip {
@@ -17,8 +17,8 @@
 }
 
 .eprtr-iframe .header-tooltip h3 {
-  margin-bottom: 0;
   margin-right: 0.3rem;
+  margin-bottom: 0;
 }
 
 .eprtr-iframe iframe {

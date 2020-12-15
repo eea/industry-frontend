@@ -1,5 +1,9 @@
 pipeline {
+  agent any
+
   environment {
+    GIT_NAME="eprtr_frontend"
+    NAMESPACE = "@eeacms"
     registry = "eeacms/eprtr-frontend"
     template = "templates/volto-eprtr"
     RANCHER_STACKID = "1st1851"
@@ -7,8 +11,6 @@ pipeline {
     dockerImage = ''
     tagName = ''
   }
-
-  agent any
 
   stages {
     stage('Build & Push') {

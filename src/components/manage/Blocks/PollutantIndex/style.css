@@ -12,18 +12,17 @@
 }
 
 .pollutant-index-container .ui.attached.tabular.menu .item:hover {
-
 }
 
 .pollutant-index-container .ui.attached.tabular.menu .active.item {
-  background-color: transparent !important;
-  color: #4296B3 !important;
-  font-weight: bold !important;
-  border-bottom: 2px solid #4296B3 !important;
   border-top: 0;
-  border-left: 0;
   border-right: 0;
+  border-bottom: 2px solid #4296b3 !important;
+  border-left: 0;
+  background-color: transparent !important;
   border-radius: 0;
+  color: #4296b3 !important;
+  font-weight: bold !important;
 }
 
 .pollutant-index-container .ui.attached.tabular.menu .active.item:hover {
@@ -32,14 +31,14 @@
 }
 
 .pollutant-index-container .ui.bottom.attached.segment.active.tab {
-  padding-left: 0;
   padding-right: 0;
+  padding-left: 0;
   background-color: transparent !important;
 }
 
 .pollutant-index-container h3 {
-  font-size: 1.3em;
   margin-bottom: 0.5em;
+  font-size: 1.3em;
 }
 
 .pollutant-index-container p:not(:last-child) {
@@ -51,7 +50,7 @@
 }
 
 .pollutant-index-container h3.blue {
-  color: #4296B3;
+  color: #4296b3;
 }
 
 .pollutant-index-container .ui.table thead th {
@@ -63,14 +62,20 @@
 }
 
 .pollutant-index-container .ui.table.description-table thead tr,
-.pollutant-index-container .ui.table.description-table:not(.headless) tbody tr:nth-child(even),
-.pollutant-index-container .ui.table.description-table.headless tbody tr:nth-child(odd) {
-  background-color: #FAF8F8;
+.pollutant-index-container
+  .ui.table.description-table:not(.headless)
+  tbody
+  tr:nth-child(even),
+.pollutant-index-container
+  .ui.table.description-table.headless
+  tbody
+  tr:nth-child(odd) {
+  background-color: #faf8f8;
 }
 
 .pollutant-index-container .ui.table.description-table thead tr:hover,
 .pollutant-index-container .ui.table.description-table tbody tr:hover {
-  background-color: #F4F4F4 !important;
+  background-color: #f4f4f4 !important;
 }
 
 /* .pollutant-index-container .ui.table.description-table tbody tr td:nth-child(1) {
@@ -79,9 +84,9 @@
 } */
 
 .pollutant-index-container .pollutants-list {
-  list-style: none;
   padding: 0;
   margin: 0;
+  list-style: none;
 }
 
 .pollutant-index-container .pollutants-list li {
@@ -89,12 +94,12 @@
 }
 
 .pollutant-index-container .ui.search.dropdown input {
-  color: #4296B3;
-  font-weight: bold !important;
-  font-size: 30px !important;
-  line-height: 39px !important;
   padding: 0 !important;
   padding-right: 60px !important;
+  color: #4296b3;
+  font-size: 30px !important;
+  font-weight: bold !important;
+  line-height: 39px !important;
 }
 
 .pollutant-index-container .ui.search.dropdown.active .text {

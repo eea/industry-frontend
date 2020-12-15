@@ -482,8 +482,7 @@ const View = ({ content, ...props }) => {
       setDiscodataValues(props.discodataValues);
     }
     /* eslint-disable-next-line */
-  }, [props.search, props.discodata_resources, props.discodataValues])
-
+  }, [props.search, props.discodata_resources, props.discodataValues]);
 
   return (
     <>

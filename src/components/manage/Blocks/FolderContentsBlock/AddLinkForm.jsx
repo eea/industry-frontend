@@ -64,7 +64,7 @@ class AddLinkForm extends Component {
     document.removeEventListener('mousedown', this.handleClickOutside, false);
   }
 
-  handleClickOutside = e => {
+  handleClickOutside = (e) => {
     if (
       this.linkFormContainer.current &&
       doesNodeContainClick(this.linkFormContainer.current, e)
@@ -111,7 +111,7 @@ class AddLinkForm extends Component {
       value: itemToSave,
       isInvalid: false,
     });
-    this.props.onAddLink(itemToSave)
+    this.props.onAddLink(itemToSave);
     this.props.resetSearchContent();
     this.input.blur();
     this.onClose();
@@ -171,11 +171,11 @@ class AddLinkForm extends Component {
           />
         </div>
         <ul style={{ margin: 0, paddingLeft: '35px' }}>
-          {map(this.props.search, item => (
+          {map(this.props.search, (item) => (
             <li style={{ padding: '5px' }}>
               <button
                 style={{ cursor: 'pointer' }}
-                onClick={e => this.onSelectItem(e, item)}
+                onClick={(e) => this.onSelectItem(e, item)}
                 title={item['@id']}
                 role="link"
               >
@@ -192,7 +192,7 @@ class AddLinkForm extends Component {
 export default compose(
   injectIntl,
   connect(
-    state => ({
+    (state) => ({
       search: state.search.items,
     }),
     { resetSearchContent, searchContent },

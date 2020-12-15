@@ -234,7 +234,7 @@ const OpenlayersMapView = (props) => {
       mounted.current = false;
     };
     /* eslint-disable-next-line */
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (selectedSite && mapRendered) {
@@ -263,14 +263,12 @@ const OpenlayersMapView = (props) => {
       updateRegionsFilters();
     }
     /* eslint-disable-next-line */
-  }, [
-    JSON.stringify(props.discodata_query.search.filtersCounter),
-  ]);
+  }, [JSON.stringify(props.discodata_query.search.filtersCounter)]);
 
   useEffect(() => {
     stateRef.current = { ...state };
     /* eslint-disable-next-line */
-  }, [state])
+  }, [state]);
 
   useEffect(() => {
     if (mapRendered && mounted.current && stateRef.current.map.element) {
@@ -295,7 +293,7 @@ const OpenlayersMapView = (props) => {
       }
     }
     /* eslint-disable-next-line */
-  }, [state.map.sitesSourceQuery?.where, state.updateMapPosition])
+  }, [state.map.sitesSourceQuery?.where, state.updateMapPosition]);
 
   useEffect(() => {
     if (

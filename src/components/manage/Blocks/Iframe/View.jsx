@@ -89,7 +89,7 @@ const View = ({ content, ...props }) => {
       }
     }
     /* eslint-disable-next-line */
-  }, [props.data.queryParameters, props.search])
+  }, [props.data.queryParameters, props.search]);
 
   useEffect(() => {
     if (props.data.flags?.value) {
@@ -131,7 +131,7 @@ const View = ({ content, ...props }) => {
     }
 
     /* eslint-disable-next-line */
-  }, [desktopUrl, tabletUrl, mobileUrl])
+  }, [desktopUrl, tabletUrl, mobileUrl]);
 
   const getUrl = (url) => {
     const newUrl = new URL(url);

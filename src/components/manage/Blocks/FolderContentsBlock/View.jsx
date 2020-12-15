@@ -15,7 +15,7 @@ import { Button } from 'semantic-ui-react';
 
 function removeDuplicates(myArr, prop) {
   return myArr.filter((obj, pos, arr) => {
-    return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
+    return arr.map((mapObj) => mapObj[prop]).indexOf(obj[prop]) === pos;
   });
 }
 
@@ -33,7 +33,7 @@ class View extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      link: this.props.data.link
+      link: this.props.data.link,
     };
   }
   getPath(url) {
@@ -43,22 +43,27 @@ class View extends Component {
       .replace(settings.internalApiPath, '');
   }
 
-
   render() {
     return (
       <div>
-        {this.state.link && (
-          <Link className="detailed-link-block" onClick={(e) => e.preventDefault} to={this.getPath(this.state.link.value)}>
+        {(this.state.link && (
+          <Link
+            className="detailed-link-block"
+            onClick={(e) => e.preventDefault}
+            to={this.getPath(this.state.link.value)}
+          >
             <div className="detailed-link-block-item-title">
               {this.state.link.text}
             </div>
             <p>
-
-              {this.state.link.description && <p>{this.state.link.description}</p>}
+              {this.state.link.description && (
+                <p>{this.state.link.description}</p>
+              )}
             </p>
             <Button basic>Read more</Button>
           </Link>
-        ) || 'Select a page from sidebar'}
+        )) ||
+          'Select a page from sidebar'}
       </div>
     );
   }

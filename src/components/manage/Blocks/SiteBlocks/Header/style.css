@@ -1,6 +1,6 @@
 .site-header h3.title {
-  color: #4296B2;
   margin-bottom: 1rem !important;
+  color: #4296b2;
 }
 
 .site-header .row {
@@ -9,9 +9,9 @@
 }
 
 .site-header .row .detail {
-  margin-bottom: 1rem;
-  padding-left: 0.5rem;
   padding-right: 0.5rem;
+  padding-left: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .site-header .info {

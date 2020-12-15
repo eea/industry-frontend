@@ -1,5 +1,5 @@
 .site-details h3.blue {
-  color: #4296B2;
+  color: #4296b2;
 }
 
 .site-details .header-tooltip {
@@ -12,25 +12,25 @@
 }
 
 .site-details .header-tooltip h3 {
-  margin-bottom: 0;
   margin-right: 0.3rem;
+  margin-bottom: 0;
 }
 
 .site-details .list {
-  color: #EC776A;
-  padding: 0;
-  list-style: none;
   display: flex;
   flex-flow: row;
   flex-wrap: wrap;
+  padding: 0;
+  color: #ec776a;
   grid-gap: 20px;
+  list-style: none;
 }
 
 .site-details .list li button {
-  background: transparent;
-  border: none;
-  color: #EC776A;
   padding: 0;
+  border: none;
+  background: transparent;
+  color: #ec776a;
 }
 
 .site-details .list li button:focus {

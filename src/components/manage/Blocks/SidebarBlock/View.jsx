@@ -455,7 +455,7 @@ const View = ({ content, ...props }) => {
   useEffect(() => {
     updateCollcetion();
     /* eslint-disable-next-line */
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (preset.get && preset.key) {
@@ -471,12 +471,14 @@ const View = ({ content, ...props }) => {
       }
     }
     /* eslint-disable-next-line */
-  }, [preset])
+  }, [preset]);
 
   useEffect(() => {
     updateCollcetion();
     /* eslint-disable-next-line */
-  }, [props.discodata_resources.data[preset?.key]?.[props.search.siteInspireId]])
+  }, [
+    props.discodata_resources.data[preset?.key]?.[props.search.siteInspireId],
+  ]);
 
   if (props.navigation?.items?.length && parent) {
     if (preset.key && collection.length) {
@@ -506,7 +508,7 @@ const View = ({ content, ...props }) => {
       }
     }
     /* eslint-disable-next-line */
-  }, [navigation])
+  }, [navigation]);
   return navigation.length ? (
     <div className="sidebar-block">
       <Menu

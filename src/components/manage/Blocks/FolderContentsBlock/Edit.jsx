@@ -15,7 +15,7 @@ import AddLinkForm from './AddLinkForm';
 
 function removeDuplicates(myArr, prop) {
   return myArr.filter((obj, pos, arr) => {
-    return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
+    return arr.map((mapObj) => mapObj[prop]).indexOf(obj[prop]) === pos;
   });
 }
 
@@ -41,7 +41,7 @@ class Edit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      link: this.props.data.link
+      link: this.props.data.link,
     };
   }
   getPath(url) {
@@ -50,7 +50,6 @@ class Edit extends Component {
       .replace(settings.apiPath, '')
       .replace(settings.internalApiPath, '');
   }
-
 
   componentDidUpdate(prevProps, prevState) {
     if (JSON.stringify(prevState) !== JSON.stringify(this.state)) {
@@ -65,27 +64,33 @@ class Edit extends Component {
     });
   }
 
-
-  onAddLink = link => {
+  onAddLink = (link) => {
     this.setState({
-      link
+      link,
     });
   };
 
   render() {
     return (
       <div>
-        {this.state.link && (
-          <Link className="detailed-link-block" onClick={(e) => e.preventDefault} to={this.getPath(this.state.link.value)}>
+        {(this.state.link && (
+          <Link
+            className="detailed-link-block"
+            onClick={(e) => e.preventDefault}
+            to={this.getPath(this.state.link.value)}
+          >
             <div className="detailed-link-block-item-title">
               {this.state.link.text}
             </div>
             <p>
-            {this.state.link.description && <p>{this.state.link.description}</p>}
+              {this.state.link.description && (
+                <p>{this.state.link.description}</p>
+              )}
             </p>
-              <Button basic>Read more</Button>
+            <Button basic>Read more</Button>
           </Link>
-        ) || 'Select a page from sidebar'}
+        )) ||
+          'Select a page from sidebar'}
         <SidebarPortal selected={true}>
           <Segment.Group raised>
             <header className="header pulled">

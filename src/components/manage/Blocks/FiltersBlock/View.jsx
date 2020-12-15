@@ -95,7 +95,7 @@ const View = ({ content, ...props }) => {
       setTriggerSearch(false);
     }
     /* eslint-disable-next-line */
-  }, [searchTerm, triggerSearch])
+  }, [searchTerm, triggerSearch]);
 
   useEffect(() => {
     if (mounted.current && state.open && searchResultsActive) {
@@ -124,7 +124,7 @@ const View = ({ content, ...props }) => {
       }
     }
     /* eslint-disable-next-line */
-  }, [JSON.stringify(state.filtersMeta)])
+  }, [JSON.stringify(state.filtersMeta)]);
 
   useEffect(() => {
     if (
@@ -136,7 +136,7 @@ const View = ({ content, ...props }) => {
       initialization();
     }
     /* eslint-disable-next-line */
-  }, [filtersMetaReady])
+  }, [filtersMetaReady]);
 
   useEffect(() => {
     if (mounted.current && __CLIENT__) {

@@ -1,7 +1,7 @@
 .sidebar-block .ui.menu {
-  background: transparent;
-  border-bottom: none;
   flex-flow: column;
+  border-bottom: none;
+  background: transparent;
 }
 
 .sidebar-block .ui.menu .item {
@@ -10,14 +10,13 @@
 
 .sidebar-block .ui.menu .item,
 .sidebar-block .ui.menu .item.active {
-  background-color: transparent;
-  border: none;
-  text-align: left;
-  color: #333333 !important;
   padding-bottom: 1rem;
+  border: none;
+  background-color: transparent;
+  color: #333333 !important;
   cursor: pointer;
+  text-align: left;
 }
-
 
 .sidebar-block .ui.menu .item.hidden {
   display: none;
@@ -48,8 +47,8 @@
 }
 
 .sidebar-block .ui.menu .item.active {
-  color: #ED776A!important;
-  background-color: transparent!important;
+  background-color: transparent !important;
+  color: #ed776a !important;
 }
 
 .sidebar-block .ui.menu .item.active.depth__3 {

@@ -122,7 +122,7 @@ const View = ({ content, ...props }) => {
   useEffect(() => {
     updateDiscodataValues(mounted);
     /* eslint-disable-next-line */
-  }, [props.search, props.discodata_resources, JSON.stringify(props.data)])
+  }, [props.search, props.discodata_resources, JSON.stringify(props.data)]);
 
   const queryParametersText = queryParameters
     ? queryParameters

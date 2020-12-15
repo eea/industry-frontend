@@ -32,7 +32,7 @@ const Edit = (props) => {
       }),
     });
     /* eslint-disable-next-line */
-  }, [props.data])
+  }, [props.data]);
   return (
     <div>
       <RenderFields schema={state.schema} {...props} title="Filters block" />

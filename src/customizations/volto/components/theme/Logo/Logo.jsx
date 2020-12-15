@@ -23,8 +23,8 @@ const messages = defineMessages({
   },
   industrialEmissions: {
     id: 'Industrial Emissions',
-    defaultMessage: 'Industrial Emissions Portal'
-  }
+    defaultMessage: 'Industrial Emissions Portal',
+  },
 });
 
 /**

@@ -283,7 +283,7 @@ class SchemaWidget extends Component {
           ...this.props.value.fieldsets[this.state.currentFieldset],
           fields: map(
             this.props.value.fieldsets[this.state.currentFieldset].fields,
-            field => (field === this.state.editField.id ? values.id : field),
+            (field) => (field === this.state.editField.id ? values.id : field),
           ),
         },
         ...slice(this.props.value.fieldsets, this.state.currentFieldset + 1),
@@ -538,7 +538,7 @@ class SchemaWidget extends Component {
       <div>
         <Segment.Group raised>
           {error.length > 0 &&
-            map(error, err => (
+            map(error, (err) => (
               <Message
                 icon="warning"
                 key={err}

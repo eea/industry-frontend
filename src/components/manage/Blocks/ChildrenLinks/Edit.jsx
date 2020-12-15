@@ -23,12 +23,12 @@ const Edit = (props) => {
       handleChangeBlock('childrenLinks', [...props.childrenLinks]);
     }
     /* eslint-disable-next-line */
-  }, [props.childrenLinks])
+  }, [props.childrenLinks]);
 
   useEffect(() => {
     props.dispatch(getParentFolderData(pageLink));
     /* eslint-disable-next-line */
-  }, [pageLink])
+  }, [pageLink]);
 
   const handleChangeBlock = (id, value) => {
     const { data } = props;

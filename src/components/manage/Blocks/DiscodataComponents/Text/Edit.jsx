@@ -28,7 +28,11 @@ const Edit = (props) => {
       schema,
     });
     /* eslint-disable-next-line */
-  }, [props.discodata_query.search, props.discodata_resources.data, JSON.stringify(props.data)]);
+  }, [
+    props.discodata_query.search,
+    props.discodata_resources.data,
+    JSON.stringify(props.data),
+  ]);
 
   return (
     <div>

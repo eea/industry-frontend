@@ -431,7 +431,7 @@ const Edit = (props) => {
       }),
     });
     /* eslint-disable-next-line */
-  }, [props.data, props.discodata_resources, props.discodata_query.search])
+  }, [props.data, props.discodata_resources, props.discodata_query.search]);
   return (
     <DiscodataSqlBuilderEdit
       {...props}
