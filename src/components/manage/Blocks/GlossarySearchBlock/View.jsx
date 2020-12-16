@@ -16,7 +16,7 @@ import {
 } from 'volto-addons/actions';
 import Highlighter from 'react-highlight-words';
 import cx from 'classnames';
-import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
+import { setQueryParam, deleteQueryParam } from '@eeacms/volto-datablocks/actions';
 import './style.css';
 
 const messages = defineMessages({

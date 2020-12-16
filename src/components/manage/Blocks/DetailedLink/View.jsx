@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { settings } from '~/config';
 import cx from 'classnames';
 import './style.css';
-import { deleteQueryParam } from 'volto-datablocks/actions';
+import { deleteQueryParam } from '@eeacms/volto-datablocks/actions';
 
 const getPath = (url) => {
   if (!url) return '';

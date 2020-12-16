@@ -19,7 +19,7 @@ import {
   installExpendableList,
   installFolderListing,
 } from 'volto-addons';
-import { installDiscodataBlocks } from 'volto-datablocks';
+import { installDiscodataBlocks } from '@eeacms/volto-datablocks';
 import { applyConfig as eprtrConfig } from './localconfig';
 
 const consoleError = console.error.bind(console);

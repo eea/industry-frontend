@@ -12,7 +12,7 @@ import {
   getNavigationByParent,
   getBasePath,
 } from 'volto-tabsview/helpers';
-import { deleteQueryParam, setQueryParam } from 'volto-datablocks/actions';
+import { deleteQueryParam, setQueryParam } from '@eeacms/volto-datablocks/actions';
 import { useEffect } from 'react';
 
 const View = ({ content, ...props }) => {

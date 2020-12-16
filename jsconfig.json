@@ -7,13 +7,13 @@
             "@eeacms/volto-grid-block": [
                 "develop/volto-grid-block/src"
             ],
-            "volto-datablocks": [
+            "@eeacms/volto-datablocks": [
                 "develop/volto-datablocks/src"
             ],
             "volto-addons": [
                 "develop/volto-addons/src"
             ],
-            "volto-embed": [
+            "@eeacms/volto-embed": [
                 "develop/volto-embed/src"
             ],
             "volto-matomo": [

@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { isArray } from 'lodash';
 import { Dropdown } from 'semantic-ui-react';
-import { setQueryParam } from 'volto-datablocks/actions';
+import { setQueryParam } from '@eeacms/volto-datablocks/actions';
 
 import cx from 'classnames';
 

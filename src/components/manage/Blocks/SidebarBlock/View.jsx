@@ -12,7 +12,7 @@ import {
   getBasePath,
 } from 'volto-tabsview/helpers';
 
-import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
+import { setQueryParam, deleteQueryParam } from '@eeacms/volto-datablocks/actions';
 
 import { getFacilities, getInstallations, getLcps } from '~/helpers/api';
 

@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
-import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
+import { setQueryParam, deleteQueryParam } from '@eeacms/volto-datablocks/actions';
 import _uniqueId from 'lodash/uniqueId';
 import Icon from '@plone/volto/components/theme/Icon/Icon';
 import CompetentAuthority from '../CompetentAuthority';

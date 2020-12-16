@@ -15,7 +15,7 @@ import { getBaseUrl } from '@plone/volto/helpers';
 import { settings } from '~/config';
 
 import { getNavigation } from '@plone/volto/actions';
-import { resetQueryParam } from 'volto-datablocks/actions';
+import { resetQueryParam } from '@eeacms/volto-datablocks/actions';
 
 const messages = defineMessages({
   closeMobileMenu: {

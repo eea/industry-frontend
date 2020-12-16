@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Header, Modal, Select, Input, List } from 'semantic-ui-react';
 import { Portal } from 'react-portal';
 import { Icon } from '@plone/volto/components';
-import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
+import { setQueryParam, deleteQueryParam } from '@eeacms/volto-datablocks/actions';
 import { settings } from '~/config';
 import _uniqueId from 'lodash/uniqueId';
 import axios from 'axios';

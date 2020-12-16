@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import DiscodataSqlBuilder from 'volto-datablocks/DiscodataSqlBuilder/View';
+import DiscodataSqlBuilder from '@eeacms/volto-datablocks/DiscodataSqlBuilder/View';
 import Flags from '~/components/manage/Blocks/Flags/View';
 
 const QueryBuilder = (props) => {

@@ -8,7 +8,7 @@ import Icon from '@plone/volto/components/theme/Icon/Icon';
 import infoSVG from '@plone/volto/icons/info.svg';
 import { settings } from '~/config';
 
-import 'volto-embed/css/embed-styles.css';
+import '@eeacms/volto-embed/css/embed-styles.css';
 
 const key = (domain_key) => `accept-${domain_key}`;
 

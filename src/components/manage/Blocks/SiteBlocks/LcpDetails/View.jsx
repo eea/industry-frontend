@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
 import { Link } from 'react-router-dom';
-import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
+import { setQueryParam, deleteQueryParam } from '@eeacms/volto-datablocks/actions';
 import Icon from '@plone/volto/components/theme/Icon/Icon';
 import infoSVG from '@plone/volto/icons/info.svg';
 import CompetentAuthority from '../CompetentAuthority';

@@ -19,8 +19,8 @@ import { Helmet } from '@plone/volto/helpers';
 import { searchContent } from '@plone/volto/actions';
 import { Toolbar, Icon } from '@plone/volto/components';
 import Highlighter from 'react-highlight-words';
-import DiscodataSqlBuilder from 'volto-datablocks/DiscodataSqlBuilder/View';
-import { setQueryParam } from 'volto-datablocks/actions';
+import DiscodataSqlBuilder from '@eeacms/volto-datablocks/DiscodataSqlBuilder/View';
+import { setQueryParam } from '@eeacms/volto-datablocks/actions';
 import paginationLeftSVG from '@plone/volto/icons/left-key.svg';
 import paginationRightSVG from '@plone/volto/icons/right-key.svg';
 
