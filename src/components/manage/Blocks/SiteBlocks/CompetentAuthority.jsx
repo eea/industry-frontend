@@ -16,7 +16,12 @@ const CompetentAuthority = (props) => {
         )}
       >
         <h3 className="blue">Competent Authority</h3>
-        <span className="floating-icon" data-tip={'This is a tooltip'}>
+        <span
+          className="floating-icon"
+          data-tip={
+            'Authority, body or bodies responsible for regulating the facility and reporting the associated E-PRTR data, as designated by the reporting country'
+          }
+        >
           <Icon
             className="firefox-icon"
             name={infoSVG}

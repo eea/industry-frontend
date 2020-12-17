@@ -3,7 +3,10 @@ import { useHistory } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
-import { setQueryParam, deleteQueryParam } from '@eeacms/volto-datablocks/actions';
+import {
+  setQueryParam,
+  deleteQueryParam,
+} from '@eeacms/volto-datablocks/actions';
 import _uniqueId from 'lodash/uniqueId';
 import Icon from '@plone/volto/components/theme/Icon/Icon';
 import CompetentAuthority from '../CompetentAuthority';
@@ -62,9 +65,10 @@ const View = (props) => {
                     site.eprtrReportingYear
                       ? 'xs-6 sm-6 md-6 lg-6'
                       : 'xs-12 sm-12 md-12 lg-12',
+                    'mb-0',
                   )}
                 >
-                  <span
+                  {/* <span
                     className="floating-icon"
                     data-tip={'This is a tooltip'}
                   >
@@ -74,14 +78,18 @@ const View = (props) => {
                       size="20"
                       color="#fff"
                     />
-                  </span>
+                  </span> */}
                   <p className="lighter mb-0">Last report was submitted on:</p>
-                  <p className="bold">{getDate(site.authLastUpdated)}</p>
+                  <p className="bold" style={{ marginBottom: '0' }}>
+                    {getDate(site.authLastUpdated)}
+                  </p>
                 </div>
                 {site.eprtrReportingYear ? (
                   <div className="xs-6 sm-6 md-6 lg-6">
                     <p className="lighter mb-0">EPRTR reporting year</p>
-                    <p className="bold">{site.eprtrReportingYear}</p>
+                    <p className="bold" style={{ marginBottom: '0' }}>
+                      {site.eprtrReportingYear}
+                    </p>
                   </div>
                 ) : (
                   ''

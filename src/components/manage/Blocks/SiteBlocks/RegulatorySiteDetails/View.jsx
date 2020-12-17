@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
-import { setQueryParam, deleteQueryParam } from '@eeacms/volto-datablocks/actions';
-import _uniqueId from 'lodash/uniqueId';
+import {
+  setQueryParam,
+  deleteQueryParam,
+} from '@eeacms/volto-datablocks/actions';
 import Icon from '@plone/volto/components/theme/Icon/Icon';
-import RenderTable from '../RenderTable';
 import PermitingAuthority from '../PermitingAuthority';
-import moment from 'moment';
 import cx from 'classnames';
-import { getDate, getLonLat } from '../helpers';
+import { getDate } from '../helpers';
 import infoSVG from '@plone/volto/icons/info.svg';
 import './style.css';
 
 const View = (props) => {
-  const history = useHistory();
   const [aels, setAels] = useState(false);
   const {
     siteInspireId = null,
@@ -67,7 +65,12 @@ const View = (props) => {
           {/* ABOUT THE ENTITY */}
           <div className={cx('header-tooltip', 'mb-1')}>
             <h3 className="blue">About the entity</h3>
-            <span className="floating-icon" data-tip={'This is a tooltip'}>
+            <span
+              className="floating-icon"
+              data-tip={
+                'Information regarding the facilities included in the industrial site'
+              }
+            >
               <Icon
                 className="firefox-icon"
                 name={infoSVG}
@@ -97,7 +100,12 @@ const View = (props) => {
           {/* BAT CONCLUSION */}
           <div className={cx('header-tooltip', 'mb-1')}>
             <h3 className="blue">BAT conclusions</h3>
-            <span className="floating-icon" data-tip={'This is a tooltip'}>
+            <span
+              className="floating-icon"
+              data-tip={
+                'Number of individual conclusions that indicate which techniques or combinations of techniques are BAT for achieving a specific environmental objective'
+              }
+            >
               <Icon
                 className="firefox-icon"
                 name={infoSVG}

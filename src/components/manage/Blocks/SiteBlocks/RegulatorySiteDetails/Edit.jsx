@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import _uniqueId from 'lodash/uniqueId';
@@ -11,7 +11,7 @@ const getSchema = (props) => {
 };
 
 const Edit = (props) => {
-  const [state, setState] = useState({
+  const [state] = useState({
     schema: getSchema({ ...props, providerUrl: settings.providerUrl }),
     id: _uniqueId('block_'),
   });

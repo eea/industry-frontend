@@ -2,7 +2,10 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
-import { setQueryParam, deleteQueryParam } from '@eeacms/volto-datablocks/actions';
+import {
+  setQueryParam,
+  deleteQueryParam,
+} from '@eeacms/volto-datablocks/actions';
 import Icon from '@plone/volto/components/theme/Icon/Icon';
 import infoSVG from '@plone/volto/icons/info.svg';
 import CompetentAuthority from '../CompetentAuthority';
@@ -59,7 +62,7 @@ const View = (props) => {
                   {facility[0]?.facilityIndustrialActivity}{' '}
                   {facility[0]?.facilityMainActivity}
                 </span>
-                <span
+                {/* <span
                   className="floating-icon"
                   data-tip={'This is a tooltip 2'}
                 >
@@ -69,7 +72,7 @@ const View = (props) => {
                     size="20"
                     color="#D63D27"
                   />
-                </span>
+                </span> */}
               </p>
             </div>
           ) : (

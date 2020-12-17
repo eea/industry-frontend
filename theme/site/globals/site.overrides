@@ -1636,7 +1636,9 @@ b {
   border-radius: 10px;
   p {
     color: #fff;
-    margin-bottom: 0.5em !important;
+    &:not(:last-child) {
+      margin-bottom: 0.5em !important;
+    }
   }
   .floating-icon {
     position: absolute;

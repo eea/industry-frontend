@@ -11,7 +11,12 @@ const PermitingAuthority = (props) => {
     <div>
       <div className={cx('header-tooltip', 'mb-1')}>
         <h3 className="blue">Permiting Authority</h3>
-        <span className="floating-icon" data-tip={'This is a tooltip'}>
+        <span
+          className="floating-icon"
+          data-tip={
+            'Authority, body or bodies responsible for issuing a permit to a given facility'
+          }
+        >
           <Icon
             className="firefox-icon"
             name={infoSVG}

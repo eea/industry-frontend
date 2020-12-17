@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Tab, Dropdown, Table } from 'semantic-ui-react';
+import { Dropdown } from 'semantic-ui-react';
 import QueryBuilder from '../QueryBuilder';
-import { setQueryParam, deleteQueryParam } from '@eeacms/volto-datablocks/actions';
-import cx from 'classnames';
+import {
+  setQueryParam,
+  deleteQueryParam,
+} from '@eeacms/volto-datablocks/actions';
 import './style.css';
 
 const View = (props) => {
