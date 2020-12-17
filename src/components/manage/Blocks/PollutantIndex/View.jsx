@@ -3,8 +3,10 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Tab, Dropdown, Table } from 'semantic-ui-react';
 import DiscodataSqlBuilder from '@eeacms/volto-datablocks/DiscodataSqlBuilder/View';
-import { setQueryParam, deleteQueryParam } from '@eeacms/volto-datablocks/actions';
-import qs from 'query-string';
+import {
+  setQueryParam,
+  deleteQueryParam,
+} from '@eeacms/volto-datablocks/actions';
 import cx from 'classnames';
 import './style.css';
 

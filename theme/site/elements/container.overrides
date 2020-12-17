@@ -15,11 +15,14 @@
     margin-right 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045);
 }
 
-.contentWidthMedia(@width, @gutter, @offset) {
+.contentWidthMedia(@width, @headerWidth, @gutter, @offset) {
   .ui.container {
     width: @width !important;
     margin-right: @gutter !important;
     margin-left: @gutter !important;
+    &.header-container {
+      width: @headerWidth !important;
+    }
   }
 
   .drag.handle.wrapper {
@@ -33,7 +36,7 @@
 
 .contentWidth(@offset) {
   @media only screen and (max-width: @largestMobileScreen + @offset) {
-    .contentWidthMedia(@mobileWidth, @mobileGutter, -12px);
+    .contentWidthMedia(@mobileWidth, auto, @mobileGutter, -12px);
 
     [class*='mobile hidden'],
     [class*='tablet only']:not(.mobile),
@@ -45,7 +48,7 @@
     }
   }
   @media only screen and (min-width: @tabletBreakpoint + @offset) and (max-width: @largestTabletScreen + @offset) {
-    .contentWidthMedia(@tabletWidth, @tabletGutter, -30px);
+    .contentWidthMedia(@tabletWidth, @tabletWidth, @tabletGutter, -30px);
 
     [class*='mobile only']:not(.tablet),
     [class*='tablet hidden'],
@@ -57,7 +60,7 @@
     }
   }
   @media only screen and (min-width: @computerBreakpoint + @offset) and (max-width: @largestSmallMonitor + @offset) {
-    .contentWidthMedia(@computerWidth, @computerGutter, -30px);
+    .contentWidthMedia(@computerWidth, @computerWidth, @computerGutter, -30px);
 
     [class*='mobile only']:not(.computer),
     [class*='tablet only']:not(.computer),
@@ -69,7 +72,7 @@
     }
   }
   @media only screen and (min-width: @largeMonitorBreakpoint + @offset) {
-    .contentWidthMedia(@largeMonitorWidth, @largeMonitorGutter, -30px);
+    .contentWidthMedia(@largeMonitorWidth, @largeMonitorWidth, @largeMonitorGutter, -30px);
 
     [class*='mobile only']:not([class*='large screen']),
     [class*='tablet only']:not([class*='large screen']),

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { isArray, isDate } from 'lodash';
+import { isArray } from 'lodash';
 import { Dropdown, Header } from 'semantic-ui-react';
 import { setQueryParam } from '@eeacms/volto-datablocks/actions';
 import DiscodataSqlBuilder from '@eeacms/volto-datablocks/DiscodataSqlBuilder/View';
@@ -19,11 +19,6 @@ const countryGroups = [
     key: 'All E-PRTR',
     value: 'All E-PRTR',
     text: 'All E-PRTR',
-  },
-  {
-    key: 'EEA33',
-    value: 'EEA33',
-    text: 'EEA33',
   },
   {
     key: 'EU27',

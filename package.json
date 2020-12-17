@@ -127,12 +127,11 @@
     "@eeacms/volto-blocks-form": "github:eea/volto-blocks-form#1.0.1",
     "@eeacms/volto-metadata-block": "github:eea/volto-metadata-block#1.0.2",
     "@eeacms/volto-object-widget": "github:eea/volto-object-widget#1.0.3",
+    "@eeacms/volto-slate-metadata-mentions": "github:eea/volto-slate-metadata-mentions#1.0.0",
     "@eeacms/volto-widget-toggle": "github:eea/volto-widget-toggle#1.0.0",
     "@eeacms/volto-widgets-view": "github:eea/volto-widgets-view#1.0.3",
-    "@eeacms/volto-slate-metadata-mentions": "github:eea/volto-slate-metadata-mentions#1.0.0",
     "@material/react-linear-progress": "^0.15.0",
     "@plone/volto": "10.4.3",
-    "volto-slate": "github:eea/volto-slate#1.0.5",
     "axios": "^0.20.0",
     "jsonp": "^0.2.1",
     "ol": "^6.4.3",
@@ -146,7 +145,8 @@
     "react-loadable": "^5.5.0",
     "react-sizeme": "^2.6.12",
     "react-tooltip": "^4.2.9",
-    "react-visibility-sensor": "^5.1.1"
+    "react-visibility-sensor": "^5.1.1",
+    "volto-slate": "github:eea/volto-slate#1.0.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",

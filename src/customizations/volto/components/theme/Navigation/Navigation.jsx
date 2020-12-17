@@ -9,13 +9,16 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { NavLink } from 'react-router-dom';
 import { defineMessages, injectIntl } from 'react-intl';
-import { Menu } from 'semantic-ui-react';
+import { Menu, Button } from 'semantic-ui-react';
 import cx from 'classnames';
+import Icon from '@plone/volto/components/theme/Icon/Icon';
 import { getBaseUrl } from '@plone/volto/helpers';
 import { settings } from '~/config';
 
 import { getNavigation } from '@plone/volto/actions';
 import { resetQueryParam } from '@eeacms/volto-datablocks/actions';
+
+import clearSVG from '@plone/volto/icons/clear.svg';
 
 const messages = defineMessages({
   closeMobileMenu: {
@@ -126,9 +129,7 @@ class Navigation extends Component {
       <nav className="navigation">
         <div className="hamburger-wrapper mobile tablet only">
           <button
-            className={cx('hamburger hamburger--collapse', {
-              'is-active': this.state.isMobileMenuOpen,
-            })}
+            className={cx('hamburger hamburger--collapse')}
             aria-label={
               this.state.isMobileMenuOpen
                 ? this.props.intl.formatMessage(messages.closeMobileMenu, {
@@ -164,8 +165,16 @@ class Navigation extends Component {
               ? 'open'
               : 'computer large screen widescreen only'
           }
-          onClick={this.closeMobileMenu}
         >
+          <Button
+            icon
+            basic
+            title="Close menu"
+            className="close-button"
+            onClick={this.closeMobileMenu}
+          >
+            <Icon name={clearSVG} size="32px" />
+          </Button>
           {this.props.items.map(
             (item) =>
               !settings.excludeFromNavigation.includes(item.url) && (
@@ -181,6 +190,7 @@ class Navigation extends Component {
                     ) {
                       this.props.resetQueryParam();
                     }
+                    this.closeMobileMenu();
                   }}
                   exact={
                     settings.isMultilingual

@@ -4,7 +4,7 @@
  */
 
 import React, { Component } from 'react';
-import { Segment, Image } from 'semantic-ui-react';
+import { Segment, Image, Grid } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -46,7 +46,7 @@ class Header extends Component {
   render() {
     return (
       <Segment basic className="header-wrapper" role="banner">
-        <div className="header-container">
+        <div className="header-container ui container">
           <div className="header">
             <div className="logo-nav-wrapper">
               <div className="logo">
@@ -56,13 +56,20 @@ class Header extends Component {
             </div>
             <div className="header-partner-section">
               <Image
+                className="ec-logo"
                 src={eclogo}
                 alt="European Comission"
                 title="European Comission"
                 height={55}
                 style={{ marginRight: '10px' }}
               />
-              <Image src={eealogo} alt="EEA" title="EEA" height={50} />
+              <Image
+                className="eea-logo"
+                src={eealogo}
+                alt="EEA"
+                title="EEA"
+                height={55}
+              />
             </div>
           </div>
         </div>

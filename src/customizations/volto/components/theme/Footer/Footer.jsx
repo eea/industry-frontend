@@ -72,7 +72,7 @@ const Footer = ({ intl }) => (
                   <a href="https://ec.europa.eu/" title="European Commission">
                     <img
                       className="footerLogo"
-                      style={{ height: '50px' }}
+                      style={{ height: '53px' }}
                       src={eeaLogo}
                       alt="EEA"
                       title="EEA"
@@ -80,7 +80,7 @@ const Footer = ({ intl }) => (
                   </a>
                   <img
                     className="footerLogo"
-                    style={{ height: '50px' }}
+                    style={{ height: '53px' }}
                     src={eclogo}
                     alt="EC"
                     title="EC"
