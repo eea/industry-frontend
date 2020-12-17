@@ -45,8 +45,8 @@ const Footer = ({ intl }) => (
               </li>
 
               <li>
-                <Link className="item" to="/raw-data">
-                  <FormattedMessage id="datasets" defaultMessage="Raw data" />
+                <Link className="item" to="/download">
+                  <FormattedMessage id="datasets" defaultMessage="Download" />
                 </Link>
               </li>
               <li>
