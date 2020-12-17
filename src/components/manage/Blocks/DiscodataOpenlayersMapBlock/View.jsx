@@ -108,7 +108,7 @@ const OpenlayersMapView = (props) => {
   const selectedSiteRef = useRef(null);
   const selectedSiteCoordinates = useRef(null);
   const regionsSourceWhere = useRef('');
-  const firstFilteringDone = useRef(false);
+  const firstFilteringDone = useRef(0);
   const ToggleSidebarControl = useRef(null);
   const ViewYourAreaControl = useRef(null);
   const siteTermRef = useRef(null);
@@ -285,9 +285,7 @@ const OpenlayersMapView = (props) => {
         state.map.sitesSourceLayer &&
           state.map.sitesSourceLayer.getSource().refresh();
       }
-      if (!firstFilteringDone.current) {
-        firstFilteringDone.current = true;
-      }
+      firstFilteringDone.current++;
       if (!state.updateMapPosition && !state.map.sitesSourceQuery.where) {
         applyZoom();
       }
@@ -686,7 +684,9 @@ const OpenlayersMapView = (props) => {
       stateRef.current.updateMapPosition === 'byAdvancedFilters' &&
       mounted.current
     ) {
-      stateRef.current.map.element.getView().cancelAnimations();
+      if (firstFilteringDone.current > 2) {
+        stateRef.current.map.element.getView().cancelAnimations();
+      }
       setSelectedSite(null);
       getLocationByAdvancedFilters(options);
     }
@@ -1088,7 +1088,10 @@ const OpenlayersMapView = (props) => {
         }
         map.on('click', function (evt) {
           let newZoom = map.getView().getZoom();
-          if (newZoom > zoomSwitch) {
+          if (
+            newZoom > zoomSwitch ||
+            stateRef.current.map.sitesSourceQuery?.where
+          ) {
             displayPopup(map, evt.pixel, evt.coordinate, popupDetails, true);
           }
         });

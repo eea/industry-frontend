@@ -1,5 +1,5 @@
 /* REACT IMPORTS */
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getBasePath } from '~/helpers';
@@ -9,8 +9,8 @@ const RedirectView = (props) => {
   const history = useHistory();
   const [mounted, setMounted] = useState(false);
   const [redirect, setRedirect] = useState(false);
-  const currentPage = props.content['@id'];
-  const redirectPage = props.content.relatedItems?.[0]?.['@id'];
+  const currentPage = props.content?.['@id'];
+  const redirectPage = props.content?.relatedItems?.[0]?.['@id'];
 
   useEffect(() => {
     setMounted(true);

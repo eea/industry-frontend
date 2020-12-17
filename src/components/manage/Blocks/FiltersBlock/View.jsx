@@ -5,7 +5,10 @@ import { connect } from 'react-redux';
 import { Header, Modal, Select, Input, List } from 'semantic-ui-react';
 import { Portal } from 'react-portal';
 import { Icon } from '@plone/volto/components';
-import { setQueryParam, deleteQueryParam } from '@eeacms/volto-datablocks/actions';
+import {
+  setQueryParam,
+  deleteQueryParam,
+} from '@eeacms/volto-datablocks/actions';
 import { settings } from '~/config';
 import _uniqueId from 'lodash/uniqueId';
 import axios from 'axios';
@@ -518,6 +521,25 @@ const View = ({ content, ...props }) => {
                     }) || []),
                 ],
               };
+              if (metadata[index]?.key === 'reporting_years') {
+                const reportingYears =
+                  res.data?.results
+                    ?.map((item) => item.reportingYear)
+                    ?.sort((a, b) => b - a) || [];
+                if (reportingYears.length) {
+                  props.setQueryParam({
+                    queryParam: {
+                      [metadata[index].queryToSet]: [reportingYears[0]],
+                      advancedFiltering: true,
+                      filtersCounter: props.discodata_query.search[
+                        'filtersCounter'
+                      ]
+                        ? props.discodata_query.search['filtersCounter'] + 1
+                        : 1,
+                    },
+                  });
+                }
+              }
             });
             setLoadingData(false);
             setState({
@@ -892,8 +914,8 @@ const View = ({ content, ...props }) => {
         ...state.filters,
         [searchTermType]:
           searchTermType === 'locationTerm'
-            ? locationResults[locationResultsTexts.indexOf(searchTerm)]
-            : searchTerm,
+            ? locationResults[locationResultsTexts.indexOf(searchTerm)] || ''
+            : searchTerm || '',
         [emptyTermType]: null,
         nuts_regions: nuts,
         nuts_latest,
@@ -902,7 +924,7 @@ const View = ({ content, ...props }) => {
           : 1,
         extent:
           (nuts_latest.length ||
-            (searchTermType === 'siteTerm' && searchTerm.length)) &&
+            (searchTermType === 'siteTerm' && searchTerm?.length)) &&
           searchTermType !== 'locationTerm'
             ? null
             : props.discodata_query.search['extent'],
