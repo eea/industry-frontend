@@ -16,7 +16,7 @@ import { getBaseUrl } from '@plone/volto/helpers';
 import { settings } from '~/config';
 
 import { getNavigation } from '@plone/volto/actions';
-import { resetQueryParam } from '@eeacms/volto-datablocks/actions';
+import { resetQueryParam } from 'volto-datablocks/actions';
 
 import clearSVG from '@plone/volto/icons/clear.svg';
 
@@ -156,53 +156,55 @@ class Navigation extends Component {
             </span>
           </button>
         </div>
-        <Menu
-          stackable
-          pointing
-          secondary
-          className={
-            this.state.isMobileMenuOpen
-              ? 'open'
-              : 'computer large screen widescreen only'
-          }
-        >
-          <Button
-            icon
-            basic
-            title="Close menu"
-            className="close-button"
-            onClick={this.closeMobileMenu}
+        <div className={this.state.isMobileMenuOpen ? 'open menu-wrapper' : ''}>
+          <Menu
+            stackable
+            pointing
+            secondary
+            className={
+              this.state.isMobileMenuOpen
+                ? 'open'
+                : 'computer large screen widescreen only'
+            }
           >
-            <Icon name={clearSVG} size="32px" />
-          </Button>
-          {this.props.items.map(
-            (item) =>
-              !settings.excludeFromNavigation.includes(item.url) && (
-                <NavLink
-                  to={item.url === '' ? '/' : item.url}
-                  key={item.url}
-                  className="item"
-                  activeClassName="active"
-                  onClick={() => {
-                    if (
-                      !item.url.includes('/industrial-site') &&
-                      !item.url.includes('/analysis')
-                    ) {
-                      this.props.resetQueryParam();
+            <Button
+              icon
+              basic
+              title="Close menu"
+              className="close-button"
+              onClick={this.closeMobileMenu}
+            >
+              <Icon name={clearSVG} size="32px" />
+            </Button>
+            {this.props.items.map(
+              (item) =>
+                !settings.excludeFromNavigation.includes(item.url) && (
+                  <NavLink
+                    to={item.url === '' ? '/' : item.url}
+                    key={item.url}
+                    className="item"
+                    activeClassName="active"
+                    onClick={() => {
+                      if (
+                        !item.url.includes('/industrial-site') &&
+                        !item.url.includes('/analysis')
+                      ) {
+                        this.props.resetQueryParam();
+                      }
+                      this.closeMobileMenu();
+                    }}
+                    exact={
+                      settings.isMultilingual
+                        ? item.url === `/${lang}`
+                        : item.url === ''
                     }
-                    this.closeMobileMenu();
-                  }}
-                  exact={
-                    settings.isMultilingual
-                      ? item.url === `/${lang}`
-                      : item.url === ''
-                  }
-                >
-                  {item.title}
-                </NavLink>
-              ),
-          )}
-        </Menu>
+                  >
+                    {item.title}
+                  </NavLink>
+                ),
+            )}
+          </Menu>
+        </div>
       </nav>
     );
   }

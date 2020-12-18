@@ -8,7 +8,7 @@ import { Icon } from '@plone/volto/components';
 import {
   setQueryParam,
   deleteQueryParam,
-} from '@eeacms/volto-datablocks/actions';
+} from 'volto-datablocks/actions';
 import { settings } from '~/config';
 import _uniqueId from 'lodash/uniqueId';
 import axios from 'axios';

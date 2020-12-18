@@ -13,7 +13,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import { Container, Image } from 'semantic-ui-react';
 import { map } from 'lodash';
 import qs from 'query-string';
-import { setQueryParam } from '@eeacms/volto-datablocks/actions';
+import { setQueryParam } from 'volto-datablocks/actions';
 
 import { blocks } from '~/config';
 

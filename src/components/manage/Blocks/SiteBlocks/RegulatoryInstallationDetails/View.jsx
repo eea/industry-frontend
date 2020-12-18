@@ -5,7 +5,7 @@ import ReactTooltip from 'react-tooltip';
 import {
   setQueryParam,
   deleteQueryParam,
-} from '@eeacms/volto-datablocks/actions';
+} from 'volto-datablocks/actions';
 import Icon from '@plone/volto/components/theme/Icon/Icon';
 import PermitingAuthority from '../PermitingAuthority';
 import cx from 'classnames';

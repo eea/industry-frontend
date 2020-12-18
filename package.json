@@ -34,8 +34,8 @@
     "@eeacms/volto-grid-block",
     "@eeacms/volto-matomo",
     "@eeacms/volto-sentry-rancher-config",
-    "@eeacms/volto-datablocks",
-    "@eeacms/volto-embed",
+    "volto-datablocks",
+    "volto-embed",
     "volto-addons"
   ],
   "scripts": {

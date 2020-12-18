@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { isArray, isDate } from 'lodash';
 import { Link } from 'react-router-dom';
-import { setQueryParam } from '@eeacms/volto-datablocks/actions';
+import { setQueryParam } from 'volto-datablocks/actions';
 import Icon from '@plone/volto/components/theme/Icon/Icon';
 import moment from 'moment';
 import cx from 'classnames';

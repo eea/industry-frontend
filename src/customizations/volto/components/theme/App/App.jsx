@@ -102,10 +102,6 @@ class App extends Component {
     const action = getView(this.props.pathname);
     const isCmsUI = isCmsUi(this.props.pathname);
     const ConnectionRefusedView = views.errorViews.ECONNREFUSED;
-    console.error('APP: has error ?', this.state.hasError);
-    if (this.state.hasError) {
-      console.error('APP: error info ', this.state.errorInfo);
-    }
     return (
       <Fragment>
         <BodyClass className={`view-${action}view`} />
@@ -137,7 +133,8 @@ class App extends Component {
           <Segment basic className="content-area">
             <main>
               <OutdatedBrowser />
-              {this.props.connectionRefused ? (
+              <h1>APP</h1>
+              {/* {this.props.connectionRefused ? (
                 <ConnectionRefusedView />
               ) : this.state.hasError ? (
                 <Error
@@ -148,7 +145,7 @@ class App extends Component {
                 renderRoutes(this.props.route.routes, {
                   staticContext: this.props.staticContext,
                 })
-              )}
+              )} */}
             </main>
           </Segment>
         </MultilingualRedirector>

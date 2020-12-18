@@ -6,7 +6,7 @@ import QueryBuilder from '../QueryBuilder';
 import {
   setQueryParam,
   deleteQueryParam,
-} from '@eeacms/volto-datablocks/actions';
+} from 'volto-datablocks/actions';
 import './style.css';
 
 const View = (props) => {

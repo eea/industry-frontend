@@ -16,7 +16,7 @@ import { isArray } from 'lodash';
 import { Icon as VoltoIcon, Toast } from '@plone/volto/components';
 import PrivacyProtection from './PrivacyProtection';
 // VOLTO-DATABLOCKS
-import { setQueryParam } from '@eeacms/volto-datablocks/actions';
+import { setQueryParam } from 'volto-datablocks/actions';
 // SEMANTIC REACT UI
 import { Grid, Header } from 'semantic-ui-react';
 // SVGs

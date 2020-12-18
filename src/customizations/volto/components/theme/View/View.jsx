@@ -230,8 +230,6 @@ class View extends Component {
    * @returns {string} Markup for the component.
    */
   render() {
-    console.error('VIEW: error: ', this.props.error);
-    console.error('VIEW: connection refused ? ', this.props.connectionRefused);
     if (this.props.error && !this.props.connectionRefused) {
       let FoundView;
       if (this.props.error.status === undefined) {

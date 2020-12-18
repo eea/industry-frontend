@@ -13,8 +13,7 @@
   "volto-datablocks": {
     "url": "https://github.com/eea/volto-datablocks.git",
     "branch": "master",
-    "path": "src",
-    "package": "@eeacms/volto-datablocks"
+    "path": "src"
   },
   "volto-addons": {
     "url": "https://github.com/eea/volto-addons.git",
@@ -24,8 +23,7 @@
   "volto-embed": {
     "url": "https://github.com/eea/volto-embed.git",
     "branch": "master",
-    "path": "src",
-    "package": "@eeacms/volto-embed"
+    "path": "src"
   },
   "volto-matomo": {
     "url": "https://github.com/eea/volto-matomo.git",

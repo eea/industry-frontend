@@ -2,11 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Tab, Dropdown, Table } from 'semantic-ui-react';
-import DiscodataSqlBuilder from '@eeacms/volto-datablocks/DiscodataSqlBuilder/View';
+import DiscodataSqlBuilder from 'volto-datablocks/DiscodataSqlBuilder/View';
 import {
   setQueryParam,
   deleteQueryParam,
-} from '@eeacms/volto-datablocks/actions';
+} from 'volto-datablocks/actions';
 import cx from 'classnames';
 import './style.css';
 

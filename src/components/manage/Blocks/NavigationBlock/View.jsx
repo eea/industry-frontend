@@ -15,7 +15,7 @@ import {
 import {
   deleteQueryParam,
   setQueryParam,
-} from '@eeacms/volto-datablocks/actions';
+} from 'volto-datablocks/actions';
 import { useEffect } from 'react';
 
 const View = ({ content, ...props }) => {

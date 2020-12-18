@@ -2,7 +2,7 @@ import { settings } from '~/config';
 import {
   setDiscodataResource,
   setDiscodataResourcePending,
-} from '@eeacms/volto-datablocks/actions';
+} from 'volto-datablocks/actions';
 import axios from 'axios';
 
 export const parseResponse = (response) => {

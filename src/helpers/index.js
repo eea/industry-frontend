@@ -6,7 +6,7 @@
  */
 import { settings } from '~/config';
 import { getBaseUrl } from '@plone/volto/helpers';
-import { setConnectedDataParameters } from '@eeacms/volto-datablocks/actions';
+import { setConnectedDataParameters } from 'volto-datablocks/actions';
 
 export function addCustomGroup(config, customGroup) {
   const hasCustomGroup = config.blocks.groupBlocksOrder.filter((el) => {
