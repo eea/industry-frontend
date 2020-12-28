@@ -11,13 +11,10 @@
   margin: 0 0.5rem;
 }
 
-.pollutant-index-container .ui.attached.tabular.menu .item:hover {
-}
-
 .pollutant-index-container .ui.attached.tabular.menu .active.item {
   border-top: 0;
   border-right: 0;
-  border-bottom: 2px solid #4296b3 !important;
+  /* border-bottom: 2px solid #4296b3 !important; */
   border-left: 0;
   background-color: transparent !important;
   border-radius: 0;
