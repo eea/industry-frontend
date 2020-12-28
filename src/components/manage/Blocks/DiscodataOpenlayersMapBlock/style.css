@@ -212,14 +212,21 @@
   padding-top: 1rem;
 }
 
-.ol-overlaycontainer-stopevent #map-sidebar-button {
-  top: 2.5em;
-  right: 30px;
+.ol-overlaycontainer-stopevent #extra-control-buttons {
+  position: absolute;
+  top: .5em;
+  right: .5em;
+  padding: 2px;
 }
 
-.ol-overlaycontainer-stopevent #map-view-your-area-button {
-  top: 0.5em;
-  right: 30px;
+.ol-overlaycontainer-stopevent #extra-control-buttons .ol-control {
+  position: relative;
+  padding: 0;
+  margin: 1px;
+}
+
+.ol-rotate {
+  display: none;
 }
 
 @media only screen and (max-width: 600px) {

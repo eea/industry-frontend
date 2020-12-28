@@ -68,8 +68,7 @@ let Map,
   defaultsControls,
   defaultsInteractions,
   containsExtent,
-  VOID,
-  DragRotateAndZoom;
+  VOID;
 let OL_LOADED = false;
 
 const OpenlayersMapView = (props) => {
@@ -111,6 +110,7 @@ const OpenlayersMapView = (props) => {
   const firstFilteringDone = useRef(0);
   const ToggleSidebarControl = useRef(null);
   const ViewYourAreaControl = useRef(null);
+  const ExtraControl = useRef(null);
   const siteTermRef = useRef(null);
   const mounted = useRef(false);
   const draggable = !!props.data?.draggable?.value;
@@ -175,52 +175,42 @@ const OpenlayersMapView = (props) => {
         defaultsInteractions = require('ol/interaction.js').defaults;
         containsExtent = require('ol/extent.js').containsExtent;
         VOID = require('ol/functions').VOID;
-        DragRotateAndZoom = require('ol/interaction.js').DragRotateAndZoom;
         OL_LOADED = true;
       }
-      if (OL_LOADED && !ToggleSidebarControl.current && hasSidebar) {
-        ToggleSidebarControl.current = /*@__PURE__*/ (function (Control) {
-          function ToggleSidebarControl(opt_options) {
+
+      if (OL_LOADED && !ExtraControl.current) {
+        ExtraControl.current = (function (Control) {
+          function ExtraControl(opt_options) {
             const options = opt_options || {};
-            const buttonContainer = document.createElement('div');
-            buttonContainer.setAttribute('id', 'map-sidebar-button');
-            buttonContainer.setAttribute('class', 'ol-unselectable ol-control');
+            const buttonsContainer = document.createElement('div');
+            const viewYourAreaButton = document.createElement('div');
+            const toggleSidebarButton = document.createElement('div');
+            buttonsContainer.setAttribute('id', 'extra-control-buttons');
+            toggleSidebarButton.setAttribute('id', 'map-sidebar-button');
+            toggleSidebarButton.setAttribute(
+              'class',
+              'ol-unselectable ol-control',
+            );
+            viewYourAreaButton.setAttribute('id', 'map-view-your-area-button');
+            viewYourAreaButton.setAttribute(
+              'class',
+              'ol-unselectable ol-control',
+            );
+            buttonsContainer.appendChild(viewYourAreaButton);
+            buttonsContainer.appendChild(toggleSidebarButton);
             Control.call(this, {
-              element: buttonContainer,
+              element: buttonsContainer,
               target: options.target,
             });
           }
-          if (Control) ToggleSidebarControl.__proto__ = Control;
-          ToggleSidebarControl.prototype = Object.create(
-            Control && Control.prototype,
-          );
-          ToggleSidebarControl.prototype.constructor = ToggleSidebarControl;
+          if (Control) ExtraControl.__proto__ = Control;
+          ExtraControl.prototype = Object.create(Control && Control.prototype);
+          ExtraControl.prototype.constructor = ExtraControl;
 
-          return ToggleSidebarControl;
+          return ExtraControl;
         })(Control);
       }
 
-      if (OL_LOADED && !ViewYourAreaControl.current) {
-        ViewYourAreaControl.current = /*@__PURE__*/ (function (Control) {
-          function ViewYourAreaControl(opt_options) {
-            const options = opt_options || {};
-            const buttonContainer = document.createElement('div');
-            buttonContainer.setAttribute('id', 'map-view-your-area-button');
-            buttonContainer.setAttribute('class', 'ol-unselectable ol-control');
-            Control.call(this, {
-              element: buttonContainer,
-              target: options.target,
-            });
-          }
-          if (Control) ViewYourAreaControl.__proto__ = Control;
-          ViewYourAreaControl.prototype = Object.create(
-            Control && Control.prototype,
-          );
-          ViewYourAreaControl.prototype.constructor = ViewYourAreaControl;
-
-          return ViewYourAreaControl;
-        })(Control);
-      }
       if (
         canShow(dataprotection.privacy_cookie_key) &&
         document.getElementById('map')
@@ -472,15 +462,13 @@ const OpenlayersMapView = (props) => {
       document.getElementById('map').innerHTML = '';
       const map = new Map({
         controls: draggable
-          ? hasSidebar
-            ? defaultsControls().extend([
-                new ToggleSidebarControl.current(),
-                new ViewYourAreaControl.current(),
-              ])
-            : defaultsControls().extend([new ViewYourAreaControl.current()])
+          ? defaultsControls().extend([new ExtraControl.current(hasSidebar)])
           : [],
         interactions: draggable
-          ? defaultsInteractions().extend([new DragRotateAndZoom()])
+          ? defaultsInteractions({
+              altShiftDragRotate: false,
+              pinchRotate: false,
+            })
           : [],
         target: document.getElementById('map'),
         view: new View({

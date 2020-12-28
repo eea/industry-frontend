@@ -5,7 +5,7 @@
   width: 80% !important;
 
   @media only screen and (max-width: @largestTabletScreen) {
-    margin: 0 2rem !important;
+    margin: 0 1rem !important;
     width: auto !important;
   }
 }
@@ -240,10 +240,16 @@ h4 {
 
 p {
   color: @bodyColor;
-  font-weight: @lightWeight;
+  font-weight: 300;
 
   &.documentDescription {
     color: @fullBlack;
+  }
+}
+
+ul, ol {
+  li {
+    font-weight: 300;
   }
 }
 
