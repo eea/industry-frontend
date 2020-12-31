@@ -1,3 +1,7 @@
+pollutant-index-container {
+  overflow: hidden;
+}
+
 .pollutant-index-container .ui.attached.tabular.menu {
   flex-wrap: wrap;
   border-bottom: 0;
