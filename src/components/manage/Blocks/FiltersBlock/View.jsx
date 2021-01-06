@@ -5,10 +5,7 @@ import { connect } from 'react-redux';
 import { Header, Modal, Select, Input, List } from 'semantic-ui-react';
 import { Portal } from 'react-portal';
 import { Icon } from '@plone/volto/components';
-import {
-  setQueryParam,
-  deleteQueryParam,
-} from 'volto-datablocks/actions';
+import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
 import { settings } from '~/config';
 import _uniqueId from 'lodash/uniqueId';
 import axios from 'axios';
@@ -1078,6 +1075,7 @@ const View = ({ content, ...props }) => {
           open={state.open}
           trigger={
             <button
+              id="modal-show-button"
               aria-label="Show modal button"
               className="outline red ml-0-super mr-0-super"
             >
@@ -1149,6 +1147,7 @@ const View = ({ content, ...props }) => {
                             return (
                               <div key={input.id} className="input-container">
                                 <Select
+                                  id={`${filterKey}_${index}`}
                                   key={input.id}
                                   search
                                   onChange={(event, data) =>
@@ -1222,6 +1221,7 @@ const View = ({ content, ...props }) => {
           </Modal.Content>
           <Modal.Actions>
             <button
+              id="modal-clear-button"
               aria-label="Clear button"
               className="outline red ma-1"
               onClick={clearFilters}
@@ -1229,6 +1229,7 @@ const View = ({ content, ...props }) => {
               Clear Filters
             </button>
             <button
+              id="modal-search-button"
               aria-label="Search and filter button"
               className="outline dark-blue ma-1"
               onClick={() => {
