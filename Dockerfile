@@ -3,8 +3,10 @@ FROM node:12-stretch-slim as build
 
 ENV NODE_OPTIONS=--max_old_space_size=$MAX_OLD_SPACE_SIZE
 
-RUN apt-get update -y \
- && apt-get install -y git bsdmainutils vim-nox mc \
+RUN runDeps="nano openssl ca-certificates git bsdmainutils vim-nox mc libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb patch" \
+ && apt-get update -y \
+ && apt-get install -y --no-install-recommends $runDeps \
+ && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
 RUN yarn global add mrs-developer
