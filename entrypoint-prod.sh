@@ -63,6 +63,7 @@ if [[ "$1" == "cypress"* ]]; then
 
   cd /opt/frontend
   exec bash -c "wait-on -t $TIMEOUT http://localhost:3000 && NODE_ENV=production CYPRESS_API_PATH=$CYPRESS_API_PATH ./node_modules/cypress/bin/cypress run"
+  exec bash -c "wait-on -t $TIMEOUT http://localhost:3000 && NODE_ENV=production CYPRESS_API_PATH=$CYPRESS_API_PATH ./node_modules/cypress/bin/cypress run"
 fi
 
 exec "$@"
