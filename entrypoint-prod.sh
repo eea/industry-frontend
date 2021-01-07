@@ -24,6 +24,40 @@ test -n "$API_PATH" && apply_path
 
 echo "Starting Volto"
 
+if [ -z "$TIMEOUT" ]; then
+  TIMEOUT="120000"
+fi
+
+if [ -z "$RAZZLE_API_PATH" ]; then
+  RAZZLE_API_PATH="http://plone:8080/Plone"
+fi
+
+if [ -z "$CYPRESS_API_PATH" ]; then
+  CYPRESS_API_PATH="$RAZZLE_API_PATH"
+fi
+
+if [ -z "$GIT_URL" ]; then
+  GIT_URL="https://github.com"
+fi
+
+if [ -z "$GIT_BRANCH" ]; then
+  GIT_BRANCH="master"
+fi
+
+if [ -z "$GIT_USER" ]; then
+  GIT_USER="eea"
+fi
+
+if [ -z "$GIT_NAME" ]; then
+  echo "GIT_NAME is required"
+  exit 1
+fi
+
+PACKAGE="$GIT_NAME"
+if [ ! -z "$NAMESPACE" ]; then
+  PACKAGE="$NAMESPACE/$GIT_NAME"
+fi
+
 if [[ "$1" == "cypress"* ]]; then
   RAZZLE_API_PATH=$RAZZLE_API_PATH yarn start &
 

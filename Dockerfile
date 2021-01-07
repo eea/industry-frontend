@@ -10,6 +10,7 @@ RUN apt-get update -y \
 RUN yarn global add mrs-developer
 
 WORKDIR /opt/frontend/
+RUN npm install -g yo @plone/generator-volto wait-on
 
 COPY docker-image.txt /
 COPY . .
