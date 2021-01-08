@@ -18,7 +18,7 @@ pipeline {
         node(label: 'docker-host') {
           script {
             checkout scm
-            if (env.BRANCH_NAME == 'test') {
+            if (env.BRANCH_NAME == 'master') {
               tagName = 'latest'
             } else {
               tagName = "$BRANCH_NAME"
