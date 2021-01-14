@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { injectIntl } from 'react-intl';
 import View from './View';
-import DiscodataSqlBuilderEdit from 'volto-datablocks/DiscodataSqlBuilder/Edit';
+import { EditDiscodataSqlBuilder } from 'volto-datablocks/components';
 
 const schema = {
   itemsCountKey: {
@@ -158,13 +158,13 @@ const Edit = React.forwardRef((props) => {
   }
 
   return (
-    <DiscodataSqlBuilderEdit
+    <EditDiscodataSqlBuilder
       {...props}
       optionalSchema={schema}
       title="Discodata components block"
     >
       <View {...props} />
-    </DiscodataSqlBuilderEdit>
+    </EditDiscodataSqlBuilder>
   );
 });
 

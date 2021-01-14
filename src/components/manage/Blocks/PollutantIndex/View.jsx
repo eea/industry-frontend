@@ -2,11 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Tab, Dropdown, Table } from 'semantic-ui-react';
-import DiscodataSqlBuilder from 'volto-datablocks/DiscodataSqlBuilder/View';
-import {
-  setQueryParam,
-  deleteQueryParam,
-} from 'volto-datablocks/actions';
+import { ViewDiscodataSqlBuilder } from 'volto-datablocks/components';
+import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
 import cx from 'classnames';
 import './style.css';
 
@@ -802,7 +799,7 @@ const View = (props) => {
 
   return (
     <div className="pollutant-index-container">
-      <DiscodataSqlBuilder
+      <ViewDiscodataSqlBuilder
         data={{
           '@type': 'discodata_sql_builder',
           sql: {

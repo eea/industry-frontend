@@ -380,14 +380,14 @@ export function applyConfig(voltoConfig) {
     icon: packSVG,
   };
 
-  config.blocks.blocksConfig.discodata_components_block = {
-    id: 'discodata_components_block',
-    title: 'Discodata components block',
-    view: DiscodataComponentsBlockView,
-    edit: DiscodataComponentsBlockEdit,
-    icon: packSVG,
-    group: 'data_blocks',
-  };
+  // config.blocks.blocksConfig.discodata_components_block = {
+  //   id: 'discodata_components_block',
+  //   title: 'Discodata components block',
+  //   view: DiscodataComponentsBlockView,
+  //   edit: DiscodataComponentsBlockEdit,
+  //   icon: packSVG,
+  //   group: 'data_blocks',
+  // };
 
   return config;
 }
