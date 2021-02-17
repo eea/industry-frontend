@@ -49,30 +49,30 @@ pipeline {
       }
     }
 
-    stage('Integration tests') {
-      steps {
-        parallel(
+    // stage('Integration tests') {
+    //   steps {
+    //     parallel(
 
-          "Cypress": {
-            node(label: 'docker') {
-              script {
-                try {
-                  sh '''docker pull plone; docker run -d --name="$BUILD_TAG-plone" -e SITE="Plone" -e PROFILES="profile-plone.restapi:blocks" plone fg'''
-                  sh '''docker pull eeacms/eprtr-frontend; docker run -i --name="$BUILD_TAG-cypress" --link $BUILD_TAG-plone:plone -e NAMESPACE="$NAMESPACE" -e GIT_NAME=$GIT_NAME -e GIT_BRANCH="$BRANCH_NAME" -e GIT_CHANGE_ID="$CHANGE_ID" eeacms/eprtr-frontend cypress'''
-                } finally {
-                  sh '''mkdir -p cypress-reports'''
-                  sh '''docker cp $BUILD_TAG-cypress:/opt/frontend/cypress/videos cypress-reports/'''
-                  stash name: "cypress-reports", includes: "cypress-reports/**/*"
-                  archiveArtifacts artifacts: 'cypress-reports/videos/*.mp4', fingerprint: true
-                  sh '''echo "$(docker stop $BUILD_TAG-plone; docker rm -v $BUILD_TAG-plone; docker rm -v $BUILD_TAG-cypress)" '''
-                }
-              }
-            }
-          }
+    //       "Cypress": {
+    //         node(label: 'docker') {
+    //           script {
+    //             try {
+    //               sh '''docker pull plone; docker run -d --name="$BUILD_TAG-plone" -e SITE="Plone" -e PROFILES="profile-plone.restapi:blocks" plone fg'''
+    //               sh '''docker pull eeacms/eprtr-frontend; docker run -i --name="$BUILD_TAG-cypress" --link $BUILD_TAG-plone:plone -e NAMESPACE="$NAMESPACE" -e GIT_NAME=$GIT_NAME -e GIT_BRANCH="$BRANCH_NAME" -e GIT_CHANGE_ID="$CHANGE_ID" eeacms/eprtr-frontend cypress'''
+    //             } finally {
+    //               sh '''mkdir -p cypress-reports'''
+    //               sh '''docker cp $BUILD_TAG-cypress:/opt/frontend/cypress/videos cypress-reports/'''
+    //               stash name: "cypress-reports", includes: "cypress-reports/**/*"
+    //               archiveArtifacts artifacts: 'cypress-reports/videos/*.mp4', fingerprint: true
+    //               sh '''echo "$(docker stop $BUILD_TAG-plone; docker rm -v $BUILD_TAG-plone; docker rm -v $BUILD_TAG-cypress)" '''
+    //             }
+    //           }
+    //         }
+    //       }
 
-        )
-      }
-    }
+    //     )
+    //   }
+    // }
 
     stage('Upgrade demo') {
       when {
