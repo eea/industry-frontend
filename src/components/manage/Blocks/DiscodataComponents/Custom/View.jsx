@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { isArray } from 'lodash';
 import { Dropdown, Header } from 'semantic-ui-react';
 import { setQueryParam } from 'volto-datablocks/actions';
-import { ViewDiscodataSqlBuilder } from 'volto-datablocks/components';
+import { DiscodataSqlBuilderView } from 'volto-datablocks/components';
 import ReactTooltip from 'react-tooltip';
 import Icon from '@plone/volto/components/theme/Icon/Icon';
 import moment from 'moment';
@@ -290,7 +290,7 @@ const CountrySelector = (props) => {
 
   return (
     <div className="custom-selector big red">
-      <ViewDiscodataSqlBuilder
+      <DiscodataSqlBuilderView
         data={{
           '@type': 'discodata_sql_builder',
           sql: {

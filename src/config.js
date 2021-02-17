@@ -19,7 +19,7 @@ import {
   installExpendableList,
   installFolderListing,
 } from 'volto-addons';
-import { installDiscodataBlocks } from 'volto-datablocks';
+import { installDiscodataSqlBuilder } from 'volto-datablocks/config';
 import { applyConfig as eprtrConfig } from './localconfig';
 
 const consoleError = console.error.bind(console);
@@ -35,7 +35,7 @@ const addonConfig = [
   installTableau,
   installExpendableList,
   installFolderListing,
-  installDiscodataBlocks,
+  installDiscodataSqlBuilder,
   eprtrConfig,
 ].reduce((acc, apply) => apply(acc), config);
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ViewDiscodataSqlBuilder } from 'volto-datablocks/components';
+import { DiscodataSqlBuilderView } from 'volto-datablocks/components';
 import Flags from '~/components/manage/Blocks/Flags/View';
 
 const QueryBuilder = (props) => {
@@ -10,7 +10,7 @@ const QueryBuilder = (props) => {
         HEADER
         DB: Browse5_Header, site_flags
       */}
-      <ViewDiscodataSqlBuilder
+      <DiscodataSqlBuilderView
         data={{
           '@type': 'discodata_sql_builder',
           sql: {
@@ -31,7 +31,7 @@ const QueryBuilder = (props) => {
         SITE DETAILS (POLLUTANTS)
         DB: Browse6Header
       */}
-      <ViewDiscodataSqlBuilder
+      <DiscodataSqlBuilderView
         data={{
           '@type': 'discodata_sql_builder',
           groupBy: {
@@ -52,7 +52,7 @@ const QueryBuilder = (props) => {
         FACILITY DETAILS (POLLUTANTS)
         DB: Browse7Header
       */}
-      <ViewDiscodataSqlBuilder
+      <DiscodataSqlBuilderView
         data={{
           '@type': 'discodata_sql_builder',
           groupBy: {
@@ -73,7 +73,7 @@ const QueryBuilder = (props) => {
         SITE DETAILS 3
         DB: Browse8Header
       */}
-      <ViewDiscodataSqlBuilder
+      <DiscodataSqlBuilderView
         data={{
           '@type': 'discodata_sql_builder',
           sql: {
@@ -94,7 +94,7 @@ const QueryBuilder = (props) => {
         Permits
         DB: Browse9Header_Permit
       */}
-      <ViewDiscodataSqlBuilder
+      <DiscodataSqlBuilderView
         data={{
           '@type': 'discodata_sql_builder',
           sql: {
@@ -115,7 +115,7 @@ const QueryBuilder = (props) => {
         BAT Conclusions
         DB: Browse9Header_BATConclusion
       */}
-      <ViewDiscodataSqlBuilder
+      <DiscodataSqlBuilderView
         data={{
           '@type': 'discodata_sql_builder',
           sql: {
@@ -136,7 +136,7 @@ const QueryBuilder = (props) => {
         BAT Derogations
         DB: Browse9Header_BATDerogation
       */}
-      <ViewDiscodataSqlBuilder
+      <DiscodataSqlBuilderView
         data={{
           '@type': 'discodata_sql_builder',
           sql: {
@@ -157,7 +157,7 @@ const QueryBuilder = (props) => {
         LCP DETAILS
         DB: Browse10_Header
       */}
-      <ViewDiscodataSqlBuilder
+      <DiscodataSqlBuilderView
         data={{
           '@type': 'discodata_sql_builder',
           sql: {

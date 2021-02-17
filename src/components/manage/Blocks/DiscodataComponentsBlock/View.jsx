@@ -8,7 +8,7 @@ import { arrayToTree } from 'performant-array-to-tree';
 import qs from 'query-string';
 import { Table, Dropdown, List, Header } from 'semantic-ui-react';
 import './style.css';
-import { ViewDiscodataSqlBuilder } from 'volto-datablocks/components';
+import { DiscodataSqlBuilderView } from 'volto-datablocks/components';
 import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
 import cx from 'classnames';
 import Icon from '@plone/volto/components/theme/Icon/Icon';
@@ -718,7 +718,7 @@ const View = (props) => {
   let root = arrayToTree(componentsArray);
   if (!__CLIENT__) return '';
   return (
-    <ViewDiscodataSqlBuilder {...props}>
+    <DiscodataSqlBuilderView {...props}>
       <div className="facility-block-wrapper">
         <div>
           {(state.selectedResource &&
@@ -735,7 +735,7 @@ const View = (props) => {
             (props.data.mode === 'edit' ? <p>Add components</p> : '')}
         </div>
       </div>
-    </ViewDiscodataSqlBuilder>
+    </DiscodataSqlBuilderView>
   );
 };
 

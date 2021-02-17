@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import qs from 'query-string';
 import View from './View';
-import { EditDiscodataSqlBuilder } from 'volto-datablocks/components';
+import { DiscodataSqlBuilderEdit } from 'volto-datablocks/components';
 
 const makeChoices = (keys) => keys && keys.map((k) => [k, k]);
 
@@ -433,14 +433,14 @@ const Edit = (props) => {
     /* eslint-disable-next-line */
   }, [props.data, props.discodata_resources, props.discodata_query.search]);
   return (
-    <EditDiscodataSqlBuilder
+    <DiscodataSqlBuilderEdit
       {...props}
       optionalSchema={state.schema}
       title="Discodata components block"
     >
       <h3>Discodata components - edit mode</h3>
       <View {...props} mode="edit" />
-    </EditDiscodataSqlBuilder>
+    </DiscodataSqlBuilderEdit>
   );
 };
 

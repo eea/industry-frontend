@@ -8,7 +8,7 @@ import { Table, Pagination } from 'semantic-ui-react';
 import downSVG from '@plone/volto/icons/down-key.svg';
 import upSVG from '@plone/volto/icons/up-key.svg';
 import { Icon } from '@plone/volto/components';
-import { ViewDiscodataSqlBuilder } from 'volto-datablocks/components';
+import { DiscodataSqlBuilderView } from 'volto-datablocks/components';
 import { setQueryParam } from 'volto-datablocks/actions';
 import { Dimmer, Loader } from 'semantic-ui-react';
 import LinearProgress from '@material/react-linear-progress';
@@ -187,7 +187,7 @@ const View = (props) => {
 
   return (
     <div className={`browse-table ${props.className ? props.className : ''}`}>
-      <ViewDiscodataSqlBuilder
+      <DiscodataSqlBuilderView
         {...props}
         additionalWhereStatements={additionalWhereStatements}
         pagination={{ p: activePage, nrOfHits: itemsPerPage }}
@@ -476,7 +476,7 @@ const View = (props) => {
         ) : (
           <div style={{ width: '100%', height: '400px' }} />
         )}
-      </ViewDiscodataSqlBuilder>
+      </DiscodataSqlBuilderView>
       {!items?.length ? (
         <Dimmer active={loader} inverted>
           <Loader inverted>European Environment Agency</Loader>

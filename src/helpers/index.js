@@ -8,17 +8,7 @@ import { settings } from '~/config';
 import { getBaseUrl } from '@plone/volto/helpers';
 import { setConnectedDataParameters } from 'volto-datablocks/actions';
 
-export function addCustomGroup(config, customGroup) {
-  const hasCustomGroup = config.blocks.groupBlocksOrder.filter((el) => {
-    return el.id === customGroup.id;
-  });
-  if (hasCustomGroup.length === 0) {
-    config.blocks.groupBlocksOrder.push({
-      id: customGroup.id,
-      title: customGroup.title,
-    });
-  }
-}
+export { addCustomGroup } from 'volto-datablocks/helpers';
 
 export function getBasePath(url) {
   const parseUrl = url === '' ? '/' : url;

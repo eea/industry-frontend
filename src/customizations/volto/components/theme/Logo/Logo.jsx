@@ -10,7 +10,7 @@ import { Image } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { settings } from '~/config';
 
-import LogoImage from './Logo.png';
+import LogoImage from './Logo.white.png';
 
 const messages = defineMessages({
   site: {
