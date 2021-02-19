@@ -62,7 +62,7 @@ if [[ "$1" == "cypress"* ]]; then
   RAZZLE_API_PATH=$RAZZLE_API_PATH yarn start &
 
   cd /opt/frontend
-  wait-on $RAZZLE_API_PATH -t 120000 &
+  wait-on http://localhost:3000 -t 120000
   exec bash -c "NODE_ENV=production CYPRESS_API_PATH=$CYPRESS_API_PATH ./node_modules/cypress/bin/cypress run"
 fi
 
