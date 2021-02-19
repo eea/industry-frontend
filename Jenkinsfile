@@ -23,16 +23,15 @@ pipeline {
             } else {
               tagName = "$BRANCH_NAME"
             }
-            dockerImage = docker.build("$registry:$tagName", "--no-cache .")
-            docker.withRegistry( '', 'eeajenkins' ) {
-              dockerImage.push()
+            try {
+              dockerImage = docker.build("$registry:$tagName", "--no-cache .")
+              docker.withRegistry( '', 'eeajenkins' ) {
+                dockerImage.push()
+              }
+            } finally {
+              sh "docker rmi $registry:$tagName"
             }
           }
-        }
-      }
-      post {
-        always {
-          sh "docker rmi $registry:$tagName"
         }
       }
     }
