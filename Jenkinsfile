@@ -57,7 +57,7 @@ pipeline {
             node(label: 'docker') {
               script {
                 try {
-                  sh '''docker pull plone; docker run -d --name="$BUILD_TAG-plone" -e SITE="Plone" -e PROFILES="profile-plone.restapi:blocks" plone fg'''
+                  sh '''docker pull eeacms/plonesaas; docker run -d --name="$BUILD_TAG-plone" -e SITE="Plone" -e PROFILES="profile-plone.restapi:blocks" plone fg'''
                   sh '''docker pull eeacms/eprtr-frontend; docker run -i --name="$BUILD_TAG-cypress" --link $BUILD_TAG-plone:plone -e NAMESPACE="$NAMESPACE" -e TIMEOUT=600000 -e GIT_NAME=$GIT_NAME -e GIT_BRANCH="$BRANCH_NAME" -e GIT_CHANGE_ID="$CHANGE_ID" eeacms/eprtr-frontend cypress'''
                 } finally {
                   sh '''mkdir -p cypress-reports'''
