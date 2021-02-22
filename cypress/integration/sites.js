@@ -11,7 +11,11 @@ describe('Sites in DiscodataTableBlock', () => {
   it('Add Blocks', () => {
     changePageTitle('Sites in DiscodataTableBlock');
     addBlock('Eprtr Blocks', 'eprtr_blocks', 'eprtr_filters_block');
-    addBlock('Data blocks', 'data_blocks', 'discodata_table_block');
+    addBlock(
+      'Discodata components',
+      'discodata_components',
+      'discodata_components_table_block',
+    );
     openSidebarTab('Block');
     setInputValue(
       'textarea#field-field-widget-importExport',
