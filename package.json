@@ -1,6 +1,6 @@
 {
   "name": "@eeacms/eprtr_frontend",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "EPRTR: Industrial Emission Portal ",
   "main": "src/index.js",
   "author": "European Environment Agency: IDM2 A-Team",
