@@ -4,7 +4,6 @@ import { compose } from 'redux';
 import _uniqueId from 'lodash/uniqueId';
 import RenderFields from 'volto-datablocks/Utils/RenderFields';
 import View from './View';
-import { settings } from '~/config';
 
 const getSchema = (props) => {
   return {

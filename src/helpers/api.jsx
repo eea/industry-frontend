@@ -1,4 +1,4 @@
-import { settings } from '~/config';
+import config from '@plone/volto/registry';
 import {
   setDiscodataResource,
   setDiscodataResourcePending,
@@ -18,7 +18,7 @@ export const getFacilities = (dispatch, siteInspireId) => {
   FROM [IED].[latest].[Browse6Header] as R
   WHERE R.[siteInspireId] COLLATE Latin1_General_CI_AI LIKE '${siteInspireId}'
   GROUP BY R.[facilityInspireId]`);
-  const url = `${settings.providerUrl}?query=${sql}`;
+  const url = `${config.settings.providerUrl}?query=${sql}`;
   return new Promise((resolve, reject) => {
     dispatch(
       setDiscodataResourcePending({ key: `facilities-${siteInspireId}` }),
@@ -49,7 +49,7 @@ export const getInstallations = (dispatch, siteInspireId) => {
   FROM [IED].[latest].[Browse8Header] as Results
   WHERE siteInspireId COLLATE Latin1_General_CI_AI LIKE '${siteInspireId}'
   GROUP BY facilityInspireId`);
-  const url = `${settings.providerUrl}?query=${sql}`;
+  const url = `${config.settings.providerUrl}?query=${sql}`;
   return new Promise((resolve, reject) => {
     dispatch(
       setDiscodataResourcePending({ key: `installations-${siteInspireId}` }),
@@ -84,7 +84,7 @@ export const getLcps = (dispatch, siteInspireId) => {
   FROM [IED].[latest].[Browse10_Header] as Results
   WHERE siteInspireId COLLATE Latin1_General_CI_AI LIKE '${siteInspireId}'
   GROUP BY facilityInspireId, installationInspireId`);
-  const url = `${settings.providerUrl}?query=${sql}`;
+  const url = `${config.settings.providerUrl}?query=${sql}`;
   return new Promise((resolve, reject) => {
     dispatch(setDiscodataResourcePending({ key: `lcps-${siteInspireId}` }));
     axios

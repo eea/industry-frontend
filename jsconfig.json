@@ -1,26 +1,20 @@
 {
     "compilerOptions": {
         "paths": {
-            "volto-tabsview": [
-                "develop/volto-tabsview/src"
-            ],
-            "@eeacms/volto-grid-block": [
-                "develop/volto-grid-block/src"
+            "volto-addons": [
+                "addons/volto-addons/src"
             ],
             "volto-datablocks": [
-                "develop/volto-datablocks/src"
-            ],
-            "volto-addons": [
-                "develop/volto-addons/src"
+                "addons/volto-datablocks/src"
             ],
             "volto-embed": [
-                "develop/volto-embed/src"
+                "addons/volto-embed/src"
             ],
-            "volto-matomo": [
-                "develop/volto-matomo/src"
+            "volto-tabsview": [
+                "addons/volto-tabsview/src"
             ],
-            "@eeacms/volto-sentry-rancher-config": [
-                "develop/volto-sentry-rancher-config/src"
+            "@eeacms/volto-grid-block": [
+                "addons/volto-grid-block/src"
             ]
         },
         "baseUrl": "src"

@@ -4,21 +4,59 @@
  * @example
  * export { Api } from './Api/Api';
  */
-import { settings } from '~/config';
 import { getBaseUrl } from '@plone/volto/helpers';
 import { setConnectedDataParameters } from 'volto-datablocks/actions';
+import { isMatch } from 'lodash';
+import config from '@plone/volto/registry';
 
-export { addCustomGroup } from 'volto-datablocks/helpers';
+export function removeValue(arr) {
+  if (!arr || arr.length === 0) return [];
+  let what,
+    a = arguments,
+    L = a.length,
+    ax;
+  while (L > 1 && arr.length) {
+    what = a[--L];
+    while ((ax = arr.indexOf(what)) !== -1) {
+      arr.splice(ax, 1);
+    }
+  }
+  return arr;
+}
 
 export function getBasePath(url) {
   const parseUrl = url === '' ? '/' : url;
   if (parseUrl) {
     return getBaseUrl(url)
-      .replace(settings.apiPath, '')
-      .replace(settings.internalApiPath, '');
+      .replace(config.settings.apiPath, '')
+      .replace(config.settings.internalApiPath, '');
   }
   return '';
 }
+
+export const getNavigationByParent = (items, parent) => {
+  if (items && parent !== undefined && typeof parent === 'string') {
+    const pathnameArray = removeValue(parent.split('/'), '');
+    const location = pathnameArray;
+    const depth = pathnameArray.length;
+    if (!depth) {
+      return items;
+    }
+    return deepSearch({
+      inputArray: items,
+      location,
+      depth,
+    });
+  }
+  return {};
+};
+
+export const isActive = (url, pathname) => {
+  return (
+    (url === '' && pathname === '/') ||
+    (url !== '' && isMatch(pathname?.split('/'), url?.split('/')))
+  );
+};
 
 export const objectHasData = (obj) => {
   return typeof obj === 'object' && obj !== null && Object.keys(obj).length > 0;

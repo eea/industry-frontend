@@ -15,7 +15,7 @@ import { map } from 'lodash';
 import qs from 'query-string';
 import { setQueryParam } from 'volto-datablocks/actions';
 
-import { blocks } from '~/config';
+import config from '@plone/volto/registry';
 
 import {
   getBlocksFieldname,
@@ -138,7 +138,7 @@ const DefaultView = ({
               ]
             : content[blocksFieldname]?.[block];
         const Block =
-          blocks.blocksConfig[contentBlock?.['@type']]?.['view'] || null;
+          config.blocks.blocksConfig[contentBlock?.['@type']]?.['view'] || null;
         return Block !== null ? (
           <Block
             key={block}

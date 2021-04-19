@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import _uniqueId from 'lodash/uniqueId';
 import View from './View';
-import { settings } from '~/config';
+import config from '@plone/volto/registry';
 import './style.css';
 
 const getSchema = (props) => {
@@ -12,7 +12,7 @@ const getSchema = (props) => {
 
 const Edit = (props) => {
   const [state, setState] = useState({
-    schema: getSchema({ ...props, providerUrl: settings.providerUrl }),
+    schema: getSchema({ ...props, providerUrl: config.settings.providerUrl }),
     id: _uniqueId('block_'),
   });
   return (

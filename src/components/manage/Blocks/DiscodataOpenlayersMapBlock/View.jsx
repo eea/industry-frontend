@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import qs from 'query-string';
 import axios from 'axios';
 import jsonp from 'jsonp';
-import { settings } from '~/config';
+import config from '@plone/volto/registry';
 import { isArray } from 'lodash';
 // VOLTO
 import { Icon as VoltoIcon, Toast } from '@plone/volto/components';
@@ -108,8 +108,6 @@ const OpenlayersMapView = (props) => {
   const selectedSiteCoordinates = useRef(null);
   const regionsSourceWhere = useRef('');
   const firstFilteringDone = useRef(0);
-  const ToggleSidebarControl = useRef(null);
-  const ViewYourAreaControl = useRef(null);
   const ExtraControl = useRef(null);
   const siteTermRef = useRef(null);
   const mounted = useRef(false);
@@ -575,7 +573,7 @@ const OpenlayersMapView = (props) => {
       axios
         .get(
           encodeURI(
-            `${settings.providerUrl}?query=SELECT shape_wm.STX as x, shape_wm.STY as y, Site_reporting_year from [IED].[latest].[SiteMap] WHERE siteName COLLATE Latin1_General_CI_AI LIKE '%${stateRef.current.siteTerm}%' ORDER BY [Site_reporting_year] DESC`,
+            `${config.settings.providerUrl}?query=SELECT shape_wm.STX as x, shape_wm.STY as y, Site_reporting_year from [IED].[latest].[SiteMap] WHERE siteName COLLATE Latin1_General_CI_AI LIKE '%${stateRef.current.siteTerm}%' ORDER BY [Site_reporting_year] DESC`,
           ),
         )
         .then((response) => {
@@ -599,7 +597,7 @@ const OpenlayersMapView = (props) => {
     axios
       .get(
         encodeURI(
-          `${settings.providerUrl}?query=SELECT
+          `${config.settings.providerUrl}?query=SELECT
             MIN(shape_wm.STX) AS MIN_X,
             MIN(shape_wm.STY) AS MIN_Y,
             MAX(shape_wm.STX) AS MAX_X,
@@ -1145,7 +1143,7 @@ const OpenlayersMapView = (props) => {
       axios
         .get(
           encodeURI(
-            `${settings.providerUrl}?query=SELECT DISTINCT siteId, siteInspireId FROM [IED].[latest].[FacilitiesPerSite] WHERE siteId LIKE '${state.popupDetails.properties.id}'`,
+            `${config.settings.providerUrl}?query=SELECT DISTINCT siteId, siteInspireId FROM [IED].[latest].[FacilitiesPerSite] WHERE siteId LIKE '${state.popupDetails.properties.id}'`,
           ),
         )
         .then((response) => {

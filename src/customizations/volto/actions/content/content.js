@@ -13,7 +13,7 @@ import {
   UPDATECOLUMNS_CONTENT,
 } from '@plone/volto/constants/ActionTypes';
 import { nestContent } from '@plone/volto/helpers';
-import { settings } from '~/config';
+import config from '@plone/volto/registry';
 
 /**
  * Create content function.
@@ -127,12 +127,12 @@ export function getContent(
   page = null,
 ) {
   let qs = page
-    ? `?fullobjects&b_start=${settings.defaultPageSize * (page - 1)}&b_size=${
-        settings.defaultPageSize
-      }`
+    ? `?fullobjects&b_start=${
+        config.settings.defaultPageSize * (page - 1)
+      }&b_size=${config.settings.defaultPageSize}`
     : '?fullobjects';
 
-  if (settings.isMultilingual) {
+  if (config.settings.isMultilingual) {
     qs = qs + '&expand=layout,translations';
   } else {
     qs = qs + '&expand=layout';

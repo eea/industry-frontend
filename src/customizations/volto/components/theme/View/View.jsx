@@ -9,13 +9,13 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Portal } from 'react-portal';
 import { injectIntl } from 'react-intl';
-import { Helmet } from '@plone/volto/helpers';
 import qs from 'query-string';
-import { settings, views } from '~/config';
+import config from '@plone/volto/registry';
 
 import { Comments, Tags, Toolbar } from '@plone/volto/components';
 import { listActions, getContent } from '@plone/volto/actions';
 import {
+  Helmet,
   BodyClass,
   getBaseUrl,
   getLayoutFieldname,
@@ -170,7 +170,7 @@ class View extends Component {
    * @method getViewDefault
    * @returns {string} Markup for component.
    */
-  getViewDefault = () => views.defaultView;
+  getViewDefault = () => config.views.defaultView;
 
   /**
    * Get view by content type
@@ -178,7 +178,7 @@ class View extends Component {
    * @returns {string} Markup for component.
    */
   getViewByType = () =>
-    views.contentTypesViews[this.props.content['@type']] || null;
+    config.views.contentTypesViews[this.props.content['@type']] || null;
 
   /**
    * Get view by content layout property
@@ -186,7 +186,7 @@ class View extends Component {
    * @returns {string} Markup for component.
    */
   getViewByLayout = () =>
-    views.layoutViews[
+    config.views.layoutViews[
       this.props.content[getLayoutFieldname(this.props.content)]
     ] || null;
 
@@ -230,6 +230,7 @@ class View extends Component {
    * @returns {string} Markup for the component.
    */
   render() {
+    const { views } = config;
     if (this.props.error && !this.props.connectionRefused) {
       let FoundView;
       if (this.props.error.status === undefined) {
@@ -263,7 +264,9 @@ class View extends Component {
           <title>{this.props.content.title}</title>
           <meta
             name="description"
-            content={this.props.content.description || settings.metaDescription}
+            content={
+              this.props.content.description || config.settings.metaDescription
+            }
           />
         </Helmet>
         {/* Body class if displayName in component is set */}

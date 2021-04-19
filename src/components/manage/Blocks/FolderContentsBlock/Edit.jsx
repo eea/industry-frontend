@@ -10,7 +10,7 @@ import { Icon, SidebarPortal, TextWidget } from '@plone/volto/components';
 import { Dropdown, Segment, Checkbox, Input, Button } from 'semantic-ui-react';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import { Card } from 'semantic-ui-react';
-import { settings } from '~/config';
+import config from '@plone/volto/registry';
 import AddLinkForm from './AddLinkForm';
 
 function removeDuplicates(myArr, prop) {
@@ -47,8 +47,8 @@ class Edit extends Component {
   getPath(url) {
     if (!url) return '';
     return url
-      .replace(settings.apiPath, '')
-      .replace(settings.internalApiPath, '');
+      .replace(config.settings.apiPath, '')
+      .replace(config.settings.internalApiPath, '');
   }
 
   componentDidUpdate(prevProps, prevState) {

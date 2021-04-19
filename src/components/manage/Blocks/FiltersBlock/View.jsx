@@ -6,7 +6,7 @@ import { Header, Modal, Select, Input, List } from 'semantic-ui-react';
 import { Portal } from 'react-portal';
 import { Icon } from '@plone/volto/components';
 import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
-import { settings } from '~/config';
+import config from '@plone/volto/registry';
 import _uniqueId from 'lodash/uniqueId';
 import axios from 'axios';
 import Highlighter from 'react-highlight-words';
@@ -28,7 +28,7 @@ const keyCodes = {
 };
 
 const View = ({ content, ...props }) => {
-  const providerUrl = settings.providerUrl;
+  const providerUrl = config.settings.providerUrl;
   const [state, setState] = useState({
     id: _uniqueId('block_'),
     open: false,

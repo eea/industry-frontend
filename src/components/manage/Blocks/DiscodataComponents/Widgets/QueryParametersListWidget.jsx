@@ -3,12 +3,10 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import './style.css';
 
-import { widgets } from '~/config';
-
-import InlineForm from '@plone/volto/components/manage/Form/InlineForm';
+import config from '@plone/volto/registry';
 
 const QueryParametersListWidget = (props) => {
-  const ObjectList = widgets.widget.object_list;
+  const ObjectList = config.widgets.widget.object_list;
   const search = props.discodata_query.search || {};
 
   return (

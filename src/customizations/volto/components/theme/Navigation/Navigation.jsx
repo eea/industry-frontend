@@ -13,7 +13,7 @@ import { Menu, Button } from 'semantic-ui-react';
 import cx from 'classnames';
 import Icon from '@plone/volto/components/theme/Icon/Icon';
 import { getBaseUrl } from '@plone/volto/helpers';
-import { settings } from '~/config';
+import config from '@plone/volto/registry';
 
 import { getNavigation } from '@plone/volto/actions';
 import { resetQueryParam } from 'volto-datablocks/actions';
@@ -69,12 +69,8 @@ class Navigation extends Component {
     };
   }
 
-  /**
-   * Component will mount
-   * @method componentWillMount
-   * @returns {undefined}
-   */
-  UNSAFE_componentWillMount() {
+  componentDidMount() {
+    const { settings } = config;
     this.props.getNavigation(
       getBaseUrl(this.props.pathname),
       settings.navDepth,
@@ -88,6 +84,7 @@ class Navigation extends Component {
    * @returns {undefined}
    */
   UNSAFE_componentWillReceiveProps(nextProps) {
+    const { settings } = config;
     if (nextProps.pathname !== this.props.pathname) {
       this.props.getNavigation(
         getBaseUrl(nextProps.pathname),
@@ -123,6 +120,7 @@ class Navigation extends Component {
    * @returns {string} Markup for the component.
    */
   render() {
+    const { settings } = config;
     const { lang } = this.props;
 
     return (

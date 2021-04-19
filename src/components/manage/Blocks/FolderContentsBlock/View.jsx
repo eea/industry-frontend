@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
-import { settings } from '~/config';
+import config from '@plone/volto/registry';
 import { BodyClass } from '@plone/volto/helpers';
 
 import { Button } from 'semantic-ui-react';
@@ -39,8 +39,8 @@ class View extends Component {
   getPath(url) {
     if (!url) return '';
     return url
-      .replace(settings.apiPath, '')
-      .replace(settings.internalApiPath, '');
+      .replace(config.settings.apiPath, '')
+      .replace(config.settings.internalApiPath, '');
   }
 
   render() {

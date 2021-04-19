@@ -6,11 +6,7 @@ import { connect } from 'react-redux';
 /* SEMANTIC UI */
 import { Menu } from 'semantic-ui-react';
 /* HELPERS */
-import {
-  isActive,
-  getNavigationByParent,
-  getBasePath,
-} from 'volto-tabsview/helpers';
+import { getNavigationByParent, getBasePath } from '~/helpers';
 
 import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
 

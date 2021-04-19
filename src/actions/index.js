@@ -65,3 +65,5 @@ export function setFlags(packageKey, id, flags) {
     flags,
   };
 }
+
+export * from './search';

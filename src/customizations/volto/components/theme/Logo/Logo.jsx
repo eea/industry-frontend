@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { defineMessages, useIntl } from 'react-intl';
 import { Image } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
-import { settings } from '~/config';
+import config from '@plone/volto/registry';
 
 import LogoImage from './Logo.white.png';
 
@@ -39,7 +39,7 @@ const Logo = () => {
 
   return (
     <Link
-      to={settings.isMultilingual ? `/${lang}` : '/'}
+      to={config.settings.isMultilingual ? `/${lang}` : '/'}
       title={intl.formatMessage(messages.site)}
     >
       <Image

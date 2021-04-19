@@ -14,7 +14,7 @@ import { Portal } from 'react-portal';
 import { Container, Pagination } from 'semantic-ui-react';
 import qs from 'query-string';
 import { isArray, isObject } from 'lodash';
-import { settings } from '~/config';
+import config from '@plone/volto/registry';
 import { Helmet } from '@plone/volto/helpers';
 import { searchContent } from '@plone/volto/actions';
 import { Toolbar, Icon } from '@plone/volto/components';
@@ -230,7 +230,7 @@ class Search extends Component {
 
       this.props.searchContent('', {
         ...options,
-        b_start: (this.state.currentPage - 1) * settings.defaultPageSize,
+        b_start: (this.state.currentPage - 1) * config.settings.defaultPageSize,
       });
     });
   };
@@ -430,7 +430,8 @@ class Search extends Component {
                   <Pagination
                     activePage={this.state.currentPage}
                     totalPages={Math.ceil(
-                      this.props.search.items_total / settings.defaultPageSize,
+                      this.props.search.items_total /
+                        config.settings.defaultPageSize,
                     )}
                     onPageChange={this.handleQueryPaginationChange}
                     firstItem={null}
@@ -487,7 +488,7 @@ export default compose(
       items: state.search.items.map((item) => {
         return {
           ...item,
-          '@id': item['@id'].replace(settings.apiPath, ''),
+          '@id': item['@id'].replace(config.settings.apiPath, ''),
           summary: getSummary(
             item,
             qs.parse(props.location.search).SearchableText,

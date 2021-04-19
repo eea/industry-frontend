@@ -1,40 +1,34 @@
 {
-  "volto-tabsview": {
-    "url": "https://github.com/eea/volto-tabsview.git",
+  "volto-addons": {
+    "url": "https://github.com/eea/volto-addons.git",
+    "branch": "volto_7",
+    "path": "src",
+    "develop": true
+  },
+  "volto-datablocks": {
+    "url": "https://github.com/eea/volto-datablocks.git",
     "branch": "master",
-    "path": "src"
+    "path": "src",
+    "develop": true
+  },
+  "volto-embed": {
+    "url": "https://github.com/eea/volto-embed.git",
+    "branch": "master",
+    "path": "src",
+    "develop": true
   },
   "volto-grid-block": {
     "url": "https://github.com/eea/volto-grid-block.git",
     "branch": "centurion",
     "path": "src",
-    "package": "@eeacms/volto-grid-block"
+    "package": "@eeacms/volto-grid-block",
+    "develop": true
   },
-  "volto-datablocks": {
-    "url": "https://github.com/eea/volto-datablocks.git",
-    "branch": "master",
-    "path": "src"
-  },
-  "volto-addons": {
-    "url": "https://github.com/eea/volto-addons.git",
-    "branch": "volto_7",
-    "path": "src"
-  },
-  "volto-embed": {
-    "url": "https://github.com/eea/volto-embed.git",
-    "branch": "master",
-    "path": "src"
-  },
-  "volto-matomo": {
-    "url": "https://github.com/eea/volto-matomo.git",
-    "branch": "master",
-    "path": "src"
-  },
-  "volto-sentry-rancher-config": {
-    "url": "https://github.com/eea/volto-sentry-rancher-config.git",
+  "volto-tabsview": {
+    "url": "https://github.com/eea/volto-tabsview.git",
     "branch": "master",
     "path": "src",
-    "package": "@eeacms/volto-sentry-rancher-config"
+    "develop": true
   }
 }
   

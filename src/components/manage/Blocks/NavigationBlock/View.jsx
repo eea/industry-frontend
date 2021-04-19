@@ -7,15 +7,8 @@ import { connect } from 'react-redux';
 import { Menu } from 'semantic-ui-react';
 /* HELPERS */
 import cx from 'classnames';
-import {
-  isActive,
-  getNavigationByParent,
-  getBasePath,
-} from 'volto-tabsview/helpers';
-import {
-  deleteQueryParam,
-  setQueryParam,
-} from 'volto-datablocks/actions';
+import { isActive, getNavigationByParent, getBasePath } from '~/helpers';
+import { deleteQueryParam, setQueryParam } from 'volto-datablocks/actions';
 import { useEffect } from 'react';
 
 const View = ({ content, ...props }) => {

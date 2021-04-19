@@ -3,12 +3,12 @@ import { Redirect } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { updateIntl } from 'react-intl-redux';
 import cookie from 'react-cookie';
-import { settings } from '~/config';
+import config from '@plone/volto/registry';
 
 let locales = {};
 
-if (settings) {
-  settings.supportedLanguages.forEach((lang) => {
+if (config.settings) {
+  config.settings.supportedLanguages.forEach((lang) => {
     import('~/../locales/' + lang + '.json').then((locale) => {
       locales = { ...locales, [lang]: locale.default };
     });
@@ -17,18 +17,19 @@ if (settings) {
 
 const MultilingualRedirector = (props) => {
   const { pathname, children } = props;
-  const currentLanguage = cookie.load('lang') || settings.defaultLanguage;
-  const redirectToLanguage = settings.supportedLanguages.includes(
+  const currentLanguage =
+    cookie.load('lang') || config.settings.defaultLanguage;
+  const redirectToLanguage = config.settings.supportedLanguages.includes(
     currentLanguage,
   )
     ? currentLanguage
-    : settings.defaultLanguage;
+    : config.settings.defaultLanguage;
   const dispatch = useDispatch();
 
   React.useEffect(() => {
     // ToDo: Add means to support language negotiation (with config)
     // const detectedLang = (navigator.language || navigator.userLanguage).substring(0, 2);
-    if (settings.isMultilingual && pathname === '/') {
+    if (config.settings.isMultilingual && pathname === '/') {
       dispatch(
         updateIntl({
           locale: redirectToLanguage,
@@ -38,7 +39,7 @@ const MultilingualRedirector = (props) => {
     }
   }, [pathname, dispatch, redirectToLanguage]);
 
-  return pathname === '/' && settings.isMultilingual ? (
+  return pathname === '/' && config.settings.isMultilingual ? (
     <Redirect to={`/${redirectToLanguage}`} />
   ) : (
     <>{children}</>

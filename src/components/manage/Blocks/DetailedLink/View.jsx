@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { settings } from '~/config';
+import config from '@plone/volto/registry';
 import cx from 'classnames';
 import './style.css';
 import { deleteQueryParam } from 'volto-datablocks/actions';
@@ -11,8 +11,8 @@ import { deleteQueryParam } from 'volto-datablocks/actions';
 const getPath = (url) => {
   if (!url) return '';
   return url
-    .replace(settings.apiPath, '')
-    .replace(settings.internalApiPath, '');
+    .replace(config.settings.apiPath, '')
+    .replace(config.settings.internalApiPath, '');
 };
 
 const View = (props) => {
@@ -100,6 +100,7 @@ const View = (props) => {
               </Link>
             ) : detailedLink?.path ? (
               <a
+                rel="noreferrer"
                 target="_blank"
                 href={detailedLink.path}
                 className={cx(
