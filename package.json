@@ -42,7 +42,8 @@
     "@eeacms/volto-matomo",
     "@eeacms/volto-grid-block",
     "volto-datablocks",
-    "volto-embed"
+    "volto-embed",
+    "volto-addons"
   ],
   "dependencies": {
     "@eeacms/volto-slate-metadata-mentions": "github:eea/volto-slate-metadata-mentions#2.2.0",

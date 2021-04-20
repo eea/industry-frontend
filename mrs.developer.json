@@ -1,7 +1,7 @@
 {
   "volto-addons": {
     "url": "https://github.com/eea/volto-addons.git",
-    "branch": "volto_7",
+    "branch": "master",
     "path": "src",
     "develop": true
   },
@@ -22,12 +22,6 @@
     "branch": "centurion",
     "path": "src",
     "package": "@eeacms/volto-grid-block",
-    "develop": true
-  },
-  "volto-tabsview": {
-    "url": "https://github.com/eea/volto-tabsview.git",
-    "branch": "master",
-    "path": "src",
     "develop": true
   }
 }

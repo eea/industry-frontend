@@ -13,6 +13,7 @@ const getPath = (url) => {
 
 const View = (props) => {
   const childrenLinks = props.data.childrenLinks || null;
+
   return (
     (childrenLinks && childrenLinks.length && (
       <div className="children-links-container">

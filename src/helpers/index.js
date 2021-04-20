@@ -42,7 +42,7 @@ export const getNavigationByParent = (items, parent) => {
     if (!depth) {
       return items;
     }
-    return deepSearch({
+    return deepSearchNavigationParent({
       inputArray: items,
       location,
       depth,
@@ -88,6 +88,36 @@ export function deepSearch({ inputArray = [], pattern, depth }) {
 
   return null;
 }
+
+export const deepSearchNavigationParent = ({
+  inputArray = [],
+  location,
+  depth,
+  start = 1,
+}) => {
+  for (let index = 0; index < inputArray.length; index++) {
+    if (
+      depth === 1 &&
+      removeValue(inputArray[index].url?.split('/'), '')[start - 1] ===
+        location[start - 1]
+    ) {
+      return inputArray[index] || {};
+    }
+    if (
+      removeValue(inputArray[index].url?.split('/'), '')[start - 1] ===
+      location[start - 1]
+    ) {
+      return deepSearchNavigationParent({
+        inputArray: inputArray[index].items,
+        location,
+        depth: depth - 1,
+        start: start + 1,
+      });
+    }
+  }
+
+  return null;
+};
 
 export const getSchemaWithDataQuery = (props) => {
   if (!props.schema) return {};

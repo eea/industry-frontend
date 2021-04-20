@@ -10,9 +10,6 @@
             "volto-embed": [
                 "addons/volto-embed/src"
             ],
-            "volto-tabsview": [
-                "addons/volto-tabsview/src"
-            ],
             "@eeacms/volto-grid-block": [
                 "addons/volto-grid-block/src"
             ]

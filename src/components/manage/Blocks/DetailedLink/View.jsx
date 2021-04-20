@@ -34,6 +34,7 @@ const View = (props) => {
     descriptionClassname = '',
     buttonClassname = '',
   } = props.data;
+
   return (
     <div
       className={cx(
