@@ -70,13 +70,8 @@ const View = ({ content, ...props }) => {
   const mapSidebarExists = document?.getElementById('map-sidebar');
 
   const searchResults = [
-    ...sitesResults.slice(
-      0,
-      locationResults.length < 3 ? 6 - locationResults.length : 3,
-    ),
-    ...locationResults
-      .map((result) => result.text)
-      .slice(0, sitesResults.length < 3 ? 6 - sitesResults.length : 3),
+    ...locationResults.map((result) => result.text),
+    ...sitesResults,
   ];
 
   useEffect(function () {
@@ -983,7 +978,35 @@ const View = ({ content, ...props }) => {
         <Input
           aria-label="Site search"
           className="search"
-          icon="search"
+          icon={
+            <>
+              {searchTerm?.length > 0 ? (
+                <button
+                  className="delete-icon"
+                  onClick={() => {
+                    setSearchResultsActive(false);
+                    setSearchTerm('');
+                    setTriggerSearch(!modal);
+                  }}
+                >
+                  <i aria-hidden className="delete icon" />
+                </button>
+              ) : (
+                ''
+              )}
+
+              <button className="search-icon">
+                <i
+                  aria-hidden
+                  className="search icon"
+                  onClick={() => {
+                    setSearchResultsActive(false);
+                    setTriggerSearch(!modal);
+                  }}
+                />
+              </button>
+            </>
+          }
           placeholder="Search for country, region, city or a site name"
           value={searchTerm}
           onChange={(event, data) => {
