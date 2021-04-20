@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Header, Modal, Select, Input, List } from 'semantic-ui-react';
 import { Portal } from 'react-portal';
 import { Icon } from '@plone/volto/components';
+import { DiscodataSqlBuilderView } from 'volto-datablocks/components';
 import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
 import config from '@plone/volto/registry';
 import _uniqueId from 'lodash/uniqueId';
@@ -73,6 +74,9 @@ const View = ({ content, ...props }) => {
     ...locationResults.map((result) => result.text),
     ...sitesResults,
   ];
+
+  const eprtrCountries =
+    props.discodata_resources?.filters_eprtr_countries?.[0]?.['countries'];
 
   useEffect(function () {
     mounted.current = true;
@@ -804,7 +808,11 @@ const View = ({ content, ...props }) => {
     ];
     const reqs = [
       {
-        url: `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?f=json&text=${data.value}&maxSuggestions=6`,
+        url: `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?f=json&text=${
+          data.value
+        }&maxSuggestions=6${
+          eprtrCountries ? `&countryCode=${eprtrCountries}` : ''
+        }`,
         reqKey: 'suggestions',
         searchKeys: ['text', 'magicKey'],
         updateState: setLocationResults,
@@ -1086,9 +1094,19 @@ const View = ({ content, ...props }) => {
       </div>
     </div>
   );
+
   if (!__CLIENT__) return '';
   return (
     <div className="filters-container">
+      <DiscodataSqlBuilderView
+        data={{
+          '@type': 'discodata_sql_builder',
+          sql: {
+            value:
+              '{"fieldsets":[{"id":"sql_metadata","title":"SQL","fields":["filters_eprtr_countries"]}],"properties":{"filters_eprtr_countries":{"title":"filters EPRTR Countries","isCollection":true,"hasPagination":false,"urlQuery":true,"sql":"SELECT (STUFF((\\n    SELECT CONCAT(\',\', countryCode)\\n    FROM [IED].[latest].[SiteMap]\\n    GROUP BY countryCode\\n    FOR XML PATH(\'\')\\n    ), 1, 1, \'\')\\n) AS countries"}}}',
+          },
+        }}
+      />
       {searchView(searchContainer, false)}
       <div className="flex space-between buttons-container">
         <Modal
@@ -1443,6 +1461,7 @@ export default compose(
       content:
         state.prefetch?.[state.router.location.pathname] || state.content.data,
       discodata_query: state.discodata_query,
+      discodata_resources: state.discodata_resources.data,
     }),
     {
       setQueryParam,
