@@ -1,61 +1,29 @@
-# Based on https://github.com/plone/volto/blob/master/entrypoint.sh
-FROM node:12-stretch-slim as build
+FROM node:12-stretch-slim
 
-ENV NODE_OPTIONS=--max_old_space_size=$MAX_OLD_SPACE_SIZE
+RUN apt-get update && apt-get install -y git
 
-RUN runDeps="nano openssl ca-certificates git bsdmainutils vim-nox mc libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb patch" \
- && apt-get update -y \
- && apt-get install -y --no-install-recommends $runDeps \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
-
-RUN yarn global add mrs-developer
+COPY . /opt/frontend/
+RUN chown -R node /opt/frontend/
+RUN rm -rf /opt/frontend/src/addons/*
 
 WORKDIR /opt/frontend/
-RUN npm install -g yo @plone/generator-volto wait-on
-
-COPY docker-image.txt /
-COPY . .
-# RUN chmod +x optimize_node_modules.sh
-
-RUN mkdir -p /opt/frontend/src/develop
-
-RUN chown -R node /opt/frontend
-
+RUN npm install -g mrs-developer
 USER node
 
-RUN echo "prefix = \"/home/node\"\n" > /home/node/.npmrc
-RUN rm -rf node_modules .git package-lock.json
+ARG MAX_OLD_SPACE_SIZE=8192
+ENV NODE_OPTIONS=--max_old_space_size=$MAX_OLD_SPACE_SIZE
 
-# RUN npm install mr-developer
+RUN cd /opt/frontend
 
-#RUN node_modules/.bin/mrdeveloper --config=jsconfig.json --no-config --output=addons
-RUN missdev --config=jsconfig.json --output=develop
+RUN RAZZLE_API_PATH=VOLTO_API_PATH RAZZLE_INTERNAL_API_PATH=VOLTO_INTERNAL_API_PATH yarn
+RUN yarn develop
+RUN RAZZLE_API_PATH=VOLTO_API_PATH RAZZLE_INTERNAL_API_PATH=VOLTO_INTERNAL_API_PATH yarn
 
-# RUN make activate-all
-
-# RUN NPM_CONFIG_REGISTRY=$NPM_CONFIG_REGISTRY npm ci
-# RUN NPM_CONFIG_REGISTRY=$NPM_CONFIG_REGISTRY npm install
-
-# RUN ./optimize_node_modules.sh
-# RUN make clean-addons
-# RUN rm -f package-lock.json
-
-# RUN RAZZLE_API_PATH=VOLTO_API_PATH RAZZLE_INTERNAL_API_PATH=VOLTO_INTERNAL_API_PATH yarn build
-
-# Second stage build
-# FROM node:12-stretch-slim
-
-# COPY . /opt/frontend/
-# RUN chown -R node /opt/frontend/
-
-# WORKDIR /opt/frontend/
-# USER node
-
-RUN RAZZLE_API_PATH=VOLTO_API_PATH RAZZLE_INTERNAL_API_PATH=VOLTO_INTERNAL_API_PATH yarn \
- && RAZZLE_API_PATH=VOLTO_API_PATH RAZZLE_INTERNAL_API_PATH=VOLTO_INTERNAL_API_PATH yarn build
+RUN RAZZLE_API_PATH=VOLTO_API_PATH RAZZLE_INTERNAL_API_PATH=VOLTO_INTERNAL_API_PATH yarn build \
+ && rm -rf /home/node/.cache
 
 EXPOSE 3000 3001 4000 4001
 
 ENTRYPOINT ["/opt/frontend/entrypoint-prod.sh"]
 CMD ["yarn", "start:prod"]
+USER root
