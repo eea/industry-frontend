@@ -1,0 +1,50 @@
+.ui.grid.explore-eprtr {
+  margin-left: -1rem !important;
+  margin-right: -1rem !important;
+}
+
+.ui.grid.explore-eprtr .column {
+  display: flex !important;
+  justify-content: center;
+}
+
+.ui.grid.explore-eprtr .explore-map {
+  margin-bottom: 1rem !important;
+}
+
+.explore-eprtr .description {
+  display: flex !important;
+  justify-content: space-between;
+}
+
+.explore-eprtr .description .explore-tile {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.explore-eprtr .description .explore-tile img {
+  margin-right: 1rem;
+}
+
+.explore-eprtr .description .explore-tile p {
+  margin-bottom: 0;
+  color: #4896B0;
+  font-size: 1.1em;
+}
+
+.explore-eprtr .description .explore-tile p.title {
+  margin-bottom: 0;
+  color: #00435C;
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-bottom: .2rem;
+}
+
+.explore-eprtr .description > a:hover .explore-tile img {
+  opacity: .9;
+}
+
+.explore-eprtr .description > a:hover .explore-tile p {
+  color: #00435C;
+}

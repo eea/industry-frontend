@@ -108,18 +108,20 @@ import ListView from '~/components/manage/Blocks/DiscodataComponents/List/View';
 
 import BlocksWidget from '~/components/manage/Widgets/BlocksWidget';
 import QueryParametersListWidget from '~/components/manage/Blocks/DiscodataComponents/Widgets/QueryParametersListWidget';
-import packSVG from '@plone/volto/icons/pack.svg';
-import folderSVG from '@plone/volto/icons/folder.svg';
-import linkSVG from '@plone/volto/icons/link.svg';
-import listSVG from '@plone/volto/icons/content-listing.svg';
-import worldSVG from '@plone/volto/icons/world.svg';
 
+import installExploreEprtr from '~/components/manage/Blocks/ExploreEprtr';
 import {
   installTableau,
   installExpendableList,
   installFolderListing,
 } from 'volto-addons';
 import { installDiscodataSqlBuilder } from 'volto-datablocks/config';
+
+import packSVG from '@plone/volto/icons/pack.svg';
+import folderSVG from '@plone/volto/icons/folder.svg';
+import linkSVG from '@plone/volto/icons/link.svg';
+import listSVG from '@plone/volto/icons/content-listing.svg';
+import worldSVG from '@plone/volto/icons/world.svg';
 
 // All your imports required for the config here BEFORE this line
 import '@plone/volto/config';
@@ -427,6 +429,7 @@ export default function applyConfig(config) {
   };
 
   return [
+    installExploreEprtr,
     installTableau,
     installExpendableList,
     installFolderListing,
