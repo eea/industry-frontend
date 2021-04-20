@@ -2,7 +2,7 @@
   "name": "@eeacms/eprtr_frontend",
   "description": "Volto-based frontend server and SPA for the Industrial Emissions Portal website (former EPRTR) industry.eea.europa.eu",
   "license": "MIT",
-  "version": "1.4.5",
+  "version": "2.0.0",
   "main": "src/index.js",
   "author": "European Environment Agency: IDM2 A-Team",
   "homepage": "https://github.com/eea/eprtr_frontend",
@@ -147,7 +147,7 @@
     },
     "ignoreFiles": "theme/themes/default/**/*.overrides"
   },
-    "browserslist": [
+  "browserslist": [
     ">1%",
     "last 4 versions",
     "Firefox ESR",
