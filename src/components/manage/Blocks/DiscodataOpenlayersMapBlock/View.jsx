@@ -62,6 +62,7 @@ let Map,
   Style,
   TileLayer,
   VectorLayer,
+  transformExtent,
   Group,
   tile,
   Control,
@@ -166,6 +167,7 @@ const OpenlayersMapView = (props) => {
         Style = require('ol/style/Style.js').default;
         TileLayer = require('ol/layer/Tile.js').default;
         VectorLayer = require('ol/layer/Vector.js').default;
+        transformExtent = require('ol/proj').transformExtent;
         Group = require('ol/layer/Group.js').default;
         tile = require('ol/loadingstrategy').tile;
         Control = require('ol/control/Control.js').default;
@@ -594,10 +596,54 @@ const OpenlayersMapView = (props) => {
   }
 
   function getLocationByAdvancedFilters(options) {
-    axios
-      .get(
-        encodeURI(
-          `${config.settings.providerUrl}?query=SELECT
+    if (
+      stateRef.current.map.sitesSourceQuery?.where &&
+      stateRef.current.map.sitesSourceQuery?.where.includes('countryCode') &&
+      !stateRef.current.map.sitesSourceQuery?.where.includes(') OR (')
+    ) {
+      const iso2 = props.discodata_query.search.siteCountry[0];
+      const country = props.discodata_query.search.siteCountryNames?.filter(
+        (country) => country.siteCountry === iso2,
+      )?.[0]?.siteCountryName;
+      axios
+        .get(
+          encodeURI(
+            'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=' +
+              country +
+              '&forStorage=false&f=pjson&' +
+              '&maxLocations=1',
+          ),
+        )
+        .then((response) => {
+          const data = JSON.parse(response.request.response) || {};
+          if (data.error) {
+            // setLoader(false);
+          } else if (data.candidates?.length > 0) {
+            stateRef.current.map.element
+              .getView()
+              .fit(
+                transformExtent(
+                  [
+                    data.candidates[0].extent.xmin,
+                    data.candidates[0].extent.ymin,
+                    data.candidates[0].extent.xmax,
+                    data.candidates[0].extent.ymax,
+                  ],
+                  'EPSG:4326',
+                  'EPSG:3857',
+                ),
+                {
+                  duration: 500,
+                },
+              );
+          }
+        })
+        .catch((error) => {});
+    } else {
+      axios
+        .get(
+          encodeURI(
+            `${config.settings.providerUrl}?query=SELECT
             MIN(shape_wm.STX) AS MIN_X,
             MIN(shape_wm.STY) AS MIN_Y,
             MAX(shape_wm.STX) AS MAX_X,
@@ -608,42 +654,44 @@ const OpenlayersMapView = (props) => {
             ? 'WHERE ' + stateRef.current.map.sitesSourceQuery.where
             : ''
         }`,
-        ),
-      )
-      .then((response) => {
-        const data = JSON.parse(response.request.response);
-        const extent = data.results?.[0];
-        if (
-          extent.MIN_X === null ||
-          extent.MIN_Y === null ||
-          extent.MAX_X === null ||
-          extent.MAX_Y === null
-        ) {
-          return toast.warn(
-            <Toast
-              warn
-              title=""
-              content="No results for selected filters. Please change or clear the filters."
-            />,
-          );
-        }
-        if (
-          stateRef.current.map.sitesSourceQuery?.where &&
-          (stateRef.current.map.sitesSourceQuery?.where.includes(
-            'nuts_regions',
-          ) ||
-            stateRef.current.map.sitesSourceQuery?.where.includes(
-              'countryCode',
-            ))
-        ) {
-          stateRef.current.map.element
-            .getView()
-            .fit([extent.MIN_X, extent.MIN_Y, extent.MAX_X, extent.MAX_Y], {
-              maxZoom: 15,
-            });
-        }
-      })
-      .catch((error) => {});
+          ),
+        )
+        .then((response) => {
+          const data = JSON.parse(response.request.response);
+          const extent = data.results?.[0];
+          if (
+            extent.MIN_X === null ||
+            extent.MIN_Y === null ||
+            extent.MAX_X === null ||
+            extent.MAX_Y === null
+          ) {
+            return toast.warn(
+              <Toast
+                warn
+                title=""
+                content="No results for selected filters. Please change or clear the filters."
+              />,
+            );
+          }
+
+          if (
+            stateRef.current.map.sitesSourceQuery?.where &&
+            (stateRef.current.map.sitesSourceQuery?.where.includes(
+              'nuts_regions',
+            ) ||
+              stateRef.current.map.sitesSourceQuery?.where.includes(
+                'countryCode',
+              ))
+          ) {
+            stateRef.current.map.element
+              .getView()
+              .fit([extent.MIN_X, extent.MIN_Y, extent.MAX_X, extent.MAX_Y], {
+                maxZoom: 15,
+              });
+          }
+        })
+        .catch((error) => {});
+    }
   }
 
   function onSourceChange() {
