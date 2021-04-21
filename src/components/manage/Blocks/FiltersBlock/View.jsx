@@ -440,6 +440,12 @@ const View = ({ content, ...props }) => {
             const filtersMeta = {
               ...state.filtersMeta,
             };
+            const newQueryParams = {
+              advancedFiltering: true,
+              filtersCounter: props.discodata_query.search['filtersCounter']
+                ? props.discodata_query.search['filtersCounter'] + 1
+                : 1,
+            };
             Object.entries(filtersMeta).forEach(([key, meta]) => {
               if (!meta.static) {
                 delete filtersMeta[key];
@@ -523,20 +529,23 @@ const View = ({ content, ...props }) => {
                     ?.map((item) => item.reportingYear)
                     ?.sort((a, b) => b - a) || [];
                 if (reportingYears.length) {
-                  props.setQueryParam({
-                    queryParam: {
-                      [metadata[index].queryToSet]: [reportingYears[0]],
-                      advancedFiltering: true,
-                      filtersCounter: props.discodata_query.search[
-                        'filtersCounter'
-                      ]
-                        ? props.discodata_query.search['filtersCounter'] + 1
-                        : 1,
-                    },
-                  });
+                  newQueryParams[metadata[index].queryToSet] = [
+                    reportingYears[0],
+                  ];
                 }
               }
+              if (metadata[index]?.key === 'countries') {
+                newQueryParams.siteCountryNames = res.data?.results || [];
+              }
             });
+            if (Object.keys(newQueryParams).length > 2) {
+              props.setQueryParam({
+                queryParam: {
+                  ...(newQueryParams || {}),
+                },
+              });
+            }
+
             setLoadingData(false);
             setState({
               ...state,
