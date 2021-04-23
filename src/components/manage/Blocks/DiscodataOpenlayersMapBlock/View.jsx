@@ -575,7 +575,12 @@ const OpenlayersMapView = (props) => {
       axios
         .get(
           encodeURI(
-            `${config.settings.providerUrl}?query=SELECT shape_wm.STX as x, shape_wm.STY as y, Site_reporting_year from [IED].[latest].[SiteMap] WHERE siteName COLLATE Latin1_General_CI_AI LIKE '%${stateRef.current.siteTerm}%' ORDER BY [Site_reporting_year] DESC`,
+            `${
+              config.settings.providerUrl
+            }?query=SELECT shape_wm.STX as x, shape_wm.STY as y, Site_reporting_year from [IED].[latest].[SiteMap] WHERE siteName COLLATE Latin1_General_CI_AI LIKE '%${stateRef.current.siteTerm.replace(
+              "'",
+              "''",
+            )}%' ORDER BY [Site_reporting_year] DESC`,
           ),
         )
         .then((response) => {
