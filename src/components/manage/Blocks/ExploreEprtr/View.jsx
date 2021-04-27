@@ -20,7 +20,9 @@ const View = (props) => {
           tablet="7"
           mobile="12"
         >
-          <img src={explore} alt="Explore the data" />
+          <Link to="/browse/explore-data-map/map">
+            <img src={explore} alt="Explore the data" />
+          </Link>
         </Grid.Column>
         <Grid.Column
           className="description"
@@ -30,7 +32,7 @@ const View = (props) => {
           tablet="5"
           mobile="12"
         >
-          <Link to="/analyse">
+          <Link to="/analysis/country-group">
             <div className="explore-tile">
               <img src={analyse} alt="Analyse" />
               <div>

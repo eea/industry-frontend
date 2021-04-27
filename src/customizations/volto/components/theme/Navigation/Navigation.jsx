@@ -182,8 +182,9 @@ class Navigation extends Component {
                     key={item.url}
                     className="item"
                     activeClassName="active"
-                    onClick={() => {
+                    onClick={(e) => {
                       if (
+                        !e.ctrlKey &&
                         !item.url.includes('/industrial-site') &&
                         !item.url.includes('/analysis')
                       ) {

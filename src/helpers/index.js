@@ -34,6 +34,10 @@ export function getBasePath(url) {
   return '';
 }
 
+export function removeTralingSlash(url) {
+  return getBasePath(url).replace(/\/+$/, '');
+}
+
 export const getNavigationByParent = (items, parent) => {
   if (items && parent !== undefined && typeof parent === 'string') {
     const pathnameArray = removeValue(parent.split('/'), '');

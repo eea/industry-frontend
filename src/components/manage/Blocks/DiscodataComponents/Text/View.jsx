@@ -22,7 +22,7 @@ const components = {
       {components.bold(bold, text)}
       {tooltip && tooltipText ? (
         <span data-tip={tooltip && tooltipText ? tooltipText : false}>
-          <Icon name={infoSVG} size="20" color={color} />
+          <Icon name={infoSVG} size={20} color={color} />
         </span>
       ) : (
         ''

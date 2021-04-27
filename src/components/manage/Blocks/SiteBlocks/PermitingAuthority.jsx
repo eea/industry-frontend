@@ -1,47 +1,66 @@
 import React from 'react';
+import { Popup, Grid } from 'semantic-ui-react';
 import Icon from '@plone/volto/components/theme/Icon/Icon';
+import { UniversalLink } from '@plone/volto/components';
 import RenderTable from './RenderTable';
 import cx from 'classnames';
 import infoSVG from '@plone/volto/icons/info.svg';
 
 const PermitingAuthority = (props) => {
+  const { entity = '' } = props;
   const permitingAuthority = props.permitingAuthority;
 
   return (
-    <div>
-      <div className={cx('header-tooltip', 'mb-1')}>
+    <div className="permiting-authority">
+      <div
+        className={cx({
+          title: true,
+          marginless: !permitingAuthority.length,
+        })}
+      >
         <h3 className="blue">Permiting Authority</h3>
-        <span
-          className="floating-icon"
-          data-tip={
-            'Authority, body or bodies responsible for issuing a permit to a given facility'
+        <Popup
+          position="top left"
+          content="Authority, body or bodies responsible for issuing a permit to a given facility"
+          trigger={
+            <div className="popup-svg">
+              <Icon name={infoSVG} size={20} color="#D63D27" />
+            </div>
           }
-        >
-          <Icon
-            className="firefox-icon"
-            name={infoSVG}
-            size="20"
-            color="#D63D27"
-          />
-        </span>
+        />
       </div>
-      {permitingAuthority.length === 0 ? (
-        <p className="info mb-1-super">
+      {!permitingAuthority.length ? (
+        <p className="info">
           No information provided about permiting authority
         </p>
       ) : (
         ''
       )}
-      {permitingAuthority.length > 1 ? (
-        <div className="industrial-site mb-1">
+      {permitingAuthority.length > 1 ||
+      (permitingAuthority.length === 1 && entity === 'site') ? (
+        <div className="site-block-table">
           <RenderTable
             className="description-table"
             celled={false}
             headless={false}
             headers={[
+              ...(entity === 'site'
+                ? [
+                    {
+                      key: 'nth',
+                      value: 'Installation',
+                      popup: { key: 'installationInspireId' },
+                    },
+                  ]
+                : []),
+              { key: 'operatingSince', value: 'Operating since' },
               { key: 'permitUpdated', value: 'Permit updated' },
               { key: 'permitingAuthority', value: 'Permiting authority' },
-              { key: 'permitAvailable', value: 'Permit available' },
+              {
+                key: 'permitAvailable',
+                value: 'Permit available',
+                link: { text: 'Permit link' },
+              },
               { key: 'seveso', value: 'Seveso' },
               { key: 'entityStatus', value: 'Status' },
             ]}
@@ -49,41 +68,49 @@ const PermitingAuthority = (props) => {
           />
         </div>
       ) : permitingAuthority.length === 1 ? (
-        <div className="industrial-site">
-          <div className="row mb-1">
-            <div className="detail xs-6 sm-6 md-6 lg-6">
-              <p className="bold mb-0">Permit updated</p>
-              <p className="info">
-                {permitingAuthority[0].permitUpdated || '-'}
-              </p>
-            </div>
-            <div className="detail xs-6 sm-6 md-6 lg-6">
-              <p className="bold mb-0">Permiting authority</p>
-              <p className="info">
-                {permitingAuthority[0].permitingAuthority || '-'}
-              </p>
-            </div>
-          </div>
-          <div className="row mb-1">
-            <div className="detail xs-6 sm-6 md-6 lg-6">
-              <p className="bold mb-0">Permit available</p>
-              <p className="info">
-                {permitingAuthority[0].permitAvailable || '-'}
-              </p>
-            </div>
-            <div className="detail xs-6 sm-6 md-6 lg-6">
-              <p className="bold mb-0">Seveso</p>
-              <p className="info">{permitingAuthority[0].seveso || '-'}</p>
-            </div>
-          </div>
-          <div className="row mb-1">
-            <div className="detail xs-12 sm-12 md-12 lg-12">
-              <p className="bold mb-0">Status</p>
-              <p className="info">
-                {permitingAuthority[0].entityStatus || '-'}
-              </p>
-            </div>
-          </div>
+        <div>
+          <Grid>
+            <Grid.Row>
+              <Grid.Column mobile={6}>
+                <p className="label">Permit updated</p>
+                <p className="info">
+                  {permitingAuthority[0].permitUpdated || '-'}
+                </p>
+              </Grid.Column>
+              <Grid.Column mobile={6}>
+                <p className="label">Permiting authority</p>
+                <p className="info">
+                  {permitingAuthority[0].permitingAuthority || '-'}
+                </p>
+              </Grid.Column>
+              <Grid.Column mobile={6}>
+                <p className="label">Permit available</p>
+                <p className="info">
+                  {permitingAuthority[0].permitAvailable ? (
+                    <UniversalLink
+                      href={permitingAuthority[0].permitAvailable || '#'}
+                      openLinkInNewTab={true}
+                      title={permitingAuthority[0].permitAvailable}
+                    >
+                      {permitingAuthority[0].permitAvailable}
+                    </UniversalLink>
+                  ) : (
+                    '-'
+                  )}
+                </p>
+              </Grid.Column>
+              <Grid.Column mobile={6}>
+                <p className="label">Seveso</p>
+                <p className="info">{permitingAuthority[0].seveso || '-'}</p>
+              </Grid.Column>
+              <Grid.Column mobile={12}>
+                <p className="label">Status</p>
+                <p className="info">
+                  {permitingAuthority[0].entityStatus || '-'}
+                </p>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </div>
       ) : (
         ''

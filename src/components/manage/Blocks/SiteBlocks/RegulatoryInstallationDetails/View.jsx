@@ -2,10 +2,7 @@ import React, { useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
-import {
-  setQueryParam,
-  deleteQueryParam,
-} from 'volto-datablocks/actions';
+import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
 import Icon from '@plone/volto/components/theme/Icon/Icon';
 import PermitingAuthority from '../PermitingAuthority';
 import cx from 'classnames';
@@ -83,12 +80,7 @@ const View = (props) => {
                 'Number of individual conclusions that indicate which techniques or combinations of techniques are BAT for achieving a specific environmental objective'
               }
             >
-              <Icon
-                className="firefox-icon"
-                name={infoSVG}
-                size="20"
-                color="#D63D27"
-              />
+              <Icon name={infoSVG} size={20} color="#D63D27" />
             </span>
           </div>
           {batConclusions.length || batDerogations.length ? (

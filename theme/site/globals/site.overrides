@@ -1,6 +1,10 @@
 /*******************************
         Global Overrides
 *******************************/
+body {
+  font-family: 'Open Sans',Verdana, Helvetica, Arial, sans-serif, 'Helvetica Neue';
+}
+
 .ui.vertical.padded.segment.footerWrapper>.ui.container {
   width: 80% !important;
 
@@ -1669,10 +1673,6 @@ b {
   }
 }
 
-.firefox-icon {
-  height: 20px;
-}
-
 .mdc-linear-progress__bar-inner {
   background-color: #4296B2 !important;
 }
@@ -1724,4 +1724,34 @@ strong {
 .folder-contents {
   margin-top: 2rem;
   margin-bottom: 2rem;
+}
+
+.sidebar-content {
+  .sidebar-block {
+    height: 100%;
+    .ui.menu {
+      height: 100%;
+      padding: 1rem;
+      .item {
+        padding: 1rem;
+      }
+    }
+  }
+  .grid-layout > .row {
+    padding: 2rem !important;
+  }
+
+  @media (max-width: 768px) {
+    .sidebar-block {
+      .ui.menu {
+        padding: 1rem 0;
+        .item {
+          padding: 1rem;
+        }
+      }
+    }
+    .grid-layout > .row {
+      padding: 2rem 1rem !important;
+    }
+  }
 }

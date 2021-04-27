@@ -10,8 +10,17 @@
             "volto-embed": [
                 "addons/volto-embed/src"
             ],
+            "@eeacms/volto-block-style": [
+                "addons/volto-block-style/src"
+            ],
+            "@eeacms/volto-columns-block": [
+                "addons/volto-columns-block/src"
+            ],
             "@eeacms/volto-grid-block": [
                 "addons/volto-grid-block/src"
+            ],
+            "@eeacms/volto-tabs-block": [
+                "addons/volto-tabs-block/src"
             ]
         },
         "baseUrl": "src"
