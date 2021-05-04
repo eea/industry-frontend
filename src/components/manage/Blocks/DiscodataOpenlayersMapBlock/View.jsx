@@ -1377,7 +1377,7 @@ const OpenlayersMapView = (props) => {
                 as="a"
                 className="solid dark-blue display-inline-block"
                 onClick={setSiteQueryParams}
-                to={`/industrial-site/introduction/understanding-the-data/?siteInspireId=${state.popupDetails.properties.InspireSiteId}&siteName=${state.popupDetails.properties.siteName}&siteReportingYear=${state.popupDetails.properties.Site_reporting_year}`}
+                to={`/industrial-site/environmental-information?siteInspireId=${state.popupDetails.properties.InspireSiteId}&siteName=${state.popupDetails.properties.siteName}&siteReportingYear=${state.popupDetails.properties.Site_reporting_year}`}
               >
                 Site Details
               </Link>
