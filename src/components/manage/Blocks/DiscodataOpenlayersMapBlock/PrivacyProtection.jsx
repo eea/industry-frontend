@@ -72,12 +72,7 @@ export default ({ children, data = {}, block, onShow, ...rest }) => {
                         className="floating-icon mr-1"
                         data-tip={dataprotection.privacy_statement}
                       >
-                        <Icon
-                          className="firefox-icon"
-                          name={infoSVG}
-                          size="20"
-                          color="#D63D27"
-                        />
+                        <Icon name={infoSVG} size={20} color="#D63D27" />
                       </span>
                     ) : (
                       ''
@@ -112,8 +107,8 @@ export default ({ children, data = {}, block, onShow, ...rest }) => {
 
                   <p className="discreet">
                     Your choice will be saved in a cookie managed by{' '}
-                    {config.settings.ownDomain || '.eea.europa.eu'} that will expire in{' '}
-                    {getExpDays()} days.
+                    {config.settings.ownDomain || '.eea.europa.eu'} that will
+                    expire in {getExpDays()} days.
                   </p>
                 </div>
               </div>

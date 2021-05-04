@@ -57,75 +57,87 @@ const DefaultView = ({
     'siteInspireId',
     'siteName',
     'siteReportingYear',
-    'facilityInspireId',
-    'installationInspireId',
-    'lcpInspireId',
+    // 'facilityInspireId',
+    // 'installationInspireId',
+    // 'lcpInspireId',
   ];
 
   useEffect(() => {
     setMounted(true);
+    const unlisten = history.listen((location, action) => {
+      if (location?.state?.ignoreScrollBehavior) {
+        const scrollTo = window.scrollTo;
+        window.scrollTo = () => {};
+        setTimeout(() => {
+          window.scrollTo = scrollTo;
+        }, 1);
+      }
+    });
     return () => {
       setMounted(false);
+      unlisten();
     };
+    /* eslint-disable-next-line */
   }, []);
 
-  useEffect(() => {
-    if (
-      content['layout'] === 'default_view' &&
-      content['@type'] === 'site_template' &&
-      !discodata_query.search.siteInspireId &&
-      !query.siteInspireId
-    ) {
-      history.push('/browse/explore-data-map/map');
-      return;
-    }
-    if (
-      content['layout'] === 'default_view' &&
-      content['@type'] === 'site_template' &&
-      mounted
-    ) {
-      const queryParams = { ...query };
-      const missingQueryParams = {};
+  // useEffect(() => {
+  //   if (
+  //     content['layout'] === 'default_view' &&
+  //     content['@type'] === 'site_template' &&
+  //     !discodata_query.search.siteInspireId &&
+  //     !query.siteInspireId
+  //   ) {
+  //     history.push('/browse/explore-data-map/map');
+  //     return;
+  //   }
+  //   if (
+  //     content['layout'] === 'default_view' &&
+  //     content['@type'] === 'site_template' &&
+  //     mounted
+  //   ) {
+  //     const queryParams = { ...query };
+  //     const missingQueryParams = {};
 
-      Object.keys(discodata_query.search)
-        .filter((key) => siteTemplateQuery.includes(key))
-        .forEach((key) => {
-          queryParams[key] = discodata_query.search[key];
-        });
+  //     Object.keys(discodata_query.search)
+  //       .filter((key) => siteTemplateQuery.includes(key))
+  //       .forEach((key) => {
+  //         queryParams[key] = discodata_query.search[key];
+  //       });
 
-      Object.keys(query)
-        .filter(
-          (key) =>
-            siteTemplateQuery.includes(key) && !discodata_query.search[key],
-        )
-        .forEach((key) => {
-          if (key === 'siteReportingYear') {
-            missingQueryParams[key] = parseInt(query[key]);
-          } else {
-            missingQueryParams[key] = query[key];
-          }
-        });
+  //     Object.keys(query)
+  //       .filter(
+  //         (key) =>
+  //           siteTemplateQuery.includes(key) && !discodata_query.search[key],
+  //       )
+  //       .forEach((key) => {
+  //         if (key === 'siteReportingYear') {
+  //           missingQueryParams[key] = parseInt(query[key]);
+  //         } else {
+  //           missingQueryParams[key] = query[key];
+  //         }
+  //       });
 
-      if (Object.keys(missingQueryParams).length) {
-        setQueryParam({
-          queryParam: { ...missingQueryParams },
-        });
-      }
+  //     if (Object.keys(missingQueryParams).length) {
+  //       setQueryParam({
+  //         queryParam: { ...missingQueryParams },
+  //       });
+  //     }
 
-      if (
-        Object.keys(queryParams).filter(
-          (key) =>
-            JSON.stringify(queryParams[key]) !== JSON.stringify(query[key]),
-        ).length
-      ) {
-        history.push(
-          `${location.pathname.replace(/\/$/, '')}?${qs.stringify(
-            queryParams,
-          )}`,
-        );
-      }
-    }
-  }, [mounted, content?.['@id']]);
+  //     if (
+  //       Object.keys(queryParams).filter(
+  //         (key) =>
+  //           JSON.stringify(queryParams[key]) !== JSON.stringify(query[key]),
+  //       ).length
+  //     ) {
+  //       history.push(
+  //         `${location.pathname.replace(/\/$/, '')}?${qs.stringify(
+  //           queryParams,
+  //         )}`,
+  //       );
+  //     }
+  //   }
+  //   /* eslint-disable-next-line */
+  // }, [mounted, content?.['@id']]);
 
   return hasBlocksData(content) ? (
     <div id="page-document" className="ui container">

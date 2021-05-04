@@ -1,5 +1,6 @@
 import React from 'react';
-import { Table } from 'semantic-ui-react';
+import { Table, Popup } from 'semantic-ui-react';
+import { UniversalLink } from '@plone/volto/components';
 import cx from 'classnames';
 import './style.css';
 
@@ -30,11 +31,24 @@ const RenderTable = (props) => {
             <Table.Row key={`${rowIndex}_row`}>
               {headers.map((header, headerIndex) => (
                 <Table.Cell key={`${headerIndex}_cell`}>
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: row[header.key] || '-',
-                    }}
-                  />
+                  {row[header.key] && header.link ? (
+                    <UniversalLink
+                      href={row[header.key] || '#'}
+                      openLinkInNewTab={true}
+                      title={row[header.key]}
+                      style={{ ...(header.style || {}) }}
+                    >
+                      {header.link.text || row[header.key]}
+                    </UniversalLink>
+                  ) : header.popup?.key ? (
+                    <Popup
+                      position="top left"
+                      content={row[header.popup.key]}
+                      trigger={<p>{row[header.key] || '-'}</p>}
+                    />
+                  ) : (
+                    <p>{row[header.key] || '-'}</p>
+                  )}
                 </Table.Cell>
               ))}
             </Table.Row>

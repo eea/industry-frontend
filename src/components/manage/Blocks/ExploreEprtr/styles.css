@@ -12,9 +12,13 @@
   margin-bottom: 1rem !important;
 }
 
+.ui.grid.explore-eprtr .explore-map a img {
+  width: 100%;
+}
+
 .explore-eprtr .description {
   display: flex !important;
-  justify-content: space-between;
+  justify-content: space-between !important;
 }
 
 .explore-eprtr .description .explore-tile {

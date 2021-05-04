@@ -204,12 +204,7 @@ const View = ({ content, ...props }) => {
             <div className="header-tooltip">
               <h3 className={cx('blue', titleClassName)}>{title}</h3>
               <span className="floating-icon" data-tip={'This is a tooltip'}>
-                <Icon
-                  className="firefox-icon"
-                  name={infoSVG}
-                  size="20"
-                  color="#D63D27"
-                />
+                <Icon name={infoSVG} size={20} color="#D63D27" />
               </span>
             </div>
           ) : title ? (
@@ -253,7 +248,7 @@ const View = ({ content, ...props }) => {
 
 export default compose(
   connect((state, props) => ({
-    query: state.router.location.search,
+    query: qs.parse(state.router.location.search.replace('?', '')),
     search: state.discodata_query.search,
     flags: state.flags,
   })),

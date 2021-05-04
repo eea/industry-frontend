@@ -5,6 +5,20 @@
     "path": "src",
     "develop": true
   },
+  "volto-block-style": {
+    "url": "https://github.com/eea/volto-block-style.git",
+    "path": "src",
+    "package": "@eeacms/volto-block-style",
+    "branch": "develop",
+    "develop": true
+  },
+  "volto-columns-block": {
+    "url": "https://github.com/eea/volto-columns-block.git",
+    "branch": "develop",
+    "path": "src",
+    "package": "@eeacms/volto-columns-block",
+    "develop": true
+  },
   "volto-datablocks": {
     "url": "https://github.com/eea/volto-datablocks.git",
     "branch": "master",
@@ -22,6 +36,13 @@
     "branch": "centurion",
     "path": "src",
     "package": "@eeacms/volto-grid-block",
+    "develop": true
+  },
+  "volto-tabs-block": {
+    "url": "https://github.com/eea/volto-tabs-block.git",
+    "path": "src",
+    "package": "@eeacms/volto-tabs-block",
+    "branch": "master",
     "develop": true
   }
 }

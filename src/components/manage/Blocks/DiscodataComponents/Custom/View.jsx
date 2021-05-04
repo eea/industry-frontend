@@ -154,12 +154,7 @@ const ReportingYears = (props) => {
     >
       <div>
         <span className="floating-icon" data-tip={'Something'}>
-          <Icon
-            className="firefox-icon"
-            name={infoSVG}
-            size="20"
-            color="#fff"
-          />
+          <Icon name={infoSVG} size={20} color="#fff" />
         </span>
         <p className="lighter">Last report was submitted on:</p>
         <p className="bold">{getDate(packages[0])}</p>

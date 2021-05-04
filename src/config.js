@@ -66,24 +66,6 @@ import GlossarySearchBlockView from '~/components/manage/Blocks/GlossarySearchBl
 import DummyBlockEdit from '~/components/manage/Blocks/DummyBlock/Edit';
 import DummyBlockView from '~/components/manage/Blocks/DummyBlock/View';
 
-import SiteHeaderEdit from '~/components/manage/Blocks/SiteBlocks/Header/Edit';
-import SiteHeaderView from '~/components/manage/Blocks/SiteBlocks/Header/View';
-
-import PollutantsSiteDetailsEdit from '~/components/manage/Blocks/SiteBlocks/PollutantsSiteDetails/Edit';
-import PollutantsSiteDetailsView from '~/components/manage/Blocks/SiteBlocks/PollutantsSiteDetails/View';
-
-import PollutantsFacilityDetailsEdit from '~/components/manage/Blocks/SiteBlocks/PollutantsFacilityDetails/Edit';
-import PollutantsFacilityDetailsView from '~/components/manage/Blocks/SiteBlocks/PollutantsFacilityDetails/View';
-
-import RegulatorySiteDetailsEdit from '~/components/manage/Blocks/SiteBlocks/RegulatorySiteDetails/Edit';
-import RegulatorySiteDetailsView from '~/components/manage/Blocks/SiteBlocks/RegulatorySiteDetails/View';
-
-import RegulatoryInstallationDetailsEdit from '~/components/manage/Blocks/SiteBlocks/RegulatoryInstallationDetails/Edit';
-import RegulatoryInstallationDetailsView from '~/components/manage/Blocks/SiteBlocks/RegulatoryInstallationDetails/View';
-
-import LcpDetailsEdit from '~/components/manage/Blocks/SiteBlocks/LcpDetails/Edit';
-import LcpDetailsView from '~/components/manage/Blocks/SiteBlocks/LcpDetails/View';
-
 // Discodata components
 import DiscodataTableBlockEdit from '~/components/manage/Blocks/DiscodataTableBlock/Edit';
 import DiscodataTableBlockView from '~/components/manage/Blocks/DiscodataTableBlock/View';
@@ -109,6 +91,14 @@ import ListView from '~/components/manage/Blocks/DiscodataComponents/List/View';
 import BlocksWidget from '~/components/manage/Widgets/BlocksWidget';
 import QueryParametersListWidget from '~/components/manage/Blocks/DiscodataComponents/Widgets/QueryParametersListWidget';
 
+import installSiteStructureSidebar from '~/components/manage/Blocks/SiteStructureSidebar';
+import installSiteHeader from '~/components/manage/Blocks/SiteBlocks/Header';
+import installEnvironmentalSiteDetails from '~/components/manage/Blocks/SiteBlocks/EnvironmentalSiteDetails';
+import installEnvironmentalFacilityDetails from '~/components/manage/Blocks/SiteBlocks/EnvironmentalFacilityDetails';
+import installEnvironmentalLcpDetails from '~/components/manage/Blocks/SiteBlocks/EnvironmentalLcpDetails';
+import installRegulatorySiteDetails from '~/components/manage/Blocks/SiteBlocks/RegulatorySiteDetails';
+import installRegulatoryPermits from '~/components/manage/Blocks/SiteBlocks/RegulatoryPermits';
+import installRegulatoryBATConclusions from '~/components/manage/Blocks/SiteBlocks/RegulatoryBATConclusions';
 import installExploreEprtr from '~/components/manage/Blocks/ExploreEprtr';
 import {
   installTableau,
@@ -296,60 +286,6 @@ export default function applyConfig(config) {
     icon: packSVG,
   };
 
-  config.blocks.blocksConfig.eprtr_site_header = {
-    id: 'eprtr_site_header',
-    title: 'Eprtr site header',
-    group: 'eprtr_blocks',
-    view: SiteHeaderView,
-    edit: SiteHeaderEdit,
-    icon: packSVG,
-  };
-
-  config.blocks.blocksConfig.eprtr_pollutants_site_details = {
-    id: 'eprtr_pollutants_site_details',
-    title: 'Eprtr Pollutants site details',
-    group: 'eprtr_blocks',
-    view: PollutantsSiteDetailsView,
-    edit: PollutantsSiteDetailsEdit,
-    icon: packSVG,
-  };
-
-  config.blocks.blocksConfig.eprtr_pollutants_facility_details = {
-    id: 'eprtr_pollutants_facility_details',
-    title: 'Eprtr Pollutants facility details',
-    group: 'eprtr_blocks',
-    view: PollutantsFacilityDetailsView,
-    edit: PollutantsFacilityDetailsEdit,
-    icon: packSVG,
-  };
-
-  config.blocks.blocksConfig.eprtr_regulatory_site_details = {
-    id: 'eprtr_regulatory_site_details',
-    title: 'Eprtr Regulatory site details',
-    group: 'eprtr_blocks',
-    view: RegulatorySiteDetailsView,
-    edit: RegulatorySiteDetailsEdit,
-    icon: packSVG,
-  };
-
-  config.blocks.blocksConfig.eprtr_regulatory_installation_details = {
-    id: 'eprtr_regulatory_installation_details',
-    title: 'Eprtr Regulatory installation details',
-    group: 'eprtr_blocks',
-    view: RegulatoryInstallationDetailsView,
-    edit: RegulatoryInstallationDetailsEdit,
-    icon: packSVG,
-  };
-
-  config.blocks.blocksConfig.eprtr_lcp_details = {
-    id: 'eprtr_lcp_details',
-    title: 'Eprtr lcp details',
-    group: 'eprtr_blocks',
-    view: LcpDetailsView,
-    edit: LcpDetailsEdit,
-    icon: packSVG,
-  };
-
   config.blocks.blocksConfig.eprtr_openlayers_map_block = {
     id: 'eprtr_openlayers_map_block',
     title: 'Eprtr openlayers map block',
@@ -428,7 +364,22 @@ export default function applyConfig(config) {
     ...(config.portlets || {}),
   };
 
+  config.settings.available_colors = [
+    '#F3EFEE',
+    '#F6F6F6',
+    '#4296B3',
+    '#ED8175',
+  ];
+
   return [
+    installSiteStructureSidebar,
+    installSiteHeader,
+    installEnvironmentalSiteDetails,
+    installEnvironmentalFacilityDetails,
+    installEnvironmentalLcpDetails,
+    installRegulatorySiteDetails,
+    installRegulatoryPermits,
+    installRegulatoryBATConclusions,
     installExploreEprtr,
     installTableau,
     installExpendableList,

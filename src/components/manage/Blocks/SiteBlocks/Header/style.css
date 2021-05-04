@@ -1,19 +1,17 @@
+.site-header .info {
+  word-break: break-all;
+}
+
 .site-header h3.title {
   margin-bottom: 1rem !important;
   color: #4296b2;
 }
 
-.site-header .row {
-  justify-content: space-between;
-  margin-left: -0.5rem;
-}
-
-.site-header .row .detail {
-  padding-right: 0.5rem;
-  padding-left: 0.5rem;
-  margin-bottom: 1rem;
+.site-header .label {
+  font-weight: bold;
+  margin-bottom: 0;
 }
 
 .site-header .info {
-  word-break: break-all;
+  margin-bottom: 0;
 }

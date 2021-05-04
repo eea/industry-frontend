@@ -1,116 +1,136 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Dropdown } from 'semantic-ui-react';
-import QueryBuilder from '../QueryBuilder';
-import {
-  setQueryParam,
-  deleteQueryParam,
-} from 'volto-datablocks/actions';
+import { Grid, Dropdown } from 'semantic-ui-react';
+import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
+import qs from 'querystring';
 import './style.css';
 
+const getQueryString = (query) => {
+  if (!Object.keys(query).length) return '';
+  return '?' + qs.stringify(query);
+};
+
 const View = (props) => {
-  const {
-    siteInspireId = null,
-    siteReportingYear = null,
-  } = props.discodata_query.search;
-  const {
-    site_header = {},
-    reporting_years = [],
-  } = props.discodata_resources.data;
-  const site = site_header[siteInspireId] || null;
-  const options = reporting_years
-    .filter((item) => item.reportingYear)
-    .map((item, index) => ({
-      key: item.reportingYear || index,
-      value: item.reportingYear || index,
-      text: item.reportingYear || index,
-    }));
+  const [siteHeader, setSiteHeader] = React.useState({});
+  const { provider_data = {} } = props;
+  const query = { ...props.query, ...props.discodata_query.search };
+  const siteReportingYear = parseInt(query.siteReportingYear || '');
+  const index = provider_data?.euregReportingYear?.indexOf(siteReportingYear);
+
+  const reportingYears = provider_data.euregReportingYear?.length
+    ? provider_data.euregReportingYear
+        .filter((year) => year)
+        .map((year) => ({
+          key: year,
+          value: year,
+          text: year,
+        }))
+    : [];
+
+  React.useEffect(() => {
+    const keys = Object.keys(provider_data || {});
+    if (keys?.length) {
+      const newSiteHeader = {};
+      keys.forEach((key) => {
+        newSiteHeader[key] = provider_data[key][index];
+      });
+      setSiteHeader(newSiteHeader);
+    }
+  }, [provider_data, index]);
 
   return props.mode === 'edit' ? (
-    <p>Site Header</p>
-  ) : (
-    <div>
-      <QueryBuilder />
-      {site ? (
-        <div className="site-header">
-          <h3 className="title">{site.siteName}</h3>
-          <div className="row">
-            <div className="detail xs-6 sm-6 md-3 lg-3">
-              <p className="bold mb-0">Country</p>
-              <p className="info">{site.countryCode}</p>
-            </div>
-
-            <div className="detail xs-6 sm-6 md-3 lg-3">
-              <p className="bold mb-0">Regulation</p>
-              {site.count_factype_EPRTR ? (
-                <p className="info mb-0">
-                  {site.count_factype_EPRTR} EPRTR{' '}
-                  {site.count_factype_EPRTR > 1 ? 'Facilities' : 'Facility'}
-                </p>
-              ) : (
-                ''
-              )}
-              {site.count_factype_NONEPRTR ? (
-                <p className="info mb-0">
-                  {site.count_factype_NONEPRTR} NON-EPRTR{' '}
-                  {site.count_factype_NONEPRTR > 1 ? 'Facilities' : 'Facility'}
-                </p>
-              ) : (
-                ''
-              )}
-              {site.count_instype_IED ? (
-                <p className="info mb-0">
-                  {site.count_instype_IED} IED Installation
-                  {site.count_instype_IED > 1 ? 's' : ''}
-                </p>
-              ) : (
-                ''
-              )}
-              {site.count_instype_NONIED ? (
-                <p className="info mb-0">
-                  {site.count_instype_NONIED} NON-IED Installation
-                  {site.count_instype_NONIED > 1 ? 's' : ''}
-                </p>
-              ) : (
-                ''
-              )}
-              {site.count_plantType_LCP ? (
-                <p className="info mb-0">
-                  {site.count_plantType_LCP} Large combustion plant
-                  {site.count_plantType_LCP > 1 ? 's' : ''}
-                </p>
-              ) : (
-                ''
-              )}
-              {site.count_plantType_WI ? (
-                <p className="info mb-0">
-                  {site.count_plantType_WI} Waste incinerator
-                  {site.count_plantType_WI > 1 ? 's' : ''}
-                </p>
-              ) : (
-                ''
-              )}
-              {site.count_plantType_coWI ? (
-                <p className="info mb-0">
-                  {site.count_plantType_coWI} Co-waste incinerator
-                  {site.count_plantType_WI > 1 ? 's' : ''}
-                </p>
-              ) : (
-                ''
-              )}
-            </div>
-
-            <div className="detail xs-6 sm-6 md-3 lg-3">
-              <p className="bold mb-0">Inspire id</p>
-              <p className="info">{site.siteInspireId}</p>
-            </div>
-
-            <div className="detail xs-6 sm-6 md-3 lg-3 custom-selector grey">
-              <p className="bold mb-0">Reporting year</p>
+    <p>Site header</p>
+  ) : Object.keys(siteHeader)?.length ? (
+    <div className="site-header">
+      <h3 className="title">{siteHeader.siteName}</h3>
+      <Grid columns={12}>
+        <Grid.Row>
+          <Grid.Column mobile={6} tablet={3} computer={3}>
+            <p className="label">Country</p>
+            <p className="info">{siteHeader.countryCode}</p>
+          </Grid.Column>
+          <Grid.Column mobile={6} tablet={3} computer={3}>
+            <p className="label">Regulation</p>
+            {siteHeader.count_factype_EPRTR ? (
+              <p className="info">
+                {siteHeader.count_factype_EPRTR} EPRTR{' '}
+                {siteHeader.count_factype_EPRTR > 1 ? 'Facilities' : 'Facility'}
+              </p>
+            ) : (
+              ''
+            )}
+            {siteHeader.count_factype_NONEPRTR ? (
+              <p className="info">
+                {siteHeader.count_factype_NONEPRTR} NON-EPRTR{' '}
+                {siteHeader.count_factype_NONEPRTR > 1
+                  ? 'Facilities'
+                  : 'Facility'}
+              </p>
+            ) : (
+              ''
+            )}
+            {siteHeader.count_instype_IED ? (
+              <p className="info">
+                {siteHeader.count_instype_IED} IED Installation
+                {siteHeader.count_instype_IED > 1 ? 's' : ''}
+              </p>
+            ) : (
+              ''
+            )}
+            {siteHeader.count_instype_NONIED ? (
+              <p className="info">
+                {siteHeader.count_instype_NONIED} NON-IED Installation
+                {siteHeader.count_instype_NONIED > 1 ? 's' : ''}
+              </p>
+            ) : (
+              ''
+            )}
+            {siteHeader.count_plantType_LCP ? (
+              <p className="info">
+                {siteHeader.count_plantType_LCP} Large combustion plant
+                {siteHeader.count_plantType_LCP > 1 ? 's' : ''}
+              </p>
+            ) : (
+              ''
+            )}
+            {siteHeader.count_plantType_WI ? (
+              <p className="info">
+                {siteHeader.count_plantType_WI} Waste incinerator
+                {siteHeader.count_plantType_WI > 1 ? 's' : ''}
+              </p>
+            ) : (
+              ''
+            )}
+            {siteHeader.count_plantType_coWI ? (
+              <p className="info">
+                {siteHeader.count_plantType_coWI} Co-waste incinerator
+                {siteHeader.count_plantType_WI > 1 ? 's' : ''}
+              </p>
+            ) : (
+              ''
+            )}
+          </Grid.Column>
+          <Grid.Column mobile={6} tablet={3} computer={3}>
+            <p className="label">Inspire id</p>
+            <p className="info">{siteHeader.siteInspireId}</p>
+          </Grid.Column>
+          <Grid.Column mobile={6} tablet={3} computer={3}>
+            <p className="label">Reporting year</p>
+            <div className="custom-selector grey">
               <Dropdown
                 selection
                 onChange={(event, data) => {
+                  props.history.push({
+                    pathname: props.location.pathname,
+                    search: getQueryString({
+                      ...props.query,
+                      siteReportingYear: data.value,
+                    }),
+                    state: {
+                      ignoreScrollBehavior: true,
+                    },
+                  });
                   props.setQueryParam({
                     queryParam: {
                       siteReportingYear: data.value,
@@ -118,26 +138,25 @@ const View = (props) => {
                   });
                 }}
                 placeholder={'Select'}
-                options={options}
+                options={reportingYears}
                 value={siteReportingYear}
                 aria-label="Reporting year selector"
               />
             </div>
-          </div>
-        </div>
-      ) : (
-        ''
-      )}
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     </div>
+  ) : (
+    ''
   );
 };
 
 export default compose(
   connect(
     (state, props) => ({
-      query: state.router.location.search,
+      query: qs.parse(state.router.location.search.replace('?', '')),
       discodata_query: state.discodata_query,
-      discodata_resources: state.discodata_resources,
     }),
     {
       setQueryParam,
