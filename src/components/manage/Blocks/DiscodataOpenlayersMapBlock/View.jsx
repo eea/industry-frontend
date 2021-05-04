@@ -402,6 +402,7 @@ const OpenlayersMapView = (props) => {
       } else {
         options = splitBy(props.discodata_query.search[id], ',');
       }
+
       if (where.type === 'multiple') {
         options = isArray(options) ? options?.filter((option) => option) : [];
         const conditions = [];
@@ -415,7 +416,13 @@ const OpenlayersMapView = (props) => {
           where.sql = null;
         }
       } else {
-        where.sql = options ? where.sql.replace(/:options/g, options) : null;
+        if (id === 'reportingYear' && options) {
+          where.sql = options
+            ? where.sql.replace(/:options/g, options).replace(/'/g, '')
+            : null;
+        } else {
+          where.sql = options ? where.sql.replace(/:options/g, options) : null;
+        }
       }
       if (!where.sql) delete sitesSourceQuery.whereStatements[id];
     });
