@@ -2,7 +2,6 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Grid, Dropdown } from 'semantic-ui-react';
-import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
 import qs from 'querystring';
 import './style.css';
 
@@ -14,13 +13,14 @@ const getQueryString = (query) => {
 const View = (props) => {
   const [siteHeader, setSiteHeader] = React.useState({});
   const { provider_data = {} } = props;
-  const query = { ...props.query, ...props.discodata_query.search };
+  const query = { ...props.query };
   const siteReportingYear = parseInt(query.siteReportingYear || '');
   const index = provider_data?.euregReportingYear?.indexOf(siteReportingYear);
 
-  const reportingYears = provider_data.euregReportingYear?.length
+  const reportingYears = provider_data?.euregReportingYear?.length
     ? provider_data.euregReportingYear
         .filter((year) => year)
+        .sort()
         .map((year) => ({
           key: year,
           value: year,
@@ -131,11 +131,6 @@ const View = (props) => {
                       ignoreScrollBehavior: true,
                     },
                   });
-                  props.setQueryParam({
-                    queryParam: {
-                      siteReportingYear: data.value,
-                    },
-                  });
                 }}
                 placeholder={'Select'}
                 options={reportingYears}
@@ -153,14 +148,7 @@ const View = (props) => {
 };
 
 export default compose(
-  connect(
-    (state, props) => ({
-      query: qs.parse(state.router.location.search.replace('?', '')),
-      discodata_query: state.discodata_query,
-    }),
-    {
-      setQueryParam,
-      deleteQueryParam,
-    },
-  ),
+  connect((state, props) => ({
+    query: qs.parse(state.router.location.search.replace('?', '')),
+  })),
 )(View);

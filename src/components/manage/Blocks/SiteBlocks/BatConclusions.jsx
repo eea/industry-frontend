@@ -27,7 +27,7 @@ const View = (props) => {
           content="Number of individual conclusions that indicate which techniques or combinations of techniques are BAT for achieving a specific environmental objective"
           trigger={
             <div className="popup-svg">
-              <Icon name={infoSVG} size={20} color="#D63D27" />
+              <Icon name={infoSVG} size="20px" color="#D63D27" />
             </div>
           }
         />
@@ -86,7 +86,7 @@ const View = (props) => {
                                             ? downSVG
                                             : rightSVG
                                         }
-                                        size={20}
+                                        size="20px"
                                         color="#D63D27"
                                         onClick={() => {
                                           if (

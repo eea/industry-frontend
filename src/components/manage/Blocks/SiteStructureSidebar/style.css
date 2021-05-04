@@ -2,7 +2,6 @@
   flex-flow: column;
   border-bottom: none;
   background: transparent;
-  min-height: 800px;
 }
 
 .sidebar-block .ui.menu .ui.menu {
@@ -118,8 +117,4 @@
 .sidebar-block .ui.menu .item.active.depth__3 {
   color: #333333;
   /* font-weight: bold;; */
-}
-
-.permiting-authority .info {
-  margin-bottom: 1rem;
 }

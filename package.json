@@ -45,6 +45,7 @@
     "volto-datablocks",
     "volto-embed",
     "volto-addons",
+    "@eeacms/volto-tableau",
     "@eeacms/volto-block-style",
     "@eeacms/volto-tabs-block"
   ],
@@ -66,6 +67,7 @@
     "react-iframe": "^1.8.0",
     "react-tooltip": "^4.2.9",
     "react-visibility-sensor": "^5.1.1",
+    "tableau-api-js": "github:eea/tableau-api-js#1.1.0",
     "volto-slate": "github:eea/volto-slate#2.4.0"
   },
   "devDependencies": {

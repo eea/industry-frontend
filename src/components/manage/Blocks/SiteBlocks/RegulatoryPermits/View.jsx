@@ -18,7 +18,7 @@ const getAllIndexes = (arr, val) => {
 const View = (props) => {
   const [permits, setPermits] = React.useState([]);
   const { provider_data = {} } = props;
-  const query = { ...props.query, ...props.discodata_query.search };
+  const query = { ...props.query };
   const siteReportingYear = parseInt(query.siteReportingYear || '');
 
   React.useEffect(() => {
@@ -94,6 +94,5 @@ const View = (props) => {
 export default compose(
   connect((state, props) => ({
     query: qs.parse(state.router.location.search.replace('?', '')),
-    discodata_query: state.discodata_query,
   })),
 )(View);

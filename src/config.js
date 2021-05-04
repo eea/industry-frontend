@@ -70,8 +70,8 @@ import DummyBlockView from '~/components/manage/Blocks/DummyBlock/View';
 import DiscodataTableBlockEdit from '~/components/manage/Blocks/DiscodataTableBlock/Edit';
 import DiscodataTableBlockView from '~/components/manage/Blocks/DiscodataTableBlock/View';
 
-import DiscodataComponentsBlockEdit from '~/components/manage/Blocks/DiscodataComponentsBlock/Edit';
-import DiscodataComponentsBlockView from '~/components/manage/Blocks/DiscodataComponentsBlock/View';
+// import DiscodataComponentsBlockEdit from '~/components/manage/Blocks/DiscodataComponentsBlock/Edit';
+// import DiscodataComponentsBlockView from '~/components/manage/Blocks/DiscodataComponentsBlock/View';
 
 import TextEdit from '~/components/manage/Blocks/DiscodataComponents/Text/Edit';
 import TextView from '~/components/manage/Blocks/DiscodataComponents/Text/View';
@@ -91,6 +91,7 @@ import ListView from '~/components/manage/Blocks/DiscodataComponents/List/View';
 import BlocksWidget from '~/components/manage/Widgets/BlocksWidget';
 import QueryParametersListWidget from '~/components/manage/Blocks/DiscodataComponents/Widgets/QueryParametersListWidget';
 
+import installSiteTableau from '~/components/manage/Blocks/SiteTableau';
 import installSiteStructureSidebar from '~/components/manage/Blocks/SiteStructureSidebar';
 import installSiteHeader from '~/components/manage/Blocks/SiteBlocks/Header';
 import installEnvironmentalSiteDetails from '~/components/manage/Blocks/SiteBlocks/EnvironmentalSiteDetails';
@@ -358,6 +359,7 @@ export default function applyConfig(config) {
     excludeFromNavigation: ['/industrial-site'],
     metaDescription: 'European Environment Agency',
     matomoSiteId: 48,
+    tableauVersion: '2.3.0',
   };
 
   config.portlets = {
@@ -372,6 +374,7 @@ export default function applyConfig(config) {
   ];
 
   return [
+    installSiteTableau,
     installSiteStructureSidebar,
     installSiteHeader,
     installEnvironmentalSiteDetails,

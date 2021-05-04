@@ -8,7 +8,7 @@ import '../style.css';
 const View = (props) => {
   const [lcp, setLcp] = React.useState({});
   const { provider_data = {} } = props;
-  const query = { ...props.query, ...props.discodata_query.search };
+  const query = { ...props.query };
   const { lcpInspireId = null } = query;
   const siteReportingYear = parseInt(query.siteReportingYear || '');
   const index = provider_data?.euregReportingYear?.indexOf(siteReportingYear);
@@ -72,6 +72,5 @@ const View = (props) => {
 export default compose(
   connect((state, props) => ({
     query: qs.parse(state.router.location.search.replace('?', '')),
-    discodata_query: state.discodata_query,
   })),
 )(View);

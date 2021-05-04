@@ -144,7 +144,7 @@ const OpenlayersMapView = (props) => {
   const siteTerm =
     filterSource !== 'query_params'
       ? props.discodata_query.search.siteTerm || null
-      : props.discodata_query.search[queryParams?.siteName?.param] || null;
+      : props.query.siteName || null;
 
   useEffect(() => {
     if (__CLIENT__ && document) {
@@ -363,7 +363,8 @@ const OpenlayersMapView = (props) => {
         },
         // Reporting year
         reportingYear: {
-          sql: `(Site_reporting_year IN (:options))`,
+          sql: `(Site_reporting_year = :options)`,
+          type: 'multiple',
         },
         // Plant type
         plantTypes: {
@@ -416,13 +417,7 @@ const OpenlayersMapView = (props) => {
           where.sql = null;
         }
       } else {
-        if (id === 'reportingYear' && options) {
-          where.sql = options
-            ? where.sql.replace(/:options/g, options).replace(/'/g, '')
-            : null;
-        } else {
-          where.sql = options ? where.sql.replace(/:options/g, options) : null;
-        }
+        where.sql = options ? where.sql.replace(/:options/g, options) : null;
       }
       if (!where.sql) delete sitesSourceQuery.whereStatements[id];
     });
@@ -1441,7 +1436,7 @@ const OpenlayersMapView = (props) => {
 export default compose(
   connect(
     (state, props) => ({
-      query: state.router.location.search,
+      query: qs.parse(state.router.location.search.replace('?', '')),
       content:
         state.prefetch?.[state.router.location.pathname] || state.content.data,
       discodata_query: state.discodata_query,

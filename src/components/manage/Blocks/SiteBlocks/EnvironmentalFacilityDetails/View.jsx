@@ -1,7 +1,6 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
 import CompetentAuthority from '../CompetentAuthority';
 import { getDate } from '../helpers';
 import qs from 'querystring';
@@ -19,7 +18,7 @@ const getAllIndexes = (arr, val) => {
 const View = (props) => {
   const [facilities, setFacilities] = React.useState([]);
   const { provider_data = {} } = props;
-  const query = { ...props.query, ...props.discodata_query.search };
+  const query = { ...props.query };
   const siteReportingYear = parseInt(query.siteReportingYear || '');
 
   const competentAuthority = facilities
@@ -74,14 +73,7 @@ const View = (props) => {
 };
 
 export default compose(
-  connect(
-    (state, props) => ({
-      query: qs.parse(state.router.location.search.replace('?', '')),
-      discodata_query: state.discodata_query,
-    }),
-    {
-      setQueryParam,
-      deleteQueryParam,
-    },
-  ),
+  connect((state, props) => ({
+    query: qs.parse(state.router.location.search.replace('?', '')),
+  })),
 )(View);

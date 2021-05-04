@@ -3,7 +3,7 @@
  * @module components/theme/View/DefaultView
  */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -13,7 +13,6 @@ import { defineMessages, injectIntl } from 'react-intl';
 import { Container, Image } from 'semantic-ui-react';
 import { map } from 'lodash';
 import qs from 'query-string';
-import { setQueryParam } from 'volto-datablocks/actions';
 
 import config from '@plone/volto/registry';
 
@@ -37,30 +36,17 @@ const messages = defineMessages({
  * @param {Object} content Content object.
  * @returns {string} Markup of the component.
  */
-const DefaultView = ({
-  content,
-  intl,
-  location,
-  discodata_query,
-  query,
-  setQueryParam,
-}) => {
+const DefaultView = ({ content, intl, location, query }) => {
   const [mounted, setMounted] = useState(false);
   const history = useHistory();
   const blocksFieldname = getBlocksFieldname(content);
   const blocksLayoutFieldname = getBlocksLayoutFieldname(content);
   const contentTypeBlocks = content['@components']?.layout?.[blocksFieldname];
-  const hash = location.hash.replace('#', '');
-  const timer = useRef(null);
-  const clock = useRef(0);
-  const siteTemplateQuery = [
-    'siteInspireId',
-    'siteName',
-    'siteReportingYear',
-    // 'facilityInspireId',
-    // 'installationInspireId',
-    // 'lcpInspireId',
-  ];
+  const siteTemplateQuery = ['siteInspireId', 'siteName', 'siteReportingYear'];
+  const queryObj = { ...(query || {}) };
+
+  const hasRequiredQuery =
+    siteTemplateQuery.filter((key) => queryObj[key]).length !== 3;
 
   useEffect(() => {
     setMounted(true);
@@ -80,64 +66,17 @@ const DefaultView = ({
     /* eslint-disable-next-line */
   }, []);
 
-  // useEffect(() => {
-  //   if (
-  //     content['layout'] === 'default_view' &&
-  //     content['@type'] === 'site_template' &&
-  //     !discodata_query.search.siteInspireId &&
-  //     !query.siteInspireId
-  //   ) {
-  //     history.push('/browse/explore-data-map/map');
-  //     return;
-  //   }
-  //   if (
-  //     content['layout'] === 'default_view' &&
-  //     content['@type'] === 'site_template' &&
-  //     mounted
-  //   ) {
-  //     const queryParams = { ...query };
-  //     const missingQueryParams = {};
-
-  //     Object.keys(discodata_query.search)
-  //       .filter((key) => siteTemplateQuery.includes(key))
-  //       .forEach((key) => {
-  //         queryParams[key] = discodata_query.search[key];
-  //       });
-
-  //     Object.keys(query)
-  //       .filter(
-  //         (key) =>
-  //           siteTemplateQuery.includes(key) && !discodata_query.search[key],
-  //       )
-  //       .forEach((key) => {
-  //         if (key === 'siteReportingYear') {
-  //           missingQueryParams[key] = parseInt(query[key]);
-  //         } else {
-  //           missingQueryParams[key] = query[key];
-  //         }
-  //       });
-
-  //     if (Object.keys(missingQueryParams).length) {
-  //       setQueryParam({
-  //         queryParam: { ...missingQueryParams },
-  //       });
-  //     }
-
-  //     if (
-  //       Object.keys(queryParams).filter(
-  //         (key) =>
-  //           JSON.stringify(queryParams[key]) !== JSON.stringify(query[key]),
-  //       ).length
-  //     ) {
-  //       history.push(
-  //         `${location.pathname.replace(/\/$/, '')}?${qs.stringify(
-  //           queryParams,
-  //         )}`,
-  //       );
-  //     }
-  //   }
-  //   /* eslint-disable-next-line */
-  // }, [mounted, content?.['@id']]);
+  useEffect(() => {
+    if (
+      content['layout'] === 'default_view' &&
+      content['@type'] === 'site_template' &&
+      hasRequiredQuery
+    ) {
+      history.push('/browse/explore-data-map/map');
+      return;
+    }
+    /* eslint-disable-next-line */
+  }, [mounted, content?.['@id']]);
 
   return hasBlocksData(content) ? (
     <div id="page-document" className="ui container">
@@ -229,11 +168,7 @@ DefaultView.propTypes = {
 };
 
 export default compose(
-  connect(
-    (state, props) => ({
-      discodata_query: state.discodata_query,
-      query: qs.parse(state.router.location.search),
-    }),
-    { setQueryParam },
-  ),
+  connect((state, props) => ({
+    query: qs.parse(state.router.location.search.replace('?', '')),
+  })),
 )(injectIntl(DefaultView));

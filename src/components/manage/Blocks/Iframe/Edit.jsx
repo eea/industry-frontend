@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import _uniqueId from 'lodash/uniqueId';
@@ -151,18 +151,17 @@ const Edit = (props) => {
     schema: getSchema({ ...props, providerUrl: config.settings.providerUrl }),
     id: _uniqueId('block_'),
   });
-  // useEffect(() => {
 
-  // }, [discodata_query, flags]);
   return (
     <div>
+      <View {...props} id={state.id} mode="edit" />
+
       <RenderFields
         schema={state.schema}
         {...props}
         title="Iframe"
         noValueKey={true}
       />
-      <View {...props} id={state.id} mode="edit" />
     </div>
   );
 };

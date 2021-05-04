@@ -204,7 +204,7 @@ const View = ({ content, ...props }) => {
             <div className="header-tooltip">
               <h3 className={cx('blue', titleClassName)}>{title}</h3>
               <span className="floating-icon" data-tip={'This is a tooltip'}>
-                <Icon name={infoSVG} size={20} color="#D63D27" />
+                <Icon name={infoSVG} size="20px" color="#D63D27" />
               </span>
             </div>
           ) : title ? (

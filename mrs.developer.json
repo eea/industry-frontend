@@ -38,6 +38,13 @@
     "package": "@eeacms/volto-grid-block",
     "develop": true
   },
+  "volto-tableau": {
+    "url": "https://github.com/eea/volto-tableau.git",
+    "path": "src",
+    "package": "@eeacms/volto-tableau",
+    "branch": "master",
+    "develop": true
+  },
   "volto-tabs-block": {
     "url": "https://github.com/eea/volto-tabs-block.git",
     "path": "src",

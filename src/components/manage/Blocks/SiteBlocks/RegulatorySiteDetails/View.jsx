@@ -3,7 +3,6 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Grid, Popup } from 'semantic-ui-react';
 import Icon from '@plone/volto/components/theme/Icon/Icon';
-import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
 import infoSVG from '@plone/volto/icons/info.svg';
 import qs from 'querystring';
 import '../style.css';
@@ -11,7 +10,7 @@ import '../style.css';
 const View = (props) => {
   const [siteDetails, setSiteDetails] = React.useState({});
   const { provider_data = {} } = props;
-  const query = { ...props.query, ...props.discodata_query.search };
+  const query = { ...props.query };
   const siteReportingYear = parseInt(query.siteReportingYear || '');
   const index = provider_data?.euregReportingYear?.indexOf(siteReportingYear);
 
@@ -37,7 +36,7 @@ const View = (props) => {
           content="Information regarding the facilities included in the industrial site"
           trigger={
             <div className="popup-svg">
-              <Icon name={infoSVG} size={20} color="#D63D27" />
+              <Icon name={infoSVG} size="20px" color="#D63D27" />
             </div>
           }
         />
@@ -63,14 +62,7 @@ const View = (props) => {
 };
 
 export default compose(
-  connect(
-    (state, props) => ({
-      query: qs.parse(state.router.location.search.replace('?', '')),
-      discodata_query: state.discodata_query,
-    }),
-    {
-      setQueryParam,
-      deleteQueryParam,
-    },
-  ),
+  connect((state, props) => ({
+    query: qs.parse(state.router.location.search.replace('?', '')),
+  })),
 )(View);

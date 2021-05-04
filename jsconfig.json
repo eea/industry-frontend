@@ -19,6 +19,9 @@
             "@eeacms/volto-grid-block": [
                 "addons/volto-grid-block/src"
             ],
+            "@eeacms/volto-tableau": [
+                "addons/volto-tableau/src"
+            ],
             "@eeacms/volto-tabs-block": [
                 "addons/volto-tabs-block/src"
             ]

@@ -72,7 +72,7 @@ export default ({ children, data = {}, block, onShow, ...rest }) => {
                         className="floating-icon mr-1"
                         data-tip={dataprotection.privacy_statement}
                       >
-                        <Icon name={infoSVG} size={20} color="#D63D27" />
+                        <Icon name={infoSVG} size="20px" color="#D63D27" />
                       </span>
                     ) : (
                       ''

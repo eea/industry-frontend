@@ -16,7 +16,7 @@ const CompetentAuthority = (props) => {
           content="Authority, body or bodies responsible for regulating the facility and reporting the associated E-PRTR data, as designated by the reporting country"
           trigger={
             <div className="popup-svg">
-              <Icon name={infoSVG} size={20} color="#ed776a" />
+              <Icon name={infoSVG} size="20px" color="#ed776a" />
             </div>
           }
         />
