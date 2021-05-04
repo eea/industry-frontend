@@ -879,7 +879,7 @@ const OpenlayersMapView = (props) => {
       sitesSource = new VectorSource({
         loader: function (extent, resolution, projection) {
           if (mounted.current && firstFilteringDone.current) {
-            let url = `https://services.arcgis.com/LcQjj2sL7Txk9Lag/arcgis/rest/services/SiteMap/FeatureServer/0/query/?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=${encodeURIComponent(
+            let url = `https://air.discomap.eea.europa.eu/arcgis/rest/services/Air/IED_SiteMap/FeatureServer/0/query/?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=${encodeURIComponent(
               '{"xmin":' +
                 extent[0] +
                 ',"ymin":' +
@@ -989,7 +989,7 @@ const OpenlayersMapView = (props) => {
       if (hasRegionsFeatures) {
         regionsSource = new VectorSource({
           loader: function (extent, resolution, projection) {
-            let url = `https://services.arcgis.com/LcQjj2sL7Txk9Lag/ArcGIS/rest/services/ly_IED_SiteClusters_WM/FeatureServer/0/query/?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=${encodeURIComponent(
+            let url = `https://air.discomap.eea.europa.eu/arcgis/rest/services/Air/IED_Clusters_WM/FeatureServer/0/query/?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=${encodeURIComponent(
               '{"xmin":' +
                 extent[0] +
                 ',"ymin":' +
@@ -1044,7 +1044,7 @@ const OpenlayersMapView = (props) => {
           }),
         }),
         visible: true,
-        title: 'ly_IED_SiteMap_WM',
+        title: 'ied_SiteMap',
       });
       //  Regions source layerq
       if (hasRegionsFeatures) {
