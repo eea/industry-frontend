@@ -2,6 +2,7 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Grid, Dropdown } from 'semantic-ui-react';
+import { setQueryParam } from 'volto-datablocks/actions';
 import qs from 'querystring';
 import './style.css';
 
@@ -10,12 +11,23 @@ const getQueryString = (query) => {
   return '?' + qs.stringify(query);
 };
 
+const getSiteByYear = (provider_data, year) => {
+  const index = provider_data?.euregReportingYear?.indexOf(year);
+  const keys = Object.keys(provider_data || {});
+  const site = {};
+  if (keys?.length) {
+    keys.forEach((key) => {
+      site[key] = provider_data[key][index];
+    });
+  }
+  return site;
+};
+
 const View = (props) => {
   const [siteHeader, setSiteHeader] = React.useState({});
   const { provider_data = {} } = props;
   const query = { ...props.query };
   const siteReportingYear = parseInt(query.siteReportingYear || '');
-  const index = provider_data?.euregReportingYear?.indexOf(siteReportingYear);
 
   const reportingYears = provider_data?.euregReportingYear?.length
     ? provider_data.euregReportingYear
@@ -29,15 +41,32 @@ const View = (props) => {
     : [];
 
   React.useEffect(() => {
-    const keys = Object.keys(provider_data || {});
-    if (keys?.length) {
-      const newSiteHeader = {};
-      keys.forEach((key) => {
-        newSiteHeader[key] = provider_data[key][index];
+    if (
+      siteHeader?.siteName &&
+      siteReportingYear &&
+      (siteHeader.siteName !== props.discodata_query.siteTerm ||
+        siteReportingYear !== props.discodata_query.reportingYear?.[0])
+    ) {
+      props.setQueryParam({
+        queryParam: {
+          siteTerm: siteHeader.siteName,
+          reportingYear: [siteReportingYear],
+          ...(props.discodata_query.siteTerm
+            ? {
+                filtersCounter:
+                  (props.discodata_query['filtersCounter'] || 0) + 1,
+              }
+            : {}),
+        },
       });
-      setSiteHeader(newSiteHeader);
     }
-  }, [provider_data, index]);
+    /* eslint-disable-next-line */
+  }, [JSON.stringify(siteHeader)]);
+
+  React.useEffect(() => {
+    setSiteHeader(getSiteByYear(provider_data, siteReportingYear));
+    /* eslint-disable-next-line */
+  }, [JSON.stringify(provider_data), siteReportingYear]);
 
   return props.mode === 'edit' ? (
     <p>Site header</p>
@@ -121,11 +150,13 @@ const View = (props) => {
               <Dropdown
                 selection
                 onChange={(event, data) => {
+                  const newSite = getSiteByYear(provider_data, data.value);
                   props.history.push({
                     pathname: props.location.pathname,
                     search: getQueryString({
                       ...props.query,
                       siteReportingYear: data.value,
+                      siteName: newSite.siteName,
                     }),
                     state: {
                       ignoreScrollBehavior: true,
@@ -148,7 +179,11 @@ const View = (props) => {
 };
 
 export default compose(
-  connect((state, props) => ({
-    query: qs.parse(state.router.location.search.replace('?', '')),
-  })),
+  connect(
+    (state, props) => ({
+      query: qs.parse(state.router.location.search.replace('?', '')),
+      discodata_query: state.discodata_query.search,
+    }),
+    { setQueryParam },
+  ),
 )(View);

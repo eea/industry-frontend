@@ -4,13 +4,14 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Header, Modal, Select, Input, List } from 'semantic-ui-react';
 import { Portal } from 'react-portal';
+import _uniqueId from 'lodash/uniqueId';
+import axios from 'axios';
+import Highlighter from 'react-highlight-words';
 import { Icon } from '@plone/volto/components';
 import { DiscodataSqlBuilderView } from 'volto-datablocks/components';
 import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
 import config from '@plone/volto/registry';
-import _uniqueId from 'lodash/uniqueId';
-import axios from 'axios';
-import Highlighter from 'react-highlight-words';
+import { getEncodedQueryString } from '~/utils';
 
 import menuSVG from '@plone/volto/icons/menu-alt.svg';
 import circlePlus from '@plone/volto/icons/circle-plus.svg';
@@ -523,7 +524,10 @@ const View = ({ content, ...props }) => {
                     }) || []),
                 ],
               };
-              if (metadata[index]?.key === 'reporting_years') {
+              if (
+                metadata[index]?.key === 'reporting_years' &&
+                !props.discodata_query.search.reportingYear?.length
+              ) {
                 const reportingYears =
                   res.data?.results
                     ?.map((item) => item.reportingYear)
@@ -534,7 +538,10 @@ const View = ({ content, ...props }) => {
                   ];
                 }
               }
-              if (metadata[index]?.key === 'countries') {
+              if (
+                metadata[index]?.key === 'countries' &&
+                !props.discodata_query.search.siteCountryNames?.length
+              ) {
                 newQueryParams.siteCountryNames = res.data?.results || [];
               }
             });
@@ -831,7 +838,7 @@ const View = ({ content, ...props }) => {
       sqls.forEach((sql) => {
         promises.push({
           get: axios.get(
-            providerUrl + `?query=${encodeURI(sql.query)}&p=1&nrOfHits=6`,
+            providerUrl + `?${getEncodedQueryString(sql.query)}&p=1&nrOfHits=6`,
           ),
           metadata: sql,
         });

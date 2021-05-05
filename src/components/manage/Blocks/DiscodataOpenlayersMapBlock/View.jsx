@@ -12,6 +12,7 @@ import axios from 'axios';
 import jsonp from 'jsonp';
 import config from '@plone/volto/registry';
 import { isArray } from 'lodash';
+import { getEncodedQueryString } from '~/utils';
 // VOLTO
 import { Icon as VoltoIcon, Toast } from '@plone/volto/components';
 import PrivacyProtection from './PrivacyProtection';
@@ -67,9 +68,7 @@ let Map,
   tile,
   Control,
   defaultsControls,
-  defaultsInteractions,
-  containsExtent,
-  VOID;
+  defaultsInteractions;
 let OL_LOADED = false;
 
 const OpenlayersMapView = (props) => {
@@ -173,8 +172,6 @@ const OpenlayersMapView = (props) => {
         Control = require('ol/control/Control.js').default;
         defaultsControls = require('ol/control.js').defaults;
         defaultsInteractions = require('ol/interaction.js').defaults;
-        containsExtent = require('ol/extent.js').containsExtent;
-        VOID = require('ol/functions').VOID;
         OL_LOADED = true;
       }
 
@@ -235,8 +232,8 @@ const OpenlayersMapView = (props) => {
             radius: 3,
             fill: new Fill({ color: '#00FF00' }),
             stroke: new Stroke({ color: '#6A6A6A', width: 1 }),
-            zIndex: 1,
           }),
+          zIndex: 1,
         }),
       );
     }
@@ -266,6 +263,7 @@ const OpenlayersMapView = (props) => {
         onSourceChange();
       } else if (['byAdvancedFilters'].includes(state.updateMapPosition)) {
         onSourceChange();
+        // TODO: verifica nebunii
         if (!state.map.sitesSourceLayer.getVisible()) {
           state.map.sitesSourceLayer.setVisible(true);
         }
@@ -293,6 +291,7 @@ const OpenlayersMapView = (props) => {
       renderMap();
       setMapRendered(true);
     }
+    /* eslint-disable-next-line */
   }, [prepareMapRender]);
 
   if (mapRendered && mounted.current && !firstFilteringUpdate) {
@@ -397,11 +396,11 @@ const OpenlayersMapView = (props) => {
     Object.entries(sitesSourceQuery.whereStatements).forEach(([id, where]) => {
       let options;
       if (['string', 'multiple'].includes(where.type)) {
-        options = props.discodata_query.search[id];
-      } else if (!props.discodata_query.search[id]) {
+        options = props.query[id];
+      } else if (!props.query[id]) {
         options = null;
       } else {
-        options = splitBy(props.discodata_query.search[id], ',');
+        options = splitBy(props.query[id], ',');
       }
 
       if (where.type === 'multiple') {
@@ -428,8 +427,8 @@ const OpenlayersMapView = (props) => {
 
     if (filterSource !== 'query_params') {
       if (
-        props.discodata_query.search.advancedFiltering &&
-        props.discodata_query.search.nuts_latest?.length > 0
+        props.query.advancedFiltering &&
+        props.query.nuts_latest?.length > 0
       ) {
         updateMapPosition = 'byAdvancedFilters';
       } else {
@@ -576,14 +575,12 @@ const OpenlayersMapView = (props) => {
     if (stateRef.current.siteTerm) {
       axios
         .get(
-          encodeURI(
-            `${
-              config.settings.providerUrl
-            }?query=SELECT shape_wm.STX as x, shape_wm.STY as y, Site_reporting_year from [IED].[latest].[SiteMap] WHERE siteName COLLATE Latin1_General_CI_AI LIKE '%${stateRef.current.siteTerm.replace(
+          `${config.settings.providerUrl}?${getEncodedQueryString(
+            `SELECT shape_wm.STX as x, shape_wm.STY as y, Site_reporting_year, siteName from [IED].[latest].[SiteMap] WHERE siteName COLLATE Latin1_General_CI_AI LIKE '%${stateRef.current.siteTerm.replace(
               "'",
               "''",
             )}%' ORDER BY [Site_reporting_year] DESC`,
-          ),
+          )}`,
         )
         .then((response) => {
           const data = JSON.parse(response.request.response);
@@ -649,19 +646,17 @@ const OpenlayersMapView = (props) => {
     } else {
       axios
         .get(
-          encodeURI(
-            `${config.settings.providerUrl}?query=SELECT
+          `${config.settings.providerUrl}?${getEncodedQueryString(`SELECT
             MIN(shape_wm.STX) AS MIN_X,
             MIN(shape_wm.STY) AS MIN_Y,
             MAX(shape_wm.STX) AS MAX_X,
             MAX(shape_wm.STY) AS MAX_Y
-        FROM [IED].[latest].[SiteMap]
-        ${
-          stateRef.current.map.sitesSourceQuery.where
-            ? 'WHERE ' + stateRef.current.map.sitesSourceQuery.where
-            : ''
-        }`,
-          ),
+          FROM [IED].[latest].[SiteMap]
+          ${
+            stateRef.current.map.sitesSourceQuery.where
+              ? 'WHERE ' + stateRef.current.map.sitesSourceQuery.where
+              : ''
+          }`)}`,
         )
         .then((response) => {
           const data = JSON.parse(response.request.response);
@@ -880,6 +875,7 @@ const OpenlayersMapView = (props) => {
       let reqs = 0;
       sitesSource = new VectorSource({
         loader: function (extent, resolution, projection) {
+          this.resolution = resolution;
           if (mounted.current && firstFilteringDone.current) {
             let url = `https://air.discomap.eea.europa.eu/arcgis/rest/services/Air/IED_SiteMap/FeatureServer/0/query/?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=${encodeURIComponent(
               '{"xmin":' +
@@ -905,9 +901,7 @@ const OpenlayersMapView = (props) => {
               },
               (error, response) => {
                 reqs--;
-                if (error) {
-                  console.log(error.message);
-                } else {
+                if (!error) {
                   let features = esrijsonFormat.readFeatures(response, {
                     featureProjection: projection,
                   });
@@ -924,14 +918,11 @@ const OpenlayersMapView = (props) => {
         },
         strategy: function (extent, resolution) {
           const tileGrid = createXYZ({
-            tileSize: 512,
-            maxZoom: zoomSwitch,
+            tileSize: 256,
           });
-
           if (this.resolution && this.resolution !== resolution) {
             this.loadedExtentsRtree_.clear();
           }
-
           let z = tileGrid.getZForResolution(resolution);
           let tileRange = tileGrid.getTileRangeForExtentAndZ(extent, z);
           /** @type {Array<import("./extent.js").Extent>} */
@@ -954,38 +945,6 @@ const OpenlayersMapView = (props) => {
           return extents;
         },
       });
-
-      sitesSource.loadFeatures = function (extent, resolution, projection) {
-        let loadedExtentsRtree = this.loadedExtentsRtree_;
-        let extentsToLoad = this.strategy_(extent, resolution);
-        this.loading = false;
-        let _loop_1 = function (i, ii) {
-          let extentToLoad = extentsToLoad[i];
-          let alreadyLoaded = loadedExtentsRtree.forEachInExtent(
-            extentToLoad,
-            /**
-             * @param {{extent: import("../extent.js").Extent}} object Object.
-             * @return {boolean} Contains.
-             */
-            function (object) {
-              return containsExtent(object.extent, extentToLoad);
-            },
-          );
-
-          if (!alreadyLoaded) {
-            this_1.loader_.call(this_1, extentToLoad, resolution, projection);
-            loadedExtentsRtree.insert(extentToLoad, {
-              extent: extentToLoad.slice(),
-            });
-            this_1.loading = this_1.loader_ !== VOID;
-          }
-        };
-        let this_1 = this;
-        for (let i = 0, ii = extentsToLoad.length; i < ii; ++i) {
-          _loop_1(i, ii);
-        }
-        this.resolution = resolution;
-      };
 
       //  Make regions source layer
       if (hasRegionsFeatures) {
@@ -1013,9 +972,7 @@ const OpenlayersMapView = (props) => {
                     : '') + '&callback',
               },
               (error, response) => {
-                if (error) {
-                  console.log(error.message);
-                } else {
+                if (!error) {
                   let features = esrijsonFormat.readFeatures(response, {
                     featureProjection: projection,
                   });
@@ -1028,7 +985,7 @@ const OpenlayersMapView = (props) => {
           },
           strategy: tile(
             createXYZ({
-              tileSize: 512,
+              tileSize: 256,
             }),
           ),
         });
@@ -1048,7 +1005,7 @@ const OpenlayersMapView = (props) => {
         visible: true,
         title: 'ied_SiteMap',
       });
-      //  Regions source layerq
+      //  Regions source layer
       if (hasRegionsFeatures) {
         regionsSourceLayer = new VectorLayer({
           source: regionsSource,
@@ -1096,9 +1053,8 @@ const OpenlayersMapView = (props) => {
             (position) => {
               return centerPosition(map, position, 12);
             },
-            (error) => {
-              console.log(error);
-            },
+            // Errors
+            () => {},
           );
         } else {
           map.getView().fit([extent[0], extent[1], extent[2], extent[3]]);
@@ -1113,10 +1069,14 @@ const OpenlayersMapView = (props) => {
             );
             setSelectedSite(closestFeature);
             selectedSiteCoordinates.current = null;
+          } else if (selectedSite) {
+            setSelectedSite(null);
           }
         }
       });
 
+      // TODO: REVIEW
+      // ==============
       if (hasPopups) {
         if (document && document.documentElement?.clientWidth > 500) {
           map.on('pointermove', function (evt) {
@@ -1190,35 +1150,10 @@ const OpenlayersMapView = (props) => {
           element: popupDetails,
         },
       });
+      // ==============
     }
   }
 
-  const setSiteQueryParams = () => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(
-          encodeURI(
-            `${config.settings.providerUrl}?query=SELECT DISTINCT siteId, siteInspireId FROM [IED].[latest].[FacilitiesPerSite] WHERE siteId LIKE '${state.popupDetails.properties.id}'`,
-          ),
-        )
-        .then((response) => {
-          const data = JSON.parse(response.request.response);
-          props.setQueryParam({
-            queryParam: {
-              siteInspireId: data.results[0].siteInspireId,
-              siteId: state.popupDetails.properties.id,
-              siteName: state.popupDetails.properties.siteName,
-              siteReportingYear:
-                state.popupDetails.properties.Site_reporting_year,
-            },
-          });
-          resolve(true);
-        })
-        .catch((error) => {
-          reject(false);
-        });
-    });
-  };
   if (!__CLIENT__) return '';
 
   const view = (
@@ -1371,8 +1306,9 @@ const OpenlayersMapView = (props) => {
               <Link
                 as="a"
                 className="solid dark-blue display-inline-block"
-                onClick={setSiteQueryParams}
-                to={`/industrial-site/environmental-information?siteInspireId=${state.popupDetails.properties.InspireSiteId}&siteName=${state.popupDetails.properties.siteName}&siteReportingYear=${state.popupDetails.properties.Site_reporting_year}`}
+                to={`/industrial-site/environmental-information?siteInspireId=${state.popupDetails.properties.InspireSiteId?.encoded()}&siteName=${state.popupDetails.properties.siteName?.encoded()}&siteReportingYear=${
+                  state.popupDetails.properties.Site_reporting_year
+                }`}
               >
                 Site Details
               </Link>
@@ -1392,9 +1328,8 @@ const OpenlayersMapView = (props) => {
                     (position) => {
                       return centerPosition(state.map.element, position, 12);
                     },
-                    (error) => {
-                      console.log(error);
-                    },
+                    // Error
+                    () => {},
                     { timeout: 10000 },
                   );
                 }
@@ -1436,7 +1371,10 @@ const OpenlayersMapView = (props) => {
 export default compose(
   connect(
     (state, props) => ({
-      query: qs.parse(state.router.location.search.replace('?', '')),
+      query: {
+        ...(state.discodata_query.search || {}),
+        ...(qs.parse(state.router.location.search.replace('?', '')) || {}),
+      },
       content:
         state.prefetch?.[state.router.location.pathname] || state.content.data,
       discodata_query: state.discodata_query,

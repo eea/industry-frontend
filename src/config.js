@@ -116,6 +116,12 @@ import worldSVG from '@plone/volto/icons/world.svg';
 
 // All your imports required for the config here BEFORE this line
 import '@plone/volto/config';
+import { getEncodedString } from '~/utils';
+
+// eslint-disable-next-line no-extend-native
+String.prototype.encoded = function encoded() {
+  return this ? getEncodedString(this) : '';
+};
 
 export default function applyConfig(config) {
   // Add here your project's configuration here by modifying `config` accordingly
