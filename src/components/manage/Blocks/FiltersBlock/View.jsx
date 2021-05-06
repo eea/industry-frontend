@@ -82,16 +82,18 @@ const View = ({ content, ...props }) => {
   useEffect(function () {
     mounted.current = true;
     setMountState(true);
+    document.addEventListener('mousedown', handleClickOutside, false);
     return () => {
       mounted.current = false;
       setMountState(false);
+      document.removeEventListener('mousedown', handleClickOutside, false);
     };
     /* eslint-disable-next-line */
   }, []);
 
   useEffect(() => {
     if (mounted.current && triggerSearch) {
-      submit();
+      submit(false, true);
       setTriggerSearch(false);
     }
     /* eslint-disable-next-line */
@@ -103,18 +105,6 @@ const View = ({ content, ...props }) => {
     }
     /* eslint-disable-next-line */
   }, [state.open]);
-
-  useEffect(() => {
-    // register eventListener on each state update
-    if (mounted.current) {
-      document.addEventListener('mousedown', handleClickOutside, false);
-    }
-    return () => {
-      // unregister eventListener
-      document.removeEventListener('mousedown', handleClickOutside, false);
-    };
-    /* eslint-disable-next-line */
-  }, [state]);
 
   useEffect(() => {
     if (mounted.current) {
@@ -435,6 +425,7 @@ const View = ({ content, ...props }) => {
         });
         setLoadingData(true);
       }
+      if (!promises?.length) return;
       Promise.all(promises)
         .then((response) => {
           if (mounted.current) {
@@ -625,7 +616,6 @@ const View = ({ content, ...props }) => {
       filtersToDelete.forEach((filter) => {
         newFilters[filter] = [];
       });
-
       setState({
         ...state,
         filters: { ...(newFilters || {}) },
@@ -883,7 +873,7 @@ const View = ({ content, ...props }) => {
     setSearchTerm(data.value);
   };
 
-  const submit = (advancedFiltering = false) => {
+  const submit = (advancedFiltering = false, search = false) => {
     const searchTermType =
       sitesResults.indexOf(searchTerm) > -1
         ? 'siteTerm'
@@ -945,9 +935,35 @@ const View = ({ content, ...props }) => {
             ? null
             : props.discodata_query.search['extent'],
         advancedFiltering,
+        ...(!search
+          ? {}
+          : {
+              siteCountry: [],
+              province: [],
+              region: [],
+              riverBasin: [],
+              nuts_regions: [],
+              nuts_latest: [],
+            }),
       },
     });
-    setState({ ...state, open: false });
+    setState({
+      ...state,
+      open: false,
+      filters: {
+        ...state.filters,
+        ...(!search
+          ? {}
+          : {
+              siteCountry: [null],
+              province: [null],
+              region: [null],
+              riverBasin: [null],
+              nuts_regions: [null],
+              nuts_latest: [null],
+            }),
+      },
+    });
   };
 
   const getNewExtent = (searchTerm) => {
@@ -1388,6 +1404,8 @@ const View = ({ content, ...props }) => {
                             );
                             props.setQueryParam({
                               queryParam: {
+                                locationTerm: null,
+                                siteTerm: null,
                                 advancedFiltering: true,
                                 filtersCounter: props.discodata_query.search[
                                   'filtersCounter'
@@ -1398,6 +1416,7 @@ const View = ({ content, ...props }) => {
                                   : 1,
                               },
                             });
+                            setSearchTerm('');
                           }}
                           placeholder={
                             state.filtersMeta['countries']?.placeholder
