@@ -23,6 +23,7 @@ export default (config) => {
       tablet: [981, 768],
       mobile: [767, 0],
     },
+    defaultProviderUrl: '/data-connectors/site-flags',
   };
   return config;
 };
