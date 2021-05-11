@@ -44,11 +44,7 @@ const View = (props) => {
     (breakpoint) => breakpoint.device === device,
   )[0]?.url;
   const url = breakpointUrl || data.url;
-  const disabled = disabledKey
-    ? !provider_data?.[disabledKey]?.[
-        provider_data?.siteReportingYear?.indexOf(query.siteReportingYear)
-      ]
-    : false;
+  const disabled = disabledKey ? !provider_data?.[disabledKey]?.[0] : false;
 
   React.useEffect(() => {
     setMounted(true);
