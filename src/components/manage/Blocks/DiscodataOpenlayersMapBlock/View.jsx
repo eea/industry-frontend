@@ -19,7 +19,7 @@ import PrivacyProtection from './PrivacyProtection';
 // VOLTO-DATABLOCKS
 import { setQueryParam } from 'volto-datablocks/actions';
 // SEMANTIC REACT UI
-import { Grid, Header } from 'semantic-ui-react';
+import { Grid, Header, Progress } from 'semantic-ui-react';
 // SVGs
 import clearSVG from '@plone/volto/icons/clear.svg';
 import navigationSVG from '@plone/volto/icons/navigation.svg';
@@ -104,6 +104,7 @@ const OpenlayersMapView = (props) => {
   const [mapRendered, setMapRendered] = useState(false);
   const [firstFilteringUpdate, setFirstFilteringUpdate] = useState(false);
   const [prepareMapRender, setPrepareMapRender] = useState(false);
+  const [loading, setLoading] = useState(false);
   const selectedSiteRef = useRef(null);
   const selectedSiteCoordinates = useRef(null);
   const regionsSourceWhere = useRef('');
@@ -147,7 +148,7 @@ const OpenlayersMapView = (props) => {
 
   useEffect(() => {
     if (__CLIENT__ && document) {
-      // MOuNT
+      // MOUNT
       if (!OL_LOADED) {
         Map = require('ol/Map').default;
         View = require('ol/View').default;
@@ -875,6 +876,7 @@ const OpenlayersMapView = (props) => {
       let reqs = 0;
       sitesSource = new VectorSource({
         loader: function (extent, resolution, projection) {
+          setLoading(true);
           this.resolution = resolution;
           if (mounted.current && firstFilteringDone.current) {
             let url = `https://air.discomap.eea.europa.eu/arcgis/rest/services/Air/IED_SiteMap/FeatureServer/0/query/?f=json&returnGeometry=true&spatialRel=esriSpatialRelIntersects&geometry=${encodeURIComponent(
@@ -908,10 +910,10 @@ const OpenlayersMapView = (props) => {
                   if (features.length > 0) {
                     sitesSource.addFeatures(features);
                   }
-                  sitesSource.dispatchEvent(
-                    new VectorSourceEvent('updateClosestFeature'),
-                  );
                 }
+                sitesSource.dispatchEvent(
+                  new VectorSourceEvent('updateClosestFeature'),
+                );
               },
             );
           }
@@ -1063,6 +1065,7 @@ const OpenlayersMapView = (props) => {
       //  Events
       sitesSource.on('updateClosestFeature', function (e) {
         if (!reqs && e.target.getState() === 'ready' && mounted.current) {
+          setLoading(false);
           if (selectedSiteCoordinates.current) {
             const closestFeature = sitesSource.getClosestFeatureToCoordinate(
               selectedSiteCoordinates.current,
@@ -1158,6 +1161,23 @@ const OpenlayersMapView = (props) => {
 
   const view = (
     <>
+      {loading ? (
+        <div className="loader">
+          <svg className="circular-loader" viewBox="25 25 50 50">
+            <circle
+              className="loader-path"
+              cx="50"
+              cy="50"
+              r="20"
+              fill="none"
+              stroke="#7C9AC0"
+              stroke-width="8"
+            />
+          </svg>
+        </div>
+      ) : (
+        ''
+      )}
       <div id="map" className="map" />
       <div id="popup" className="popup">
         {state.popup.element && (
