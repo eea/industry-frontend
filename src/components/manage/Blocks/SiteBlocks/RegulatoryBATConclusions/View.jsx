@@ -43,13 +43,16 @@ const View = (props) => {
             facility: provider_data['facilityInspireId'][index],
           };
         }
-        if (!newBatConclusions[installation][batConclusionName]) {
+        if (
+          batConclusionName &&
+          !newBatConclusions[installation][batConclusionName]
+        ) {
           newBatConclusions[installation][batConclusionName] = [];
+          keys.forEach((key) => {
+            obj[key] = provider_data[key][index];
+          });
+          newBatConclusions[installation][batConclusionName].push({ ...obj });
         }
-        keys.forEach((key) => {
-          obj[key] = provider_data[key][index];
-        });
-        newBatConclusions[installation][batConclusionName].push({ ...obj });
       });
 
       Object.keys(newBatConclusions)

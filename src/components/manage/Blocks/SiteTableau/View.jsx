@@ -24,6 +24,7 @@ const getDevice = (config, width) => {
 
 const View = (props) => {
   const [error, setError] = React.useState(null);
+  const [loaded, setLoaded] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
   const [extraFilters, setExtraFilters] = React.useState({});
   const { data = {}, query = {}, screen = {}, provider_data = null } = props;
@@ -80,8 +81,8 @@ const View = (props) => {
       )}
       {!disabled ? (
         <>
-          {title ? <h3 className="tableau-title">{title}</h3> : ''}
-          {description ? (
+          {loaded && title ? <h3 className="tableau-title">{title}</h3> : ''}
+          {loaded && description ? (
             <p className="tableau-description">{description}</p>
           ) : (
             ''
@@ -92,7 +93,9 @@ const View = (props) => {
             extraFilters={extraFilters}
             extraOptions={{ device }}
             error={error}
+            loaded={loaded}
             setError={setError}
+            setLoaded={setLoaded}
             version={version}
             url={url}
           />
@@ -112,6 +115,7 @@ export default compose(
       ...(qs.parse(state.router.location?.search?.replace('?', '')) || {}),
       ...(state.discodata_query?.search || {}),
     },
+    tableau: state.tableau,
     screen: state.screen,
   })),
 )(connectBlockToProviderData(View));

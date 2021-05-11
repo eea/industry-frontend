@@ -8,6 +8,15 @@ import infoSVG from '@plone/volto/icons/info.svg';
 import rightSVG from '@plone/volto/icons/right-key.svg';
 import downSVG from '@plone/volto/icons/down-key.svg';
 
+const hasConclusions = (data, installations) => {
+  if (!installations.length) return false;
+  for (let i = 0; i < installations.length; i++) {
+    const conclusions = Object.keys(data[installations[i]] || {});
+    if (conclusions.length) return true;
+  }
+  return false;
+};
+
 const View = (props) => {
   const [activeAels, setActiveAels] = React.useState({});
   const { data = {}, installationsNth = {}, entity = '' } = props;
@@ -18,7 +27,7 @@ const View = (props) => {
       <div
         className={cx({
           title: true,
-          marginless: !installations.length,
+          marginless: !hasConclusions(data, installations),
         })}
       >
         <h3 className="blue">BAT conclusions</h3>
@@ -33,12 +42,12 @@ const View = (props) => {
         />
       </div>
 
-      {installations.length ? (
+      {hasConclusions(data, installations) ? (
         <div className="bat-conclusions-wrapper">
           {installations.map((installation) => {
             const conclusions = Object.keys(data[installation] || {}).sort();
 
-            return (
+            return conclusions.length ? (
               <div
                 key={installation}
                 className="installation-conclusions-wrapper"
@@ -180,13 +189,13 @@ const View = (props) => {
                     })
                   : ''}
               </div>
+            ) : (
+              ''
             );
           })}
         </div>
       ) : (
-        <p className="info">
-          No information provided about competent authority
-        </p>
+        <p className="info">No information provided about bat conclusions</p>
       )}
     </div>
   );
