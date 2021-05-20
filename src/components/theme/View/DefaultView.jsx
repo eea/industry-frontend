@@ -72,7 +72,7 @@ const DefaultView = ({ content, intl, location, query }) => {
       content['@type'] === 'site_template' &&
       hasRequiredQuery
     ) {
-      history.push('/browse/explore-data-map/map');
+      history.push('/explore/explore-data-map/map');
       return;
     }
     /* eslint-disable-next-line */

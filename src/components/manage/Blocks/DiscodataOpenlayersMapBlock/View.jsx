@@ -63,12 +63,14 @@ let Map,
   Style,
   TileLayer,
   VectorLayer,
+  VectorImage,
   transformExtent,
   Group,
   tile,
   Control,
   defaultsControls,
-  defaultsInteractions;
+  defaultsInteractions,
+  olExtent;
 let OL_LOADED = false;
 
 const OpenlayersMapView = (props) => {
@@ -167,12 +169,14 @@ const OpenlayersMapView = (props) => {
         Style = require('ol/style/Style.js').default;
         TileLayer = require('ol/layer/Tile.js').default;
         VectorLayer = require('ol/layer/Vector.js').default;
+        VectorImage = require('ol/layer/VectorImage.js').default;
         transformExtent = require('ol/proj').transformExtent;
         Group = require('ol/layer/Group.js').default;
         tile = require('ol/loadingstrategy').tile;
         Control = require('ol/control/Control.js').default;
         defaultsControls = require('ol/control.js').defaults;
         defaultsInteractions = require('ol/interaction.js').defaults;
+        olExtent = require('ol/extent.js').defaults;
         OL_LOADED = true;
       }
 
@@ -463,6 +467,7 @@ const OpenlayersMapView = (props) => {
     if (document.getElementById('map')) {
       document.getElementById('map').innerHTML = '';
       const map = new Map({
+        renderer: 'webgl',
         controls: draggable
           ? defaultsControls().extend([new ExtraControl.current(hasSidebar)])
           : [],
@@ -920,11 +925,8 @@ const OpenlayersMapView = (props) => {
         },
         strategy: function (extent, resolution) {
           const tileGrid = createXYZ({
-            tileSize: 256,
+            tileSize: 512,
           });
-          if (this.resolution && this.resolution !== resolution) {
-            this.loadedExtentsRtree_.clear();
-          }
           let z = tileGrid.getZForResolution(resolution);
           let tileRange = tileGrid.getTileRangeForExtentAndZ(extent, z);
           /** @type {Array<import("./extent.js").Extent>} */
@@ -943,6 +945,22 @@ const OpenlayersMapView = (props) => {
             ) {
               extents.push(tileGrid.getTileCoordExtent(tileCoord));
             }
+          }
+          if (this.resolution && this.resolution !== resolution) {
+            extents.forEach((newExtent) => {
+              this.loadedExtentsRtree_.forEach((loadedExtent) => {
+                const bigExtent = loadedExtent.extent;
+                if (
+                  olExtent.containsExtent(bigExtent, newExtent) &&
+                  bigExtent[0] !== newExtent[0] &&
+                  bigExtent[1] !== newExtent[1] &&
+                  bigExtent[2] !== newExtent[2] &&
+                  bigExtent[3] !== newExtent[3]
+                ) {
+                  this.loadedExtentsRtree_.remove(loadedExtent);
+                }
+              });
+            });
           }
           return extents;
         },
@@ -994,7 +1012,7 @@ const OpenlayersMapView = (props) => {
       }
       /* ======== SOURCE LAYERS ======== */
       //  Sites source layer
-      sitesSourceLayer = new VectorLayer({
+      sitesSourceLayer = new VectorImage({
         source: sitesSource,
         style: new Style({
           image: new CircleStyle({
@@ -1009,7 +1027,7 @@ const OpenlayersMapView = (props) => {
       });
       //  Regions source layer
       if (hasRegionsFeatures) {
-        regionsSourceLayer = new VectorLayer({
+        regionsSourceLayer = new VectorImage({
           source: regionsSource,
           style: new Style({
             image: new CircleStyle({

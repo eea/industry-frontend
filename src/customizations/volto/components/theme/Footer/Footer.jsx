@@ -36,7 +36,7 @@ const Footer = ({ intl }) => (
               </li>
 
               <li>
-                <Link className="item" to="/browse/industrial-emissions/map">
+                <Link className="item" to="/explore/explore-data-map/map">
                   <FormattedMessage
                     id="data"
                     defaultMessage="Browse the data"

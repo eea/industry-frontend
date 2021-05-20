@@ -20,7 +20,7 @@ const View = (props) => {
           tablet="7"
           mobile="12"
         >
-          <Link to="/browse/explore-data-map/map">
+          <Link to="/explore/explore-data-map/map">
             <img src={explore} alt="Explore the data" />
           </Link>
         </Grid.Column>
