@@ -1,0 +1,19 @@
+div#view .ui.container > .site-location-map-wrapper,
+div#view .ui.container > .site-location-map {
+  margin-bottom: 0;
+}
+
+.site-location-map {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.site-location-map.visible.transition {
+  display: flex !important;
+}
+
+.site-location-map .ol-map {
+  height: 400px;
+  min-height: 400px;
+}

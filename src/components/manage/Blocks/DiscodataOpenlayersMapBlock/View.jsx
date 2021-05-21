@@ -176,7 +176,7 @@ const OpenlayersMapView = (props) => {
         Control = require('ol/control/Control.js').default;
         defaultsControls = require('ol/control.js').defaults;
         defaultsInteractions = require('ol/interaction.js').defaults;
-        olExtent = require('ol/extent.js').defaults;
+        olExtent = require('ol/extent.js');
         OL_LOADED = true;
       }
 
@@ -925,7 +925,7 @@ const OpenlayersMapView = (props) => {
         },
         strategy: function (extent, resolution) {
           const tileGrid = createXYZ({
-            tileSize: 512,
+            tileSize: 256,
           });
           let z = tileGrid.getZForResolution(resolution);
           let tileRange = tileGrid.getTileRangeForExtentAndZ(extent, z);

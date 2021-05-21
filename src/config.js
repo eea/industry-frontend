@@ -91,6 +91,7 @@ import ListView from '~/components/manage/Blocks/DiscodataComponents/List/View';
 import BlocksWidget from '~/components/manage/Widgets/BlocksWidget';
 import QueryParametersListWidget from '~/components/manage/Blocks/DiscodataComponents/Widgets/QueryParametersListWidget';
 
+import installSiteLocationMap from '~/components/manage/Blocks/SiteLocationMap';
 import installSiteTableau from '~/components/manage/Blocks/SiteTableau';
 import installSiteStructureSidebar from '~/components/manage/Blocks/SiteStructureSidebar';
 import installSiteHeader from '~/components/manage/Blocks/SiteBlocks/Header';
@@ -380,6 +381,7 @@ export default function applyConfig(config) {
   ];
 
   return [
+    installSiteLocationMap,
     installSiteTableau,
     installSiteStructureSidebar,
     installSiteHeader,

@@ -24,6 +24,9 @@
             ],
             "@eeacms/volto-tabs-block": [
                 "addons/volto-tabs-block/src"
+            ],
+            "@eeacms/volto-openlayers-map": [
+                "addons/volto-openlayers-map/src"
             ]
         },
         "baseUrl": "src"

@@ -936,34 +936,65 @@ const View = ({ content, ...props }) => {
             : props.discodata_query.search['extent'],
         advancedFiltering,
         ...(!search
-          ? {}
+          ? {
+              locationTerm: null,
+              siteTerm: null,
+            }
           : {
-              siteCountry: [],
-              province: [],
-              region: [],
-              riverBasin: [],
-              nuts_regions: [],
-              nuts_latest: [],
+              EEAActivity: [null],
+              siteCountry: [null],
+              nuts_latest: [null],
+              nuts_regions: [null],
+              province: [null],
+              region: [null],
+              riverBasin: [null],
+              pollutantGroup: [null],
+              pollutant: [null],
+              plantTypes: [null],
+              batConclusionCode: [null],
+              permitType: [null],
+              permitYear: [null],
             }),
       },
     });
+
+    const newFiltersMeta = { ...state.filtersMeta };
+    const newFilters = { ...state.filters };
+
+    if (search) {
+      Object.keys(state.filtersMeta).forEach((key) => {
+        if (key !== 'reporting_years') {
+          newFiltersMeta[key].filteringInputs = [
+            {
+              id: _uniqueId('select_'),
+              type: 'select',
+              position: 0,
+            },
+          ];
+        }
+      });
+
+      Object.keys(state.filters).forEach((key) => {
+        if (key !== 'reportingYear') {
+          newFilters[key] = [null];
+        }
+      });
+    }
+
     setState({
       ...state,
       open: false,
       filters: {
-        ...state.filters,
-        ...(!search
-          ? {}
-          : {
-              siteCountry: [null],
-              province: [null],
-              region: [null],
-              riverBasin: [null],
-              nuts_regions: [null],
-              nuts_latest: [null],
-            }),
+        ...newFilters,
+      },
+      filtersMeta: {
+        ...newFiltersMeta,
       },
     });
+
+    if (!search) {
+      setSearchTerm('');
+    }
   };
 
   const getNewExtent = (searchTerm) => {
@@ -1362,6 +1393,8 @@ const View = ({ content, ...props }) => {
                             );
                             props.setQueryParam({
                               queryParam: {
+                                locationTerm: null,
+                                siteTerm: null,
                                 advancedFiltering: true,
                                 filtersCounter: props.discodata_query.search[
                                   'filtersCounter'
@@ -1372,6 +1405,7 @@ const View = ({ content, ...props }) => {
                                   : 1,
                               },
                             });
+                            setSearchTerm('');
                           }}
                           placeholder={
                             state.filtersMeta['reporting_years']?.placeholder
@@ -1443,6 +1477,8 @@ const View = ({ content, ...props }) => {
                             );
                             props.setQueryParam({
                               queryParam: {
+                                locationTerm: null,
+                                siteTerm: null,
                                 advancedFiltering: true,
                                 filtersCounter: props.discodata_query.search[
                                   'filtersCounter'
@@ -1453,6 +1489,7 @@ const View = ({ content, ...props }) => {
                                   : 1,
                               },
                             });
+                            setSearchTerm('');
                           }}
                           placeholder={
                             state.filtersMeta['industries']?.placeholder

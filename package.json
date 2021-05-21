@@ -45,6 +45,7 @@
     "volto-datablocks",
     "volto-embed",
     "volto-addons",
+    "@eeacms/volto-openlayers-map",
     "@eeacms/volto-tableau",
     "@eeacms/volto-block-style",
     "@eeacms/volto-tabs-block"
