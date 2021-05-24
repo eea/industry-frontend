@@ -423,9 +423,10 @@ const View = ({ content, ...props }) => {
             metadata.push(dynamicRequests.meta[index]);
           }
         });
-        setLoadingData(true);
       }
+
       if (!promises?.length) return;
+      setLoadingData(true);
       Promise.all(promises)
         .then((response) => {
           if (mounted.current) {
@@ -760,13 +761,35 @@ const View = ({ content, ...props }) => {
 
   const clearFilters = () => {
     const newFilters = { ...state.filters };
-    Object.keys(newFilters).forEach((filter) => {
-      newFilters[filter] = newFilters[filter].map((value) => null);
+    const newFiltersMeta = { ...state.filtersMeta };
+
+    Object.keys(state.filters).forEach((key) => {
+      newFilters[key] = [null];
     });
+
+    Object.keys(state.filtersMeta).forEach((key) => {
+      if (
+        ['regions', 'river_basins', 'provinces', 'pollutants'].includes(key)
+      ) {
+        delete newFiltersMeta[key];
+      } else {
+        newFiltersMeta[key].filteringInputs = [
+          {
+            id: _uniqueId('select_'),
+            type: 'select',
+            position: 0,
+          },
+        ];
+      }
+    });
+
+
     setState({
       ...state,
       filters: newFilters,
+      filtersMeta: newFiltersMeta,
     });
+
     setSitesResults([]);
     setLocationResults([]);
     setSearchTerm('');
