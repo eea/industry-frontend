@@ -6,6 +6,7 @@
 import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { matchPath } from 'react-router';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl } from 'react-intl';
@@ -21,6 +22,7 @@ import {
   getBlocksLayoutFieldname,
   hasBlocksData,
   getBaseUrl,
+  flattenToAppURL,
 } from '@plone/volto/helpers';
 
 const messages = defineMessages({
@@ -53,10 +55,12 @@ const DefaultView = ({ content, intl, location, query }) => {
     const unlisten = history.listen((location, action) => {
       if (location?.state?.ignoreScrollBehavior) {
         const scrollTo = window.scrollTo;
+        const y = window.scrollY;
         window.scrollTo = () => {};
         setTimeout(() => {
           window.scrollTo = scrollTo;
-        }, 1);
+          window.scrollTo(0, y);
+        }, 10);
       }
     });
     return () => {
@@ -67,11 +71,13 @@ const DefaultView = ({ content, intl, location, query }) => {
   }, []);
 
   useEffect(() => {
-    if (
-      content['layout'] === 'default_view' &&
-      content['@type'] === 'site_template' &&
-      hasRequiredQuery
-    ) {
+    const isIndustrialSite = !!matchPath(flattenToAppURL(content?.['@id']), {
+      path: '/industrial-site/*',
+      exact: true,
+      strict: false,
+    });
+
+    if (isIndustrialSite && hasRequiredQuery) {
       history.push('/explore/explore-data-map/map');
       return;
     }

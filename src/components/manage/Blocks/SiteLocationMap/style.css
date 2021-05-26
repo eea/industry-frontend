@@ -14,6 +14,6 @@ div#view .ui.container > .site-location-map {
 }
 
 .site-location-map .ol-map {
-  height: 400px;
-  min-height: 400px;
+  height: 300px;
+  min-height: 300px;
 }

@@ -36,22 +36,28 @@ const Footer = ({ intl }) => (
               </li>
 
               <li>
-                <Link className="item" to="/explore/explore-data-map/map">
-                  <FormattedMessage
-                    id="data"
-                    defaultMessage="Browse the data"
-                  />
+                <Link className="item" to="/explore">
+                  <FormattedMessage id="explore" defaultMessage="Explore" />
+                </Link>
+              </li>
+
+              <li>
+                <Link className="item" to="/analyse">
+                  <FormattedMessage id="analyse" defaultMessage="Analyse" />
                 </Link>
               </li>
 
               <li>
                 <Link className="item" to="/download">
-                  <FormattedMessage id="datasets" defaultMessage="Download" />
+                  <FormattedMessage id="download" defaultMessage="Download" />
                 </Link>
               </li>
               <li>
-                <Link className="item" to="/glossary">
-                  <FormattedMessage id="glossary" defaultMessage="Glossary" />
+                <Link className="item" to="/pollutants">
+                  <FormattedMessage
+                    id="pollutants"
+                    defaultMessage="Pollutants"
+                  />
                 </Link>
               </li>
               <li>

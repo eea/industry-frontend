@@ -783,7 +783,6 @@ const View = ({ content, ...props }) => {
       }
     });
 
-
     setState({
       ...state,
       filters: newFilters,

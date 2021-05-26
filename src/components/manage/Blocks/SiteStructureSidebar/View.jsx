@@ -24,9 +24,6 @@ GROUP BY facilities.siteName,
   lcps.lcpInspireId
 */
 
-// AT.CAED/9008390010204.SITE -> fara lcps
-// AT.CAED/9008390099636.SITE -> cu de toate
-
 const getQueryString = (query) => {
   if (!Object.keys(query).length) return '';
   return '?' + qs.stringify(query);
@@ -35,10 +32,9 @@ const getQueryString = (query) => {
 const View = (props) => {
   const [siteStructure, setSiteStructure] = React.useState(null);
   const [siteDetails, setSiteDetails] = React.useState({});
-  const { data = {}, provider_data = {} } = props;
+  const { provider_data = {} } = props;
   const provider_data_string = JSON.stringify(provider_data);
   const dataReady = provider_data?.siteInspireId?.length > 0;
-  const parentPathname = removeTralingSlash(data.pathname || '');
   const pathname = removeTralingSlash(props.location.pathname || '');
   const query = qs.parse(props.location?.search?.replace('?', ''));
   const newQuery = qs.parse(props.location?.search?.replace('?', ''));
@@ -88,6 +84,7 @@ const View = (props) => {
         facilities: newSiteStructure.facilities.sort(),
       });
     }
+    /* eslint-disable-next-line */
   }, [provider_data_string]);
 
   return props.mode === 'edit' ? (

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { Container } from 'semantic-ui-react';
 import Map from '@eeacms/volto-openlayers-map/Map';
 import { Interactions } from '@eeacms/volto-openlayers-map/Interactions';
 import { Controls } from '@eeacms/volto-openlayers-map/Controls';
@@ -52,8 +53,8 @@ const View = (props) => {
   });
 
   return (
-    <div className="site-location-map-wrapper full-width">
-      <div className="site-location-map full-width">
+    <div className="site-location-map-wrapper">
+      <Container className="site-location-map">
         <Map
           view={{
             center: proj.fromLonLat([20, 50]),
@@ -94,7 +95,7 @@ const View = (props) => {
             select={false}
           />
         </Map>
-      </div>
+      </Container>
     </div>
   );
 };
