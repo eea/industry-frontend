@@ -103,7 +103,7 @@ const Footer = ({ intl }) => (
                   <br />
                   <a
                     rel="noreferrer"
-                    href="industry.helpdesk@eea.europa.eu"
+                    href="mailto:industry.helpdesk@eea.europa.eu"
                     target="_blank"
                   >
                     Contact us

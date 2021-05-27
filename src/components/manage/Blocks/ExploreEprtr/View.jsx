@@ -32,7 +32,7 @@ const View = (props) => {
           tablet="5"
           mobile="12"
         >
-          <Link to="/analysis">
+          <Link to="/analyse">
             <div className="explore-tile">
               <img src={analyse} alt="Analyse" />
               <div>
