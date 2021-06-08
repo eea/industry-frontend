@@ -16,6 +16,12 @@
             "@eeacms/volto-columns-block": [
                 "addons/volto-columns-block/src"
             ],
+            "@eeacms/volto-datablocks": [
+                "addons/volto-datablocks/src"
+            ],
+            "@eeacms/volto-embed": [
+                "addons/volto-embed/src"
+            ],
             "@eeacms/volto-grid-block": [
                 "addons/volto-grid-block/src"
             ],

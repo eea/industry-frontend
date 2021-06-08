@@ -6,7 +6,7 @@ import qs from 'query-string';
 /* ROOT IMPORTS */
 import DefaultViewNoHeading from './DefaultViewNoHeading';
 /* LOCAL IMPORTS */
-import { getDiscodataResource, setQueryParam } from 'volto-datablocks/actions';
+import { getDiscodataResource, setQueryParam } from '@eeacms/volto-datablocks/actions';
 import { Dimmer, Loader } from 'semantic-ui-react';
 /* =================================================== */
 const DiscodataView = (props) => {

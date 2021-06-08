@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import Tableau from '@eeacms/volto-tableau/Tableau/View';
 import config from '@plone/volto/registry';
 import { getLatestTableauVersion } from 'tableau-api-js';
-import { connectBlockToProviderData } from 'volto-datablocks/hocs';
+import { connectBlockToProviderData } from '@eeacms/volto-datablocks/hocs';
 import qs from 'querystring';
 import '@eeacms/volto-tableau/less/tableau.less';
 

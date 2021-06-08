@@ -8,8 +8,8 @@ import _uniqueId from 'lodash/uniqueId';
 import axios from 'axios';
 import Highlighter from 'react-highlight-words';
 import { Icon } from '@plone/volto/components';
-import { DiscodataSqlBuilderView } from 'volto-datablocks/components';
-import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
+import { DiscodataSqlBuilderView } from '@eeacms/volto-datablocks/components';
+import { setQueryParam, deleteQueryParam } from '@eeacms/volto-datablocks/actions';
 import config from '@plone/volto/registry';
 import { getEncodedQueryString } from '~/utils';
 

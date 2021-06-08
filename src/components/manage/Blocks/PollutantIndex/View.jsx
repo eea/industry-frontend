@@ -2,8 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Tab, Dropdown, Table } from 'semantic-ui-react';
-import { DiscodataSqlBuilderView } from 'volto-datablocks/components';
-import { setQueryParam, deleteQueryParam } from 'volto-datablocks/actions';
+import { DiscodataSqlBuilderView } from '@eeacms/volto-datablocks/components';
+import {
+  setQueryParam,
+  deleteQueryParam,
+} from '@eeacms/volto-datablocks/actions';
 import cx from 'classnames';
 import './style.css';
 
@@ -12,10 +15,10 @@ const panes = [
     menuItem: 'General information',
     render: (props) => {
       const { pollutant = {} } = props.data;
-      const classification = pollutant.classification
-        ?.split('|')
-        .map((category) => category.replace(/['"]+/g, ''))
-        .join(', ');
+      // const classification = pollutant.classification
+      //   ?.split('|')
+      //   .map((category) => category.replace(/['"]+/g, ''))
+      //   .join(', ');
       const molecular_formula_sub = pollutant.molecular_formula_sub
         ?.split('|')
         .map((sub) => sub.replace(/['"]+/g, ''));
@@ -43,10 +46,7 @@ const panes = [
                   .replace('\n', `<sub>${health_affects_sub[index]}</sub>`)
               : item.replace(/['"]+/g, ''),
           ) || [];
-      const main_methods_of_release =
-        pollutant.health_affects
-          ?.split('|')
-          ?.map((item) => item.replace(/['"]+/g, '')) || [];
+      const main_methods_of_release = pollutant.main_methods_of_release;
       if (!props.data.pollutant) return '';
       return (
         <Tab.Pane>
@@ -91,17 +91,14 @@ const panes = [
           ) : (
             ''
           )}
-          {main_methods_of_release?.length > 0 ? (
+          {main_methods_of_release ? (
             <div className="mb-1">
               <h3>Where do the releases originate?</h3>
-              {main_methods_of_release.map((item, index) => (
-                <p
-                  key={`main_methods_of_release_${index}`}
-                  dangerouslySetInnerHTML={{
-                    __html: item,
-                  }}
-                />
-              ))}
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: main_methods_of_release,
+                }}
+              />
             </div>
           ) : (
             ''
@@ -292,6 +289,7 @@ const View = (props) => {
         },
       });
     }
+    /* eslint-disable-next-line */
   }, [indexPollutantId, JSON.stringify(indexPollutants)]);
 
   useEffect(() => {
@@ -304,6 +302,7 @@ const View = (props) => {
         ? newPollutantGroup
         : undefined,
     );
+    /* eslint-disable-next-line */
   }, [indexPollutantGroupId, JSON.stringify(indexPollutantGroups)]);
 
   useEffect(() => {

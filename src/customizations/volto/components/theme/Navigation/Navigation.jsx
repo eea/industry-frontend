@@ -16,7 +16,7 @@ import { getBaseUrl } from '@plone/volto/helpers';
 import config from '@plone/volto/registry';
 
 import { getNavigation } from '@plone/volto/actions';
-import { resetQueryParam } from 'volto-datablocks/actions';
+import { resetQueryParam } from '@eeacms/volto-datablocks/actions';
 
 import clearSVG from '@plone/volto/icons/clear.svg';
 

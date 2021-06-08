@@ -2,7 +2,7 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Grid, Dropdown } from 'semantic-ui-react';
-import { setQueryParam } from 'volto-datablocks/actions';
+import { setQueryParam } from '@eeacms/volto-datablocks/actions';
 import qs from 'querystring';
 import './style.css';
 

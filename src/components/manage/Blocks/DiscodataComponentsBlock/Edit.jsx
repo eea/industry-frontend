@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import qs from 'query-string';
 import View from './View';
-import { DiscodataSqlBuilderEdit } from 'volto-datablocks/components';
+import { DiscodataSqlBuilderEdit } from '@eeacms/volto-datablocks/components';
 
 const makeChoices = (keys) => keys && keys.map((k) => [k, k]);
 

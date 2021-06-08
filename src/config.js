@@ -107,7 +107,7 @@ import {
   installExpendableList,
   installFolderListing,
 } from 'volto-addons';
-import { installDiscodataSqlBuilder } from 'volto-datablocks/config';
+import { installDiscodataSqlBuilder } from '@eeacms/volto-datablocks/config';
 
 import packSVG from '@plone/volto/icons/pack.svg';
 import folderSVG from '@plone/volto/icons/folder.svg';

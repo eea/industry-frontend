@@ -5,7 +5,7 @@
  * export { Api } from './Api/Api';
  */
 import { getBaseUrl } from '@plone/volto/helpers';
-import { setConnectedDataParameters } from 'volto-datablocks/actions';
+import { setConnectedDataParameters } from '@eeacms/volto-datablocks/actions';
 import { isMatch } from 'lodash';
 import config from '@plone/volto/registry';
 

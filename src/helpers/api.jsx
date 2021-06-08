@@ -2,7 +2,7 @@ import config from '@plone/volto/registry';
 import {
   setDiscodataResource,
   setDiscodataResourcePending,
-} from 'volto-datablocks/actions';
+} from '@eeacms/volto-datablocks/actions';
 import axios from 'axios';
 
 export const parseResponse = (response) => {

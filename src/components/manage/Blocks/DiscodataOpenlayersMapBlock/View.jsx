@@ -17,7 +17,7 @@ import { getEncodedQueryString } from '~/utils';
 import { Icon as VoltoIcon, Toast } from '@plone/volto/components';
 import PrivacyProtection from './PrivacyProtection';
 // VOLTO-DATABLOCKS
-import { setQueryParam } from 'volto-datablocks/actions';
+import { setQueryParam } from '@eeacms/volto-datablocks/actions';
 // SEMANTIC REACT UI
 import { Grid, Header, Progress } from 'semantic-ui-react';
 // SVGs
