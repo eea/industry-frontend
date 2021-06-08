@@ -193,6 +193,7 @@ h3.orange {
   margin-bottom: 1rem;
   padding: 0 1rem;
   border-radius: 10px;
+  overflow-wrap: break-word;
 }
 
 .bat-conclusions .installation-conclusions-wrapper {
