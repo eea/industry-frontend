@@ -17,19 +17,29 @@
 
 .sidebar-block .ui.menu .ui.menu.entity .entity-item {
   position: relative;
-  border-left: 2px solid #4296B3;
+  border-left: 2px solid #4296b3;
   margin-left: 1em;
 }
 
-.sidebar-block .ui.menu .ui.menu.entity .entity-item > .ui.menu.entity > .entity-item {
-  border-left: 2px solid #4296B3 !important;
+.sidebar-block
+  .ui.menu
+  .ui.menu.entity
+  .entity-item
+  > .ui.menu.entity
+  > .entity-item {
+  border-left: 2px solid #4296b3 !important;
 }
 
 .sidebar-block .ui.menu .ui.menu.entity > .entity-item:last-child {
   border-left: 2px solid transparent !important;
 }
 
-.sidebar-block .ui.menu .ui.menu.entity .entity-item > .ui.menu.entity:last-child > .entity-item {
+.sidebar-block
+  .ui.menu
+  .ui.menu.entity
+  .entity-item
+  > .ui.menu.entity:last-child
+  > .entity-item {
   border-left: 2px solid transparent !important;
 }
 
@@ -49,26 +59,26 @@
 .sidebar-block .ui.menu .item span {
   display: block !important;
   line-height: 1.1em;
-  white-space: nowrap; 
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .sidebar-block .ui.menu .ui.menu.entity .item:before {
   display: block !important;
-    height: initial;
-    content: '';
-    position: absolute !important;
-    top: 0 !important;
-    left: -2px !important;
-    right: unset;
-    bottom: 50% !important;
-    width: 0.75em !important;
-    border: 2px solid #4296B3 !important;
-    border-left: 2px solid #4296B3 !important;
-    border-bottom: 2px solid #4296B3 !important;
-    border-top: 0 none transparent !important;
-    border-right: 0 none transparent !important;
+  height: initial;
+  content: '';
+  position: absolute !important;
+  top: 0 !important;
+  left: -2px !important;
+  right: unset;
+  bottom: 50% !important;
+  width: 0.75em !important;
+  border: 2px solid #4296b3 !important;
+  border-left: 2px solid #4296b3 !important;
+  border-bottom: 2px solid #4296b3 !important;
+  border-top: 0 none transparent !important;
+  border-right: 0 none transparent !important;
 }
 
 .sidebar-block .ui.menu .item,

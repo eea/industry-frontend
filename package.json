@@ -26,7 +26,9 @@
     "develop": "missdev --config=jsconfig.json --output=addons",
     "develop:npx": "npx -p mrs-developer missdev --config=jsconfig.json --output=addons",
     "cypress:run": "NODE_ENV=development ./node_modules/cypress/bin/cypress run",
-    "cypress:open": "NODE_ENV=development ./node_modules/cypress/bin/cypress open"
+    "cypress:open": "NODE_ENV=development ./node_modules/cypress/bin/cypress open",
+    "prettier": "./node_modules/.bin/prettier --single-quote --check 'src/**/*.{js,jsx,ts,tsx,json,css,scss,md}'",
+    "prettier:fix": "./node_modules/.bin/prettier --single-quote --write 'src/**/*.{js,jsx,ts,tsx,json,css,scss,md}'"
   },
   "workspaces": [
     "src/addons/*"

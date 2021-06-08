@@ -8,7 +8,10 @@ import { Menu } from 'semantic-ui-react';
 /* HELPERS */
 import { getNavigationByParent, getBasePath } from '~/helpers';
 
-import { setQueryParam, deleteQueryParam } from '@eeacms/volto-datablocks/actions';
+import {
+  setQueryParam,
+  deleteQueryParam,
+} from '@eeacms/volto-datablocks/actions';
 
 import { getFacilities, getInstallations, getLcps } from '~/helpers/api';
 

@@ -33,22 +33,22 @@
 
 .explore-eprtr .description .explore-tile p {
   margin-bottom: 0;
-  color: #4896B0;
+  color: #4896b0;
   font-size: 1.1em;
 }
 
 .explore-eprtr .description .explore-tile p.title {
   margin-bottom: 0;
-  color: #00435C;
+  color: #00435c;
   font-weight: bold;
   font-size: 1.2em;
-  margin-bottom: .2rem;
+  margin-bottom: 0.2rem;
 }
 
 .explore-eprtr .description > a:hover .explore-tile img {
-  opacity: .9;
+  opacity: 0.9;
 }
 
 .explore-eprtr .description > a:hover .explore-tile p {
-  color: #00435C;
+  color: #00435c;
 }

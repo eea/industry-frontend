@@ -9,7 +9,10 @@ import qs from 'query-string';
 import { Table, Dropdown, List, Header } from 'semantic-ui-react';
 import './style.css';
 import { DiscodataSqlBuilderView } from '@eeacms/volto-datablocks/components';
-import { setQueryParam, deleteQueryParam } from '@eeacms/volto-datablocks/actions';
+import {
+  setQueryParam,
+  deleteQueryParam,
+} from '@eeacms/volto-datablocks/actions';
 import cx from 'classnames';
 import Icon from '@plone/volto/components/theme/Icon/Icon';
 import infoSVG from '@plone/volto/icons/info.svg';
