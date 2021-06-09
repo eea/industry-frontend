@@ -19,7 +19,7 @@ import PrivacyProtection from './PrivacyProtection';
 // VOLTO-DATABLOCKS
 import { setQueryParam } from '@eeacms/volto-datablocks/actions';
 // SEMANTIC REACT UI
-import { Grid, Header, Progress } from 'semantic-ui-react';
+import { Grid, Header } from 'semantic-ui-react';
 // SVGs
 import clearSVG from '@plone/volto/icons/clear.svg';
 import navigationSVG from '@plone/volto/icons/navigation.svg';
@@ -755,11 +755,35 @@ const OpenlayersMapView = (props) => {
     });
   }
 
+  function getFeatureInRange(map, point, range = 3) {
+    let x = 0;
+    let y = 0;
+    let dx = 0;
+    let dy = -1;
+    for (let i = 0; i <= range * range; i++) {
+      const features =
+        map.getFeaturesAtPixel([point[0] + x, point[1] + y]) || null;
+      if (features?.length) {
+        return features;
+      }
+      if (x === y || (x < 0 && x === -y) || (x > 0 && x === 1 - y)) {
+        let temp = dx;
+        dx = -dy;
+        dy = temp;
+      }
+      x += dx;
+      y += dy;
+    }
+    return null;
+  }
+
   function setFeatureInfo(map, pixel, coordinate, detailed) {
-    let features = [];
-    map.forEachFeatureAtPixel(pixel, function (feature) {
-      features.push(feature);
-    });
+    let features = detailed ? getFeatureInRange(map, pixel, 9) : [];
+    if (!detailed) {
+      map.forEachFeatureAtPixel(pixel, function (feature) {
+        features.push(feature);
+      });
+    }
     if (features.length) {
       let hdms = toStringHDMS(
         toLonLat(features[0].getGeometry().flatCoordinates),
@@ -1010,18 +1034,35 @@ const OpenlayersMapView = (props) => {
           ),
         });
       }
+      const smallCircle = new Style({
+        image: new CircleStyle({
+          radius: 3,
+          fill: new Fill({ color: '#000' }),
+          stroke: new Stroke({ color: '#6A6A6A', width: 1 }),
+          zIndex: 0,
+        }),
+      });
+
+      const bigCircle = new Style({
+        image: new CircleStyle({
+          radius: 6,
+          fill: new Fill({ color: '#000' }),
+          stroke: new Stroke({ color: '#6A6A6A', width: 1 }),
+          zIndex: 0,
+        }),
+      });
       /* ======== SOURCE LAYERS ======== */
       //  Sites source layer
       sitesSourceLayer = new VectorImage({
         source: sitesSource,
-        style: new Style({
-          image: new CircleStyle({
-            radius: 3,
-            fill: new Fill({ color: '#000' }),
-            stroke: new Stroke({ color: '#6A6A6A', width: 1 }),
-            zIndex: 0,
-          }),
-        }),
+        style: () => {
+          const view = stateRef.current.map?.element?.getView();
+          if (view) {
+            const zoom = view.getZoom();
+            return zoom >= 8 ? bigCircle : smallCircle;
+          }
+          return;
+        },
         visible: true,
         title: 'ied_SiteMap',
       });
