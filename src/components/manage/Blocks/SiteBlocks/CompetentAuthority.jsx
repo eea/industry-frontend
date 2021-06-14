@@ -54,7 +54,6 @@ const CompetentAuthority = (props) => {
                 : []),
               { key: 'organizationName', value: 'Organization name' },
               { key: 'contactPerson', value: 'Contact person' },
-              { key: 'address', value: 'Address' },
               { key: 'email', value: 'E-mail' },
               { key: 'authLastUpdated', value: 'Last updated' },
             ]}
@@ -71,10 +70,6 @@ const CompetentAuthority = (props) => {
             <Grid.Column mobile={6}>
               <p className="bold mb-0">Contact Person</p>
               <p className="info">{competentAuthority[0].contactPerson}</p>
-            </Grid.Column>
-            <Grid.Column mobile={6}>
-              <p className="bold mb-0">Address</p>
-              <p className="info">{competentAuthority[0].address}</p>
             </Grid.Column>
             <Grid.Column mobile={6}>
               <p className="bold mb-0">E-mail</p>
