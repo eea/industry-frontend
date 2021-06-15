@@ -29,7 +29,7 @@ pipeline {
                 dockerImage.push()
               }
             } finally {
-              sh "docker rmi $registry:$tagName"
+              sh script: "docker rmi $registry:$tagName", returnStatus: true
             }
           }
         }
