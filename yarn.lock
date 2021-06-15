@@ -2073,6 +2073,11 @@
   resolved "https://registry.yarnpkg.com/@eeacms/volto-resize-helper/-/volto-resize-helper-0.2.0.tgz#9aaad55a34c670cf304f98927e47c005fabe6214"
   integrity sha512-BwGYm9wpuXPcjJzPFb9ocWeMGGrm2BOdM0TA16oZV/B7mbzkl7mD7fRgmZ3rNb//W4RplEa+pMUt3/YNP1dTzg==
 
+"@eeacms/volto-resize-helper@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@eeacms/volto-resize-helper/-/volto-resize-helper-0.2.2.tgz#5fa899acc4116f2a31cc753bb3737b1ceb30238a"
+  integrity sha512-MevcfCFta+A79esQbGq0dVwZHHp5zbkguQ3j8nORGtZEmnYOUCE+HTUoWVAGmQLDFbrfy7lttwmiwFXxC0COxw==
+
 "@eeacms/volto-sentry-rancher-config@2.1.2":
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/@eeacms/volto-sentry-rancher-config/-/volto-sentry-rancher-config-2.1.2.tgz#3833b597568a824e916c09d1927e651a0fba2fda"
