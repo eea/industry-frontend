@@ -44,6 +44,11 @@ pipeline {
     }
     
     stage('Build & Push') {
+      when {
+        allOf {
+          environment name: 'CHANGE_ID', value: ''
+        }
+      }
       steps{
         node(label: 'docker-host') {
           script {
