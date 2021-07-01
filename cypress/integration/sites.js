@@ -10,6 +10,7 @@ describe('Sites in DiscodataTableBlock', () => {
 
   it('Add Blocks', () => {
     changePageTitle('Sites in DiscodataTableBlock');
+    cy.get('.block.inner.text').click();
     addBlock('Eprtr Blocks', 'eprtr_blocks', 'eprtr_filters_block');
     addBlock(
       'Discodata components',
