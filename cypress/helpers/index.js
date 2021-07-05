@@ -1,3 +1,4 @@
-export { openSidebar, closeSidebar, openSidebarTab } from './sidebar';
-export { changePageTitle, addBlock, selectBlock } from './blocks';
-export { setInputValue, filtersModal } from './utils';
+export * from './actions';
+export * from './blocks';
+export * from './sidebar';
+export * from './utils';

@@ -50,6 +50,8 @@ export const filtersModal = {
   search: (text) => {
     cy.get('.filters-container .search-input-container input').type(text);
     cy.wait(2000);
-    cy.get('.filters-container .search-input-container input').type('{enter}');
+    cy.get('.filters-container .search-input-container span.suggestion-term')
+      .contains(text)
+      .click();
   },
 };
