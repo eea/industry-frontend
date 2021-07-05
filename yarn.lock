@@ -1985,10 +1985,10 @@
   resolved "https://registry.yarnpkg.com/@eeacms/volto-sentry-rancher-config/-/volto-sentry-rancher-config-2.1.2.tgz#3833b597568a824e916c09d1927e651a0fba2fda"
   integrity sha512-eT+SlMCXFK4H1N8yqJOWq5cNDF73gvVUGS/cw3qbZmYhhkqCIDrU43aa1/6aGHzmeTStIIS7KtwEVlbDeHYAMQ==
 
-"@eeacms/volto-slate-metadata-mentions@2.2.3":
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/@eeacms/volto-slate-metadata-mentions/-/volto-slate-metadata-mentions-2.2.3.tgz#ae32aeca1c1ce63d1f347c0a5aaeb1c697eee366"
-  integrity sha512-VXEkvPszbJJv2BBo5PqzKyI+FBZjO7YPmTtBdcv3k9Xr8RwNrB63d0i64S+7zZ6abW7vqEwQC/hJcHN+JmuQmQ==
+"@eeacms/volto-slate-metadata-mentions@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@eeacms/volto-slate-metadata-mentions/-/volto-slate-metadata-mentions-2.4.0.tgz#d92253410034a1d12e9143e60199da8a80d591fb"
+  integrity sha512-h5Wf7zEiI+q3c1BiWj5zG4DXuVi/QAW7RN/RXmq2yyeNl8FDjaVRYTPUuzGHL8xduUijRnSc1Tco+WycP4kzjQ==
   dependencies:
     "@eeacms/volto-widgets-view" "*"
     volto-slate "*"
@@ -17857,10 +17857,28 @@ vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
-volto-slate@2.7.0:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/volto-slate/-/volto-slate-2.7.0.tgz#8e5fb3f67021d8d94c3ddc4caab0bf5f72b925b5"
-  integrity sha512-YTOUA3KzL1wDUTsibHGTyTRAVjF3N6ABQd6ykP8wEnLatRdKvs6CbOCU+bQduirr715LFBoarrIbihwZjp7s7A==
+volto-slate@*:
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/volto-slate/-/volto-slate-2.8.0.tgz#a898677772f47c201446071092e815748b9258c4"
+  integrity sha512-dqdT849CNtNVSh4yajOKFwypeHyklI4Opl5NxYMnEw4O4guhkknRYoSMFTViNtJ0qWyyf/GNner/9/8y7K8Ueg==
+  dependencies:
+    "@eeacms/volto-object-widget" ">=2.2.3"
+    classnames "2.2.6"
+    image-extensions "1.1.0"
+    is-url "1.2.4"
+    jsdom "16.2.2"
+    react-intersection-observer "^8.32.0"
+    react-visibility-sensor "5.1.1"
+    slate "^0.62.0"
+    slate-history "^0.62.0"
+    slate-hyperscript "^0.62.0"
+    slate-react "^0.62.0"
+    weak-key "^1.0.2"
+
+volto-slate@2.8.1:
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/volto-slate/-/volto-slate-2.8.1.tgz#039583acafaff31db6110c2621e7a3b82867da9d"
+  integrity sha512-IKMPG+jyizNY4n5DWSqmjhGP9RcaO7dd2exAbRFzkg8qH/e4GIGWvWycEOBkMZkkw2vxdVVRkbjuuUzChBGdTA==
   dependencies:
     "@eeacms/volto-object-widget" ">=2.2.3"
     classnames "2.2.6"
