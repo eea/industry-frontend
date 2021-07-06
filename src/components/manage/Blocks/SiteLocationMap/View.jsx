@@ -10,11 +10,25 @@ import { getSiteLocationURL } from './index';
 import qs from 'querystring';
 import './style.css';
 
+// SVGs
+import mapPlaceholder from '~/components/manage/Blocks/DiscodataOpenlayersMapBlock/map_placeholder.png';
+// Privacy Protection VOLTO
+import PrivacyProtection from '~/components/manage/Blocks/DiscodataOpenlayersMapBlock/PrivacyProtection';
+
 const View = (props) => {
   const [options, setOptions] = React.useState({});
   const [vectorSource, setVectorSource] = useState(null);
   const { format, proj, source, style } = openlayers;
   const { siteInspireId } = { ...props.query, ...props.discodata_query };
+
+  const dataprotection = {
+    enabled: true,
+    privacy_statement:
+      'This map is hosted by a third party [Environmental Systems Research Institute, INC: "ESRI"]. By showing th external content you accept the terms and conditions of www.esri.com. This includes their cookie policies, which e have no control over.',
+    privacy_cookie_key: 'site-location-map',
+    placeholder_image: mapPlaceholder,
+    type: props.data.privacy?.value || 'big',
+  };
 
   React.useState(() => {
     if (__SERVER__) return;
@@ -54,47 +68,56 @@ const View = (props) => {
 
   return (
     <div className="site-location-map-wrapper">
-      <Container className="site-location-map">
-        <Map
-          view={{
-            center: proj.fromLonLat([20, 50]),
-            showFullExtent: true,
-            maxZoom: 12,
-            minZoom: 12,
-            zoom: 12,
+      <Container id="site-location-map" className="site-location-map">
+        <PrivacyProtection
+          data={{ dataprotection }}
+          style={{
+            backgroundImage: `url(${mapPlaceholder})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
           }}
-          renderer="webgl"
-          {...options}
         >
-          <Layers>
-            <Layer.Tile
-              source={
-                new source.XYZ({
-                  url:
-                    'https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
-                })
-              }
-              zIndex={0}
+          <Map
+            view={{
+              center: proj.fromLonLat([20, 50]),
+              showFullExtent: true,
+              maxZoom: 12,
+              minZoom: 12,
+              zoom: 12,
+            }}
+            renderer="webgl"
+            {...options}
+          >
+            <Layers>
+              <Layer.Tile
+                source={
+                  new source.XYZ({
+                    url:
+                      'https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+                  })
+                }
+                zIndex={0}
+              />
+              <Layer.VectorImage
+                source={vectorSource}
+                style={siteStyle}
+                title="1.Sites"
+                zIndex={1}
+              />
+            </Layers>
+            <Controls attribution={false} zoom={false} />
+            <Interactions
+              doubleClickZoom={false}
+              dragAndDrop={false}
+              dragPan={false}
+              keyboardPan={false}
+              keyboardZoom={false}
+              mouseWheelZoom={false}
+              pointer={false}
+              select={false}
             />
-            <Layer.VectorImage
-              source={vectorSource}
-              style={siteStyle}
-              title="1.Sites"
-              zIndex={1}
-            />
-          </Layers>
-          <Controls attribution={false} zoom={false} />
-          <Interactions
-            doubleClickZoom={false}
-            dragAndDrop={false}
-            dragPan={false}
-            keyboardPan={false}
-            keyboardZoom={false}
-            mouseWheelZoom={false}
-            pointer={false}
-            select={false}
-          />
-        </Map>
+          </Map>
+        </PrivacyProtection>
       </Container>
     </div>
   );
