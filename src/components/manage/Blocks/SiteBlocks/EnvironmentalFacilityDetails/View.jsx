@@ -63,6 +63,10 @@ const View = (props) => {
               {facilities[0]?.facilityMainActivity}
             </span>
           </p>
+          <p className="address light-blue">Facility address</p>
+          <p className="info">
+            <span>{facilities[0]?.facilityAddress}</span>
+          </p>
         </>
       ) : (
         ''

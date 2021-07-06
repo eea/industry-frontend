@@ -42,6 +42,11 @@ h3.orange {
   margin-bottom: 0;
 }
 
+.site-block > .address {
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
 .site-block .ui.grid {
   margin-top: 0;
   margin-bottom: 0;
