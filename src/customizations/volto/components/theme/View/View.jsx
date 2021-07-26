@@ -253,7 +253,9 @@ class View extends Component {
     if (!this.props.content) {
       return <span />;
     }
-    const RenderedView = this.state.RenderedView;
+    // const RenderedView = this.state.RenderedView;
+    const RenderedView =
+      this.getViewByType() || this.getViewByLayout() || this.getViewDefault();
 
     return (
       <div id="view">

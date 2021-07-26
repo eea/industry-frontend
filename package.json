@@ -59,7 +59,7 @@
     "@eeacms/volto-widget-toggle": "2.2.3",
     "@eeacms/volto-widgets-view": "2.1.2",
     "@material/react-linear-progress": "^0.15.0",
-    "@plone/volto": "12.10.1",
+    "@plone/volto": "13.8.2",
     "axios": "^0.21.1",
     "jsonp": "^0.2.1",
     "ol": "^6.4.3",
@@ -69,7 +69,7 @@
     "react-tooltip": "^4.2.9",
     "react-visibility-sensor": "^5.1.1",
     "tableau-api-js": "github:eea/tableau-api-js#1.1.0",
-    "volto-slate": "2.8.1"
+    "volto-slate": "2.8.3"
   },
   "devDependencies": {
     "eslint-plugin-prettier": "3.1.3",
