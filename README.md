@@ -1,6 +1,6 @@
 # EPRTR: Volto Frontend
 
-[![Pipeline](https://ci.eionet.europa.eu/buildStatus/icon?job=eprtr.eea.europa.eu%2Feprtr_frontend%2Fmaster&subject=pipeline)](https://ci.eionet.europa.eu/view/Github/job/eprtr.eea.europa.eu/job/eprtr_frontend/job/master/display/redirect)
+[![Pipeline](https://ci.eionet.europa.eu/buildStatus/icon?job=volto%2Feprtr_frontend%2Fmaster&subject=pipeline)](https://ci.eionet.europa.eu/view/Github/job/volto/job/eprtr_frontend/job/master/display/redirect)
 [![Release](https://img.shields.io/github/v/release/eea/eprtr_frontend?sort=semver)](https://github.com/eea/eprtr_frontend/releases)
 
 ## Documentation
