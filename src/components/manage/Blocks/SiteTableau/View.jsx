@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { withRouter } from 'react-router';
 import Tableau from '@eeacms/volto-tableau/Tableau/View';
 import config from '@plone/volto/registry';
 import { getLatestTableauVersion } from 'tableau-api-js';
@@ -24,7 +25,7 @@ const getDevice = (config, width) => {
 
 const View = (props) => {
   const [error, setError] = React.useState(null);
-  const [loaded, setLoaded] = React.useState(false);
+  const [loaded, setLoaded] = React.useState(null);
   const [mounted, setMounted] = React.useState(false);
   const [extraFilters, setExtraFilters] = React.useState({});
   const { data = {}, query = {}, screen = {}, provider_data = null } = props;
@@ -34,12 +35,13 @@ const View = (props) => {
     urlParameters = [],
     title = null,
     description = null,
+    autoScale = false,
   } = data;
   const version =
     props.data.version ||
     config.settings.tableauVersion ||
     getLatestTableauVersion();
-  const device = getDevice(config, screen.page.width || Infinity);
+  const device = getDevice(config, screen.page?.width || Infinity);
   const breakpointUrl = breakpointUrls.filter(
     (breakpoint) => breakpoint.device === device,
   )[0]?.url;
@@ -87,7 +89,7 @@ const View = (props) => {
             {...props}
             canUpdateUrl={!breakpointUrl}
             extraFilters={extraFilters}
-            extraOptions={{ device }}
+            extraOptions={{ device: autoScale ? 'desktop' : device }}
             error={error}
             loaded={loaded}
             setError={setError}
@@ -106,7 +108,7 @@ const View = (props) => {
 };
 
 export default compose(
-  connect((state, props) => ({
+  connect((state) => ({
     query: {
       ...(qs.parse(state.router.location?.search?.replace('?', '')) || {}),
       ...(state.discodata_query?.search || {}),
@@ -114,4 +116,4 @@ export default compose(
     tableau: state.tableau,
     screen: state.screen,
   })),
-)(connectBlockToProviderData(View));
+)(connectBlockToProviderData(withRouter(View)));

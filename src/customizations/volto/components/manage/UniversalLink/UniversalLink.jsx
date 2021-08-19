@@ -21,7 +21,7 @@ const UniversalLink = ({
   children,
   className = null,
   title = null,
-  stripHash = true,
+  stripHash = false,
   delay = 0,
   offset = null,
   onClick = () => {},
@@ -57,7 +57,7 @@ const UniversalLink = ({
   const isDownload = (!isExternal && url.includes('@@download')) || download;
   const appUrl = flattenToAppURL(url);
 
-  const path = !isDownload && stripHash ? appUrl.split('#')[0] : appUrl;
+  const path = stripHash ? appUrl.split('#')[0] : appUrl;
   const hash = appUrl.split('#')[1];
 
   return isExternal ? (
@@ -74,7 +74,7 @@ const UniversalLink = ({
       {children}
     </a>
   ) : isDownload ? (
-    <a href={path} download title={title} className={className} {...props}>
+    <a href={appUrl} download title={title} className={className} {...props}>
       {children}
     </a>
   ) : (
@@ -122,6 +122,10 @@ UniversalLink.propTypes = {
     '@id': PropTypes.string.isRequired,
     remoteUrl: PropTypes.string, //of plone @type 'Link'
   }),
+  stripHash: PropTypes.bool,
+  delay: PropTypes.number, // ms
+  offset: PropTypes.oneOfType([PropTypes.func, PropTypes.number]),
+  onClick: PropTypes.func,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,

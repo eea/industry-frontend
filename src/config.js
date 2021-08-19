@@ -102,6 +102,8 @@ import installRegulatorySiteDetails from '~/components/manage/Blocks/SiteBlocks/
 import installRegulatoryPermits from '~/components/manage/Blocks/SiteBlocks/RegulatoryPermits';
 import installRegulatoryBATConclusions from '~/components/manage/Blocks/SiteBlocks/RegulatoryBATConclusions';
 import installExploreEprtr from '~/components/manage/Blocks/ExploreEprtr';
+import installList from '~/components/manage/Blocks/List';
+import installSelect from '~/components/manage/Blocks/Select';
 import {
   installTableau,
   installExpendableList,
@@ -392,6 +394,8 @@ export default function applyConfig(config) {
     installRegulatoryPermits,
     installRegulatoryBATConclusions,
     installExploreEprtr,
+    installList,
+    installSelect,
     installTableau,
     installExpendableList,
     installFolderListing,
