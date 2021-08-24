@@ -1345,6 +1345,11 @@
     "@eeacms/volto-widgets-view" "*"
     volto-slate "*"
 
+"@eeacms/volto-staging-banner@0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@eeacms/volto-staging-banner/-/volto-staging-banner-0.1.2.tgz#aa3974d76baac5e44d599d821b586defc90fb083"
+  integrity sha512-xeGSthVB6hgTdXXKXdOpMWqX2tzB1bqBQrMxDxgv+hy+WbpC7IRdZqE6Zynh7D8iShOA4R2Yx2SIXrnp7CW4ag==
+
 "@eeacms/volto-widget-toggle@2.2.3":
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/@eeacms/volto-widget-toggle/-/volto-widget-toggle-2.2.3.tgz#44200a3560d8d4359fb2a4e91075742b3300d08c"
@@ -16721,10 +16726,10 @@ volto-slate@*:
     slate-react "^0.62.0"
     weak-key "^1.0.2"
 
-volto-slate@2.9.1:
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/volto-slate/-/volto-slate-2.9.1.tgz#d4ed326470570a5b81c3dbd65e2aa9acf936184e"
-  integrity sha512-ZCqMnIv+qHOsMgespqLwDKvAqSbrflGXF1MFTABbCgpEAA7dw/9SGaCR1Sa5uZbYs8kb24PR7esBCKs2JszQkg==
+volto-slate@2.9.2:
+  version "2.9.2"
+  resolved "https://registry.yarnpkg.com/volto-slate/-/volto-slate-2.9.2.tgz#9874dbce05de9bd833ce93c22514c0f2ef0ee51d"
+  integrity sha512-6eaWvOgz/aOQ63zeJ8qE538M3SQA6CONtAxEf5dDLw+88ZCiAWqFnjDNG/Q+ILdWWAtiocETp51s3Wa8auT81Q==
   dependencies:
     "@eeacms/volto-object-widget" ">=2.2.3"
     classnames "2.2.6"
