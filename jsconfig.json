@@ -33,6 +33,9 @@
             ],
             "@eeacms/volto-openlayers-map": [
                 "addons/volto-openlayers-map/src"
+            ],
+            "@eeacms/volto-staging-banner": [
+                "addons/volto-staging-banner/src"
             ]
         },
         "baseUrl": "src"

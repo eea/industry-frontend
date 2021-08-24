@@ -49,7 +49,8 @@
     "@eeacms/volto-openlayers-map",
     "@eeacms/volto-tableau",
     "@eeacms/volto-block-style",
-    "@eeacms/volto-tabs-block"
+    "@eeacms/volto-tabs-block",
+    "@eeacms/volto-staging-banner"
   ],
   "dependencies": {
     "@eeacms/volto-matomo": "2.0.2",
