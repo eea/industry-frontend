@@ -65,6 +65,6 @@
     "path": "src",
     "package": "@eeacms/volto-staging-banner",
     "branch": "develop",
-    "develop": true
+    "develop": false
   }
 }
