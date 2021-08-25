@@ -72,7 +72,9 @@ const View = ({ content, ...props }) => {
   const mounted = useRef(false);
   const modalButtonTitle = props.data.modalButtonTitle?.value;
   const locationResultsTexts = locationResults.map((result) => result.text);
-  const mapSidebarExists = document?.getElementById('map-sidebar');
+  const mapSidebarExists = __CLIENT__
+    ? document?.getElementById('map-sidebar')
+    : false;
 
   const searchResults = [
     ...locationResults.map((result) => result.text),
