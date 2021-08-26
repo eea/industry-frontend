@@ -1345,10 +1345,10 @@
     "@eeacms/volto-widgets-view" "*"
     volto-slate "*"
 
-"@eeacms/volto-staging-banner@0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@eeacms/volto-staging-banner/-/volto-staging-banner-0.1.5.tgz#d915dfc5f4db99b58bf2ae20cefbaa4e273662c5"
-  integrity sha512-1BOm7p4+Beqjbk/4Nyi51PxForjnmooZFg5mQQZwVwDSk++siW9bBIWP0G/ose/5VkEhKnKav2g9v9lRTMXLBA==
+"@eeacms/volto-staging-banner@0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@eeacms/volto-staging-banner/-/volto-staging-banner-0.1.6.tgz#d2250050e09b128fba5ca3778888135edb0bb74b"
+  integrity sha512-ZMNr9mLyqbsnpXeWoKgfAcvHL9oqdQk4Lb3ktxvZFJONMjsgul4B8IJnN3tGe+adkZyWK4I5QjHFwW6+BbTlwQ==
 
 "@eeacms/volto-widget-toggle@2.2.3":
   version "2.2.3"
