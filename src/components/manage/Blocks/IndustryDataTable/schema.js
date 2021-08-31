@@ -4,9 +4,14 @@ export default () => ({
     {
       id: 'default',
       title: 'Default',
-      fields: [],
+      fields: ['link'],
     },
   ],
-  properties: {},
+  properties: {
+    link: {
+      title: 'Site details path',
+      widget: 'object_by_path',
+    },
+  },
   required: [],
 });

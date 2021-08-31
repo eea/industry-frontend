@@ -62,7 +62,6 @@ let Map,
   Stroke,
   Style,
   TileLayer,
-  VectorLayer,
   VectorImage,
   transformExtent,
   Group,
@@ -168,7 +167,6 @@ const OpenlayersMapView = (props) => {
         Stroke = require('ol/style/Stroke.js').default;
         Style = require('ol/style/Style.js').default;
         TileLayer = require('ol/layer/Tile.js').default;
-        VectorLayer = require('ol/layer/Vector.js').default;
         VectorImage = require('ol/layer/VectorImage.js').default;
         transformExtent = require('ol/proj').transformExtent;
         Group = require('ol/layer/Group.js').default;
@@ -784,7 +782,7 @@ const OpenlayersMapView = (props) => {
         features.push(feature);
       });
     }
-    if (features.length) {
+    if (features?.length) {
       let hdms = toStringHDMS(
         toLonLat(features[0].getGeometry().flatCoordinates),
       );
@@ -936,7 +934,7 @@ const OpenlayersMapView = (props) => {
                   let features = esrijsonFormat.readFeatures(response, {
                     featureProjection: projection,
                   });
-                  if (features.length > 0) {
+                  if (features?.length > 0) {
                     sitesSource.addFeatures(features);
                   }
                 }
@@ -1020,7 +1018,7 @@ const OpenlayersMapView = (props) => {
                   let features = esrijsonFormat.readFeatures(response, {
                     featureProjection: projection,
                   });
-                  if (features.length > 0) {
+                  if (features?.length > 0) {
                     regionsSource.addFeatures(features);
                   }
                 }

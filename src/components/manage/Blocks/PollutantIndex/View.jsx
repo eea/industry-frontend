@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Tab, Dropdown, Table } from 'semantic-ui-react';
+import config from '@plone/volto/registry';
 import { DiscodataSqlBuilderView } from '@eeacms/volto-datablocks/components';
 import {
   setQueryParam,
@@ -204,6 +205,8 @@ const RenderTable = (props) => {
 };
 
 const View = (props) => {
+  const db_version =
+    process.env.RAZZLE_DB_VERSION || config.settings.db_version || 'latest';
   const [activeTab, setActiveTab] = useState(0);
   const [currentPollutant, setCurrentPollutant] = useState(undefined);
   const [currentPollutantGroup, setCurrentPollutantGroup] = useState(undefined);
@@ -318,8 +321,7 @@ const View = (props) => {
         data={{
           '@type': 'discodata_sql_builder',
           sql: {
-            value:
-              '{"fieldsets":[{"id":"sql_metadata","title":"SQL","fields":["index_pollutant_groups","index_pollutants","index_pollutant_iso","index_pollutant_other_provisions","index_pollutant_phrases"]}],"properties":{"index_pollutant_groups":{"title":"Index pollutant groups","isCollection":true,"hasPagination":false,"urlQuery":false,"sql":"SELECT pollutant_group_id as pollutantId , * \\nFROM [IED].[latest].[Glo_PollutantsGroupsDetails]\\nORDER BY name"},"index_pollutants":{"title":"Index pollutants","isCollection":true,"hasPagination":false,"urlQuery":false,"sql":"SELECT POL.code,\\nPOL.name,\\nPOL.startYear,\\nPOL.endYear,\\nPOL.parentId,\\nPOL.cas,\\nPOL.eperPollutantId,\\nPOL.codeEPER,\\nPOL_DET.*\\nFROM [IED].[latest].[Glo_Pollutants] as POL\\nLEFT JOIN [IED].[latest].[Glo_PollutantsDetails] AS POL_DET\\nON POL.pollutantId = POL_DET.pollutantId\\nORDER BY name","packageName":"index_pollutant_group_id"},"index_pollutant_iso":{"title":"Index pollutants iso","hasPagination":true,"urlQuery":false,"sql":"SELECT *\\nFROM [IED].[latest].[Glo_PollutantsIsoProvision]","packageName":"index_pollutant_id"},"index_pollutant_other_provisions":{"title":"index_pollutant_other_provisions","hasPagination":true,"urlQuery":false,"sql":"SELECT *\\nFROM [IED].[latest].[Glo_PollutantsOtherProvisions]","packageName":"index_pollutant_id"},"index_pollutant_phrases":{"title":"index_pollutant_phrases","hasPagination":true,"urlQuery":false,"sql":"SELECT *\\nFROM [IED].[latest].[Glo_PollutantsPrase]","packageName":"index_pollutant_id"}},"required":[]}',
+            value: `{"fieldsets":[{"id":"sql_metadata","title":"SQL","fields":["index_pollutant_groups","index_pollutants","index_pollutant_iso","index_pollutant_other_provisions","index_pollutant_phrases"]}],"properties":{"index_pollutant_groups":{"title":"Index pollutant groups","isCollection":true,"hasPagination":false,"urlQuery":false,"sql":"SELECT pollutant_group_id as pollutantId , * \\nFROM [IED].[${db_version}].[Glo_PollutantsGroupsDetails]\\nORDER BY name"},"index_pollutants":{"title":"Index pollutants","isCollection":true,"hasPagination":false,"urlQuery":false,"sql":"SELECT POL.code,\\nPOL.name,\\nPOL.startYear,\\nPOL.endYear,\\nPOL.parentId,\\nPOL.cas,\\nPOL.eperPollutantId,\\nPOL.codeEPER,\\nPOL_DET.*\\nFROM [IED].[${db_version}].[Glo_Pollutants] as POL\\nLEFT JOIN [IED].[${db_version}].[Glo_PollutantsDetails] AS POL_DET\\nON POL.pollutantId = POL_DET.pollutantId\\nORDER BY name","packageName":"index_pollutant_group_id"},"index_pollutant_iso":{"title":"Index pollutants iso","hasPagination":true,"urlQuery":false,"sql":"SELECT *\\nFROM [IED].[${db_version}].[Glo_PollutantsIsoProvision]","packageName":"index_pollutant_id"},"index_pollutant_other_provisions":{"title":"index_pollutant_other_provisions","hasPagination":true,"urlQuery":false,"sql":"SELECT *\\nFROM [IED].[${db_version}].[Glo_PollutantsOtherProvisions]","packageName":"index_pollutant_id"},"index_pollutant_phrases":{"title":"index_pollutant_phrases","hasPagination":true,"urlQuery":false,"sql":"SELECT *\\nFROM [IED].[${db_version}].[Glo_PollutantsPrase]","packageName":"index_pollutant_id"}},"required":[]}`,
           },
           where: {
             value:

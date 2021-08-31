@@ -663,7 +663,12 @@ ul, ol {
 }
 
 //  BROWSE TABLE
-.browse-table {
+.simple-data-table {
+  padding: 0;
+}
+
+.browse-table,
+.industry-table {
   overflow-x: auto;
   .ui.grid {
     margin-top: 0 !important;
@@ -683,6 +688,12 @@ ul, ol {
           color: #000;
           font-weight: bold;
           text-transform: none;
+
+          &::after {
+            display: none;
+            border-bottom: none;
+            padding: 0;
+          }
         }
       }
     }

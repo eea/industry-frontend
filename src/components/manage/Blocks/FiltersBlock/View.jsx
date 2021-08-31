@@ -56,6 +56,8 @@ const View = ({ content, ...props }) => {
     factsDataOrder: ['Country_quick_facts', 'EU_quick_facts'],
     firstLoad: false,
   });
+  const db_version =
+    process.env.RAZZLE_DB_VERSION || config.settings.db_version || 'latest';
   const [filtersMetaReady, setFiltersMetaReady] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
   const [sitesResults, setSitesResults] = useState([]);
@@ -149,26 +151,26 @@ const View = ({ content, ...props }) => {
         sqls: [
           // INDUSTRIES QUERY
           `SELECT DISTINCT EEAActivity
-          FROM [IED].[latest].[EPRTR_sectors]
+          FROM [IED].[${db_version}].[EPRTR_sectors]
           ORDER BY EEAActivity`,
           // COUNTRIES QUERY
           `SELECT DISTINCT siteCountry, siteCountryName
-        FROM [IED].[latest].[Browse2_MapPOPUP]
+        FROM [IED].[${db_version}].[Browse2_MapPOPUP]
         ORDER BY siteCountryName`,
           // POLLUTANT GROUPS QUERY
           `SELECT DISTINCT pollutantgroup
-        FROM [IED].[latest].[Browse2_MapPOPUP]
+        FROM [IED].[${db_version}].[Browse2_MapPOPUP]
         WHERE NOT(pollutantgroup='')
         ORDER BY pollutantgroup`,
           // REPORTING YEARS QUERY
-          `SELECT DISTINCT reportingYear FROM [IED].[latest].[ReportData] ORDER BY reportingYear`,
+          `SELECT DISTINCT reportingYear FROM [IED].[${db_version}].[ReportData] ORDER BY reportingYear`,
           // PLANT TYPE
-          `SELECT code, Label FROM [IED].[latest].[PlantTypeValue] ORDER BY Label`,
+          `SELECT code, Label FROM [IED].[${db_version}].[PlantTypeValue] ORDER BY Label`,
           // BAT CONCLUSSIONS QUERY
-          `SELECT DISTINCT id, Label, AcceptedDate FROM [IED].[latest].[BATConclusionValue] ORDER BY Label`,
+          `SELECT DISTINCT id, Label, AcceptedDate FROM [IED].[${db_version}].[BATConclusionValue] ORDER BY Label`,
           // PERMIT YEAR
           `SELECT DISTINCT permitYear
-        FROM [IED].[latest].[PermitDetails]
+        FROM [IED].[${db_version}].[PermitDetails]
         GROUP BY permitYear`,
         ],
         meta: [
@@ -291,7 +293,7 @@ const View = ({ content, ...props }) => {
           siteCountryFilters &&
             siteCountryFilters.length > 0 &&
             `SELECT DISTINCT NUTS_ID, NUTS_NAME
-          FROM [IED].[latest].[refNuts_NoGeo]
+          FROM [IED].[${db_version}].[refNuts_NoGeo]
           WHERE CNTR_CODE IN (${siteCountryFilters.map((country) => {
             return "'" + country + "'";
           })}) AND LEVL_CODE = 1
@@ -302,7 +304,7 @@ const View = ({ content, ...props }) => {
             siteCountryFilters.length > 0 &&
             regionFilters.length &&
             `SELECT DISTINCT NUTS_ID, NUTS_NAME
-          FROM [IED].[latest].[refNuts_NoGeo]
+          FROM [IED].[${db_version}].[refNuts_NoGeo]
           WHERE CNTR_CODE IN (${siteCountryFilters.map((country) => {
             return "'" + country + "'";
           })}) AND (${regionFilters
@@ -315,7 +317,7 @@ const View = ({ content, ...props }) => {
           siteCountryFilters &&
             siteCountryFilters.length > 0 &&
             `SELECT DISTINCT thematicIdIdentifier, nameText
-            FROM [IED].[latest].[refRBD_NoGeo]
+            FROM [IED].[${db_version}].[refRBD_NoGeo]
             WHERE countryCode IN (${siteCountryFilters.map((country) => {
               return "'" + country + "'";
             })})
@@ -324,7 +326,7 @@ const View = ({ content, ...props }) => {
           pollutantGroupFilter &&
             pollutantGroupFilter.length > 0 &&
             `SELECT DISTINCT pollutant
-          FROM [IED].[latest].[PollutantDict]
+          FROM [IED].[${db_version}].[PollutantDict]
           WHERE AirPollutantGroup ${pollutantGroupFilter
             .map((group, index) => {
               return (
@@ -833,7 +835,7 @@ const View = ({ content, ...props }) => {
     let promises = [];
     const sqls = [
       {
-        query: `SELECT DISTINCT siteName FROM [IED].[latest].[SiteMap] WHERE [siteName] COLLATE Latin1_General_CI_AI LIKE '%${data.value}%' ORDER BY [siteName]`,
+        query: `SELECT DISTINCT siteName FROM [IED].[${db_version}].[SiteMap] WHERE [siteName] COLLATE Latin1_General_CI_AI LIKE '%${data.value}%' ORDER BY [siteName]`,
         reqKey: 'results',
         searchKey: 'siteName',
         updateState: setSitesResults,
@@ -1193,7 +1195,7 @@ const View = ({ content, ...props }) => {
           '@type': 'discodata_sql_builder',
           sql: {
             value:
-              '{"fieldsets":[{"id":"sql_metadata","title":"SQL","fields":["filters_eprtr_countries"]}],"properties":{"filters_eprtr_countries":{"title":"filters EPRTR Countries","isCollection":true,"hasPagination":false,"urlQuery":true,"sql":"SELECT (STUFF((\\n    SELECT CONCAT(\',\', countryCode)\\n    FROM [IED].[latest].[SiteMap]\\n    GROUP BY countryCode\\n    FOR XML PATH(\'\')\\n    ), 1, 1, \'\')\\n) AS countries"}}}',
+              '{"fieldsets":[{"id":"sql_metadata","title":"SQL","fields":["filters_eprtr_countries"]}],"properties":{"filters_eprtr_countries":{"title":"filters EPRTR Countries","isCollection":true,"hasPagination":false,"urlQuery":true,"sql":"SELECT (STUFF((\\n    SELECT CONCAT(\',\', countryCode)\\n    FROM [IED].[db_version].[SiteMap]\\n    GROUP BY countryCode\\n    FOR XML PATH(\'\')\\n    ), 1, 1, \'\')\\n) AS countries"}}}',
           },
         }}
       />
@@ -1372,18 +1374,17 @@ const View = ({ content, ...props }) => {
           </Modal.Actions>
         </Modal>
       </div>
-      <Portal node={document.getElementById('map-sidebar-button')}>
-        <div id="dynamic-filter-toggle" className="ol-unselectable ol-control">
-          <button
-            aria-label="Toggle button"
-            className="toggle-button"
-            onClick={() => {
-              setSidebar(!sidebar);
-            }}
-          >
-            <Icon name={menuSVG} size="1em" fill="white" />
-          </button>
-        </div>
+      <Portal node={document.getElementById('ol-sidebar')}>
+        <button
+          title="Toggle button"
+          className="toggle-button"
+          id="dynamic-filter-toggle"
+          onClick={() => {
+            setSidebar(!sidebar);
+          }}
+        >
+          <Icon name={menuSVG} size="1em" fill="white" />
+        </button>
       </Portal>
       {mapSidebarExists
         ? (function () {

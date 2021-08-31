@@ -243,6 +243,8 @@ class Search extends Component {
   render() {
     const pollutants =
       this.props.discodata_resources.data.index_pollutants || [];
+    const db_version =
+      process.env.RAZZLE_DB_VERSION || config.settings.db_version || 'latest';
 
     return (
       <Container id="page-search">
@@ -250,8 +252,7 @@ class Search extends Component {
           data={{
             '@type': 'discodata_sql_builder',
             sql: {
-              value:
-                '{"fieldsets":[{"id":"sql_metadata","title":"SQL","fields":["index_pollutants"]}],"properties":{"index_pollutants":{"title":"Index pollutants","isCollection":true,"hasPagination":false,"urlQuery":false,"sql":"SELECT POL.code,\\nPOL.name,\\nPOL.startYear,\\nPOL.endYear,\\nPOL.parentId,\\nPOL.cas,\\nPOL.eperPollutantId,\\nPOL.codeEPER,\\nPOL_DET.*\\nFROM [IED].[latest].[Glo_Pollutants] as POL\\nLEFT JOIN [IED].[latest].[Glo_PollutantsDetails] AS POL_DET\\nON POL.pollutantId = POL_DET.pollutantId\\nORDER BY name","packageName":"index_pollutant_group_id"}},"required":[]}',
+              value: `{"fieldsets":[{"id":"sql_metadata","title":"SQL","fields":["index_pollutants"]}],"properties":{"index_pollutants":{"title":"Index pollutants","isCollection":true,"hasPagination":false,"urlQuery":false,"sql":"SELECT POL.code,\\nPOL.name,\\nPOL.startYear,\\nPOL.endYear,\\nPOL.parentId,\\nPOL.cas,\\nPOL.eperPollutantId,\\nPOL.codeEPER,\\nPOL_DET.*\\nFROM [IED].[${db_version}].[Glo_Pollutants] as POL\\nLEFT JOIN [IED].[${db_version}].[Glo_PollutantsDetails] AS POL_DET\\nON POL.pollutantId = POL_DET.pollutantId\\nORDER BY name","packageName":"index_pollutant_group_id"}},"required":[]}`,
             },
             where: {
               value:

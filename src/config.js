@@ -42,9 +42,6 @@ import DiscodataOpenlayersMapBlockView from '~/components/manage/Blocks/Discodat
 import NavigationBlockEdit from '~/components/manage/Blocks/NavigationBlock/Edit';
 import NavigationBlockView from '~/components/manage/Blocks/NavigationBlock/View';
 
-import SidebarBlockEdit from '~/components/manage/Blocks/SidebarBlock/Edit';
-import SidebarBlockView from '~/components/manage/Blocks/SidebarBlock/View';
-
 import QueryParamTextEdit from '~/components/manage/Blocks/QueryParamText/Edit';
 import QueryParamTextView from '~/components/manage/Blocks/QueryParamText/View';
 
@@ -104,6 +101,8 @@ import installRegulatoryBATConclusions from '~/components/manage/Blocks/SiteBloc
 import installExploreEprtr from '~/components/manage/Blocks/ExploreEprtr';
 import installList from '~/components/manage/Blocks/List';
 import installSelect from '~/components/manage/Blocks/Select';
+import installIndustryDataTable from '~/components/manage/Blocks/IndustryDataTable';
+import installIndustryMap from '~/components/manage/Blocks/IndustryMap';
 import {
   installTableau,
   installExpendableList,
@@ -212,15 +211,6 @@ export default function applyConfig(config) {
     group: 'eprtr_blocks',
     view: NavigationBlockView,
     edit: NavigationBlockEdit,
-    icon: linkSVG,
-  };
-
-  config.blocks.blocksConfig.sidebar_block = {
-    id: 'sidebar_block',
-    title: 'Sidebar Block',
-    group: 'eprtr_blocks',
-    view: SidebarBlockView,
-    edit: SidebarBlockEdit,
     icon: linkSVG,
   };
 
@@ -396,6 +386,8 @@ export default function applyConfig(config) {
     installExploreEprtr,
     installList,
     installSelect,
+    installIndustryDataTable,
+    installIndustryMap,
     installTableau,
     installExpendableList,
     installFolderListing,

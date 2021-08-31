@@ -30,7 +30,7 @@ const View = (props) => {
     type: props.data.privacy?.value || 'big',
   };
 
-  React.useState(() => {
+  React.useEffect(() => {
     if (__SERVER__) return;
     const vs = vectorSource || new source.Vector();
     if (!vectorSource) {
@@ -53,6 +53,7 @@ const View = (props) => {
         }
       });
     });
+    /* eslint-disable-next-line */
   }, [siteInspireId]);
 
   if (__SERVER__ || !vectorSource) return '';
