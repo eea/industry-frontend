@@ -58,6 +58,7 @@
     "url": "https://github.com/eea/volto-openlayers-map.git",
     "path": "src",
     "package": "@eeacms/volto-openlayers-map",
+    "branch": "develop",
     "develop": true
   },
   "volto-staging-banner": {
