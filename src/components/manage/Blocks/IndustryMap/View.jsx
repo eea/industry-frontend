@@ -14,7 +14,7 @@ import { Controls, Control } from '@eeacms/volto-openlayers-map/Controls';
 import { Layers, Layer } from '@eeacms/volto-openlayers-map/Layers';
 import { openlayers } from '@eeacms/volto-openlayers-map';
 import { setQueryParam } from '@eeacms/volto-datablocks/actions';
-import PrivacyProtection from '~/components/manage/Blocks/DiscodataOpenlayersMapBlock/PrivacyProtection';
+import PrivacyProtection from '../PrivacyProtection';
 import { getEncodedQueryString } from '~/utils';
 import {
   getSitesUrl,
@@ -25,7 +25,7 @@ import {
 
 import clearSVG from '@plone/volto/icons/clear.svg';
 import navigationSVG from '@plone/volto/icons/navigation.svg';
-import mapPlaceholder from '~/components/manage/Blocks/DiscodataOpenlayersMapBlock/map_placeholder.png';
+import mapPlaceholder from '../PrivacyProtection/map_placeholder.png';
 
 import './style.css';
 
@@ -64,7 +64,7 @@ const View = (props) => {
       'This map is hosted by a third party [Environmental Systems Research Institute, INC: "ESRI"]. By showing th external content you accept the terms and conditions of www.esri.com. This includes their cookie policies, which e have no control over.',
     privacy_cookie_key: 'site-location-map',
     placeholder_image: mapPlaceholder,
-    type: props.data.privacy?.value || 'big',
+    type: 'big',
   };
 
   const db_version =
@@ -401,14 +401,7 @@ const View = (props) => {
   return (
     <div className="industry-map-wrapper">
       <div id="industry-map" className="industry-map">
-        <PrivacyProtection
-          data={{ dataprotection }}
-          style={{
-            backgroundImage: `url(${mapPlaceholder})`,
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover',
-          }}
-        >
+        <PrivacyProtection data={{ dataprotection }}>
           <Map
             ref={(element) => {
               if (!element || map.current) return;

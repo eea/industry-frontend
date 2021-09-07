@@ -8,12 +8,9 @@ import { Layers, Layer } from '@eeacms/volto-openlayers-map/Layers';
 import { openlayers } from '@eeacms/volto-openlayers-map';
 import { getSiteLocationURL } from './index';
 import qs from 'querystring';
+import PrivacyProtection from '../PrivacyProtection';
+import mapPlaceholder from '../PrivacyProtection/map_placeholder_small.jpg';
 import './style.css';
-
-// SVGs
-import mapPlaceholder from '~/components/manage/Blocks/DiscodataOpenlayersMapBlock/map_placeholder.png';
-// Privacy Protection VOLTO
-import PrivacyProtection from '~/components/manage/Blocks/DiscodataOpenlayersMapBlock/PrivacyProtection';
 
 const View = (props) => {
   const [options, setOptions] = React.useState({});
@@ -27,7 +24,7 @@ const View = (props) => {
       'This map is hosted by a third party [Environmental Systems Research Institute, INC: "ESRI"]. By showing th external content you accept the terms and conditions of www.esri.com. This includes their cookie policies, which e have no control over.',
     privacy_cookie_key: 'site-location-map',
     placeholder_image: mapPlaceholder,
-    type: props.data.privacy?.value || 'big',
+    type: 'small',
   };
 
   React.useEffect(() => {
@@ -60,7 +57,7 @@ const View = (props) => {
 
   const siteStyle = new style.Style({
     image: new style.Circle({
-      radius: 3,
+      radius: 6,
       fill: new style.Fill({ color: '#00FF00' }),
       stroke: new style.Stroke({ color: '#6A6A6A', width: 1 }),
       zIndex: 0,
@@ -70,14 +67,7 @@ const View = (props) => {
   return (
     <div className="site-location-map-wrapper">
       <Container id="site-location-map" className="site-location-map">
-        <PrivacyProtection
-          data={{ dataprotection }}
-          style={{
-            backgroundImage: `url(${mapPlaceholder})`,
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover',
-          }}
-        >
+        <PrivacyProtection data={{ dataprotection }}>
           <Map
             view={{
               center: proj.fromLonLat([20, 50]),

@@ -15,7 +15,7 @@ import { isArray } from 'lodash';
 import { getEncodedQueryString } from '~/utils';
 // VOLTO
 import { Icon as VoltoIcon, Toast } from '@plone/volto/components';
-import PrivacyProtection from './PrivacyProtection';
+import PrivacyProtection from '../PrivacyProtection';
 // VOLTO-DATABLOCKS
 import { setQueryParam } from '@eeacms/volto-datablocks/actions';
 // SEMANTIC REACT UI
@@ -23,7 +23,7 @@ import { Grid, Header } from 'semantic-ui-react';
 // SVGs
 import clearSVG from '@plone/volto/icons/clear.svg';
 import navigationSVG from '@plone/volto/icons/navigation.svg';
-import mapPlaceholder from '~/components/manage/Blocks/DiscodataOpenlayersMapBlock/map_placeholder.png';
+import mapPlaceholder from '~/components/manage/Blocks/PrivacyProtection/map_placeholder.png';
 // STYLES
 import 'ol/ol.css';
 import './style.css';
@@ -1432,11 +1432,6 @@ const OpenlayersMapView = (props) => {
             setPrepareMapRender(true);
           }}
           data={{ dataprotection }}
-          style={{
-            backgroundImage: `url(${mapPlaceholder})`,
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover',
-          }}
         >
           {view}
         </PrivacyProtection>

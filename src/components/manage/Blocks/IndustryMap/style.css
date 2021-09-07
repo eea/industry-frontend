@@ -372,47 +372,6 @@ p.mb-1:first-child {
   margin-bottom: 1rem;
 }
 
-.privacy-protection {
-  padding: 0;
-  background: transparent;
-}
-
-.privacy-protection .overlay {
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.35);
-}
-
-.privacy-protection .background {
-  opacity: 0.8;
-}
-
-.privacy-protection .wrapped {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 400px;
-  background: #ffffff;
-  border-radius: 10px;
-  transform: translate(-50%, -50%);
-}
-
-.privacy-protection .wrapped .ui.message {
-  background: #ffffff;
-  border-radius: 10px;
-}
-
-.privacy-protection .wrapped p.discreet {
-  padding: 1.5em 1.5em;
-}
-
-.privacy-protection .privacy-button {
-  display: flex;
-  flex-flow: row;
-  align-items: center;
-  justify-content: center;
-}
-
 .ol-location {
   right: 0.5rem !important;
   left: unset !important;

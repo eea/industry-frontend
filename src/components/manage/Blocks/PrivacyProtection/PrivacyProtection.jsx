@@ -51,7 +51,14 @@ export default ({ children, data = {}, block, onShow, ...rest }) => {
           {!dataprotection.enabled || show ? (
             children
           ) : (
-            <div className="privacy-protection" {...rest}>
+            <div
+              className="privacy-protection"
+              style={{
+                backgroundImage: `url(${dataprotection.placeholder_image})`,
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'cover',
+              }}
+            >
               <div className="overlay">
                 <div className="wrapped">
                   {dataprotection.type === 'big' ? (
