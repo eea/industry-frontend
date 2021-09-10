@@ -1327,7 +1327,7 @@
   dependencies:
     "@datapunt/matomo-tracker-react" "0.3.1"
 
-"@eeacms/volto-object-widget@3.0.0":
+"@eeacms/volto-object-widget@*", "@eeacms/volto-object-widget@3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@eeacms/volto-object-widget/-/volto-object-widget-3.0.0.tgz#caf99ec54bb39481a99937985f362f086c1c5fd5"
   integrity sha512-8ByONF12U35HKnsO6gKAxCxSe4xfSintAU7zE8zWEKgdtcIb+Jx78wpi6cy3p0C0YLUTnd2BGIXLqDSftKI+WA==
@@ -16736,12 +16736,12 @@ volto-slate@*:
     slate-react "^0.62.0"
     weak-key "^1.0.2"
 
-volto-slate@2.9.1:
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/volto-slate/-/volto-slate-2.9.1.tgz#d4ed326470570a5b81c3dbd65e2aa9acf936184e"
-  integrity sha512-ZCqMnIv+qHOsMgespqLwDKvAqSbrflGXF1MFTABbCgpEAA7dw/9SGaCR1Sa5uZbYs8kb24PR7esBCKs2JszQkg==
+volto-slate@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/volto-slate/-/volto-slate-3.0.0.tgz#0bb11ecfc5cdde3b58c2affb1aa96920e348bee2"
+  integrity sha512-/h92LxVcDHrMPnLzoFGK9IZTxm6AMRZTc2tD3N+OqrZHGlru16vQSIEhStHhnZuqegMIwX6KzatKwnz0Ehbl6g==
   dependencies:
-    "@eeacms/volto-object-widget" ">=2.2.3"
+    "@eeacms/volto-object-widget" "*"
     classnames "2.2.6"
     image-extensions "1.1.0"
     is-url "1.2.4"
