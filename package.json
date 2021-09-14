@@ -71,7 +71,7 @@
     "react-tooltip": "^4.2.9",
     "react-visibility-sensor": "^5.1.1",
     "tableau-api-js": "github:eea/tableau-api-js#1.1.0",
-    "volto-slate": "3.0.1"
+    "volto-slate": "3.1.0"
   },
   "devDependencies": {
     "eslint-plugin-prettier": "3.1.3",
