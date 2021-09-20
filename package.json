@@ -23,12 +23,15 @@
     "build": "razzle build",
     "start:prod": "NODE_ENV=production node build/server.js",
     "i18n": "NODE_ENV=production node node_modules/@plone/volto/src/i18n.js",
-    "develop": "missdev --config=jsconfig.json --output=addons",
-    "develop:npx": "npx -p mrs-developer missdev --config=jsconfig.json --output=addons",
-    "cypress:run": "NODE_ENV=development ./node_modules/cypress/bin/cypress run",
-    "cypress:open": "NODE_ENV=development ./node_modules/cypress/bin/cypress open",
-    "prettier": "./node_modules/.bin/prettier --single-quote --check 'src/**/*.{js,jsx,ts,tsx,json,css,scss,md}'",
-    "prettier:fix": "./node_modules/.bin/prettier --single-quote --write 'src/**/*.{js,jsx,ts,tsx,json,css,scss,md}'"
+    "develop:npx": "npx -p mrs-developer missdev --config=jsconfig.json --output=develop",
+    "develop": "missdev --config=jsconfig.json --output=develop",
+    "update": "./scripts/update.sh",
+    "test": "./node_modules/jest/bin/jest.js --env=jsdom --passWithNoTests src/addons --verbose",
+    "cypress:run": "./node_modules/cypress/bin/cypress run",
+    "cypress:open": "./node_modules/cypress/bin/cypress open",
+    "release": "release-it",
+    "release-major-beta": "release-it major --preRelease=beta",
+    "release-beta": "release-it --preRelease=beta"
   },
   "workspaces": [
     "src/addons/*"
