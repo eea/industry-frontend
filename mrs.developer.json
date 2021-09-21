@@ -26,13 +26,6 @@
     "package": "@eeacms/volto-datablocks",
     "develop": true
   },
-  "volto-embed": {
-    "url": "https://github.com/eea/volto-embed.git",
-    "branch": "develop",
-    "path": "src",
-    "package": "@eeacms/volto-embed",
-    "develop": true
-  },
   "volto-grid-block": {
     "url": "https://github.com/eea/volto-grid-block.git",
     "branch": "centurion",

@@ -1,14 +1,11 @@
 {
     "compilerOptions": {
         "paths": {
-            "volto-addons": [
-                "addons/volto-addons/src"
-            ],
             "volto-datablocks": [
                 "addons/volto-datablocks/src"
             ],
-            "volto-embed": [
-                "addons/volto-embed/src"
+            "volto-addons": [
+                "addons/volto-addons/src"
             ],
             "@eeacms/volto-block-style": [
                 "addons/volto-block-style/src"
@@ -18,9 +15,6 @@
             ],
             "@eeacms/volto-datablocks": [
                 "addons/volto-datablocks/src"
-            ],
-            "@eeacms/volto-embed": [
-                "addons/volto-embed/src"
             ],
             "@eeacms/volto-grid-block": [
                 "addons/volto-grid-block/src"
