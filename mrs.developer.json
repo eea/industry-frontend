@@ -1,64 +1,9 @@
 {
-  "volto-addons": {
-    "url": "https://github.com/eea/volto-addons.git",
-    "branch": "master",
-    "path": "src",
-    "develop": true
-  },
-  "volto-block-style": {
-    "url": "https://github.com/eea/volto-block-style.git",
-    "path": "src",
-    "package": "@eeacms/volto-block-style",
-    "branch": "develop",
-    "develop": true
-  },
-  "volto-columns-block": {
-    "url": "https://github.com/eea/volto-columns-block.git",
-    "branch": "develop",
-    "path": "src",
-    "package": "@eeacms/volto-columns-block",
-    "develop": true
-  },
   "volto-datablocks": {
     "url": "https://github.com/eea/volto-datablocks.git",
     "branch": "develop",
     "path": "src",
     "package": "@eeacms/volto-datablocks",
     "develop": true
-  },
-  "volto-grid-block": {
-    "url": "https://github.com/eea/volto-grid-block.git",
-    "branch": "centurion",
-    "path": "src",
-    "package": "@eeacms/volto-grid-block",
-    "develop": true
-  },
-  "volto-tableau": {
-    "url": "https://github.com/eea/volto-tableau.git",
-    "path": "src",
-    "package": "@eeacms/volto-tableau",
-    "branch": "develop",
-    "develop": true
-  },
-  "volto-tabs-block": {
-    "url": "https://github.com/eea/volto-tabs-block.git",
-    "path": "src",
-    "package": "@eeacms/volto-tabs-block",
-    "branch": "develop",
-    "develop": true
-  },
-  "volto-openlayers-map": {
-    "url": "https://github.com/eea/volto-openlayers-map.git",
-    "path": "src",
-    "package": "@eeacms/volto-openlayers-map",
-    "branch": "develop",
-    "develop": true
-  },
-  "volto-staging-banner": {
-    "url": "https://github.com/eea/volto-staging-banner.git",
-    "path": "src",
-    "package": "@eeacms/volto-staging-banner",
-    "branch": "develop",
-    "develop": false
   }
 }

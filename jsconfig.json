@@ -4,29 +4,8 @@
             "volto-datablocks": [
                 "addons/volto-datablocks/src"
             ],
-            "volto-addons": [
-                "addons/volto-addons/src"
-            ],
-            "@eeacms/volto-block-style": [
-                "addons/volto-block-style/src"
-            ],
-            "@eeacms/volto-columns-block": [
-                "addons/volto-columns-block/src"
-            ],
             "@eeacms/volto-datablocks": [
                 "addons/volto-datablocks/src"
-            ],
-            "@eeacms/volto-grid-block": [
-                "addons/volto-grid-block/src"
-            ],
-            "@eeacms/volto-tableau": [
-                "addons/volto-tableau/src"
-            ],
-            "@eeacms/volto-tabs-block": [
-                "addons/volto-tabs-block/src"
-            ],
-            "@eeacms/volto-openlayers-map": [
-                "addons/volto-openlayers-map/src"
             ]
         },
         "baseUrl": "src"
