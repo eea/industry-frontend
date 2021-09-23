@@ -52,6 +52,8 @@
     "@eeacms/volto-datablocks": "2.0.12",
     "@eeacms/volto-openlayers-map": "0.1.2",
     "@eeacms/volto-tableau": "1.2.3",
+    "@eeacms/volto-addons": "github:eea/volto-addons#master",
+    "@eeacms/volto-grid-block": "github:eea/volto-grid-block#centurion",
     "@plone/volto": "13.15.1",
     "axios": "^0.21.1",
     "jsonp": "^0.2.1",
