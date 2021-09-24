@@ -20,12 +20,11 @@ pipeline {
    stage('Integration tests') {
       parallel {
         stage('Cypress') {
-          steps {
-            when {
-              environment name: 'CHANGE_ID', value: ''           
-            }
+          when {
+            environment name: 'CHANGE_ID', value: ''           
           }
-          node(label: 'docker') {
+          steps {
+            node(label: 'docker') {
               script {
                 try {
                   sh '''docker pull plone; docker run -d --name="$BUILD_TAG-plone" -e SITE="Plone" -e PROFILES="profile-plone.restapi:blocks" plone fg'''
