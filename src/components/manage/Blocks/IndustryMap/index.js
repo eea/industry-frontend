@@ -12,6 +12,7 @@ const filters = [
   { queryKey: 'nuts_latest', featureKey: 'nuts_regions', op: 'like' },
   { queryKey: 'permitType', featureKey: 'permit_types', op: 'like' },
   { queryKey: 'permitYear', featureKey: 'permitYears', op: 'like' },
+  { queryKey: 'facilityTypes', featureKey: 'facilityTypes', op: 'eqStr' },
   { queryKey: 'plantTypes', featureKey: 'plantTypes', op: 'like' },
   { queryKey: 'pollutant', featureKey: 'pollutants', op: 'like' },
   { queryKey: 'pollutantGroup', featureKey: 'air_groups', op: 'like' },
@@ -86,6 +87,8 @@ export const getWhereStatement = (query = {}) => {
           where[filter].push(`${featureKey} LIKE '%${value}%'`);
         } else if (op === 'eq' && value) {
           where[filter].push(`${featureKey} = ${value}`);
+        } else if (op === 'eqStr' && value) {
+          where[filter].push(`${featureKey} = '${value}''`);
         }
       }
     } else if (query[queryKey]) {
@@ -95,6 +98,8 @@ export const getWhereStatement = (query = {}) => {
         where[filter].push(`${featureKey} LIKE '%${value}%'`);
       } else if (op === 'eq' && value) {
         where[filter].push(`${featureKey} = ${value}`);
+      } else if (op === 'eqStr' && value) {
+        where[filter].push(`${featureKey} = '${value}''`);
       }
     }
   }

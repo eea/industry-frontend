@@ -48,6 +48,7 @@ const View = ({ content, ...props }) => {
       'pollutant_groups',
       'pollutants',
       'reporting_years',
+      'facility_types',
       'plant_types',
       'bat_conclusions',
       'permit_types',
@@ -451,6 +452,42 @@ const View = ({ content, ...props }) => {
                 delete filtersMeta[key];
               }
             });
+            filtersMeta['facility_types'] = {
+              filteringInputs: [
+                {
+                  id: _uniqueId('select_'),
+                  type: 'select',
+                  position: 0,
+                },
+              ],
+              placeholder: 'Select facility type',
+              queryToSet: 'facilityTypes',
+              title: 'Facility type',
+              static: true,
+              options: [
+                { key: null, value: null, text: 'No value' },
+                {
+                  key: 'EPRTR',
+                  value: 'EPRTR',
+                  text: 'EPRTR',
+                },
+                {
+                  key: 'NONEPRTR',
+                  value: 'NONEPRTR',
+                  text: 'NONEPRTR',
+                },
+                {
+                  key: 'EPRTR, NONEPRTR',
+                  value: 'EPRTR, NONEPRTR',
+                  text: 'EPRTR, NONEPRTR',
+                },
+                {
+                  key: 'NONEPRTR, EPRTR',
+                  value: 'NONEPRTR, EPRTR',
+                  text: 'NONEPRTR, EPRTR',
+                },
+              ],
+            };
             response.forEach((res, index) => {
               const results = JSON.parse(res.request.response).results;
               let filteringInputs = [];

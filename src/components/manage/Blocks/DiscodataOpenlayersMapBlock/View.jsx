@@ -72,6 +72,157 @@ let Map,
   olExtent;
 let OL_LOADED = false;
 
+// const PopupDetails = ({ data }) => {
+//   const countFactypeEprtr = data.count_factype_EPRTR;
+//   const countFactypeNonEprtr = data.count_factype_NONEPRTR;
+//   const countInstypeIed = data.count_instype_IED;
+//   const countInstypeNonIed = data.count_instype_NONIED;
+//   const countPlantypeLcp = data.count_plantType_LCP;
+//   const countPlantypeCoWi = data.count_plantType_coWI;
+//   const countPlantypeWi = data.count_plantType_WI;
+
+//   return (
+//     <div className="grid-layout">
+//       {/* SITE CONTENTS */}
+//       {data.nFacilities || data.nInstallations || data.nLCP ? (
+//         <div className="row mb-1-super mt-0-super">
+//           <div className="column column-12">
+//             <Header as="h3">Site contents</Header>
+//           </div>
+//           {countFactypeEprtr ? (
+//             <div className="column  column-12">
+//               <p>
+//                 {`${countFactypeEprtr} ${
+//                   countFactypeEprtr === 1
+//                     ? 'EPRTR Facility'
+//                     : 'EPRTR Facilities'
+//                 }`}
+//               </p>
+//             </div>
+//           ) : (
+//             ''
+//           )}
+//           {countFactypeNonEprtr ? (
+//             <div className="column  column-12">
+//               <p>
+//                 {`${countFactypeNonEprtr} ${
+//                   countFactypeNonEprtr === 1
+//                     ? 'NON-EPRTR Facility'
+//                     : 'NON-EPRTR Facilities'
+//                 }`}
+//               </p>
+//             </div>
+//           ) : (
+//             ''
+//           )}
+
+//           {countInstypeIed ? (
+//             <div className="column  column-12">
+//               <p>
+//                 {`${countInstypeIed} ${
+//                   countInstypeIed === 1
+//                     ? 'IED Installation'
+//                     : 'IED Installations'
+//                 }`}
+//               </p>
+//             </div>
+//           ) : (
+//             ''
+//           )}
+
+//           {countInstypeNonIed ? (
+//             <div className="column  column-12">
+//               <p>
+//                 {`${countInstypeNonIed} ${
+//                   countInstypeNonIed === 1
+//                     ? 'NON-IED Installation'
+//                     : 'NON-IED Installations'
+//                 }`}
+//               </p>
+//             </div>
+//           ) : (
+//             ''
+//           )}
+
+//           {countPlantypeLcp ? (
+//             <div className="column  column-12">
+//               <p>
+//                 {`${countPlantypeLcp} ${
+//                   countPlantypeLcp === 1
+//                     ? 'Large combustion plant'
+//                     : 'Large combustion plants'
+//                 }`}
+//               </p>
+//             </div>
+//           ) : (
+//             ''
+//           )}
+
+//           {countPlantypeCoWi ? (
+//             <div className="column  column-12">
+//               <p>
+//                 {`${countPlantypeCoWi} ${
+//                   countPlantypeCoWi === 1
+//                     ? 'Co-waste incinerator'
+//                     : 'Large combustion plants'
+//                 }`}
+//               </p>
+//             </div>
+//           ) : (
+//             ''
+//           )}
+
+//           {countPlantypeWi ? (
+//             <div className="column  column-12">
+//               <p>
+//                 {`${countPlantypeWi} ${
+//                   countPlantypeWi === 1
+//                     ? 'Co-waste incinerator'
+//                     : 'Co-waste incinerator'
+//                 }`}
+//               </p>
+//             </div>
+//           ) : (
+//             ''
+//           )}
+//         </div>
+//       ) : (
+//         ''
+//       )}
+
+//       {/* SITE POLLUTANT EMISSIONS */}
+//       <div className="row mb-1-super mt-0-super">
+//         <div className="column  column-12">
+//           <Header as="h3">Pollutant emissions</Header>
+//         </div>
+//         <div className="column  column-12 description">
+//           {data.pollutants ? (
+//             <p>{data.pollutants}</p>
+//           ) : (
+//             <p>There are no data regarding the pollutants</p>
+//           )}
+//         </div>
+//       </div>
+//       {/* REGULATORY INFORMATION */}
+//       <div className="row mb-1-super mt-0-super">
+//         <div className="column  column-12">
+//           <Header as="h3">Regulatory information</Header>
+//         </div>
+//         <div className="column  column-12">
+//           {data.Site_reporting_year ? (
+//             <p>
+//               Inspections in {data.Site_reporting_year}:{' '}
+//               {data.numInspections || 0}
+//             </p>
+//           ) : (
+//             ''
+//           )}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
 const OpenlayersMapView = (props) => {
   const stateRef = useRef({
     map: {
@@ -366,6 +517,11 @@ const OpenlayersMapView = (props) => {
         // Reporting year
         reportingYear: {
           sql: `(Site_reporting_year = :options)`,
+          type: 'multiple',
+        },
+        // Facility type
+        facilityTypes: {
+          sql: `(facilityTypes LIKE ':options')`,
           type: 'multiple',
         },
         // Plant type
