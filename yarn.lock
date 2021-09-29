@@ -1242,10 +1242,10 @@
     "@eeacms/volto-workflow-progress" "2.3.7"
     volto-slate "3.0.0-alpha.0"
 
-"@eeacms/volto-embed@2.0.3", "@eeacms/volto-embed@^2.0.1":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@eeacms/volto-embed/-/volto-embed-2.0.3.tgz#b426014e1e92e9d9719a0220a889f760c8d44c1b"
-  integrity sha512-rM8ZIY0eK7TLl7mmclSu8kiluH3gSeTq3MVJSkEFjiOE8S7KdAXpmnNE8JHeD0KLmDurx/SSK/9iIT6A23QsiA==
+"@eeacms/volto-embed@2.0.4", "@eeacms/volto-embed@^2.0.1":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@eeacms/volto-embed/-/volto-embed-2.0.4.tgz#8c8d926945c629f225d32d644d28c7e25fc088c2"
+  integrity sha512-TTjol+c5MADHGO1sHK4PbTkSOeQPFEqaiPmjpkA64eTJWDv08vCLAGNgDfX8YviXxjWSMwm5hDXZCXUmSau2yQ==
   dependencies:
     "@eeacms/volto-corsproxy" "2.1.2"
     react-visibility-sensor "5.1.1"
