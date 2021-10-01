@@ -47,7 +47,7 @@
   ],
   "dependencies": {
     "@eeacms/volto-datablocks": "2.0.12",
-    "@eeacms/volto-eea-kitkat": "4.0.0",
+    "@eeacms/volto-eea-kitkat": "4.0.1",
     "@eeacms/volto-embed": "2.0.4",
     "@eeacms/volto-grid-block": "github:eea/volto-grid-block#centurion",
     "@eeacms/volto-openlayers-map": "0.1.2",
