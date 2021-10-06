@@ -2,7 +2,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Header, Modal, Select, Input, List } from 'semantic-ui-react';
+import {
+  Header,
+  Modal,
+  Select,
+  Input,
+  List,
+  Checkbox,
+} from 'semantic-ui-react';
 import { Portal } from 'react-portal';
 import _uniqueId from 'lodash/uniqueId';
 import axios from 'axios';
@@ -48,7 +55,6 @@ const View = ({ content, ...props }) => {
       'pollutant_groups',
       'pollutants',
       'reporting_years',
-      'facility_types',
       'plant_types',
       'bat_conclusions',
       'permit_types',
@@ -452,42 +458,6 @@ const View = ({ content, ...props }) => {
                 delete filtersMeta[key];
               }
             });
-            filtersMeta['facility_types'] = {
-              filteringInputs: [
-                {
-                  id: _uniqueId('select_'),
-                  type: 'select',
-                  position: 0,
-                },
-              ],
-              placeholder: 'Select facility type',
-              queryToSet: 'facilityTypes',
-              title: 'Facility type',
-              static: true,
-              options: [
-                { key: null, value: null, text: 'No value' },
-                {
-                  key: 'EPRTR',
-                  value: 'EPRTR',
-                  text: 'EPRTR',
-                },
-                {
-                  key: 'NONEPRTR',
-                  value: 'NONEPRTR',
-                  text: 'NONEPRTR',
-                },
-                {
-                  key: 'EPRTR, NONEPRTR',
-                  value: 'EPRTR, NONEPRTR',
-                  text: 'EPRTR, NONEPRTR',
-                },
-                {
-                  key: 'NONEPRTR, EPRTR',
-                  value: 'NONEPRTR, EPRTR',
-                  text: 'NONEPRTR, EPRTR',
-                },
-              ],
-            };
             response.forEach((res, index) => {
               const results = JSON.parse(res.request.response).results;
               let filteringInputs = [];
@@ -1224,6 +1194,34 @@ const View = ({ content, ...props }) => {
     </div>
   );
 
+  const setCheckboxValue = (_, data) => {
+    let values = props.discodata_query.search[data.name] || [];
+    const checked = data.checked;
+    const index = values.indexOf(data.label);
+    if (checked && index === -1) {
+      values.push(data.label);
+    }
+    if (!checked && index !== -1) {
+      values.splice(index, 1);
+    }
+    props.setQueryParam({
+      queryParam: {
+        [data.name]: values,
+        locationTerm: null,
+        siteTerm: null,
+        advancedFiltering: true,
+        filtersCounter: props.discodata_query.search['filtersCounter']
+          ? props.discodata_query.search['filtersCounter'] + 1
+          : 1,
+      },
+    });
+    setSearchTerm('');
+  };
+
+  const isChecked = (name, label) => {
+    return (props.discodata_query.search[name] || []).indexOf(label) !== -1;
+  };
+
   if (!__CLIENT__) return '';
   return (
     <div className="filters-container">
@@ -1563,6 +1561,25 @@ const View = ({ content, ...props }) => {
                             state.filtersMeta['industries']?.options || []
                           }
                           value={state.filters['EEAActivity']?.[0]}
+                        />
+                      </form>
+                    </div>
+
+                    <Header as="h3">Facility type</Header>
+                    <div className="input-container">
+                      <form autoComplete="facilityTypes">
+                        <Checkbox
+                          name="facilityTypes"
+                          label="EPRTR"
+                          style={{ marginRight: '1rem' }}
+                          checked={isChecked('facilityTypes', 'EPRTR')}
+                          onChange={setCheckboxValue}
+                        />
+                        <Checkbox
+                          name="facilityTypes"
+                          label="NONEPRTR"
+                          checked={isChecked('facilityTypes', 'NONEPRTR')}
+                          onChange={setCheckboxValue}
                         />
                       </form>
                     </div>

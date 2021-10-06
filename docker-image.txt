@@ -1,1 +1,1 @@
-eeacms/eprtr-frontend
+eeacms/eprtr-frontend:2.2.0

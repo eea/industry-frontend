@@ -521,7 +521,14 @@ const OpenlayersMapView = (props) => {
         },
         // Facility type
         facilityTypes: {
-          sql: `(facilityTypes LIKE ':options')`,
+          sql: (options) => {
+            const isEprtr = options.indexOf('EPRTR') !== -1;
+            const isNonEprtr = options.indexOf('NONEPRTR') !== -1;
+            if (isEprtr && isNonEprtr) return null;
+            if (isEprtr)
+              return `((facilityTypes LIKE 'EPRTR%') OR (facilityTypes LIKE '% EPRTR'))`;
+            return `((facilityTypes LIKE 'NONEPRTR%') OR (facilityTypes LIKE '% NONEPRTR'))`;
+          },
           type: 'multiple',
         },
         // Plant type
@@ -565,7 +572,9 @@ const OpenlayersMapView = (props) => {
       if (where.type === 'multiple') {
         options = isArray(options) ? options?.filter((option) => option) : [];
         const conditions = [];
-        if (options?.length) {
+        if (typeof where.sql === 'function' && options?.length) {
+          where.sql = where.sql(props.query[id]);
+        } else if (options?.length) {
           options.forEach((option) => {
             let baseSql = where.sql;
             option && conditions.push(baseSql.replace(/:options/g, option));
