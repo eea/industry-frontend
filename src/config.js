@@ -357,7 +357,9 @@ export default function applyConfig(config) {
     providerUrl: 'https://discodata.eea.europa.eu/sql',
     excludeFromNavigation: ['/industrial-site'],
     metaDescription: 'European Environment Agency',
-    matomoSiteId: 48,
+    // matomoSiteId: 48,
+    matomoSiteId: 7,
+    matomoUrlBase: 'https://matomo.devel4cph.eea.europa.eu/',
     tableauVersion: '2.3.0',
   };
 

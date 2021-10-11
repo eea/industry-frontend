@@ -21,7 +21,7 @@ import {
   deleteQueryParam,
 } from '@eeacms/volto-datablocks/actions';
 import config from '@plone/volto/registry';
-import { getEncodedQueryString } from '~/utils';
+import { getEncodedQueryString, createEvent } from '~/utils';
 
 import menuSVG from '@plone/volto/icons/menu-alt.svg';
 import circlePlus from '@plone/volto/icons/circle-plus.svg';
@@ -129,6 +129,72 @@ const View = ({ content, ...props }) => {
     }
     /* eslint-disable-next-line */
   }, [JSON.stringify(state.filtersMeta)]);
+
+  useEffect(() => {
+    if (
+      props.discodata_query.search.filtersCounter > 1 &&
+      props.discodata_query.search.advancedFiltering
+    ) {
+      const trackedFilters = [
+        'batConclusionCode',
+        'EEAActivity',
+        'facilityTypes',
+        'nuts_latest',
+        'nuts_regions',
+        'permitType',
+        'permitYear',
+        'plantTypes',
+        'pollutant',
+        'pollutantGroup',
+        'province',
+        'region',
+        'reportingYear',
+        'riverBasin',
+        'siteCountry',
+      ];
+      createEvent('matomoTrackEvent', {
+        category: 'Filters',
+        action: 'Filters changed',
+        name: 'Map/Table filters',
+        value: JSON.stringify({
+          ...Object.keys(props.discodata_query.search)
+            .filter(
+              (key) =>
+                trackedFilters.includes(key) &&
+                props.discodata_query.search[key]?.filter((value) => value)
+                  ?.length,
+            )
+            .reduce((obj, key) => {
+              obj[key] = props.discodata_query.search[key]?.filter(
+                (value) => value,
+              );
+              return obj;
+            }, {}),
+        }),
+      });
+    } else if (
+      props.discodata_query.search.filtersCounter &&
+      !props.discodata_query.search.advancedFiltering
+    ) {
+      const { siteTerm, locationTerm } = props.discodata_query.search;
+      if (siteTerm) {
+        createEvent('matomoTrackEvent', {
+          category: 'Search',
+          action: 'Search by site term',
+          name: 'Map/Table search',
+          value: siteTerm,
+        });
+      } else if (locationTerm?.text) {
+        createEvent('matomoTrackEvent', {
+          category: 'Search',
+          action: 'Search by location',
+          name: 'Map/Table search',
+          value: locationTerm.text,
+        });
+      }
+    }
+    /* eslint-disable-next-line */
+  }, [props.discodata_query.search.filtersCounter]);
 
   useEffect(() => {
     if (
@@ -810,6 +876,7 @@ const View = ({ content, ...props }) => {
       queryParam: {
         ...props.discodata_query.search,
         ...newFilters,
+        facilityTypes: [],
         nuts_regions: [],
         nuts_latest: [],
         siteTerm: null,

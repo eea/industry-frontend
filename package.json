@@ -43,7 +43,8 @@
     "@eeacms/volto-embed",
     "volto-addons",
     "@eeacms/volto-openlayers-map",
-    "@eeacms/volto-tableau"
+    "@eeacms/volto-tableau",
+    "@eeacms/volto-matomo"
   ],
   "dependencies": {
     "@eeacms/volto-datablocks": "2.0.13",
@@ -52,6 +53,7 @@
     "@eeacms/volto-grid-block": "github:eea/volto-grid-block#centurion",
     "@eeacms/volto-openlayers-map": "0.1.2",
     "@eeacms/volto-tableau": "1.2.3",
+    "@eeacms/volto-matomo": "github:eea/volto-matomo#develop",
     "@material/react-linear-progress": "^0.15.0",
     "@plone/volto": "13.15.1",
     "axios": "^0.21.1",
