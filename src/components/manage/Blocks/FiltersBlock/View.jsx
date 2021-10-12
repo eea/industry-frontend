@@ -21,7 +21,8 @@ import {
   deleteQueryParam,
 } from '@eeacms/volto-datablocks/actions';
 import config from '@plone/volto/registry';
-import { getEncodedQueryString, createEvent } from '~/utils';
+import { getEncodedQueryString } from '~/utils';
+import { trackSiteSearch } from '@eeacms/volto-matomo/utils';
 
 import menuSVG from '@plone/volto/icons/menu-alt.svg';
 import circlePlus from '@plone/volto/icons/circle-plus.svg';
@@ -152,11 +153,9 @@ const View = ({ content, ...props }) => {
         'riverBasin',
         'siteCountry',
       ];
-      createEvent('matomoTrackEvent', {
-        category: 'Filters',
-        action: 'Filters changed',
-        name: 'Map/Table filters',
-        value: JSON.stringify({
+      trackSiteSearch({
+        category: 'Map/Table filters',
+        keyword: JSON.stringify({
           ...Object.keys(props.discodata_query.search)
             .filter(
               (key) =>
@@ -178,18 +177,14 @@ const View = ({ content, ...props }) => {
     ) {
       const { siteTerm, locationTerm } = props.discodata_query.search;
       if (siteTerm) {
-        createEvent('matomoTrackEvent', {
-          category: 'Search',
-          action: 'Search by site term',
-          name: 'Map/Table search',
-          value: siteTerm,
+        trackSiteSearch({
+          category: 'Map/Table search by site term',
+          keyword: siteTerm,
         });
       } else if (locationTerm?.text) {
-        createEvent('matomoTrackEvent', {
-          category: 'Search',
-          action: 'Search by location',
-          name: 'Map/Table search',
-          value: locationTerm.text,
+        trackSiteSearch({
+          category: 'Map/Table search by location',
+          keyword: locationTerm.text,
         });
       }
     }

@@ -27,15 +27,3 @@ export const getEncodedString = (str) => {
   }
   return '';
 };
-
-export const createEvent = (type, detail) => {
-  let newEvent;
-  if (window.document.documentMode) {
-    // IE support event
-    newEvent = document.createEvent('CustomEvent');
-    newEvent.initCustomEvent(type, false, false, { detail });
-  } else {
-    newEvent = new CustomEvent(type, { detail });
-  }
-  document.dispatchEvent(newEvent);
-};
