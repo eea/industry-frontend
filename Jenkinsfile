@@ -5,7 +5,7 @@ pipeline {
     GIT_NAME="industry-frontend"
     NAMESPACE = "@eeacms"
     registry = "eeacms/eprtr-frontend"
-    template = "templates/volto-eprtr"
+    template = "templates/volto-industry"
     RANCHER_STACKID = "1st1851"
     RANCHER_ENVID = "1a332957"
     dockerImage = ''
