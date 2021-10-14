@@ -154,7 +154,9 @@ const View = ({ content, ...props }) => {
         'siteCountry',
       ];
       trackSiteSearch({
-        category: 'Map/Table filters',
+        category: props.discodata_query.dynamicFiltering
+          ? 'Map/Table simple filters'
+          : 'Map/Table advanced filters',
         keyword: JSON.stringify({
           ...Object.keys(props.discodata_query.search)
             .filter(
@@ -510,6 +512,7 @@ const View = ({ content, ...props }) => {
             };
             const newQueryParams = {
               advancedFiltering: true,
+              dynamicFiltering: false,
               filtersCounter: props.discodata_query.search['filtersCounter']
                 ? props.discodata_query.search['filtersCounter'] + 1
                 : 1,
@@ -877,6 +880,7 @@ const View = ({ content, ...props }) => {
         siteTerm: null,
         locationTerm: null,
         advancedFiltering: false,
+        dynamicFiltering: false,
         filtersCounter: props.discodata_query.search['filtersCounter']
           ? props.discodata_query.search['filtersCounter'] + 1
           : 1,
@@ -1033,6 +1037,7 @@ const View = ({ content, ...props }) => {
             ? null
             : props.discodata_query.search['extent'],
         advancedFiltering,
+        dynamicFiltering: false,
         ...(!search
           ? {
               locationTerm: null,
@@ -1272,6 +1277,7 @@ const View = ({ content, ...props }) => {
         locationTerm: null,
         siteTerm: null,
         advancedFiltering: true,
+        dynamicFiltering: true,
         filtersCounter: props.discodata_query.search['filtersCounter']
           ? props.discodata_query.search['filtersCounter'] + 1
           : 1,
@@ -1521,6 +1527,7 @@ const View = ({ content, ...props }) => {
                                 locationTerm: null,
                                 siteTerm: null,
                                 advancedFiltering: true,
+                                dynamicFiltering: true,
                                 filtersCounter: props.discodata_query.search[
                                   'filtersCounter'
                                 ]
@@ -1566,6 +1573,7 @@ const View = ({ content, ...props }) => {
                                 locationTerm: null,
                                 siteTerm: null,
                                 advancedFiltering: true,
+                                dynamicFiltering: true,
                                 filtersCounter: props.discodata_query.search[
                                   'filtersCounter'
                                 ]
@@ -1605,6 +1613,7 @@ const View = ({ content, ...props }) => {
                                 locationTerm: null,
                                 siteTerm: null,
                                 advancedFiltering: true,
+                                dynamicFiltering: true,
                                 filtersCounter: props.discodata_query.search[
                                   'filtersCounter'
                                 ]

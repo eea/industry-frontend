@@ -41,7 +41,6 @@
     "@eeacms/volto-grid-block",
     "@eeacms/volto-datablocks",
     "@eeacms/volto-embed",
-    "volto-addons",
     "@eeacms/volto-openlayers-map",
     "@eeacms/volto-tableau",
     "@eeacms/volto-matomo"
@@ -63,8 +62,7 @@
     "react-iframe": "^1.8.0",
     "react-tooltip": "^4.2.9",
     "react-visibility-sensor": "^5.1.1",
-    "tableau-api-js": "github:eea/tableau-api-js#1.1.0",
-    "volto-addons": "github:eea/volto-addons#master"
+    "tableau-api-js": "github:eea/tableau-api-js#1.1.0"
   },
   "devDependencies": {
     "eslint-plugin-prettier": "3.1.3",
