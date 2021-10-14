@@ -154,7 +154,7 @@ const View = ({ content, ...props }) => {
         'siteCountry',
       ];
       trackSiteSearch({
-        category: props.discodata_query.dynamicFiltering
+        category: props.discodata_query.search.dynamicFiltering
           ? 'Map/Table simple filters'
           : 'Map/Table advanced filters',
         keyword: JSON.stringify({
