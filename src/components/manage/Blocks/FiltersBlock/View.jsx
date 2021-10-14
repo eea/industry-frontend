@@ -22,6 +22,7 @@ import {
 } from '@eeacms/volto-datablocks/actions';
 import config from '@plone/volto/registry';
 import { getEncodedQueryString } from '~/utils';
+import { trackSiteSearch } from '@eeacms/volto-matomo/utils';
 
 import menuSVG from '@plone/volto/icons/menu-alt.svg';
 import circlePlus from '@plone/volto/icons/circle-plus.svg';
@@ -129,6 +130,68 @@ const View = ({ content, ...props }) => {
     }
     /* eslint-disable-next-line */
   }, [JSON.stringify(state.filtersMeta)]);
+
+  useEffect(() => {
+    if (
+      props.discodata_query.search.filtersCounter > 1 &&
+      props.discodata_query.search.advancedFiltering
+    ) {
+      const trackedFilters = [
+        'batConclusionCode',
+        'EEAActivity',
+        'facilityTypes',
+        'nuts_latest',
+        'nuts_regions',
+        'permitType',
+        'permitYear',
+        'plantTypes',
+        'pollutant',
+        'pollutantGroup',
+        'province',
+        'region',
+        'reportingYear',
+        'riverBasin',
+        'siteCountry',
+      ];
+      trackSiteSearch({
+        category: props.discodata_query.search.dynamicFiltering
+          ? 'Map/Table simple filters'
+          : 'Map/Table advanced filters',
+        keyword: JSON.stringify({
+          ...Object.keys(props.discodata_query.search)
+            .filter(
+              (key) =>
+                trackedFilters.includes(key) &&
+                props.discodata_query.search[key]?.filter((value) => value)
+                  ?.length,
+            )
+            .reduce((obj, key) => {
+              obj[key] = props.discodata_query.search[key]?.filter(
+                (value) => value,
+              );
+              return obj;
+            }, {}),
+        }),
+      });
+    } else if (
+      props.discodata_query.search.filtersCounter &&
+      !props.discodata_query.search.advancedFiltering
+    ) {
+      const { siteTerm, locationTerm } = props.discodata_query.search;
+      if (siteTerm) {
+        trackSiteSearch({
+          category: 'Map/Table search by site term',
+          keyword: siteTerm,
+        });
+      } else if (locationTerm?.text) {
+        trackSiteSearch({
+          category: 'Map/Table search by location',
+          keyword: locationTerm.text,
+        });
+      }
+    }
+    /* eslint-disable-next-line */
+  }, [props.discodata_query.search.filtersCounter]);
 
   useEffect(() => {
     if (
@@ -449,6 +512,7 @@ const View = ({ content, ...props }) => {
             };
             const newQueryParams = {
               advancedFiltering: true,
+              dynamicFiltering: false,
               filtersCounter: props.discodata_query.search['filtersCounter']
                 ? props.discodata_query.search['filtersCounter'] + 1
                 : 1,
@@ -810,11 +874,13 @@ const View = ({ content, ...props }) => {
       queryParam: {
         ...props.discodata_query.search,
         ...newFilters,
+        facilityTypes: [],
         nuts_regions: [],
         nuts_latest: [],
         siteTerm: null,
         locationTerm: null,
         advancedFiltering: false,
+        dynamicFiltering: false,
         filtersCounter: props.discodata_query.search['filtersCounter']
           ? props.discodata_query.search['filtersCounter'] + 1
           : 1,
@@ -971,6 +1037,7 @@ const View = ({ content, ...props }) => {
             ? null
             : props.discodata_query.search['extent'],
         advancedFiltering,
+        dynamicFiltering: false,
         ...(!search
           ? {
               locationTerm: null,
@@ -1210,6 +1277,7 @@ const View = ({ content, ...props }) => {
         locationTerm: null,
         siteTerm: null,
         advancedFiltering: true,
+        dynamicFiltering: true,
         filtersCounter: props.discodata_query.search['filtersCounter']
           ? props.discodata_query.search['filtersCounter'] + 1
           : 1,
@@ -1459,6 +1527,7 @@ const View = ({ content, ...props }) => {
                                 locationTerm: null,
                                 siteTerm: null,
                                 advancedFiltering: true,
+                                dynamicFiltering: true,
                                 filtersCounter: props.discodata_query.search[
                                   'filtersCounter'
                                 ]
@@ -1504,6 +1573,7 @@ const View = ({ content, ...props }) => {
                                 locationTerm: null,
                                 siteTerm: null,
                                 advancedFiltering: true,
+                                dynamicFiltering: true,
                                 filtersCounter: props.discodata_query.search[
                                   'filtersCounter'
                                 ]
@@ -1543,6 +1613,7 @@ const View = ({ content, ...props }) => {
                                 locationTerm: null,
                                 siteTerm: null,
                                 advancedFiltering: true,
+                                dynamicFiltering: true,
                                 filtersCounter: props.discodata_query.search[
                                   'filtersCounter'
                                 ]

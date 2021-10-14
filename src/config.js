@@ -85,6 +85,15 @@ import ListView from '~/components/manage/Blocks/DiscodataComponents/List/View';
 // import QueryParamButtonEdit from '~/components/manage/Blocks/LinkButton/Edit';
 // import QueryParamButtonView from '~/components/manage/Blocks/QueryParamButton/View';
 
+import FolderListingBlockView from '~/components/manage/Blocks/FolderListing/BlockView';
+import FolderListingBlockEdit from '~/components/manage/Blocks/FolderListing/BlockEdit';
+
+import TableauBlockEdit from '~/components/manage/Blocks/Tableau/Edit';
+import TableauBlockView from '~/components/manage/Blocks/Tableau/View';
+
+import ExpendableListEdit from '~/components/manage/Blocks/ExpendableList/Edit';
+import ExpendableListView from '~/components/manage/Blocks/ExpendableList/View';
+
 import BlocksWidget from '~/components/manage/Widgets/BlocksWidget';
 import QueryParametersListWidget from '~/components/manage/Blocks/DiscodataComponents/Widgets/QueryParametersListWidget';
 
@@ -103,11 +112,6 @@ import installList from '~/components/manage/Blocks/List';
 import installSelect from '~/components/manage/Blocks/Select';
 import installIndustryDataTable from '~/components/manage/Blocks/IndustryDataTable';
 import installIndustryMap from '~/components/manage/Blocks/IndustryMap';
-import {
-  installTableau,
-  installExpendableList,
-  installFolderListing,
-} from 'volto-addons';
 import { installDiscodataSqlBuilder } from '@eeacms/volto-datablocks/config';
 
 import packSVG from '@plone/volto/icons/pack.svg';
@@ -120,13 +124,64 @@ import worldSVG from '@plone/volto/icons/world.svg';
 import '@plone/volto/config';
 import { getEncodedString } from '~/utils';
 
+import chartIcon from '@plone/volto/icons/world.svg';
+
 // eslint-disable-next-line no-extend-native
 String.prototype.encoded = function encoded() {
   return this ? getEncodedString(this) : '';
 };
 
+function installFolderListing(config) {
+  config.blocks.blocksConfig.folder_contents_block = {
+    id: 'folder_contents_block',
+    title: 'Folder Contents',
+    view: FolderListingBlockView,
+    edit: FolderListingBlockEdit,
+    icon: chartIcon,
+    group: 'custom_addons',
+  };
+  return config;
+}
+
+function installTableau(config) {
+  config.blocks.blocksConfig.tableau = {
+    id: 'tableau',
+    title: 'Tableau',
+    view: TableauBlockView,
+    edit: TableauBlockEdit,
+    icon: chartIcon,
+    group: 'custom_addons',
+  };
+  return config;
+}
+
+function installExpendableList(config) {
+  config.blocks.blocksConfig.expendable_list = {
+    id: 'expendable_list',
+    title: 'Expendable list',
+    view: ExpendableListView,
+    edit: ExpendableListEdit,
+    icon: chartIcon,
+    group: 'custom_addons',
+  };
+  return config;
+}
+
+function addCustomGroup(config) {
+  const hasCustomGroup = config.blocks.groupBlocksOrder.filter((el) => {
+    return el.id === 'custom_addons';
+  });
+  if (hasCustomGroup.length === 0) {
+    config.blocks.groupBlocksOrder.push({
+      id: 'custom_addons',
+      title: 'Custom addons',
+    });
+  }
+}
+
 export default function applyConfig(config) {
   // Add here your project's configuration here by modifying `config` accordingly
+  addCustomGroup(config);
   config.blocks.groupBlocksOrder = [
     ...config.blocks.groupBlocksOrder,
     { id: 'eprtr_blocks', title: 'Eprtr Blocks' },
@@ -357,7 +412,9 @@ export default function applyConfig(config) {
     providerUrl: 'https://discodata.eea.europa.eu/sql',
     excludeFromNavigation: ['/industrial-site'],
     metaDescription: 'European Environment Agency',
-    matomoSiteId: 48,
+    // matomoSiteId: 48,
+    matomoSiteId: 7,
+    matomoUrlBase: 'https://matomo.devel4cph.eea.europa.eu/',
     tableauVersion: '2.3.0',
   };
 

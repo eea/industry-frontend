@@ -4,6 +4,13 @@
     "branch": "develop",
     "path": "src",
     "package": "@eeacms/volto-datablocks",
-    "develop": true
+    "develop": false
+  },
+  "volto-matomo": {
+    "url": "https://github.com/eea/volto-matomo.git",
+    "branch": "develop",
+    "path": "src",
+    "package": "@eeacms/volto-matomo",
+    "develop": false
   }
 }
