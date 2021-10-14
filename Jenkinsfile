@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-    GIT_NAME="eprtr_frontend"
+    GIT_NAME="industry-frontend"
     NAMESPACE = "@eeacms"
     registry = "eeacms/eprtr-frontend"
     template = "templates/volto-eprtr"
