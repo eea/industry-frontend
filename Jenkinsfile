@@ -6,7 +6,7 @@ pipeline {
     NAMESPACE = "@eeacms"
     registry = "eeacms/industry-frontend"
     template = "templates/volto-industry"
-    RANCHER_STACKID = "1st1851"
+    RANCHER_STACKID = "1st2336"
     RANCHER_ENVID = "1a332957"
     dockerImage = ''
     tagName = ''
