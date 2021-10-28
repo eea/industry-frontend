@@ -1,11 +1,26 @@
 {
     "compilerOptions": {
         "paths": {
-            "volto-datablocks": [
-                "addons/volto-datablocks/src"
+            "@eeacms/volto-industry-theme": [
+                "addons/volto-industry-theme/src"
+            ],
+            "@eeacms/volto-block-style": [
+                "addons/volto-block-style/src"
             ],
             "@eeacms/volto-datablocks": [
                 "addons/volto-datablocks/src"
+            ],
+            "@eeacms/volto-openlayers-map": [
+                "addons/volto-openlayers-map/src"
+            ],
+            "@eeacms/volto-resize-helper": [
+                "addons/volto-resize-helper/src"
+            ],
+            "@eeacms/volto-tableau": [
+                "addons/volto-tableau/src"
+            ],
+            "@eeacms/volto-banner": [
+                "addons/volto-banner/src"
             ]
         },
         "baseUrl": "src"

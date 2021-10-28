@@ -1,7 +1,6 @@
-# EPRTR: Volto Frontend
-
-[![Pipeline](https://ci.eionet.europa.eu/buildStatus/icon?job=volto%2Feprtr_frontend%2Fmaster&subject=pipeline)](https://ci.eionet.europa.eu/view/Github/job/volto/job/eprtr_frontend/job/master/display/redirect)
-[![Release](https://img.shields.io/github/v/release/eea/eprtr_frontend?sort=semver)](https://github.com/eea/eprtr_frontend/releases)
+# Industry: Volto frontend
+[![Pipeline](https://ci.eionet.europa.eu/buildStatus/icon?job=volto/industry-frontend/master&subject=pipeline)](https://ci.eionet.europa.eu/view/Github/job/volto/job/industry-frontend/job/master/display/redirect)
+[![Release](https://img.shields.io/github/v/release/eea/industry-frontend?sort=semver)](https://github.com/eea/industry-frontend/releases)
 
 ## Documentation
 
@@ -10,46 +9,43 @@ A training on how to create your own website using Volto is available as part of
 
 ## Getting started
 
-1. Clone:
-
-        $ git clone https://github.com/eea/eprtr_frontend.git
-        $ cd eprtr_frontend
-
 1. Install `nvm`
 
-        $ touch ~/.bash_profile
-        $ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
+        touch ~/.bash_profile
+        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
 
-        $ source ~/.bash_profile
-        $ nvm version
+        source ~/.bash_profile
+        nvm version
 
 1. Install latest `NodeJS 12.x`:
 
-        $ nvm install 12
-        $ nvm use 12
-        $ node -v
+        nvm install 12
+        nvm use 12
+        node -v
         v12.16.2
 
 1. Install `yarn`
 
-        $ curl -o- -L https://yarnpkg.com/install.sh | bash
-        $ yarn -v
+        curl -o- -L https://yarnpkg.com/install.sh | bash
+        yarn -v
+
+1. Clone:
+
+        git clone https://github.com/eea/industry-frontend.git
+        cd industry-frontend
 
 1. Install
 
-        $ yarn
+        yarn build
 
-1. Start and setup backend
+1. Start backend
 
-         $ docker-compose up -d
-
-   * Go to `http://localhost:8080` [Advanced](http://localhost:8080/@@plone-addsite?site_id=Plone&advanced=1):
-   * Add `Plone` site with add-ons enabled (**user:** `admin`, **password:** `admin`):
-     * `kitconcept.volto`
+        docker-compose up -d
+        docker-compose logs -f backend
 
 1. Start frontend
 
-        $ yarn start
+        yarn start:prod
 
 1. See application at http://localhost:3000
 
@@ -59,36 +55,26 @@ A training on how to create your own website using Volto is available as part of
 1. Install [Docker Compose](https://docs.docker.com/compose/install/)
 1. Start:
 
-        $ git clone https://github.com/eea/eprtr_frontend.git
-        $ cd eprtr_frontend
+        git clone https://github.com/eea/industry-frontend.git
+        cd industry-frontend
 
-        $ docker-compose pull
-        $ docker-compose up -d
+        docker-compose pull
+        docker-compose up -d
 
     optionally change `PORTS` via `.env`:
 
-        $ FRONTEND=9000 BACKEND=9100 docker-compose up -d
+        FRONTEND=9000 BACKEND=9100 docker-compose up -d
 
-1. Go to `http://localhost:8080` [Advanced](http://localhost:8080/@@plone-addsite?site_id=Plone&advanced=1):
-   * Add `Plone` site with add-ons enabled (**user:** `admin`, **password:** `admin`):
-     * `kitconcept.volto`
-
-1. See application at http://localhost:8000
-
+1. See application at http://localhost:4000
 
 ## Production
 
 We use [Docker](https://www.docker.com/), [Rancher](https://rancher.com/) and [Jenkins](https://jenkins.io/) to deploy this application in production.
 
-### Deploy
-
-* Within `Rancher > Catalog > EEA` deploy [Volto - EPRTR](https://github.com/eea/eea.rancher.catalog/tree/master/templates/volto-eprtr)
-
 ### Release
 
-* Create a new release of this code via `git tag` command or [Draft new release](https://github.com/eea/eprtr_frontend/releases/new) on Github.
-  * A new Docker image is built and released automatically on [DockerHub](https://hub.docker.com/r/eeacms/eprtr_frontend) based on this tag.
-  * A new entry is automatically added to [Volto - EPRTR](https://github.com/eea/eea.rancher.catalog/tree/master/templates/volto-eprtr) `EEA Rancher Catalog`
+* Create a new release of this code via `git tag` command or [Draft new release](https://github.com/eea/industry-frontend/releases/new) on Github.
+  * A new Docker image is built and released automatically on [DockerHub](https://hub.docker.com/r/eeacms/industry-frontend) based on this tag.
 
 ### Upgrade
 
