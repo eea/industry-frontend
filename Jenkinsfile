@@ -1,10 +1,11 @@
 pipeline {
   environment {
-    RANCHER_STACKID = ""
-    RANCHER_ENVID = ""
-    GIT_NAME = "industry-frontend"
+    GIT_NAME="industry-frontend"
+    NAMESPACE = "@eeacms"
     registry = "eeacms/industry-frontend"
-    template = "templates/industry-frontend"
+    template = "templates/volto-industry"
+    RANCHER_STACKID = "1st2336"
+    RANCHER_ENVID = "1a332957"
     dockerImage = ''
     tagName = ''
     SONARQUBE_TAG = 'https://industry.eea.europa.eu/'
