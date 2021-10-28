@@ -18,12 +18,8 @@
     "src/addons/*"
   ],
   "addons": [
-    "@eeacms/volto-columns-block",
     "@eeacms/volto-industry-theme",
-    "@eeacms/volto-eea-kitkat",
-    "@eeacms/volto-tableau",
-    "@eeacms/volto-openlayers-map",
-    "@eeacms/volto-block-style"
+    "@eeacms/volto-eea-kitkat"
   ],
   "scripts": {
     "start": "razzle start",
@@ -44,9 +40,7 @@
   "dependencies": {
     "@plone/volto": "13.15.1",
     "@eeacms/volto-columns-block": "4.4.6",
-    "@eeacms/volto-eea-kitkat": "4.0.2",
-    "@eeacms/volto-tableau": "1.2.3",
-    "@eeacms/volto-openlayers-map": "0.1.2"
+    "@eeacms/volto-eea-kitkat": "4.0.2"
   },
   "devDependencies": {
     "eslint-plugin-prettier": "3.1.3",
