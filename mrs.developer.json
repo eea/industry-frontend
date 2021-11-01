@@ -1,1 +1,9 @@
-{}
+{
+  "volto-industry-theme": {
+    "url": "git@github.com:eea/volto-industry-theme.git",
+    "https": "https://github.com/eea/volto-industry-theme.git",
+    "package": "@eeacms/volto-industry-theme",
+    "branch": "develop",
+    "path": "src"
+  }
+}
