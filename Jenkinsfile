@@ -1,6 +1,4 @@
 pipeline {
-  agent any
-
   environment {
     GIT_NAME="industry-frontend"
     NAMESPACE = "@eeacms"
@@ -10,18 +8,18 @@ pipeline {
     RANCHER_ENVID = "1a332957"
     dockerImage = ''
     tagName = ''
-    SONARQUBE_TAG = ""
+    SONARQUBE_TAG = 'https://industry.eea.europa.eu/'
   }
 
-
+  agent any
 
   stages {
 
-   stage('Integration tests') {
+    stage('Integration tests') {
       parallel {
-        stage('Cypress') {
+        stage('Integration with Cypress') {
           when {
-            environment name: 'CHANGE_ID', value: ''           
+            environment name: 'CHANGE_ID', value: ''
           }
           steps {
             node(label: 'docker') {
@@ -50,7 +48,7 @@ pipeline {
             }
           }
         }
-        
+
         stage("Docker test build") {
              when {
                not {
@@ -77,12 +75,12 @@ pipeline {
                }
              }
           }
-          
-        
+
+
       }
     }
 
-    
+
     stage('Pull Request') {
       when {
         not {
@@ -105,7 +103,7 @@ pipeline {
       }
     }
 
-  
+
     stage('Release') {
       when {
         allOf {
@@ -142,26 +140,26 @@ pipeline {
                 dockerImage.push()
               }
             } finally {
-              sh script: "docker rmi $registry:$tagName", returnStatus: true
+              sh "docker rmi $registry:$tagName"
             }
           }
         }
       }
     }
-    
+
     stage('Release catalog ( on tag )') {
       when {
         buildingTag()
       }
       steps{
         node(label: 'docker') {
-          withCredentials([string(credentialsId: 'eea-jenkins-token', variable: 'GITHUB_TOKEN'),  usernamePassword(credentialsId: 'jekinsdockerhub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
-           sh '''docker pull eeacms/gitflow; docker run -i --rm --name="$BUILD_TAG-release"  -e GIT_BRANCH="$BRANCH_NAME" -e GIT_NAME="$GIT_NAME" -e DOCKERHUB_REPO="$registry" -e GIT_TOKEN="$GITHUB_TOKEN" -e DOCKERHUB_USER="$DOCKERHUB_USER" -e DOCKERHUB_PASS="$DOCKERHUB_PASS"  -e RANCHER_CATALOG_PATHS="$template" -e GITFLOW_BEHAVIOR="RUN_ON_TAG" eeacms/gitflow'''
-          }
+          withCredentials([string(credentialsId: 'eea-jenkins-token', variable: 'GITHUB_TOKEN')]) {
+           sh '''docker pull eeacms/gitflow; docker run -i --rm --name="${BUILD_TAG}-release" -e GIT_TOKEN="${GITHUB_TOKEN}" -e RANCHER_CATALOG_PATH="${template}" -e DOCKER_IMAGEVERSION="${BRANCH_NAME}" -e DOCKER_IMAGENAME="${registry}" --entrypoint /add_rancher_catalog_entry.sh eeacms/gitflow'''
+         }
         }
       }
     }
-    
+
     stage('Upgrade demo ( on tag )') {
       when {
         buildingTag()
@@ -198,22 +196,25 @@ pipeline {
   }
 
 
+
   post {
-    always {
-      cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenSuccess: true, cleanWhenUnstable: true, deleteDirs: true)
-    }
     changed {
       script {
-        def details = """<h1>${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}</h1>
-                         <p>Check console output at <a href="${env.BUILD_URL}/display/redirect">${env.JOB_BASE_NAME} - #${env.BUILD_NUMBER}</a></p>
+        def url = "${env.BUILD_URL}/display/redirect"
+        def status = currentBuild.currentResult
+        def subject = "${status}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+        def summary = "${subject} (${url})"
+        def details = """<h1>${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - ${status}</h1>
+                         <p>Check console output at <a href="${url}">${env.JOB_BASE_NAME} - #${env.BUILD_NUMBER}</a></p>
                       """
-        emailext(
-        subject: '$DEFAULT_SUBJECT',
-        body: details,
-        attachLog: true,
-        compressLog: true,
-        recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'CulpritsRecipientProvider']]
-        )
+
+        def color = '#FFFF00'
+        if (status == 'SUCCESS') {
+          color = '#00FF00'
+        } else if (status == 'FAILURE') {
+          color = '#FF0000'
+        }
+        emailext (subject: '$DEFAULT_SUBJECT', to: '$DEFAULT_RECIPIENTS', body: details)
       }
     }
   }

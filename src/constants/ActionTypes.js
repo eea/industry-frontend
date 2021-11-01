@@ -4,9 +4,3 @@
  * @example
  * export const UPDATE_CONTENT = 'UPDATE_CONTENT';
  */
-export const SET_SECTION_TABS = 'SET_SECTION_TABS';
-export const GET_PARENT_FOLDER_DATA = 'GET_PARENT_FOLDER_DATA';
-export const GET_NAV_ITEMS = 'GET_NAV_ITEMS';
-export const GET_PAGE = 'GET_PAGE';
-export const GET_SPARQL_DATA = 'GET_SPARQL_DATA';
-export const SET_FLAGS = 'SET_FLAGS';
