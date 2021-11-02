@@ -302,20 +302,6 @@ function setBaseAndExtent(...args) {
   document.getSelection().setBaseAndExtent(...args);
 }
 
-function getIfExists(
-  selector,
-  successAction = () => {},
-  failAction = () => {},
-) {
-  cy.get('body').then((body) => {
-    if (body.find(selector).length > 0 && successAction) {
-      successAction();
-    } else if (failAction) {
-      failAction();
-    }
-  });
-}
-
 Cypress.Commands.add('navigate', (route = '') => {
   return cy.window().its('appHistory').invoke('push', route);
 });
@@ -327,23 +313,3 @@ Cypress.Commands.add('store', () => {
 Cypress.Commands.add('settings', (key, value) => {
   return cy.window().its('settings');
 });
-
-Cypress.Commands.add('getIfExists', getIfExists);
-
-Cypress.Commands.add(
-  'controlledTextAreaChange',
-  { prevSubject: 'element' },
-  (input, value) => {
-    const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-      window.HTMLTextAreaElement.prototype,
-      'value',
-    ).set;
-    const changeInputValue = (inputToChange) => (newValue) => {
-      nativeInputValueSetter.call(inputToChange[0], newValue);
-      inputToChange[0].dispatchEvent(
-        new Event('change', { newValue, bubbles: true }),
-      );
-    };
-    return cy.get(input).then((input) => changeInputValue(input)(value));
-  },
-);

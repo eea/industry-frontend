@@ -2,72 +2,50 @@
   "name": "@eeacms/industry-frontend",
   "description": "Volto-based frontend server and SPA for the Industrial Emissions Portal website (former EPRTR) industry.eea.europa.eu",
   "license": "MIT",
-  "version": "2.10.0",
+  "version": "3.1.0",
   "main": "src/index.js",
   "author": "European Environment Agency: IDM2 A-Team",
   "homepage": "https://github.com/eea/industry-frontend",
   "keywords": [
-    "volto-addon",
-    "volto-block",
-    "volto-grid",
+    "industry",
+    "eprtr",
     "volto",
-    "plone",
-    "react"
+    "industry-frontend",
+    "eprtr-frontend",
+    "volto-frontend"
   ],
   "private": true,
+  "workspaces": [
+    "src/addons/*"
+  ],
+  "addons": [
+    "@eeacms/volto-industry-theme",
+    "@eeacms/volto-eea-kitkat"
+  ],
   "scripts": {
     "start": "razzle start",
     "postinstall": "yarn omelette && yarn patches",
     "omelette": "ln -sf node_modules/@plone/volto/ omelette",
     "patches": "/bin/bash patches/patchit.sh > /dev/null 2>&1 ||true",
     "build": "razzle build",
+    "test": "razzle test --env=jest-environment-jsdom-sixteen --passWithNoTests",
     "start:prod": "NODE_ENV=production node build/server.js",
     "i18n": "NODE_ENV=production node node_modules/@plone/volto/src/i18n.js",
-    "develop:npx": "npx -p mrs-developer missdev --config=jsconfig.json --output=addons",
-    "develop": "missdev --config=jsconfig.json --output=addons",
-    "update": "./scripts/update.sh",
-    "test": "./node_modules/jest/bin/jest.js --env=jsdom --passWithNoTests src/addons --verbose",
+    "develop": "missdev --config=jsconfig.json --output=addons --fetch-https",
     "cypress:run": "./node_modules/cypress/bin/cypress run",
     "cypress:open": "./node_modules/cypress/bin/cypress open",
     "release": "release-it",
     "release-major-beta": "release-it major --preRelease=beta",
     "release-beta": "release-it --preRelease=beta"
   },
-  "workspaces": [
-    "src/addons/*"
-  ],
-  "addons": [
-    "@eeacms/volto-eea-kitkat",
-    "@eeacms/volto-grid-block",
-    "@eeacms/volto-datablocks",
-    "@eeacms/volto-embed",
-    "@eeacms/volto-openlayers-map",
-    "@eeacms/volto-tableau",
-    "@eeacms/volto-matomo"
-  ],
   "dependencies": {
-    "@eeacms/volto-datablocks": "2.0.13",
+    "@eeacms/volto-columns-block": "4.4.6",
     "@eeacms/volto-eea-kitkat": "4.1.1",
-    "@eeacms/volto-embed": "2.0.7",
-    "@eeacms/volto-grid-block": "github:eea/volto-grid-block#centurion",
-    "@eeacms/volto-matomo": "github:eea/volto-matomo#develop",
-    "@eeacms/volto-openlayers-map": "0.1.2",
-    "@eeacms/volto-tableau": "1.2.3",
-    "@material/react-linear-progress": "^0.15.0",
-    "@plone/volto": "13.15.1",
-    "axios": "^0.21.1",
-    "dompurify": "2.3.3",
-    "jsonp": "^0.2.1",
-    "performant-array-to-tree": "^1.7.1",
-    "react-highlight-words": "^0.16.0",
-    "react-iframe": "^1.8.0",
-    "react-tooltip": "^4.2.9",
-    "react-visibility-sensor": "^5.1.1",
-    "tableau-api-js": "github:eea/tableau-api-js#1.1.0"
+    "@eeacms/volto-industry-theme": "0.1.2",
+    "@plone/volto": "13.15.1"
   },
   "devDependencies": {
     "eslint-plugin-prettier": "3.1.3",
-    "mrs-developer": "1.6.0",
     "prettier": "2.0.5",
     "stylelint": "13.3.3",
     "stylelint-config-idiomatic-order": "8.1.0",

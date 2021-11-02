@@ -4,11 +4,7 @@
  */
 
 import defaultReducers from '@plone/volto/reducers';
-import section_tabs from './section_tabs';
-import parent_folder_data from './parent_folder_data';
-import pages from './pages';
-import sparql from './sparql';
-import flags from './flags';
+
 /**
  * Root reducer.
  * @function
@@ -17,11 +13,6 @@ import flags from './flags';
  * @returns {Object} New state.
  */
 const reducers = {
-  section_tabs,
-  parent_folder_data,
-  pages,
-  sparql,
-  flags,
   ...defaultReducers,
   // Add your reducers here
 };
