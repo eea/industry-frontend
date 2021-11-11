@@ -8,7 +8,7 @@ pipeline {
     RANCHER_ENVID = "1a332957"
     dockerImage = ''
     tagName = ''
-    SONARQUBE_TAG = 'https://industry.eea.europa.eu/'
+    SONARQUBE_TAG = 'industry.eea.europa.eu'
   }
 
   agent any
