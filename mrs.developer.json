@@ -5,5 +5,12 @@
     "package": "@eeacms/volto-industry-theme",
     "branch": "develop",
     "path": "src"
+  },
+  "volto-datablocks": {
+    "url": "git@github.com:eea/volto-datablocks.git",
+    "https": "https://github.com/eea/volto-datablocks.git",
+    "package": "@eeacms/volto-datablocks",
+    "branch": "develop",
+    "path": "src"
   }
 }
