@@ -39,8 +39,8 @@
     "release-beta": "release-it --preRelease=beta"
   },
   "dependencies": {
-    "@eeacms/volto-eea-kitkat": "4.1.1",
-    "@eeacms/volto-industry-theme": "1.1.3",
+    "@eeacms/volto-eea-kitkat": "4.1.3",
+    "@eeacms/volto-industry-theme": "1.1.4",
     "@plone/volto": "13.15.1"
   },
   "devDependencies": {
@@ -50,6 +50,9 @@
     "stylelint-config-idiomatic-order": "8.1.0",
     "stylelint-config-prettier": "8.0.1",
     "stylelint-prettier": "1.1.2"
+  },
+  "resolutions": {
+    "volto-slate": "4.2.1"
   },
   "jest": {
     "modulePathIgnorePatterns": [
