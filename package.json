@@ -2,7 +2,7 @@
   "name": "@eeacms/industry-frontend",
   "description": "Volto-based frontend server and SPA for the Industrial Emissions Portal website (former EPRTR) industry.eea.europa.eu",
   "license": "MIT",
-  "version": "3.6.1",
+  "version": "3.7.0",
   "main": "src/index.js",
   "author": "European Environment Agency: IDM2 A-Team",
   "homepage": "https://github.com/eea/industry-frontend",
@@ -39,8 +39,8 @@
     "release-beta": "release-it --preRelease=beta"
   },
   "dependencies": {
-    "@eeacms/volto-eea-kitkat": "4.1.7",
-    "@eeacms/volto-industry-theme": "1.2.7",
+    "@eeacms/volto-eea-kitkat": "5.2.0",
+    "@eeacms/volto-industry-theme": "2.0.1",
     "@plone/volto": "13.15.1"
   },
   "devDependencies": {
@@ -52,7 +52,7 @@
     "stylelint-prettier": "1.1.2"
   },
   "resolutions": {
-    "volto-slate": "4.2.1"
+    "volto-slate": "5.3.4"
   },
   "jest": {
     "modulePathIgnorePatterns": [
