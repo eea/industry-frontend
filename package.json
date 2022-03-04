@@ -39,7 +39,7 @@
     "release-beta": "release-it --preRelease=beta"
   },
   "dependencies": {
-    "@eeacms/volto-eea-kitkat": "5.2.2",
+    "@eeacms/volto-eea-kitkat": "5.2.3",
     "@eeacms/volto-industry-theme": "2.0.2",
     "@plone/volto": "13.15.1"
   },
