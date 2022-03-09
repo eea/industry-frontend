@@ -1307,10 +1307,10 @@
   resolved "https://registry.yarnpkg.com/@eeacms/volto-group-block/-/volto-group-block-4.3.5.tgz#43e2413f9f03b9fa9c9541988ef4a351a410d338"
   integrity sha512-Takka/4kXVUCwpin7Gj8aNbWx1g7L35bTCM6AAUJIQYPgvNg2j04/S2jaZ+iWWOopasND5GaiBBQ4LqgF1U0zA==
 
-"@eeacms/volto-industry-theme@2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@eeacms/volto-industry-theme/-/volto-industry-theme-2.0.2.tgz#9c75861d5177ddf320a834348ff19a006f155e77"
-  integrity sha512-koDAEvxOP/WXDfYOI42wYrU+GYlQjBpR14dCYEJErfkqmihf5lK3MCzpz6RSymKK41XKFEkYvcbqn+/w+e2yTg==
+"@eeacms/volto-industry-theme@2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@eeacms/volto-industry-theme/-/volto-industry-theme-2.0.3.tgz#c462765600a39349d17f3aef89cc8de688d86ffa"
+  integrity sha512-fX/2AFgQ8aS2/EA/FFQaz/u5KfgnGf8CwFLxxqywn68QHwEKG/0v3Gf0+wNccZDgofDSVyKA4xvuYzW8XFHpeQ==
   dependencies:
     "@cypress/code-coverage" "^3.9.5"
     "@eeacms/volto-columns-block" "*"
@@ -18227,10 +18227,10 @@ vm-browserify@^1.0.0, vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
-volto-slate@*, volto-slate@5.3.4:
-  version "5.3.4"
-  resolved "https://registry.yarnpkg.com/volto-slate/-/volto-slate-5.3.4.tgz#fd551e31f4d72e3e7ec4d4f8db127de9ad4ced0e"
-  integrity sha512-ec2u3ZAgX4cek6tEiY+drc/wFIJi5Z9Sz9Zee7/hagpyhexVqaYhOIpnCCf7KtimWKhuP0yq0C5NIABfeEdXAA==
+volto-slate@*, volto-slate@5.3.4, volto-slate@5.3.5:
+  version "5.3.5"
+  resolved "https://registry.yarnpkg.com/volto-slate/-/volto-slate-5.3.5.tgz#ea61f8840ffb6da862a9dc80d582559eb4458dfb"
+  integrity sha512-L4I0j1hq83ZyJp1j8CsOngdvayD+UtjHmA/KzApuYL3T9LvwIrVB19c4tbmJuvEXgj0zrMRDx1SF3AejF10hNw==
   dependencies:
     "@eeacms/volto-object-widget" "*"
     classnames "2.2.6"
