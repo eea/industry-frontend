@@ -1252,10 +1252,10 @@
   resolved "https://registry.yarnpkg.com/@eeacms/volto-block-toc/-/volto-block-toc-3.0.1.tgz#0f020dac44908264a7554c8229e387026b94ea56"
   integrity sha512-bDXDv47xfAK+GCd/cC4ccQpZyd4+EolRl+AX+w8FMZElix8TKSZuBaKJ+r1hLduNN54dO1gu5oS8biwf5VGGAQ==
 
-"@eeacms/volto-columns-block@*", "@eeacms/volto-columns-block@4.5.2":
-  version "4.5.2"
-  resolved "https://registry.yarnpkg.com/@eeacms/volto-columns-block/-/volto-columns-block-4.5.2.tgz#c85d95586ec7d05a0640eee87286893cac1e32d4"
-  integrity sha512-elgNAkeHM2p6gdcNh5BgZR2jL8UiHUjxSpIXvwhHoLKvKyyRzMxmZjgi5oITyYICXJAJZd5CFV2Ng8IZf9gPdA==
+"@eeacms/volto-columns-block@*", "@eeacms/volto-columns-block@4.5.3":
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/@eeacms/volto-columns-block/-/volto-columns-block-4.5.3.tgz#b7bd727940c46829d089fddb08d3be6f543f9735"
+  integrity sha512-8NoaqS6ydRatrSAOuGhv466mJgp/imqVXqy4lujTn2ULRHfzH6kMbZQYO+lu/kvTbgDOiOTmFjARRqGamVaQiA==
   dependencies:
     react-color "~2.19.3"
 
@@ -1283,10 +1283,10 @@
   resolved "https://registry.yarnpkg.com/@eeacms/volto-depiction/-/volto-depiction-0.1.6.tgz#20431aaa211186eb5ac77e2fdc176bdbe1a9c9e6"
   integrity sha512-Rcrem8q1eIgY349n9TMTtZo7Tg3vKjUv65uuy1my4XKeTSv84CzHMCFOM+15WtJhvuMfxbwjYPy3xmiAqy4IGg==
 
-"@eeacms/volto-eea-kitkat@6.2.2":
-  version "6.2.2"
-  resolved "https://registry.yarnpkg.com/@eeacms/volto-eea-kitkat/-/volto-eea-kitkat-6.2.2.tgz#506059334ac2784c2ea7cac5d2334cc0d174d016"
-  integrity sha512-rxnvZR1bkH+xXhDp0B1o+vtda6Ta7TnTkoO0fXayXGZXAKUpe2GgZe8wylWuFkI9Xl/LAc6lwabmfl0cIe1FRw==
+"@eeacms/volto-eea-kitkat@6.2.3":
+  version "6.2.3"
+  resolved "https://registry.yarnpkg.com/@eeacms/volto-eea-kitkat/-/volto-eea-kitkat-6.2.3.tgz#26c780fd379abe1c087fcffb3a923fa5fc0cf9be"
+  integrity sha512-AEJLET5jq72UZqKrhFZw1ZKBMjzC8E2KyMcDO/lQSx7IVNevXP4nF2AKSc9PzowzGLI4dIaNiOd5JfHhaMBCFw==
   dependencies:
     "@eeacms/volto-accordion-block" "3.5.0"
     "@eeacms/volto-banner" "2.2.1"
@@ -1294,7 +1294,7 @@
     "@eeacms/volto-block-image-cards" "0.6.5"
     "@eeacms/volto-block-style" "3.6.3"
     "@eeacms/volto-block-toc" "3.0.1"
-    "@eeacms/volto-columns-block" "4.5.2"
+    "@eeacms/volto-columns-block" "4.5.3"
     "@eeacms/volto-corsproxy" "2.1.6"
     "@eeacms/volto-depiction" "0.1.6"
     "@eeacms/volto-group-block" "4.3.6"
