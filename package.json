@@ -153,7 +153,7 @@
   },
   "dependencies": {
     "@eeacms/volto-eea-kitkat": "6.2.0",
-    "@eeacms/volto-industry-theme": "2.0.4",
+    "@eeacms/volto-industry-theme": "2.0.5",
     "@plone/volto": "16.0.0-alpha.14"
   },
   "devDependencies": {
