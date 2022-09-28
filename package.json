@@ -152,7 +152,7 @@
     "node": "^12 || ^14 || ^16"
   },
   "dependencies": {
-    "@eeacms/volto-eea-kitkat": "8.2.1",
+    "@eeacms/volto-eea-kitkat": "8.2.2",
     "@eeacms/volto-industry-theme": "2.0.7",
     "@plone/volto": "16.0.0-alpha.14"
   },
