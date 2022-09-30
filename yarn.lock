@@ -1446,10 +1446,10 @@
   resolved "https://registry.yarnpkg.com/@eeacms/volto-group-block/-/volto-group-block-4.3.8.tgz#d7d16fe17745cb08bf7f625c27d021e854281bb4"
   integrity sha512-aRvREccetNiqIeOLvYH0sUAoQgBeuS4J3K0pWQeEwGw2i1znvYMvgZaWVNcck84RiLsMOHVnuafSGYvzR4RkZA==
 
-"@eeacms/volto-industry-theme@2.0.7":
-  version "2.0.7"
-  resolved "https://registry.yarnpkg.com/@eeacms/volto-industry-theme/-/volto-industry-theme-2.0.7.tgz#1dae1088477375ede53454f13827e224efc8c103"
-  integrity sha512-GkFYp1djdL8NsZYBY6rwwbdFzN3ANSNH8PDjsuhHu15GgPenyMaoVsoR8bxn0rxpO/4fpJj0wXx0c2WpGo80JA==
+"@eeacms/volto-industry-theme@2.0.8":
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/@eeacms/volto-industry-theme/-/volto-industry-theme-2.0.8.tgz#6024e1961a349886aef89cf0240c7d4c9efe7a27"
+  integrity sha512-HW7gRxHvbPwRC+W64b1dwYje952dXXpWmObicRoDHPUoi64AzzvSMHFnn/N3IB4C9jxiPvsadIe+Q4XPu0d9Dg==
   dependencies:
     "@cypress/code-coverage" "^3.9.5"
     "@eeacms/volto-columns-block" "*"
