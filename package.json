@@ -154,7 +154,7 @@
   "dependencies": {
     "@eeacms/volto-eea-kitkat": "9.0.0",
     "@eeacms/volto-industry-theme": "2.0.12",
-    "@plone/volto": "16.0.0-alpha.14"
+    "@plone/volto": "16.0.0-alpha.45"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^6.3.0",
