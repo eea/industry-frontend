@@ -1309,10 +1309,10 @@
   resolved "https://registry.yarnpkg.com/@eeacms/volto-description-block/-/volto-description-block-1.0.1.tgz#4ae89166e424e2bc1299cbe617e132644401d801"
   integrity sha512-ZfopN9sA3rT4WONZgZWyGCTVzviuBewbabTrgE6MfJME1e3mAll452aEub26Y6ccdUp40hKe4sV1+ZTTUAsiAg==
 
-"@eeacms/volto-eea-kitkat@10.2.0":
-  version "10.2.0"
-  resolved "https://registry.yarnpkg.com/@eeacms/volto-eea-kitkat/-/volto-eea-kitkat-10.2.0.tgz#5592b49468049bdd510fabcfcfe2f323e6081f9f"
-  integrity sha512-SQi7x88HNl+P+ZthSZZuoIlk4QZ2MTJJSBEDSTFoV19iFf1FK94PESdhzpBRK869YcjtyzGdTqCEkem7TaG5TQ==
+"@eeacms/volto-eea-kitkat@10.3.0":
+  version "10.3.0"
+  resolved "https://registry.yarnpkg.com/@eeacms/volto-eea-kitkat/-/volto-eea-kitkat-10.3.0.tgz#5799fd7278cb3575cc99dbc48b979f45f52d3f68"
+  integrity sha512-2Ns3K50icCpByuLTeNRh2W6jTPKm1rpNfhet5hCWtKMAxUQtmmDsoKGbSieQQcO3gXG74NRDNc7qhy3yxf+tKw==
   dependencies:
     "@eeacms/volto-accordion-block" "6.0.0"
     "@eeacms/volto-banner" "3.0.1"
@@ -1325,8 +1325,8 @@
     "@eeacms/volto-depiction" "1.0.1"
     "@eeacms/volto-description-block" "1.0.1"
     "@eeacms/volto-group-block" "5.0.1"
-    "@eeacms/volto-hero-block" "2.0.0"
-    "@eeacms/volto-listing-block" "2.2.0"
+    "@eeacms/volto-hero-block" "2.1.0"
+    "@eeacms/volto-listing-block" "2.3.0"
     "@eeacms/volto-matomo" "3.0.1"
     "@eeacms/volto-metadata-block" "5.0.1"
     "@eeacms/volto-object-widget" "5.0.1"
@@ -1339,7 +1339,7 @@
     "@eeacms/volto-slate-zotero" "5.0.2"
     "@eeacms/volto-statistic-block" "1.0.1"
     "@eeacms/volto-tabs-block" "3.0.1"
-    "@eeacms/volto-tags-block" "1.0.1"
+    "@eeacms/volto-tags-block" "1.0.2"
     "@eeacms/volto-taxonomy" "3.0.1"
     "@eeacms/volto-timeline-block" "1.0.1"
     "@eeacms/volto-widget-dataprovenance" "0.2.1"
@@ -1364,10 +1364,10 @@
   resolved "https://registry.yarnpkg.com/@eeacms/volto-group-block/-/volto-group-block-5.0.1.tgz#eaf6b3dd187daa803a44b5e2e136b4b38c42e450"
   integrity sha512-mBoa7fZowCMs4dCuWlRH01UEIXx82aD5atifmE24jO9vPyEIlfwXVp39p+yz9wK42CdDkACE9xzWc3aAvVCJ1g==
 
-"@eeacms/volto-hero-block@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@eeacms/volto-hero-block/-/volto-hero-block-2.0.0.tgz#732246ca02588b46104787b0a2f85511a5dd6fe0"
-  integrity sha512-eeDG2IqxrKdjzMJwiC4NYVQy6HYkH0pxefqx4UK28Tj1UGdOQ1XQBpA+Tb7eXag7iQkcuYRG5fyNM0H6lxByiw==
+"@eeacms/volto-hero-block@2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@eeacms/volto-hero-block/-/volto-hero-block-2.1.0.tgz#04f3c3bc73feb005b805fd8b531dbb8446295669"
+  integrity sha512-Ruf3HB0w/u7vsSZo4TeH24hlBwMSO0A/wgtwEcx6JJYNJnWdur254Zw2+3pVZbFB/cmTUzueos+FIllTLQwj7Q==
   dependencies:
     "@eeacms/volto-object-widget" "*"
 
@@ -1386,10 +1386,10 @@
     react-highlight-words "0.17.0"
     react-tooltip "4.2.21"
 
-"@eeacms/volto-listing-block@2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@eeacms/volto-listing-block/-/volto-listing-block-2.2.0.tgz#5cde6e6332cf3844e07b858f90ffb798465f4e80"
-  integrity sha512-bC+27LnAANuIZhw1n11kFEfsCoh0+l5JR39C3a8PQSlgMLzdGHUWnBaCz1PySGyDaQ2RlVSGRStysDY3RS7/Zg==
+"@eeacms/volto-listing-block@2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@eeacms/volto-listing-block/-/volto-listing-block-2.3.0.tgz#b48e8b397bc8290639f2a6bdbb68da3264713e1c"
+  integrity sha512-42luSdBy968u7ImgZCzTxjNHoXtILZH283fvIeM9S9CUlQVT4aLVnY0Wm5CtLJCHWcqfQw/ZcrtIvspM/FjZ4Q==
   dependencies:
     react-resize-detector "7.1.2"
     react-slick "0.29.0"
@@ -1492,10 +1492,10 @@
     react-slick "^0.24.0"
     slick-carousel "^1.8.1"
 
-"@eeacms/volto-tags-block@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@eeacms/volto-tags-block/-/volto-tags-block-1.0.1.tgz#ac24d3a02590198be2d61df2fa9a0cb479f163ef"
-  integrity sha512-05IHHcHXLG60gJJF83uPtVwxAaWVyMGqYcL4HjgNLXlOsU4bPNEBVG9Z8a0Xkr96K/zdSjyjLh5b0+nVDQROag==
+"@eeacms/volto-tags-block@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@eeacms/volto-tags-block/-/volto-tags-block-1.0.2.tgz#2ddd0216e4a1e736d77f3387580d785bceb6d6c5"
+  integrity sha512-tOU2usVgJ6FFFBIRKpNktf+dRPOyLVuvzqTE6zxqKEDC30PxdjYHVlYhLMtmjRvApNSQCZNs5a24l4Vscou7LQ==
 
 "@eeacms/volto-taxonomy@3.0.1":
   version "3.0.1"
