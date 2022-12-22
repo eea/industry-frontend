@@ -3,8 +3,11 @@ logs
 *.log
 npm-debug.log*
 .DS_Store
-
+cache
+.nyc_output/
 coverage
+cypress/videos
+cypress/reports
 node_modules
 build
 .env.local
