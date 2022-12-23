@@ -3,7 +3,7 @@
 [![Release](https://img.shields.io/github/v/release/eea/industry-frontend?sort=semver)](https://github.com/eea/industry-frontend/releases)
 [![Pipeline](https://ci.eionet.europa.eu/buildStatus/icon?job=volto%2Findustry-frontend%2Fmaster&subject=master)](https://ci.eionet.europa.eu/view/Github/job/volto/job/industry-frontend/job/master/lastBuild/display/redirect)
 [![Pipeline](https://ci.eionet.europa.eu/buildStatus/icon?job=volto%2Findustry-frontend%2Fdevelop&subject=develop)](https://ci.eionet.europa.eu/view/Github/job/volto/job/industry-frontend/job/develop/lastBuild/display/redirect)
-[![Release pipeline](https://ci.eionet.europa.eu/buildStatus/icon?job=volto%2Findustry-frontend%2F3.20.0&build=last&subject=release%20v3.20.0%20pipeline)](https://ci.eionet.europa.eu/view/Github/job/volto/job/industry-frontend/job/3.20.0/lastBuild/display/redirect/)
+[![Release pipeline](https://ci.eionet.europa.eu/buildStatus/icon?job=volto%2Findustry-frontend%2F3.21.0&build=last&subject=release%20v3.21.0%20pipeline)](https://ci.eionet.europa.eu/view/Github/job/volto/job/industry-frontend/job/3.21.0/lastBuild/display/redirect/)
 
 
 ## Documentation
