@@ -10,7 +10,7 @@ RUN runDeps="openssl ca-certificates patch gosu git make tmux locales-all" \
   && apt-get install -y --no-install-recommends $runDeps \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* \
-  && npm install -g mrs-developer \
+  && npm install --location=global mrs-developer \
   && cp jsconfig.json.prod jsconfig.json \
   && mkdir -p /opt/frontend/src/addons \
   && rm -rf /opt/frontend/src/addons/* \
