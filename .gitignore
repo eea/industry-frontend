@@ -24,7 +24,6 @@ build
 .idea
 lighthouse-report.html
 .vscode/
-backend
 .#*
 *~
 
@@ -79,16 +78,13 @@ cypress/screenshots
 # generic
 data
 omelette
-*.old
-*~
-src/addons
-src/develop
-npm-cache
-backend
 
 # build
 public/critical.css
+src/addons/*
 /cache
+
+.nyc_output/
 
 # yarn 3
 .pnp.*

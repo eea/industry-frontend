@@ -1,6 +1,10 @@
 {
     "compilerOptions": {
-        "paths": {},
+        "paths": {
+            "@eeacms/volto-industry-theme": [
+                "addons/volto-industry-theme/src"
+            ]
+        },
         "baseUrl": "src"
     }
 }
