@@ -151,7 +151,7 @@
     "@eeacms/volto-tableau": "3.0.7"
   },
   "dependencies": {
-    "@eeacms/volto-datablocks": "4.0.4",
+    "@eeacms/volto-datablocks": "4.0.5",
     "@eeacms/volto-eea-kitkat": "15.3.0",
     "@eeacms/volto-industry-theme": "2.0.14",
     "@eeacms/volto-openlayers-map": "0.2.2",
