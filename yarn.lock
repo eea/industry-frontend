@@ -1750,7 +1750,7 @@ __metadata:
   resolution: "@eeacms/industry-frontend@workspace:."
   dependencies:
     "@cypress/code-coverage": 3.10.0
-    "@eeacms/volto-datablocks": 5.0.0
+    "@eeacms/volto-datablocks": 5.0.1
     "@eeacms/volto-eea-kitkat": 15.5.1
     "@eeacms/volto-industry-theme": 2.0.14
     "@eeacms/volto-openlayers-map": 0.3.0
@@ -1892,9 +1892,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eeacms/volto-datablocks@npm:5.0.0":
-  version: 5.0.0
-  resolution: "@eeacms/volto-datablocks@npm:5.0.0"
+"@eeacms/volto-datablocks@npm:5.0.1":
+  version: 5.0.1
+  resolution: "@eeacms/volto-datablocks@npm:5.0.1"
   dependencies:
     "@eeacms/volto-embed": "*"
     "@eeacms/volto-group-block": "*"
@@ -1906,7 +1906,7 @@ __metadata:
     react-countup: 6.1.1
     react-visibility-sensor: 5.1.1
     sanitize-html: 2.7.3
-  checksum: 2f191e00286ca8e65b4de99e78a2a6000d23c251498e9cbf04956d261792dc11102fe62bd21975affc1ad3ab35d370ba56a136935a1f097f99889d2cffbbb38b
+  checksum: 2c63bccc9f8bc03847d8dfff751b01ff973e644d9065ba66bb040b8ef1559cc0e52745108b5ace768a651a721dca5fdd8fb0980d096a3b0e1e9d544ef6252498
   languageName: node
   linkType: hard
 
