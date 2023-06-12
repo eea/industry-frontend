@@ -154,7 +154,7 @@
     "@eeacms/volto-datablocks": "5.0.0",
     "@eeacms/volto-eea-kitkat": "15.5.1",
     "@eeacms/volto-industry-theme": "2.0.14",
-    "@eeacms/volto-openlayers-map": "0.2.2",
+    "@eeacms/volto-openlayers-map": "0.3.0",
     "@eeacms/volto-spotlight": "2.0.8",
     "@eeacms/volto-tableau": "3.0.8",
     "@plone/volto": "16.19.0"
