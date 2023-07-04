@@ -2044,23 +2044,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eeacms/volto-industry-theme@npm:2.0.15":
-  version: 2.0.15
-  resolution: "@eeacms/volto-industry-theme@npm:2.0.15"
-  dependencies:
-    "@eeacms/volto-columns-block": "*"
-    "@eeacms/volto-datablocks": "*"
-    "@eeacms/volto-matomo": "*"
-    "@eeacms/volto-openlayers-map": "*"
-    "@eeacms/volto-tableau": "*"
-    axios: 0.24.0
-    react-highlight-words: 0.17.0
-    react-tooltip: 4.2.21
-  checksum: e942245a12af9bba83b78fa2900cceec076aab6adc11849c1bb76a7e116e5d0c612ae5cc829e7b91569701ab64f1a58b13314bbb869427bcda660aa0051e7120
-  languageName: node
-  linkType: hard
-
-"@eeacms/volto-industry-theme@workspace:src/addons/volto-industry-theme":
+"@eeacms/volto-industry-theme@2.0.15, @eeacms/volto-industry-theme@workspace:src/addons/volto-industry-theme":
   version: 0.0.0-use.local
   resolution: "@eeacms/volto-industry-theme@workspace:src/addons/volto-industry-theme"
   dependencies:
