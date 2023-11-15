@@ -148,7 +148,7 @@
     "node": "^14 || ^16"
   },
   "resolutions": {
-    "@eeacms/volto-tableau": "6.0.4",
+    "@eeacms/volto-tableau": "6.0.5",
     "@eeacms/volto-datablocks": "6.1.4"
   },
   "dependencies": {
@@ -157,7 +157,7 @@
     "@eeacms/volto-industry-theme": "2.0.15",
     "@eeacms/volto-openlayers-map": "0.3.0",
     "@eeacms/volto-spotlight": "2.0.10",
-    "@eeacms/volto-tableau": "6.0.4",
+    "@eeacms/volto-tableau": "6.0.5",
     "@plone/volto": "16.19.0"
   },
   "devDependencies": {
