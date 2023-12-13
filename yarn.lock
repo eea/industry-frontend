@@ -1777,7 +1777,7 @@ __metadata:
     "@eeacms/volto-industry-theme": 2.0.15
     "@eeacms/volto-openlayers-map": 0.3.0
     "@eeacms/volto-spotlight": 2.0.10
-    "@eeacms/volto-tableau": 7.0.5
+    "@eeacms/volto-tableau": 7.1.0
     "@plone/scripts": ^2.1.5
     "@plone/volto": 16.19.0
     "@storybook/addon-actions": ^6.3.0
@@ -1923,9 +1923,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eeacms/volto-datablocks@npm:6.2.0":
-  version: 6.2.0
-  resolution: "@eeacms/volto-datablocks@npm:6.2.0"
+"@eeacms/volto-datablocks@npm:6.3.0":
+  version: 6.3.0
+  resolution: "@eeacms/volto-datablocks@npm:6.3.0"
   dependencies:
     "@eeacms/countup": "*"
     "@eeacms/volto-embed": "*"
@@ -1937,7 +1937,7 @@ __metadata:
     object-hash: 2.2.0
     react-visibility-sensor: 5.1.1
     sanitize-html: 2.7.3
-  checksum: 1b0dbfeb746b1e5989e333b0181e3776a56c44245fdf27af6d8545c1194f17f0b23183c51a994b59ad012a7b9fc250e041ad7b126ff1f3d0c9f2c8f75cb575ab
+  checksum: 4be1a52e8aba5e92024b8a3ed972af9f1eaec27f1c93d924f7e3f287b11671599261b264a22921eaf8ae8bcd24f5cbe8e7587521c78bd55a3f3717d3b5c07bdd
   languageName: node
   linkType: hard
 
@@ -2226,14 +2226,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eeacms/volto-tableau@npm:7.0.5":
-  version: 7.0.5
-  resolution: "@eeacms/volto-tableau@npm:7.0.5"
+"@eeacms/volto-tableau@npm:7.1.0":
+  version: 7.1.0
+  resolution: "@eeacms/volto-tableau@npm:7.1.0"
   dependencies:
     "@eeacms/volto-embed": "*"
     "@eeacms/volto-object-widget": "*"
     "@eeacms/volto-resize-helper": "*"
-  checksum: 16d0947e4ac75ce1598e067f25d3adbb763743dc491226bb22a7ca256e7a056259f21f76af36b62fb3c637f17b302c245eba7af2a15a92672417162d0dc8d4f5
+  checksum: 8c519cb4402140528a04a7b888314f930de9ba2db4eba9d82ae78ad0a98c0f44ff27e9eaecdde6fa2ebf374406647875eb7c6be53879a40c1761260e159c8b52
   languageName: node
   linkType: hard
 
