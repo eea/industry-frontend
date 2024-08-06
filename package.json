@@ -149,7 +149,7 @@
   },
   "resolutions": {
     "@eeacms/volto-tableau": "8.0.6",
-    "@eeacms/volto-datablocks": "7.2.0"
+    "@eeacms/volto-datablocks": "7.2.1"
   },
   "dependencies": {
     "@eeacms/volto-datablocks": "~4.0.5",
