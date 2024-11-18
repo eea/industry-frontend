@@ -1750,9 +1750,9 @@ __metadata:
   resolution: "@eeacms/industry-frontend@workspace:."
   dependencies:
     "@cypress/code-coverage": 3.10.0
-    "@eeacms/volto-datablocks": ~4.0.5
+    "@eeacms/volto-datablocks": 4.1.0
     "@eeacms/volto-eea-kitkat": 16.0.2
-    "@eeacms/volto-industry-theme": 2.0.15
+    "@eeacms/volto-industry-theme": 2.0.16
     "@eeacms/volto-openlayers-map": 0.3.0
     "@eeacms/volto-spotlight": 2.0.10
     "@eeacms/volto-tableau": 4.1.0
@@ -2010,9 +2010,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eeacms/volto-industry-theme@npm:2.0.15":
-  version: 2.0.15
-  resolution: "@eeacms/volto-industry-theme@npm:2.0.15"
+"@eeacms/volto-industry-theme@npm:2.0.16":
+  version: 2.0.16
+  resolution: "@eeacms/volto-industry-theme@npm:2.0.16"
   dependencies:
     "@eeacms/volto-columns-block": "*"
     "@eeacms/volto-datablocks": "*"
@@ -2022,7 +2022,7 @@ __metadata:
     axios: 0.24.0
     react-highlight-words: 0.17.0
     react-tooltip: 4.2.21
-  checksum: e942245a12af9bba83b78fa2900cceec076aab6adc11849c1bb76a7e116e5d0c612ae5cc829e7b91569701ab64f1a58b13314bbb869427bcda660aa0051e7120
+  checksum: 6d4766f60c6ed6397324a64f5b30975bf4158a2a0fc0ee0129d05074c6bb99eac6ebf939a844f7a54790d24fc3127cc3498bcebadc4a7caf991d1b4a5833b6fd
   languageName: node
   linkType: hard
 
