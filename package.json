@@ -149,10 +149,10 @@
   },
   "resolutions": {
     "@eeacms/volto-tableau": "4.1.0",
-    "@eeacms/volto-datablocks": "4.1.0"
+    "@eeacms/volto-datablocks": "github:eea/volto-datablocks#4.1.0"
   },
   "dependencies": {
-    "@eeacms/volto-datablocks": "4.1.0",
+    "@eeacms/volto-datablocks": "github:eea/volto-datablocks#4.1.0",
     "@eeacms/volto-eea-kitkat": "16.0.2",
     "@eeacms/volto-industry-theme": "2.0.16",
     "@eeacms/volto-openlayers-map": "0.3.0",
