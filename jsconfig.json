@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
         "paths": {
-            "@eeacms/volto-industry-theme": [
-                "addons/volto-industry-theme/src"
+            "@eeacms/volto-embed-static-content": [
+                "addons/volto-embed-static-content/src"
             ]
         },
         "baseUrl": "src"
