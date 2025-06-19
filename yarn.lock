@@ -1784,7 +1784,7 @@ __metadata:
     "@eeacms/volto-datablocks": ~4.0.5
     "@eeacms/volto-eea-kitkat": 27.1.1
     "@eeacms/volto-industry-theme": 2.0.17
-    "@eeacms/volto-openlayers-map": 0.3.2
+    "@eeacms/volto-openlayers-map": 1.0.0
     "@eeacms/volto-spotlight": 2.1.1
     "@eeacms/volto-tableau": 8.1.4
     "@plone/scripts": ^2.1.5
@@ -1977,9 +1977,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eeacms/volto-datablocks@npm:7.3.0":
-  version: 7.3.0
-  resolution: "@eeacms/volto-datablocks@npm:7.3.0"
+"@eeacms/volto-datablocks@npm:7.3.1":
+  version: 7.3.1
+  resolution: "@eeacms/volto-datablocks@npm:7.3.1"
   dependencies:
     "@eeacms/countup": "*"
     "@eeacms/volto-embed": "*"
@@ -1992,7 +1992,7 @@ __metadata:
     object-hash: 2.2.0
     react-visibility-sensor: 5.1.1
     sanitize-html: 2.12.1
-  checksum: d384736f89a831a84d526f6c5fa014a32b221712db600bdc0fd016fc7dec65bdc8710565bd73c5ed42c00c8a505f978c5b59e35e8fe75e04c42a8800c3784c46
+  checksum: b658158a202e7ba0f08c05341869b63ed2e3330c22d347d2e09a12ce500bb45aab32c1b35317c1f8902e1d9241ef836fa3bc86ede989f3f8197c31268627f0a4
   languageName: node
   linkType: hard
 
@@ -2203,12 +2203,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eeacms/volto-openlayers-map@npm:0.3.2":
-  version: 0.3.2
-  resolution: "@eeacms/volto-openlayers-map@npm:0.3.2"
+"@eeacms/volto-openlayers-map@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@eeacms/volto-openlayers-map@npm:1.0.0"
   dependencies:
     ol: 6.6.x
-  checksum: 801eff2466aee3451f0c47abb1eb4ea5b2df2978f9e2e532851d32bb8ea2e5b945742e9fe59e402af1284301ebcfe861bbf83b5a57b61a3ebea3a7fd5556aca9
+  checksum: d19eb2ac0a35ebab4068e49b748dff149779f49edaece87c56d5765c7650e4d97b0979d2a7b1ca349fbdf75bdc1f5e065f3fe400fd8617adc32d1bee798ad81f
   languageName: node
   linkType: hard
 
