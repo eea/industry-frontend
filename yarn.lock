@@ -1785,7 +1785,7 @@ __metadata:
     "@eeacms/volto-eea-kitkat": 28.0.2
     "@eeacms/volto-industry-theme": 2.0.17
     "@eeacms/volto-openlayers-map": 1.0.1
-    "@eeacms/volto-spotlight": 2.1.1
+    "@eeacms/volto-spotlight": 2.1.2
     "@eeacms/volto-tableau": 8.1.5
     "@plone/scripts": ^2.1.5
     "@plone/volto": 16.19.0
@@ -2279,12 +2279,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eeacms/volto-spotlight@npm:2.1.1":
-  version: 2.1.1
-  resolution: "@eeacms/volto-spotlight@npm:2.1.1"
+"@eeacms/volto-spotlight@npm:2.1.2":
+  version: 2.1.2
+  resolution: "@eeacms/volto-spotlight@npm:2.1.2"
   dependencies:
     "@eeacms/volto-eea-design-system": "*"
-  checksum: e3bad8558554cd9b1ef4c976f850b46b3ee46cbcdbd4edc99b883af0ea255e40a1b43b5c5438e35475a0a132d064051546afe082cf76852c111cba2626de2154
+  checksum: 728d74ed74e808d17b3995ead975ee3ddc142bf462cd67cb5522aa29115573dfac3f83217142057468cd029db8cedc6552e95b8bfc6f642af5d22ff6af11b418
   languageName: node
   linkType: hard
 
